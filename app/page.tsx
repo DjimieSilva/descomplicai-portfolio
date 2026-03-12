@@ -476,7 +476,7 @@ export default function Portfolio() {
       </nav>
 
       {/* ─── HERO (21st.dev inspired — animated, light, floating) ─── */}
-      <section className="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center overflow-hidden pt-14">
+      <section className="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center overflow-hidden pt-24 sm:pt-14">
         {/* Background blobs */}
         <FloatingEl delay={0} duration={5} className="top-24 left-[10%] opacity-30">
           <div className="w-48 h-48 bg-gradient-to-br from-blue-300 to-indigo-300 rounded-full blur-3xl" />
