@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/casos-de-uso/bfitfam/:path*',
+        destination: 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app/:path*',
+      },
+    ];
+  },
   async headers() {
     return [
       {
