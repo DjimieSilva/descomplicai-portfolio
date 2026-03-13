@@ -4,8 +4,12 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: '/projetos/bfitfam',
+        destination: 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app/projetos/bfitfam',
+      },
+      {
         source: '/projetos/bfitfam/:path*',
-        destination: 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app/:path*',
+        destination: 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app/projetos/bfitfam/:path*',
       },
     ];
   },
