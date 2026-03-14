@@ -849,13 +849,13 @@ export default function BFITFAMPage() {
               </li>
               <li>
                 <a
-                  href="https://www.instagram.com/bfitfam"
+                  href="https://www.instagram.com/bfitfam_"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-white/40 transition-colors hover:text-[#0066FF]"
                 >
                   <Instagram className="h-4 w-4 text-[#0066FF]" />
-                  @bfitfam
+                  @bfitfam_
                 </a>
               </li>
             </ul>
