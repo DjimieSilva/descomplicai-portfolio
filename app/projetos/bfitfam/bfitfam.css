@@ -1,0 +1,46 @@
+/* BFITFAM — custom animations and utilities */
+/* NOTE: No @import "tailwindcss" — already imported by parent layout */
+
+/* Marquee animation */
+@keyframes bfit-marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: bfit-marquee var(--duration, 30s) linear infinite;
+}
+
+/* Shimmer effect */
+@keyframes bfit-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  animation: bfit-shimmer 3s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+
+/* Pulse glow */
+@keyframes bfit-pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(0, 102, 255, 0.6); }
+}
+.animate-pulse-glow {
+  animation: bfit-pulse-glow 2s ease-in-out infinite;
+}
+
+/* Gradient text — bfitfam variant (blue → teal) */
+.bfit-gradient-text {
+  background: linear-gradient(135deg, #0066FF, #00D4AA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass effect */
+.bfit-glass {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
