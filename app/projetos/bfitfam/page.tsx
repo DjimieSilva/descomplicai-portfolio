@@ -142,7 +142,7 @@ export default function BFITFAMPage() {
 
   const WHATSAPP_URL = useMemo(
     () =>
-      `https://wa.me/351963209209?text=${encodeURIComponent(t("whatsapp.message"))}`,
+      `https://wa.me/351934035971?text=${encodeURIComponent(t("whatsapp.message"))}`,
     [t]
   );
 

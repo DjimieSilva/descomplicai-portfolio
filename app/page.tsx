@@ -268,7 +268,7 @@ export default function Portfolio() {
               <a href="mailto:equipa@descomplicai.pt" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all">
                 <Mail className="w-4 h-4" /> equipa@descomplicai.pt
               </a>
-              <a href="https://wa.me/351963209209" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/351934035971" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-slate-700 font-medium text-sm border border-slate-200 hover:border-blue-200 hover:text-blue-700 transition-all">
                 <MessageCircle className="w-4 h-4" /> WhatsApp
               </a>
