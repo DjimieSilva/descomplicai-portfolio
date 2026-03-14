@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.69",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.36.0",
@@ -27,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "puppeteer": "^24.39.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

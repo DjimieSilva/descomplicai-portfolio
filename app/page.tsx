@@ -55,13 +55,9 @@ const PROJECTS: Project[] = [
 const FEATURED_IDS = ["bfitfam", "tasca-dentro", "futuro", "seeds", "possiblai", "ondas-academy"];
 const FEATURED_PROJECTS = PROJECTS.filter((p) => FEATURED_IDS.includes(p.id));
 
-/* ─────────────────── SERVICES ─────────────────── */
+/* ─────────────────── LINKABLE PROJECTS ─────────────────── */
 
-const SERVICES = [
-  { icon: Globe, title: "Presença Digital", desc: "Websites, apps e plataformas que representam o teu negócio online", color: "text-blue-600 bg-blue-50" },
-  { icon: Bot, title: "IA & Automação", desc: "Estrutura e automação com inteligência artificial para escalar o teu negócio", color: "text-emerald-600 bg-emerald-50" },
-  { icon: GraduationCap, title: "Mentoria & Formação 1:1", desc: "Acompanhamento personalizado para ti ou a tua equipa dominar ferramentas de IA", color: "text-violet-600 bg-violet-50" },
-];
+const LINKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds"];
 
 /* ─────────────────── FLOATING ELEMENT ─────────────────── */
 
@@ -73,18 +69,44 @@ function FloatingEl({ delay = 0, duration = 4, className = "", children }: { del
   );
 }
 
-/* ─────────────────── PREVIEW CARD ─────────────────── */
+/* ─────────────────── PREVIEW CARD (with screenshot) ─────────────────── */
+
+const PREVIEW_IMAGES: Record<string, string> = {
+  bfitfam: "/previews/bfitfam.jpg",
+  "tasca-dentro": "/previews/tasca-dentro.jpg",
+  futuro: "/previews/futuro.jpg",
+  seeds: "/previews/seeds.jpg",
+  possiblai: "/previews/possiblai.jpg",
+  "ondas-academy": "/previews/ondas-academy.jpg",
+};
 
 function PreviewCard({ project, index }: { project: Project; index: number }) {
+  const isLinkable = LINKABLE_IDS.includes(project.id);
+  const previewImg = PREVIEW_IMAGES[project.id];
+
   const content = (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.06 }}
-      className="group relative rounded-2xl bg-white border border-slate-200/80 overflow-hidden hover:shadow-lg hover:shadow-blue-500/[0.04] hover:border-blue-200/60 transition-all duration-400"
+      className={`group relative rounded-2xl bg-white border border-slate-200/80 overflow-hidden hover:shadow-lg hover:shadow-blue-500/[0.04] hover:border-blue-200/60 transition-all duration-400 ${isLinkable ? "cursor-pointer" : ""}`}
     >
-      <div className={`h-1 w-full bg-gradient-to-r ${project.gradient} opacity-70 group-hover:opacity-100 transition-opacity`} />
+      {/* Screenshot preview */}
+      {previewImg ? (
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
+          <img
+            src={previewImg}
+            alt={`Preview de ${project.title}`}
+            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent" />
+        </div>
+      ) : (
+        <div className={`h-24 w-full bg-gradient-to-br ${project.gradient} opacity-20`} />
+      )}
+
       <div className="p-5">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-2.5">
@@ -99,7 +121,7 @@ function PreviewCard({ project, index }: { project: Project; index: number }) {
           </span>
         </div>
         <p className="text-sm text-slate-500 mb-3 line-clamp-2 leading-relaxed">{project.description}</p>
-        {project.id === "bfitfam" && (
+        {isLinkable && (
           <div className="flex items-center gap-1 text-xs font-medium text-blue-600">
             Ver projeto <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </div>
@@ -108,8 +130,8 @@ function PreviewCard({ project, index }: { project: Project; index: number }) {
     </motion.div>
   );
 
-  if (project.id === "bfitfam") {
-    return <Link key={project.id} href="/projetos/bfitfam">{content}</Link>;
+  if (isLinkable) {
+    return <Link key={project.id} href={`/projetos/${project.id}`}>{content}</Link>;
   }
   return content;
 }
@@ -204,24 +226,96 @@ export default function Portfolio() {
         </motion.div>
       </section>
 
-      {/* ─── SERVICES ─── */}
+      {/* ─── SERVICES (Bento Grid) ─── */}
       <section id="services" className="px-6 py-24 max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">O que fazemos</p>
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-12">Serviços</h2>
         </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-4">
-          {SERVICES.map((s, i) => (
-            <motion.div key={s.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-              className="p-6 rounded-2xl bg-white border border-slate-100 hover:shadow-md hover:border-blue-100 transition-all duration-300">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.color} mb-4`}>
-                <s.icon className="w-5 h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          {/* Presença Digital — large card (3 cols) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0 }}
+            className="group relative md:col-span-3 overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-8 sm:p-10 transition-all duration-500 hover:shadow-xl hover:shadow-blue-500/[0.08] hover:border-blue-200/80"
+          >
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/25 mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Globe className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-semibold text-slate-900 mb-1.5">{s.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{s.desc}</p>
-            </motion.div>
-          ))}
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Presença Digital</h3>
+              <p className="text-slate-500 leading-relaxed mb-6 max-w-md">
+                Websites, apps e plataformas que representam o teu negócio online. Do conceito ao deploy.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-xs font-medium text-blue-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> 17+ sites entregues
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-medium text-indigo-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Landing pages a PWAs
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* IA & Automação — medium card (2 cols) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="group relative md:col-span-2 overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-8 transition-all duration-500 hover:shadow-xl hover:shadow-emerald-500/[0.08] hover:border-emerald-200/80"
+          >
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-emerald-400/10 to-teal-400/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/25 mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Bot className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">IA & Automação</h3>
+              <p className="text-slate-500 leading-relaxed mb-6">
+                Estrutura e automação com inteligência artificial para escalar o teu negócio.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 24/7 agentes ativos
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Mentoria & Formação — full-width card (5 cols) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="group relative md:col-span-5 overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-r from-violet-50 via-white to-purple-50 p-8 sm:p-10 transition-all duration-500 hover:shadow-xl hover:shadow-violet-500/[0.08] hover:border-violet-200/80"
+          >
+            <div className="absolute top-1/2 right-8 -translate-y-1/2 w-56 h-56 bg-gradient-to-br from-violet-400/10 to-purple-400/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+              <div className="flex-1">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-violet-500/25 mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <GraduationCap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Mentoria & Formação 1:1</h3>
+                <p className="text-slate-500 leading-relaxed max-w-lg">
+                  Acompanhamento personalizado para ti ou a tua equipa dominar ferramentas de IA. Sessões práticas com resultados reais.
+                </p>
+              </div>
+              <div className="flex flex-wrap sm:flex-col gap-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-xs font-medium text-violet-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-500" /> 100+ horas de formação
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-xs font-medium text-purple-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" /> 1:1 personalizado
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

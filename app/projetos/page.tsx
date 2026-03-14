@@ -62,8 +62,10 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds"];
+
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const isClickable = project.id === "bfitfam";
+  const isClickable = CLICKABLE_IDS.includes(project.id);
 
   const content = (
     <motion.div
@@ -99,7 +101,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 
   if (isClickable) {
-    return <Link key={project.id} href="/projetos/bfitfam">{content}</Link>;
+    return <Link key={project.id} href={`/projetos/${project.id}`}>{content}</Link>;
   }
   return content;
 }

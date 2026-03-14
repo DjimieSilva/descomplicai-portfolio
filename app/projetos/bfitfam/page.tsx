@@ -28,13 +28,13 @@ import {
 
 import { useI18n } from "./lib/i18n";
 import { trackEvent } from "./components/meta-pixel";
-import { FloatingNav } from "./components/ui/floating-nav";
-import { Marquee } from "./components/ui/marquee";
-import { ShimmerButton } from "./components/ui/shimmer-button";
-import { SpotlightCard } from "./components/ui/spotlight-card";
-import { AnimatedCounter } from "./components/ui/animated-counter";
-import { TestimonialCards } from "./components/ui/testimonial-cards";
-import { TextReveal } from "./components/ui/text-reveal";
+import { FloatingNav } from "@/components/shared-ui/floating-nav";
+import { Marquee } from "@/components/shared-ui/marquee";
+import { ShimmerButton } from "@/components/shared-ui/shimmer-button";
+import { SpotlightCard } from "@/components/shared-ui/spotlight-card";
+import { AnimatedCounter } from "@/components/shared-ui/animated-counter";
+import { TestimonialCards } from "@/components/shared-ui/testimonial-cards";
+import { TextReveal } from "@/components/shared-ui/text-reveal";
 
 /* ------------------------------------------------------------------ */
 /*  HELPERS                                                            */
