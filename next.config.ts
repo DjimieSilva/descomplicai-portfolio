@@ -2,15 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
+    const bfitfam = 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app';
     return [
-      {
-        source: '/projetos/bfitfam',
-        destination: 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app/projetos/bfitfam',
-      },
-      {
-        source: '/projetos/bfitfam/:path*',
-        destination: 'https://bfitfam-git-main-jdsdspt-1634s-projects.vercel.app/projetos/bfitfam/:path*',
-      },
+      // bfitfam public assets (served at root on bfitfam, need proxying here)
+      { source: '/gym-bg.png', destination: `${bfitfam}/gym-bg.png` },
+      { source: '/trainer.png', destination: `${bfitfam}/trainer.png` },
+      { source: '/manifest.json', destination: `${bfitfam}/manifest.json` },
+      { source: '/sw.js', destination: `${bfitfam}/sw.js` },
+      // bfitfam app (basePath handles _next assets)
+      { source: '/projetos/bfitfam', destination: `${bfitfam}/projetos/bfitfam` },
+      { source: '/projetos/bfitfam/:path*', destination: `${bfitfam}/projetos/bfitfam/:path*` },
     ];
   },
   async headers() {
