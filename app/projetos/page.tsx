@@ -36,6 +36,8 @@ const PROJECTS: Project[] = [
   { id: "mylo-experience", title: "MYLO Experience", category: "creative", type: "3D Interactive", description: "Experiência 3D interativa com Three.js — identidade MYLO", gradient: "from-cyan-500 to-teal-400", emoji: "🎭", status: "live" },
   { id: "possiblai", title: "PossiblAI", category: "ai", type: "Charity Livestream", description: "Two AI souls. One mission. End suffering. — Livestream Twitch", gradient: "from-pink-500 to-purple-500", emoji: "💜", status: "live" },
   { id: "image-gen", title: "Image Generator", category: "ai", type: "AI Tool", description: "Gerador de imagens IA via Puter.js — múltiplos estilos e categorias", gradient: "from-teal-500 to-cyan-400", emoji: "🎨", status: "live" },
+  { id: "descomplicai-brutalist", title: "Descomplicai Brutalist", category: "creative", type: "Redesign Concept", description: "Versão brutalist dark do site Descomplicai — terminal UI, glitch effects, monospace", gradient: "from-gray-700 to-black", emoji: "🖤", status: "live" },
+  { id: "descomplicai-editorial", title: "Descomplicai Editorial", category: "creative", type: "Redesign Concept", description: "Versão editorial premium do site Descomplicai — magazine layout, Playfair Display, cream", gradient: "from-amber-200 to-orange-100", emoji: "📰", status: "live" },
 ];
 
 const CATEGORIES = [
@@ -62,7 +64,7 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
-const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds"];
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds", "descomplicai-brutalist", "descomplicai-editorial"];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isClickable = CLICKABLE_IDS.includes(project.id);
