@@ -1,0 +1,992 @@
+/* ─── Quintas & Estrelas — Scoped Styles ─── */
+
+.quintas-root {
+  --qe-midnight: #1a1a3e;
+  --qe-midnight-light: #2a2a5e;
+  --qe-gold: #d4a853;
+  --qe-gold-light: #e8c97a;
+  --qe-terracotta: #c4775a;
+  --qe-terracotta-light: #d99a82;
+  --qe-cream: #faf5ef;
+  --qe-cream-dark: #f0e8db;
+  --qe-green: #8fa87a;
+  --qe-text: #2c2c2c;
+  --qe-text-light: #6b6b6b;
+
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  color: var(--qe-text);
+  background: var(--qe-cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Nav ─── */
+
+.quintas-root .qe-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.4s ease;
+}
+
+.quintas-root .qe-nav.scrolled {
+  background: rgba(26, 26, 62, 0.95);
+  backdrop-filter: blur(12px);
+  padding: 12px 20px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+.quintas-root .qe-nav-logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--qe-cream);
+  letter-spacing: -0.02em;
+}
+
+.quintas-root .qe-nav-logo span {
+  color: var(--qe-gold);
+}
+
+.quintas-root .qe-nav-links {
+  display: none;
+  list-style: none;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.quintas-root .qe-nav-links a {
+  color: var(--qe-cream);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.quintas-root .qe-nav-links a:hover {
+  opacity: 1;
+}
+
+.quintas-root .qe-nav-cta {
+  background: var(--qe-gold);
+  color: var(--qe-midnight);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.quintas-root .qe-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.quintas-root .qe-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--qe-cream);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.quintas-root .qe-mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 26, 62, 0.98);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.quintas-root .qe-mobile-menu a {
+  color: var(--qe-cream);
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.quintas-root .qe-mobile-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--qe-cream);
+  font-size: 2rem;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+@media (min-width: 768px) {
+  .quintas-root .qe-nav-links {
+    display: flex;
+  }
+  .quintas-root .qe-hamburger {
+    display: none;
+  }
+}
+
+/* ─── Hero ─── */
+
+.quintas-root .qe-hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.quintas-root .qe-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.quintas-root .qe-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quintas-root .qe-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 26, 62, 0.7) 0%,
+    rgba(26, 26, 62, 0.4) 40%,
+    rgba(26, 26, 62, 0.8) 100%
+  );
+  z-index: 1;
+}
+
+.quintas-root .qe-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.quintas-root .qe-hero-badge {
+  display: inline-block;
+  background: rgba(212, 168, 83, 0.2);
+  border: 1px solid rgba(212, 168, 83, 0.4);
+  color: var(--qe-gold-light);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.quintas-root .qe-hero h1 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(2.2rem, 7vw, 3.8rem);
+  color: var(--qe-cream);
+  line-height: 1.15;
+  margin: 0 0 16px;
+  font-weight: 400;
+}
+
+.quintas-root .qe-hero h1 em {
+  color: var(--qe-gold);
+  font-style: normal;
+}
+
+.quintas-root .qe-hero-sub {
+  color: rgba(250, 245, 239, 0.8);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+
+.quintas-root .qe-hero-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.quintas-root .qe-hero-stat {
+  text-align: center;
+}
+
+.quintas-root .qe-hero-stat-value {
+  color: var(--qe-gold);
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: block;
+}
+
+.quintas-root .qe-hero-stat-label {
+  color: rgba(250, 245, 239, 0.65);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.quintas-root .qe-hero-ctas {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.quintas-root .qe-btn-primary {
+  background: var(--qe-gold);
+  color: var(--qe-midnight);
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.quintas-root .qe-btn-primary:active {
+  transform: scale(0.97);
+}
+
+.quintas-root .qe-btn-secondary {
+  background: transparent;
+  color: var(--qe-cream);
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(250, 245, 239, 0.3);
+  cursor: pointer;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.quintas-root .qe-btn-secondary:hover {
+  background: rgba(250, 245, 239, 0.08);
+}
+
+/* ─── Section Shared ─── */
+
+.quintas-root .qe-section {
+  padding: 72px 20px;
+}
+
+.quintas-root .qe-section-dark {
+  background: var(--qe-midnight);
+  color: var(--qe-cream);
+}
+
+.quintas-root .qe-section-alt {
+  background: var(--qe-cream-dark);
+}
+
+.quintas-root .qe-section-terracotta {
+  background: var(--qe-terracotta);
+  color: var(--qe-cream);
+}
+
+.quintas-root .qe-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.quintas-root .qe-section-badge {
+  display: inline-block;
+  color: var(--qe-gold);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.quintas-root .qe-section-title {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  line-height: 1.2;
+  margin: 0 0 16px;
+  font-weight: 400;
+}
+
+.quintas-root .qe-section-desc {
+  color: var(--qe-text-light);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 640px;
+  margin: 0 0 40px;
+}
+
+.quintas-root .qe-section-dark .qe-section-desc {
+  color: rgba(250, 245, 239, 0.7);
+}
+
+/* ─── Experience ─── */
+
+.quintas-root .qe-exp-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.quintas-root .qe-exp-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.quintas-root .qe-exp-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.quintas-root .qe-exp-card h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+  font-weight: 400;
+}
+
+.quintas-root .qe-exp-card p {
+  color: var(--qe-text-light);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .quintas-root .qe-exp-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ─── Accommodations ─── */
+
+.quintas-root .qe-accom-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.quintas-root .qe-accom-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(250, 245, 239, 0.1);
+}
+
+.quintas-root .qe-accom-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.quintas-root .qe-accom-body {
+  padding: 24px;
+}
+
+.quintas-root .qe-accom-tag {
+  display: inline-block;
+  background: rgba(212, 168, 83, 0.2);
+  color: var(--qe-gold);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.quintas-root .qe-accom-card h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+  color: var(--qe-cream);
+  font-weight: 400;
+}
+
+.quintas-root .qe-accom-card p {
+  color: rgba(250, 245, 239, 0.65);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .quintas-root .qe-accom-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* ─── Activities ─── */
+
+.quintas-root .qe-act-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.quintas-root .qe-act-card {
+  background: white;
+  border-radius: 14px;
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s;
+}
+
+.quintas-root .qe-act-card:active {
+  transform: scale(0.97);
+}
+
+.quintas-root .qe-act-emoji {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.quintas-root .qe-act-card h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+
+.quintas-root .qe-act-card p {
+  color: var(--qe-text-light);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .quintas-root .qe-act-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ─── Quintas Cards ─── */
+
+.quintas-root .qe-quintas-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.quintas-root .qe-quinta-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.quintas-root .qe-quinta-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.quintas-root .qe-quinta-body {
+  padding: 24px;
+}
+
+.quintas-root .qe-quinta-region {
+  display: inline-block;
+  background: var(--qe-midnight);
+  color: var(--qe-gold);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.quintas-root .qe-quinta-card h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+  font-weight: 400;
+}
+
+.quintas-root .qe-quinta-card p {
+  color: var(--qe-text-light);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.quintas-root .qe-quinta-features {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quintas-root .qe-quinta-feat {
+  background: var(--qe-cream);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--qe-text-light);
+}
+
+@media (min-width: 768px) {
+  .quintas-root .qe-quintas-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ─── Families ─── */
+
+.quintas-root .qe-families-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.quintas-root .qe-families-text h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.4rem;
+  margin: 0 0 16px;
+  color: var(--qe-cream);
+  font-weight: 400;
+}
+
+.quintas-root .qe-families-text p {
+  color: rgba(250, 245, 239, 0.75);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0 0 24px;
+}
+
+.quintas-root .qe-families-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.quintas-root .qe-families-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--qe-cream);
+}
+
+.quintas-root .qe-families-list li span {
+  font-size: 1.2rem;
+}
+
+.quintas-root .qe-families-img {
+  width: 100%;
+  border-radius: 16px;
+  height: 260px;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .quintas-root .qe-families-content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ─── Gallery ─── */
+
+.quintas-root .qe-gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quintas-root .qe-gallery-item {
+  border-radius: 12px;
+  overflow: hidden;
+  height: 180px;
+}
+
+.quintas-root .qe-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.quintas-root .qe-gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.quintas-root .qe-gallery-item.tall {
+  grid-row: span 2;
+  height: 100%;
+}
+
+@media (min-width: 600px) {
+  .quintas-root .qe-gallery-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .quintas-root .qe-gallery-item {
+    height: 220px;
+  }
+}
+
+/* ─── Testimonials ─── */
+
+.quintas-root .qe-test-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.quintas-root .qe-test-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(250, 245, 239, 0.1);
+  border-radius: 16px;
+  padding: 28px 24px;
+}
+
+.quintas-root .qe-test-stars {
+  color: var(--qe-gold);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+.quintas-root .qe-test-card blockquote {
+  margin: 0 0 16px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--qe-cream);
+  font-style: italic;
+}
+
+.quintas-root .qe-test-author {
+  font-size: 0.82rem;
+  color: var(--qe-gold);
+  font-weight: 600;
+}
+
+.quintas-root .qe-test-detail {
+  font-size: 0.75rem;
+  color: rgba(250, 245, 239, 0.5);
+  margin-top: 2px;
+}
+
+@media (min-width: 600px) {
+  .quintas-root .qe-test-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .quintas-root .qe-test-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* ─── Pricing ─── */
+
+.quintas-root .qe-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.quintas-root .qe-price-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.quintas-root .qe-price-card.featured {
+  border: 2px solid var(--qe-gold);
+}
+
+.quintas-root .qe-price-popular {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--qe-gold);
+  color: var(--qe-midnight);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.quintas-root .qe-price-card h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.3rem;
+  margin: 0 0 4px;
+  font-weight: 400;
+}
+
+.quintas-root .qe-price-duration {
+  color: var(--qe-text-light);
+  font-size: 0.82rem;
+  margin-bottom: 20px;
+}
+
+.quintas-root .qe-price-amount {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--qe-midnight);
+  margin-bottom: 4px;
+}
+
+.quintas-root .qe-price-per {
+  color: var(--qe-text-light);
+  font-size: 0.78rem;
+  margin-bottom: 24px;
+}
+
+.quintas-root .qe-price-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  text-align: left;
+}
+
+.quintas-root .qe-price-features li {
+  padding: 8px 0;
+  font-size: 0.85rem;
+  color: var(--qe-text);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-bottom: 1px solid var(--qe-cream-dark);
+}
+
+.quintas-root .qe-price-features li:last-child {
+  border-bottom: none;
+}
+
+.quintas-root .qe-price-check {
+  color: var(--qe-green);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.quintas-root .qe-price-btn {
+  display: block;
+  width: 100%;
+  background: var(--qe-midnight);
+  color: var(--qe-cream);
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 48px;
+  text-decoration: none;
+  text-align: center;
+  transition: opacity 0.2s;
+}
+
+.quintas-root .qe-price-card.featured .qe-price-btn {
+  background: var(--qe-gold);
+  color: var(--qe-midnight);
+}
+
+@media (min-width: 768px) {
+  .quintas-root .qe-pricing-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ─── FAQ ─── */
+
+.quintas-root .qe-faq-list {
+  display: grid;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.quintas-root .qe-faq-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.quintas-root .qe-faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--qe-text);
+  cursor: pointer;
+  text-align: left;
+  min-height: 52px;
+  gap: 12px;
+}
+
+.quintas-root .qe-faq-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  color: var(--qe-gold);
+}
+
+.quintas-root .qe-faq-arrow.open {
+  transform: rotate(180deg);
+}
+
+.quintas-root .qe-faq-a {
+  padding: 0 20px 18px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--qe-text-light);
+}
+
+/* ─── CTA ─── */
+
+.quintas-root .qe-cta-section {
+  padding: 80px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--qe-midnight) 0%, #2a2a5e 100%);
+  color: var(--qe-cream);
+}
+
+.quintas-root .qe-cta-section h2 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  margin: 0 0 12px;
+  font-weight: 400;
+}
+
+.quintas-root .qe-cta-section p {
+  color: rgba(250, 245, 239, 0.7);
+  font-size: 1rem;
+  margin: 0 0 36px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.quintas-root .qe-cta-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.quintas-root .qe-cta-whatsapp {
+  background: #25d366;
+  color: white;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quintas-root .qe-cta-email {
+  background: transparent;
+  color: var(--qe-cream);
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(250, 245, 239, 0.3);
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Footer ─── */
+
+.quintas-root .qe-footer {
+  background: var(--qe-midnight);
+  color: rgba(250, 245, 239, 0.5);
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 0.82rem;
+}
+
+.quintas-root .qe-footer a {
+  color: var(--qe-gold);
+  text-decoration: none;
+}
+
+.quintas-root .qe-footer-brand {
+  color: rgba(250, 245, 239, 0.7);
+  margin-bottom: 6px;
+}
+
+/* ─── Smooth scrolling ─── */
+
+.quintas-root {
+  scroll-behavior: smooth;
+}

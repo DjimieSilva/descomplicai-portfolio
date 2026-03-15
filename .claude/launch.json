@@ -2,10 +2,11 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "portfolio",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["next", "dev", "-p", "3003"],
-      "port": 3003
+      "name": "dev",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3003,
+      "autoPort": true
     }
   ]
 }

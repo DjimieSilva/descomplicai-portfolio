@@ -10,6 +10,7 @@
   --cream-dark: #e8e0d0;
   --brown: #3D2B1F;
   --brown-light: #5a4235;
+  --grape: #6B3A6B;
 
   --font-serif: "Lora", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
@@ -36,40 +37,15 @@
 }
 
 /* ───────── Custom scrollbar ───────── */
-.vindima-root ::-webkit-scrollbar {
-  width: 8px;
-}
-.vindima-root ::-webkit-scrollbar-track {
-  background: var(--cream-dark);
-}
-.vindima-root ::-webkit-scrollbar-thumb {
-  background: var(--terracotta);
-  border-radius: 4px;
-}
-.vindima-root ::-webkit-scrollbar-thumb:hover {
-  background: var(--terracotta-dark);
-}
+.vindima-root ::-webkit-scrollbar { width: 8px; }
+.vindima-root ::-webkit-scrollbar-track { background: var(--cream-dark); }
+.vindima-root ::-webkit-scrollbar-thumb { background: var(--terracotta); border-radius: 4px; }
+.vindima-root ::-webkit-scrollbar-thumb:hover { background: var(--terracotta-dark); }
 
 /* ───────── Keyframes ───────── */
 @keyframes vindima-bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(6px); }
-}
-
-@keyframes vindima-fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes vindima-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
 }
 
 /* ───────── Nav ───────── */
@@ -89,6 +65,14 @@
   padding: 12px 20px;
 }
 
+.vindima-root .vindima-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .vindima-root .vindima-nav-logo {
   font-family: var(--font-serif);
   font-size: 1.25rem;
@@ -102,10 +86,16 @@
   color: var(--brown);
 }
 
+.vindima-root .vindima-nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
 .vindima-root .vindima-nav-link {
   color: rgba(245, 240, 230, 0.8);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 500;
   transition: color 0.3s ease;
   padding: 10px 4px;
@@ -148,15 +138,9 @@
   background: var(--brown);
 }
 
-.vindima-root .vindima-hamburger.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.vindima-root .vindima-hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-.vindima-root .vindima-hamburger.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
+.vindima-root .vindima-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.vindima-root .vindima-hamburger.open span:nth-child(2) { opacity: 0; }
+.vindima-root .vindima-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
 /* Mobile menu overlay */
 .vindima-root .vindima-mobile-menu {
@@ -168,12 +152,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 .vindima-root .vindima-mobile-menu a {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   color: var(--brown);
   text-decoration: none;
   padding: 12px 24px;
@@ -196,18 +180,24 @@
   text-align: center;
   padding: 80px 20px 60px;
   position: relative;
-  background:
-    linear-gradient(
-      180deg,
-      #3D2B1F 0%,
-      #5a3a28 15%,
-      #8B5E3C 30%,
-      #C4704B 45%,
-      #D4944A 60%,
-      #E8C547 72%,
-      #6B7F3B 85%,
-      #4a5c2a 100%
-    );
+}
+
+.vindima-root .vindima-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.vindima-root .vindima-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(61, 43, 31, 0.7) 0%,
+    rgba(61, 43, 31, 0.4) 50%,
+    rgba(61, 43, 31, 0.7) 100%
+  );
+  z-index: 1;
 }
 
 .vindima-root .vindima-hero::after {
@@ -219,36 +209,95 @@
   height: 120px;
   background: linear-gradient(to bottom, transparent, var(--cream));
   pointer-events: none;
+  z-index: 2;
+}
+
+.vindima-root .vindima-hero > * {
+  position: relative;
+  z-index: 3;
 }
 
 .vindima-root .vindima-hero h1 {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-size: clamp(1.8rem, 6vw, 3.2rem);
   font-weight: 700;
   color: var(--cream);
-  line-height: 1.15;
+  line-height: 1.2;
   max-width: 700px;
   margin-bottom: 16px;
-  text-shadow: 0 2px 30px rgba(61, 43, 31, 0.3);
+  text-shadow: 0 2px 30px rgba(61, 43, 31, 0.4);
+  white-space: pre-line;
 }
 
 .vindima-root .vindima-hero-subtitle {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: rgba(245, 240, 230, 0.85);
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  color: rgba(245, 240, 230, 0.9);
   max-width: 500px;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+/* Trust badges */
+.vindima-root .vindima-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
   margin-bottom: 32px;
 }
 
-.vindima-root .vindima-hero-stats {
+.vindima-root .vindima-trust-badge {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  justify-content: center;
-  font-size: 0.875rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(245, 240, 230, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(245, 240, 230, 0.2);
+  border-radius: 10px;
+  padding: 10px 16px;
+  min-width: 72px;
+}
+
+.vindima-root .vindima-trust-badge-icon {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.vindima-root .vindima-trust-badge-label {
+  font-size: 0.65rem;
   color: rgba(245, 240, 230, 0.7);
-  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vindima-root .vindima-hero-cta {
+  display: inline-block;
+  background: var(--terracotta);
+  color: var(--cream);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 16px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  min-height: 52px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 20px rgba(196, 112, 75, 0.4);
+}
+
+.vindima-root .vindima-hero-cta:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .vindima-root .vindima-hero-cta:hover {
+    background: var(--terracotta-dark);
+    transform: translateY(-1px);
+  }
 }
 
 .vindima-root .vindima-scroll-indicator {
@@ -264,7 +313,7 @@
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  z-index: 1;
+  z-index: 3;
 }
 
 .vindima-root .vindima-scroll-indicator svg {
@@ -284,21 +333,85 @@
 
 .vindima-root .vindima-section-title {
   font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 700;
   color: var(--brown);
   text-align: center;
   margin-bottom: 48px;
+  line-height: 1.3;
 }
 
 .vindima-root .vindima-section-title span {
   color: var(--terracotta);
 }
 
+/* ───────── About the Quinta ───────── */
+.vindima-root .vindima-quinta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-quinta-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+}
+
+.vindima-root .vindima-quinta-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.vindima-root .vindima-quinta-text h3 {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--brown);
+  margin-bottom: 16px;
+}
+
+.vindima-root .vindima-quinta-text p {
+  font-size: 0.95rem;
+  color: var(--brown-light);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.vindima-root .vindima-quinta-castas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 12px;
+}
+
+.vindima-root .vindima-quinta-castas span {
+  background: var(--cream-dark);
+  color: var(--brown);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(61, 43, 31, 0.1);
+}
+
+.vindima-root .vindima-quinta-producao {
+  font-size: 0.85rem;
+  color: var(--terracotta);
+  font-weight: 500;
+}
+
 /* ───────── Timeline ───────── */
 .vindima-root .vindima-timeline {
   position: relative;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
   padding-left: 40px;
 }
@@ -319,9 +432,7 @@
   margin-bottom: 40px;
 }
 
-.vindima-root .vindima-timeline-item:last-child {
-  margin-bottom: 0;
-}
+.vindima-root .vindima-timeline-item:last-child { margin-bottom: 0; }
 
 .vindima-root .vindima-timeline-dot {
   position: absolute;
@@ -331,12 +442,11 @@
   height: 14px;
   border-radius: 50%;
   background: var(--terracotta);
-  border: 3px solid var(--cream);
+  border: 3px solid white;
   box-shadow: 0 0 0 2px var(--terracotta);
 }
 
 .vindima-root .vindima-timeline-time {
-  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--terracotta);
@@ -347,39 +457,95 @@
 
 .vindima-root .vindima-timeline-title {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--brown);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .vindima-root .vindima-timeline-desc {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--brown-light);
-  line-height: 1.5;
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.vindima-root .vindima-timeline-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-timeline-image {
+    max-width: 320px;
+  }
+}
+
+/* ───────── Photo Gallery ───────── */
+.vindima-root .vindima-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-gallery {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+}
+
+.vindima-root .vindima-gallery-item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vindima-root .vindima-gallery-large {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 7;
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-gallery-large {
+    grid-column: 1 / 3;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 /* ───────── Feature cards ───────── */
 .vindima-root .vindima-features-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 12px;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 auto 48px;
+}
+
+@media (min-width: 480px) {
+  .vindima-root .vindima-features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (min-width: 768px) {
   .vindima-root .vindima-features-grid {
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 }
 
 .vindima-root .vindima-feature-card {
-  background: white;
+  background: var(--cream);
   border: 1px solid rgba(61, 43, 31, 0.08);
   border-radius: 12px;
-  padding: 24px 20px;
+  padding: 20px 16px;
   position: relative;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -396,24 +562,97 @@
   content: "";
   position: absolute;
   top: 0;
-  left: 20px;
-  right: 20px;
+  left: 16px;
+  right: 16px;
   height: 3px;
   background: var(--terracotta);
   border-radius: 0 0 3px 3px;
 }
 
 .vindima-root .vindima-feature-card-emoji {
-  font-size: 1.75rem;
-  margin-bottom: 12px;
+  font-size: 1.6rem;
+  margin-bottom: 8px;
   display: block;
 }
 
 .vindima-root .vindima-feature-card-title {
   font-family: var(--font-serif);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--brown);
+}
+
+/* ───────── Family Corner ───────── */
+.vindima-root .vindima-family-corner {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 32px 24px;
+  border: 2px solid rgba(107, 127, 59, 0.2);
+}
+
+.vindima-root .vindima-family-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--brown);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.vindima-root .vindima-family-subtitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--brown-light);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.vindima-root .vindima-family-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 480px) {
+  .vindima-root .vindima-family-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-family-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.vindima-root .vindima-family-card {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid rgba(61, 43, 31, 0.06);
+}
+
+.vindima-root .vindima-family-emoji {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.vindima-root .vindima-family-card strong {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--brown);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.vindima-root .vindima-family-card p {
+  font-size: 0.8rem;
+  color: var(--brown-light);
+  line-height: 1.45;
+  margin: 0;
 }
 
 /* ───────── Testimonials ───────── */
@@ -426,6 +665,22 @@
   color: var(--cream);
 }
 
+.vindima-root .vindima-google-badge {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #E8C547;
+  margin-top: -32px;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.vindima-root .vindima-stars {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
 .vindima-root .vindima-testimonial-card {
   max-width: 600px;
   margin: 0 auto;
@@ -436,34 +691,40 @@
 .vindima-root .vindima-testimonial-quote {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 3vw, 1.3rem);
   line-height: 1.5;
   color: var(--cream);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   position: relative;
 }
 
 .vindima-root .vindima-testimonial-quote::before {
   content: "\201C";
-  font-size: 4rem;
+  font-size: 3.5rem;
   color: var(--terracotta);
   line-height: 1;
   display: block;
-  margin-bottom: -16px;
+  margin-bottom: -12px;
   font-family: var(--font-serif);
 }
 
 .vindima-root .vindima-testimonial-author {
   font-size: 0.9rem;
-  color: rgba(245, 240, 230, 0.6);
+  color: rgba(245, 240, 230, 0.7);
   font-weight: 500;
+}
+
+.vindima-root .vindima-testimonial-date {
+  font-size: 0.75rem;
+  color: rgba(245, 240, 230, 0.4);
+  margin-top: 4px;
 }
 
 .vindima-root .vindima-dots {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 24px;
 }
 
 .vindima-root .vindima-dot {
@@ -492,29 +753,404 @@
   transform: scale(1.2);
 }
 
-/* ───────── CTA ───────── */
-.vindima-root .vindima-cta {
-  text-align: center;
-  background:
-    linear-gradient(
-      135deg,
-      var(--cream) 0%,
-      var(--cream-dark) 100%
-    );
+/* ───────── Team ───────── */
+.vindima-root .vindima-team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.vindima-root .vindima-price {
+@media (min-width: 768px) {
+  .vindima-root .vindima-team-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.vindima-root .vindima-team-card {
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  border: 1px solid rgba(61, 43, 31, 0.06);
+}
+
+.vindima-root .vindima-team-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--terracotta), var(--olive));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 16px;
+}
+
+.vindima-root .vindima-team-card h3 {
   font-family: var(--font-serif);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  color: var(--terracotta);
+  font-size: 1.1rem;
   font-weight: 700;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+
+.vindima-root .vindima-team-role {
+  font-size: 0.8rem;
+  color: var(--terracotta);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.vindima-root .vindima-team-bio {
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  line-height: 1.5;
+}
+
+/* ───────── Seasonal Calendar ───────── */
+.vindima-root .vindima-calendar {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vindima-root .vindima-calendar-item {
+  background: white;
+  border-radius: 10px;
+  padding: 18px 20px;
+  border-left: 4px solid var(--terracotta);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+@media (min-width: 600px) {
+  .vindima-root .vindima-calendar-item {
+    grid-template-columns: 140px 120px 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+.vindima-root .vindima-calendar-period {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brown);
+}
+
+.vindima-root .vindima-calendar-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.vindima-root .vindima-calendar-desc {
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  line-height: 1.4;
+}
+
+.vindima-root .vindima-offseason {
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.vindima-root .vindima-offseason h3 {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brown);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.vindima-root .vindima-offseason-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 600px) {
+  .vindima-root .vindima-offseason-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.vindima-root .vindima-offseason-grid div {
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  line-height: 1.4;
+  padding: 8px 12px;
+  background: var(--cream);
+  border-radius: 8px;
+}
+
+.vindima-root .vindima-offseason-grid div strong {
+  color: var(--terracotta);
+}
+
+/* ───────── FAQ ───────── */
+.vindima-root .vindima-faq-list {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vindima-root .vindima-faq-item {
+  background: var(--cream);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(61, 43, 31, 0.06);
+}
+
+.vindima-root .vindima-faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--brown);
+  text-align: left;
+  min-height: 52px;
+  transition: color 0.2s ease;
+}
+
+.vindima-root .vindima-faq-question.open {
+  color: var(--terracotta);
+}
+
+.vindima-root .vindima-faq-icon {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--terracotta);
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.vindima-root .vindima-faq-answer {
+  overflow: hidden;
+}
+
+.vindima-root .vindima-faq-answer p {
+  padding: 0 20px 18px;
+  font-size: 0.88rem;
+  color: var(--brown-light);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ───────── Pricing ───────── */
+.vindima-root .vindima-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto 32px;
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-pricing-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.vindima-root .vindima-pricing-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  border: 1px solid rgba(61, 43, 31, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.vindima-root .vindima-pricing-highlight {
+  border: 2px solid var(--terracotta);
+  box-shadow: 0 8px 32px rgba(196, 112, 75, 0.15);
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-pricing-highlight {
+    transform: scale(1.04);
+  }
+}
+
+.vindima-root .vindima-pricing-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--terracotta);
+  color: var(--cream);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 6px;
+}
+
+.vindima-root .vindima-pricing-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--brown);
+  text-align: center;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.vindima-root .vindima-pricing-highlight h3 {
+  margin-top: 20px;
+}
+
+.vindima-root .vindima-pricing-price {
+  text-align: center;
   margin-bottom: 8px;
 }
 
-.vindima-root .vindima-price-note {
-  font-size: 0.875rem;
+.vindima-root .vindima-pricing-currency {
+  font-size: 1.2rem;
+  color: var(--terracotta);
+  font-weight: 600;
+  vertical-align: top;
+}
+
+.vindima-root .vindima-pricing-amount {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--terracotta);
+  line-height: 1;
+}
+
+.vindima-root .vindima-pricing-per {
+  font-size: 0.85rem;
   color: var(--brown-light);
-  margin-bottom: 32px;
+}
+
+.vindima-root .vindima-pricing-tagline {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.vindima-root .vindima-pricing-duration {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--terracotta);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.vindima-root .vindima-pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.vindima-root .vindima-pricing-card li {
+  font-size: 0.82rem;
+  color: var(--brown-light);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(61, 43, 31, 0.04);
+  line-height: 1.4;
+}
+
+.vindima-root .vindima-pricing-card li:last-child {
+  border-bottom: none;
+}
+
+.vindima-root .vindima-pricing-cta {
+  display: block;
+  text-align: center;
+  background: var(--brown);
+  color: var(--cream);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 14px 24px;
+  border-radius: 50px;
+  text-decoration: none;
+  min-height: 48px;
+  transition: background 0.2s ease;
+}
+
+.vindima-root .vindima-pricing-highlight .vindima-pricing-cta {
+  background: var(--terracotta);
+}
+
+.vindima-root .vindima-pricing-cta:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .vindima-root .vindima-pricing-cta:hover {
+    background: var(--terracotta-dark);
+  }
+}
+
+.vindima-root .vindima-pricing-discounts {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  background: white;
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.vindima-root .vindima-pricing-discounts p {
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ───────── CTA ───────── */
+.vindima-root .vindima-cta {
+  text-align: center;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+}
+
+.vindima-root .vindima-cta .vindima-section-title {
+  white-space: pre-line;
+}
+
+.vindima-root .vindima-cta-text {
+  font-size: 0.95rem;
+  color: var(--brown-light);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto 32px;
+}
+
+.vindima-root .vindima-cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
 }
 
 .vindima-root .vindima-whatsapp-btn {
@@ -544,6 +1180,25 @@
   }
 }
 
+.vindima-root .vindima-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brown-light);
+  font-size: 0.9rem;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: 1px solid rgba(61, 43, 31, 0.15);
+  min-height: 44px;
+  transition: border-color 0.2s ease;
+}
+
+.vindima-root .vindima-email-btn:active {
+  border-color: var(--terracotta);
+  color: var(--terracotta);
+}
+
 /* ───────── Footer ───────── */
 .vindima-root .vindima-footer {
   background: var(--brown);
@@ -563,4 +1218,36 @@
 
 .vindima-root .vindima-footer p {
   margin: 4px 0;
+}
+
+.vindima-root .vindima-footer-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.vindima-root .vindima-footer-links a {
+  color: rgba(245, 240, 230, 0.6);
+  text-decoration: none;
+  font-size: 0.8rem;
+  padding: 8px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.vindima-root .vindima-footer-links a:active {
+  color: var(--terracotta);
+}
+
+.vindima-root .vindima-footer-links span {
+  color: rgba(245, 240, 230, 0.3);
+}
+
+.vindima-root .vindima-footer-address {
+  font-size: 0.75rem;
+  color: rgba(245, 240, 230, 0.35);
+  margin-top: 8px;
 }

@@ -1,0 +1,985 @@
+/* ═══════════════════════════════════════════════
+   Vinho na Rua — Scoped Styles
+   All classes prefixed with .rua- or scoped under .rua-root
+   ═══════════════════════════════════════════════ */
+
+.rua-root {
+  --rua-wine: #722F37;
+  --rua-wine-dark: #5A242C;
+  --rua-wine-light: #8B3A44;
+  --rua-mustard: #D4A017;
+  --rua-mustard-light: #E8B84A;
+  --rua-warm-white: #FAF8F5;
+  --rua-charcoal: #2D2D2D;
+  --rua-charcoal-light: #4A4A4A;
+  --rua-olive: #6B7F3B;
+  --rua-cream: #F5F0E8;
+
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--rua-charcoal);
+  background: var(--rua-warm-white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Nav ─── */
+
+.rua-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 1rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.rua-nav--scrolled {
+  background: rgba(114, 47, 55, 0.97);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.rua-nav-logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.rua-nav-logo span {
+  color: var(--rua-mustard);
+}
+
+.rua-nav-links {
+  display: none;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rua-nav-links a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.rua-nav-links a:hover {
+  color: var(--rua-mustard);
+}
+
+.rua-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.rua-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.rua-hamburger--open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.rua-hamburger--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.rua-hamburger--open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.rua-mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(114, 47, 55, 0.98);
+  backdrop-filter: blur(20px);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.rua-mobile-menu a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.rua-mobile-menu a:hover {
+  color: var(--rua-mustard);
+}
+
+/* ─── Hero ─── */
+
+.rua-hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1.25rem 3rem;
+  background: linear-gradient(165deg, var(--rua-wine) 0%, var(--rua-wine-dark) 50%, #3D1A20 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.rua-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(212, 160, 23, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(212, 160, 23, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.rua-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.rua-hero h1 {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.03em;
+}
+
+.rua-hero h1 span {
+  color: var(--rua-mustard);
+}
+
+.rua-hero-sub {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.rua-hero-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.rua-hero-stat {
+  text-align: center;
+  color: #fff;
+}
+
+.rua-hero-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--rua-mustard);
+  display: block;
+}
+
+.rua-hero-stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.rua-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--rua-mustard);
+  color: var(--rua-charcoal);
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 1rem 2.5rem;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 52px;
+}
+
+.rua-hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 160, 23, 0.35);
+}
+
+/* ─── Sections shared ─── */
+
+.rua-section {
+  padding: 4rem 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.rua-section--full {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.rua-section--wine {
+  background: var(--rua-wine);
+  color: #fff;
+}
+
+.rua-section--cream {
+  background: var(--rua-cream);
+}
+
+.rua-section-title {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.rua-section-subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--rua-charcoal-light);
+  max-width: 550px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+.rua-section--wine .rua-section-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ─── How It Works ─── */
+
+.rua-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.rua-step {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.rua-step-num {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--rua-wine);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.rua-step-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.rua-step h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.rua-step p {
+  font-size: 0.9rem;
+  color: var(--rua-charcoal-light);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Cities ─── */
+
+.rua-cities {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.rua-city-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+.rua-city-card:active {
+  transform: scale(0.98);
+}
+
+.rua-city-img {
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rua-city-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rua-city-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--rua-wine);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rua-city-body {
+  padding: 1.25rem;
+}
+
+.rua-city-body h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem;
+}
+
+.rua-city-body h3 span {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--rua-charcoal-light);
+  margin-left: 0.5rem;
+}
+
+.rua-city-desc {
+  font-size: 0.875rem;
+  color: var(--rua-charcoal-light);
+  margin: 0.5rem 0 1rem;
+  line-height: 1.55;
+}
+
+.rua-city-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rua-city-highlights span {
+  background: var(--rua-cream);
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  font-weight: 500;
+  color: var(--rua-charcoal);
+}
+
+/* ─── Timeline ─── */
+
+.rua-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.rua-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.rua-timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+  padding-left: 1.5rem;
+}
+
+.rua-timeline-dot {
+  position: absolute;
+  left: -1.6rem;
+  top: 0.25rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--rua-mustard);
+  border: 3px solid var(--rua-wine);
+  z-index: 1;
+}
+
+.rua-timeline-time {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--rua-mustard);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.rua-timeline-item h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.35rem;
+}
+
+.rua-timeline-item p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Taste Grid ─── */
+
+.rua-taste-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.rua-taste-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.rua-taste-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.rua-taste-card h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.rua-taste-card p {
+  font-size: 0.75rem;
+  color: var(--rua-charcoal-light);
+  margin: 0;
+}
+
+/* ─── Families ─── */
+
+.rua-families {
+  background: var(--rua-cream);
+  border-radius: 24px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.rua-families h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.rua-families p {
+  font-size: 0.95rem;
+  color: var(--rua-charcoal-light);
+  line-height: 1.7;
+  margin: 0 0 1.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rua-families-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  text-align: left;
+}
+
+.rua-families-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 14px;
+}
+
+.rua-families-feat-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.rua-families-feat h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+}
+
+.rua-families-feat p {
+  font-size: 0.825rem;
+  margin: 0;
+  color: var(--rua-charcoal-light);
+  line-height: 1.5;
+}
+
+/* ─── Gallery ─── */
+
+.rua-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 0 1.25rem;
+}
+
+.rua-gallery-item {
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  position: relative;
+}
+
+.rua-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.rua-gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.rua-gallery-item:nth-child(1) {
+  grid-column: span 2;
+  aspect-ratio: 16/9;
+}
+
+/* ─── Testimonials ─── */
+
+.rua-testimonials {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.rua-testimonial {
+  background: #fff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
+.rua-testimonial-stars {
+  color: var(--rua-mustard);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.rua-testimonial p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--rua-charcoal);
+}
+
+.rua-testimonial-author {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--rua-wine);
+}
+
+.rua-testimonial-author span {
+  font-weight: 400;
+  color: var(--rua-charcoal-light);
+  margin-left: 0.25rem;
+}
+
+/* ─── Pricing ─── */
+
+.rua-pricing {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.rua-price-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.rua-price-card--featured {
+  border-color: var(--rua-mustard);
+}
+
+.rua-price-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--rua-mustard);
+  color: var(--rua-charcoal);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.35rem 1rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.rua-price-card h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+}
+
+.rua-price-amount {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--rua-wine);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.rua-price-per {
+  font-size: 0.8rem;
+  color: var(--rua-charcoal-light);
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.rua-price-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  text-align: left;
+}
+
+.rua-price-features li {
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rua-cream);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rua-price-features li::before {
+  content: "\2713";
+  color: var(--rua-olive);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rua-price-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 48px;
+}
+
+.rua-price-cta--primary {
+  background: var(--rua-wine);
+  color: #fff;
+}
+
+.rua-price-cta--secondary {
+  background: var(--rua-cream);
+  color: var(--rua-charcoal);
+}
+
+.rua-price-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* ─── FAQ ─── */
+
+.rua-faq-list {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rua-faq-item {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+}
+
+.rua-faq-q {
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 1.25rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 52px;
+  color: var(--rua-charcoal);
+  font-family: inherit;
+}
+
+.rua-faq-q:hover {
+  color: var(--rua-wine);
+}
+
+.rua-faq-chevron {
+  font-size: 1.25rem;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  color: var(--rua-wine);
+}
+
+.rua-faq-chevron--open {
+  transform: rotate(180deg);
+}
+
+.rua-faq-a {
+  padding: 0 1.25rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--rua-charcoal-light);
+}
+
+/* ─── CTA ─── */
+
+.rua-cta-section {
+  background: linear-gradient(165deg, var(--rua-wine) 0%, var(--rua-wine-dark) 100%);
+  padding: 4rem 1.25rem;
+  text-align: center;
+  color: #fff;
+}
+
+.rua-cta-section h2 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.rua-cta-section p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 2rem;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.rua-cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.rua-cta-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #25D366;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  min-height: 52px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rua-cta-wa:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.3);
+}
+
+.rua-cta-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  min-height: 48px;
+  transition: background 0.2s;
+}
+
+.rua-cta-email:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ─── Footer ─── */
+
+.rua-footer {
+  background: var(--rua-charcoal);
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.rua-footer p {
+  margin: 0.4rem 0;
+}
+
+.rua-footer a {
+  color: var(--rua-mustard);
+  text-decoration: none;
+}
+
+/* ─── Tablet ─── */
+
+@media (min-width: 640px) {
+  .rua-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rua-taste-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .rua-testimonials {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rua-gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .rua-gallery-item:nth-child(1) {
+    grid-column: span 2;
+  }
+
+  .rua-families-features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rua-pricing {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .rua-cta-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+/* ─── Desktop ─── */
+
+@media (min-width: 1024px) {
+  .rua-nav-links {
+    display: flex;
+  }
+
+  .rua-hamburger {
+    display: none;
+  }
+
+  .rua-steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .rua-cities {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rua-taste-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .rua-testimonials {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .rua-section {
+    padding: 5rem 2rem;
+  }
+}

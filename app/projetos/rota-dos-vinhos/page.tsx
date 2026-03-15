@@ -5,145 +5,299 @@ import { motion, AnimatePresence } from "framer-motion";
 
 /* ─── Data ─── */
 
+const navLinks = [
+  { label: "Regioes", href: "#regioes" },
+  { label: "Galeria", href: "#galeria" },
+  { label: "Tours", href: "#experiencias" },
+  { label: "Guias", href: "#guias" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Reservar", href: "#reservar" },
+];
+
 const regions = [
   {
     name: "Douro",
-    tagline: "O berço do vinho do Porto",
-    emoji: "🏔️",
+    tagline: "O berco do vinho do Porto e Patrimonio Mundial da UNESCO",
+    emoji: "\u{1F3D4}\uFE0F",
     grad: "rota-grad-douro",
+    grape: "Touriga Nacional, Touriga Franca, Tinta Roriz",
+    bestTime: "Setembro-outubro (vindimas) ou abril-junho",
+    unique: "Regiao vinicola demarcada mais antiga do mundo (1756)",
+    quintas: "Quinta da Pacheca, Quinta do Crasto, Quinta de La Rosa",
+  },
+  {
+    name: "Vinho Verde",
+    tagline: "Frescura atlantica do Minho",
+    emoji: "\u{1F30A}",
+    grad: "rota-grad-verdes",
+    grape: "Alvarinho, Loureiro, Trajadura",
+    bestTime: "Maio a setembro (dias longos e festas populares)",
+    unique: "A maior regiao vinicola de Portugal em area",
+    quintas: "Quinta de Soalheiro, Quinta do Ameal, Paco de Calheiros",
   },
   {
     name: "Alentejo",
-    tagline: "Planícies douradas, vinhos robustos",
-    emoji: "☀️",
+    tagline: "Planicies douradas, sobreiros centenarios e vinhos generosos",
+    emoji: "\u2600\uFE0F",
     grad: "rota-grad-alentejo",
+    grape: "Aragonez, Trincadeira, Antao Vaz",
+    bestTime: "Marco-junho ou setembro-novembro",
+    unique: "70+ vinicolas abertas a visitantes, 8 sub-regioes",
+    quintas: "Herdade do Esporao, Adega da Cartuxa, Herdade das Servas",
   },
   {
-    name: "Dão",
-    tagline: "O elegante coração de Portugal",
-    emoji: "🌿",
+    name: "Dao",
+    tagline: "Elegancia serrana entre granito e pinheiros",
+    emoji: "\u{1F33F}",
     grad: "rota-grad-dao",
+    grape: "Touriga Nacional, Encruzado, Alfrocheiro",
+    bestTime: "Maio a outubro (cores magnificas no outono)",
+    unique: "Terra natal da Touriga Nacional, vinhos comparados a Borgonha",
+    quintas: "Casa da Insua, Quinta da Taboadella, Quinta dos Roques",
   },
   {
     name: "Bairrada",
-    tagline: "Espumantes e tradição",
-    emoji: "🥂",
+    tagline: "Terra da Baga, do espumante e do leitao",
+    emoji: "\u{1F942}",
     grad: "rota-grad-bairrada",
-  },
-  {
-    name: "Vinhos Verdes",
-    tagline: "Frescura atlântica do Minho",
-    emoji: "🌊",
-    grad: "rota-grad-verdes",
+    grape: "Baga, Maria Gomes, Bical",
+    bestTime: "Abril a outubro (vindima tardia em outubro)",
+    unique: "Patria do espumante portugues, metodo classico de excelencia",
+    quintas: "Quinta do Encontro, Luis Pato, Caves Sao Joao",
   },
   {
     name: "Lisboa",
-    tagline: "A capital encontra a vinha",
-    emoji: "🌇",
+    tagline: "Vinhos com brisa atlantica as portas da capital",
+    emoji: "\u{1F307}",
     grad: "rota-grad-lisboa",
+    grape: "Arinto, Castelao, Moscatel de Setubal",
+    bestTime: "Abril a novembro (clima ameno quase todo o ano)",
+    unique: "Vinhas sobre areia em Colares -- caso unico no mundo",
+    quintas: "Quinta de Chocapalha, Jose Maria da Fonseca, Quinta de Sant'Ana",
   },
+];
+
+const galleryItems = [
+  { src: "/wine-images/rota-hero.jpg", caption: "Vista panoramica dos socalcos do Douro" },
+  { src: "/wine-images/rota-vineyard.jpg", caption: "Vinhas entre colinas e quintas centenarias" },
+  { src: "/wine-images/rota-cellar.jpg", caption: "Adegas historicas com seculos de tradicao" },
+  { src: "/wine-images/rota-glasses.jpg", caption: "Provas comentadas com os melhores vinhos" },
+  { src: "/wine-images/rota-food.jpg", caption: "Gastronomia regional harmonizada com vinho" },
+  { src: "/wine-images/rota-landscape.jpg", caption: "Paisagens de tirar o folego em cada regiao" },
 ];
 
 const steps = [
   {
-    icon: "🗓️",
-    title: "Escolha a Região",
-    desc: "Selecione uma das 6 regiões vinícolas",
+    icon: "\u{1F5D3}\uFE0F",
+    title: "Escolha a Regiao",
+    desc: "Selecione uma das 6 regioes vinicolas de Portugal ou peca-nos uma sugestao",
     color: "#2563EB",
   },
   {
-    icon: "📅",
+    icon: "\u{1F4C5}",
     title: "Marque a Data",
-    desc: "Tours disponíveis de quinta a domingo",
+    desc: "Tours disponiveis de quinta a domingo. Reservas com 48h de antecedencia",
     color: "#F59E0B",
   },
   {
-    icon: "🍷",
+    icon: "\u{1F377}",
     title: "Aproveite",
-    desc: "Transporte, guia, provas e almoço incluídos",
+    desc: "Transporte, guia-sommelier, provas, almoco e seguro -- tudo incluido",
     color: "#16A34A",
   },
 ];
 
 const experiences = [
   {
-    title: "Tour do Douro Clássico",
-    price: "€49",
-    unit: "/pessoa",
-    tags: ["Full day", "3 quintas", "Almoço"],
-    border: "rota-border-douro",
-    priceColor: "bg-orange-100 text-orange-700",
-  },
-  {
-    title: "Vinhos Verdes & Minho",
-    price: "€39",
-    unit: "/pessoa",
-    tags: ["Half day", "2 adegas", "Petiscos"],
+    title: "Rota Familiar",
+    subtitle: "Meio dia para toda a familia",
+    price: "\u20AC65",
+    unit: "/adulto",
+    familyPrice: "\u20AC150 (2 adultos + 2 criancas)",
+    tags: ["4-5 horas", "Criancas bem-vindas", "Lanche regional"],
     border: "rota-border-verdes",
     priceColor: "bg-cyan-100 text-cyan-700",
+    desc: "Passeio pelas vinhas, prova de vinhos para adultos, sumos e jogos para criancas, piquenique no jardim da quinta.",
+    popular: false,
   },
   {
-    title: "Alentejo Premium",
-    price: "€69",
+    title: "Rota Classica",
+    subtitle: "A essencia do enoturismo num so dia",
+    price: "\u20AC135",
     unit: "/pessoa",
-    tags: ["Full day", "4 herdades", "Almoço gourmet"],
+    familyPrice: "Grupos 4-6: \u20AC115/pp | 7-8: \u20AC99/pp",
+    tags: ["8-9 horas", "2 quintas", "Almoco completo", "8-10 vinhos"],
+    border: "rota-border-douro",
+    priceColor: "bg-orange-100 text-orange-700",
+    desc: "Visita a duas quintas, prova de 8-10 vinhos incluindo reservas, almoco regional e estrada panoramica.",
+    popular: true,
+  },
+  {
+    title: "Rota Premium",
+    subtitle: "2 dias de imersao completa",
+    price: "\u20AC395",
+    unit: "/pessoa",
+    familyPrice: "Inclui 1 noite em quinta + jantar de degustacao",
+    tags: ["2 dias", "3 quintas", "15-20 vinhos", "Workshop blending"],
     border: "rota-border-alentejo",
     priceColor: "bg-yellow-100 text-yellow-700",
+    desc: "Dormir numa quinta, jantar de 5 pratos harmonizados, prova vertical e criar o seu proprio blend.",
+    popular: false,
   },
   {
-    title: "Bairrada & Espumantes",
-    price: "€45",
+    title: "Rota dos Sabores",
+    subtitle: "Gastronomia + vinho, prato a prato",
+    price: "\u20AC155",
     unit: "/pessoa",
-    tags: ["Half day", "Caves", "Prova de espumantes"],
+    familyPrice: "Grupos 4-6: \u20AC135/pp | 7-10: \u20AC119/pp",
+    tags: ["7-8 horas", "Workshop cozinha", "Prova de azeite", "Cesto regional"],
     border: "rota-border-bairrada",
     priceColor: "bg-pink-100 text-pink-700",
+    desc: "Workshop de cozinha regional, almoco de harmonizacao, visita a queijaria artesanal e prova de azeites.",
+    popular: false,
   },
   {
-    title: "Dão Secreto",
-    price: "€55",
+    title: "Rota Aventura",
+    subtitle: "Caminhada + vinho entre vinhas",
+    price: "\u20AC95",
     unit: "/pessoa",
-    tags: ["Full day", "3 quintas", "Almoço típico"],
+    familyPrice: "Grupos 6-8: \u20AC79/pp | 9-12: \u20AC69/pp",
+    tags: ["7-8 horas", "8-12 km trilho", "Piquenique vinicola", "4-5 vinhos"],
     border: "rota-border-dao",
     priceColor: "bg-green-100 text-green-700",
+    desc: "Caminhada guiada pelos socalcos do Douro, piquenique com enchidos e queijo, prova na quinta.",
+    popular: false,
   },
   {
-    title: "Lisboa Wine & Food",
-    price: "€59",
+    title: "Team Building Vinicola",
+    subtitle: "Para empresas e grupos corporativos",
+    price: "\u20AC75",
     unit: "/pessoa",
-    tags: ["Half day", "3 produtores", "Tapas"],
+    familyPrice: "10-20 pessoas, meio dia | Dia inteiro: \u20AC130/pp",
+    tags: ["10-60 pessoas", "Workshop blending", "Prova as cegas", "Competicao"],
     border: "rota-border-lisboa",
     priceColor: "bg-red-100 text-red-700",
+    desc: "Workshop de blending em equipa, prova as cegas competitiva, vindima em equipa e jantar de grupo.",
+    popular: false,
+  },
+];
+
+const guides = [
+  {
+    name: "Joao Pereira",
+    role: "Fundador e Diretor",
+    bio: "Nasceu nas vinhas de Sabrosa, no Douro. 15 anos de experiencia em turismo. Certificacao WSET Level 3.",
+    langs: ["Portugues", "Ingles", "Espanhol"],
+    color: "#2563eb",
+    initials: "JP",
+  },
+  {
+    name: "Tiago Nogueira",
+    role: "Sommelier Principal",
+    bio: "Sommelier certificado (Court of Master Sommeliers), WSET Level 3 Distinction. Estagiou na Borgonha.",
+    langs: ["Portugues", "Ingles", "Frances", "Espanhol"],
+    color: "#7c3aed",
+    initials: "TN",
+  },
+  {
+    name: "Sofia Barros",
+    role: "Guia de Enoturismo e Natureza",
+    bio: "Biologa de formacao, amante de vinhos. Guia os trilhos da Rota Aventura com paixao pela biodiversidade.",
+    langs: ["Portugues", "Ingles"],
+    color: "#16a34a",
+    initials: "SB",
+  },
+  {
+    name: "Miguel Azevedo",
+    role: "Guia de Familias e Grupos",
+    bio: "Formacao em animacao sociocultural. O favorito das criancas -- ninguem sai sem pes roxos e um sorriso.",
+    langs: ["Portugues", "Ingles", "Espanhol"],
+    color: "#f59e0b",
+    initials: "MA",
+  },
+];
+
+const testimonials = [
+  {
+    text: "Levamos os nossos dois filhos (7 e 10 anos) e o guia Miguel foi espetacular com as criancas, que adoraram pisar as uvas. O piquenique no jardim da quinta foi o ponto alto. Ja estamos a planear voltar!",
+    author: "Ana e Ricardo Ferreira",
+    meta: "Lisboa \u2022 Rota Familiar (Vinho Verde)",
+    rating: 5,
+  },
+  {
+    text: "Somos um casal ingles apaixonado por vinhos e ja fizemos tours em Franca e Italia. O Douro superou tudo. A guia Sofia explicou tudo com paixao e bom humor. O vinho do Porto de 1985 -- nunca vou esquecer.",
+    author: "James e Sarah Mitchell",
+    meta: "Londres \u2022 Rota Classica (Douro)",
+    rating: 5,
+  },
+  {
+    text: "Reservei a Rota Premium para celebrar 25 anos de casados. Dormir numa quinta no Douro, jantar com harmonizacao de 5 pratos, criar o nosso proprio blend... foi tudo perfeito.",
+    author: "Carlos Mendonca",
+    meta: "Porto \u2022 Rota Premium (Douro)",
+    rating: 5,
+  },
+  {
+    text: "Organizamos o team building da empresa (22 pessoas) e foi um sucesso. A competicao de blending gerou muita risada. Ate o nosso diretor acabou a dizer que o Encruzado do Dao era brutal!",
+    author: "Margarida Santos",
+    meta: "Diretora de RH \u2022 Rota Corporativa (Dao)",
+    rating: 5,
+  },
+  {
+    text: "Viemos do Brasil e foi o ponto alto da viagem. A herdade era lindissima, o Pera-Manca era divino, e o ensopado de borrego no almoco... que saudade ja tenho! Recomendo a todos os brasileiros.",
+    author: "Fernanda e Marcos Ribeiro",
+    meta: "Sao Paulo \u2022 Rota Classica (Alentejo)",
+    rating: 5,
   },
 ];
 
 const faqs = [
   {
-    q: "O transporte está incluído?",
-    a: "Sim, fazemos pickup no centro do Porto ou Lisboa, dependendo da rota escolhida.",
+    q: "O transporte esta incluido?",
+    a: "Sim. Fazemos recolha no seu hotel, alojamento local ou num ponto central da cidade. No Porto: Avenida dos Aliados ou hotel. Em Lisboa: Praca do Comercio ou hotel. Carrinhas Mercedes com ar condicionado, wifi e agua.",
   },
   {
-    q: "Posso ir com crianças?",
-    a: "Sim, temos atividades adaptadas para menores. As crianças podem participar nas visitas e desfrutar de sumos de uva e almoço.",
+    q: "Posso ir com criancas?",
+    a: "Claro! A Rota Familiar foi desenhada para familias com criancas de todas as idades. Temos cadeirinhas na carrinha, sumos de uva naturais, bolachas e atividades para os mais pequenos. Nas outras rotas, consulte-nos.",
   },
   {
-    q: "Quanto tempo demora?",
-    a: "Depende do tour: Half day dura cerca de 4 horas, Full day cerca de 8 horas.",
+    q: "E preciso perceber de vinhos para participar?",
+    a: "De maneira nenhuma! Os nossos guias adaptam a linguagem a cada grupo. Explicamos tudo de forma simples, sem jargao. O objectivo e sempre divertir e dar prazer -- nao examinar.",
   },
   {
-    q: "O almoço está incluído?",
-    a: "Sim, em todos os tours full day o almoço regional está incluído. Nos half day incluímos petiscos ou tapas.",
+    q: "Qual e a politica de cancelamento?",
+    a: "Cancelamento gratuito ate 48 horas antes. Entre 24 e 48 horas, reembolsamos 50%. Com menos de 24 horas, pode remarcar para outra data. Em caso de mau tempo severo, remarcamos sem custo.",
   },
   {
-    q: "Posso cancelar?",
-    a: "Cancelamento grátis até 48 horas antes da data do tour. Após esse prazo, aplicam-se as condições gerais.",
+    q: "As rotas funcionam com chuva?",
+    a: "Sim! O enoturismo e maioritariamente em ambientes interiores (adegas, salas de prova, restaurantes). Apenas a Rota Aventura pode ser reagendada em caso de chuva intensa.",
+  },
+  {
+    q: "Quantas pessoas cabem em cada grupo?",
+    a: "As nossas carrinhas levam ate 8 pessoas. Para grupos maiores, utilizamos autocarros ou multiplas carrinhas. Grupos de 2 a 60 pessoas sao bem-vindos. Tours privados a partir de 2 pessoas.",
+  },
+  {
+    q: "As rotas sao acessiveis a pessoas com mobilidade reduzida?",
+    a: "Trabalhamos para tornar as experiencias acessiveis a todos. Temos quintas parceiras com acessos adaptados e carrinhas com espaco para cadeira de rodas dobravel. Informe-nos ao reservar.",
+  },
+  {
+    q: "Aceitam restricoes alimentares?",
+    a: "Sim. Vegetarianos, veganos, celiacos, intolerantes a lactose -- todos os restaurantes parceiros estao preparados. Opcoes halal e kosher mediante aviso previo. Basta informar ao reservar.",
   },
 ];
 
-const floatingEmojis = [
-  { emoji: "🍇", top: "18%", left: "8%", delay: 0 },
-  { emoji: "🍷", top: "30%", right: "6%", delay: 0.5 },
-  { emoji: "🌿", top: "60%", left: "5%", delay: 1 },
-  { emoji: "🌞", top: "70%", right: "10%", delay: 1.5 },
+const pricingData = [
+  { name: "Rota Familiar", duration: "4-5h", meals: "Lanche", wineries: 1, tastings: "3-4", price: "\u20AC65/adulto" },
+  { name: "Rota Classica", duration: "8-9h", meals: "Almoco", wineries: 2, tastings: "8-10", price: "\u20AC135/pp" },
+  { name: "Rota Premium", duration: "2 dias", meals: "Jantar + Almoco", wineries: 3, tastings: "15-20", price: "\u20AC395/pp" },
+  { name: "Rota dos Sabores", duration: "7-8h", meals: "Almoco harmonizado", wineries: 1, tastings: "4-5", price: "\u20AC155/pp" },
+  { name: "Rota Aventura", duration: "7-8h", meals: "Piquenique", wineries: 1, tastings: "4-5", price: "\u20AC95/pp" },
+];
+
+const floatingEmojis: { emoji: string; top: string; left?: string; right?: string; delay: number }[] = [
+  { emoji: "\u{1F347}", top: "18%", left: "8%", delay: 0 },
+  { emoji: "\u{1F377}", top: "30%", right: "6%", delay: 0.5 },
+  { emoji: "\u{1F33F}", top: "60%", left: "5%", delay: 1 },
+  { emoji: "\u{1F31E}", top: "70%", right: "10%", delay: 1.5 },
 ];
 
 /* ─── Animations ─── */
@@ -172,7 +326,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           {q}
         </span>
         <span className="text-2xl text-blue-600 flex-shrink-0 leading-none">
-          {open ? "−" : "+"}
+          {open ? "\u2212" : "+"}
         </span>
       </button>
       <AnimatePresence initial={false}>
@@ -192,6 +346,71 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+function RegionCard({
+  region,
+  index,
+}: {
+  region: (typeof regions)[0];
+  index: number;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      custom={index}
+      className={`${region.grad} rounded-3xl p-8 text-white flex flex-col justify-between min-h-[260px] w-[85vw] max-w-[340px] md:w-[300px] cursor-pointer`}
+      onClick={() => setExpanded(!expanded)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={expanded}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setExpanded(!expanded);
+        }
+      }}
+    >
+      <span className="text-5xl mb-4 block">{region.emoji}</span>
+      <div>
+        <h3 className="text-2xl font-extrabold mb-1">{region.name}</h3>
+        <p className="text-white/80 text-sm mb-3">{region.tagline}</p>
+        <span className="text-sm font-bold opacity-90">
+          {expanded ? "Fechar \u2191" : "Saber mais \u2193"}
+        </span>
+        <AnimatePresence>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <ul className="rota-region-details">
+                <li>
+                  <strong>Castas:</strong> {region.grape}
+                </li>
+                <li>
+                  <strong>Melhor epoca:</strong> {region.bestTime}
+                </li>
+                <li>
+                  <strong>Destaque:</strong> {region.unique}
+                </li>
+                <li>
+                  <strong>Quintas:</strong> {region.quintas}
+                </li>
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
 /* ─── Page ─── */
 
 export default function RotaDosVinhosPage() {
@@ -199,31 +418,20 @@ export default function RotaDosVinhosPage() {
 
   return (
     <>
-      {/* Google Font */}
-      {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet"
-      />
-
       {/* ════════ NAV ════════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-5 h-16">
           <a href="#" className="text-xl font-extrabold text-blue-600">
-            Rota dos Vinhos 🍇
+            Rota dos Vinhos
           </a>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            {[
-              { label: "Regiões", href: "#regioes" },
-              { label: "Experiências", href: "#experiencias" },
-              { label: "Reservar", href: "#reservar" },
-            ].map((link) => (
+          <div className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 hover:after:w-full after:h-[3px] after:bg-gradient-to-r after:from-blue-500 after:to-amber-400 after:transition-all after:duration-300 after:rounded-full"
+                className="text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors"
               >
                 {link.label}
               </a>
@@ -259,11 +467,7 @@ export default function RotaDosVinhosPage() {
               className="md:hidden overflow-hidden bg-white border-t border-slate-100"
             >
               <div className="flex flex-col px-5 py-4 gap-1">
-                {[
-                  { label: "Regiões", href: "#regioes" },
-                  { label: "Experiências", href: "#experiencias" },
-                  { label: "Reservar", href: "#reservar" },
-                ].map((link) => (
+                {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
@@ -281,6 +485,16 @@ export default function RotaDosVinhosPage() {
 
       {/* ════════ HERO ════════ */}
       <section className="relative pt-28 pb-20 px-5 text-center overflow-hidden">
+        {/* Background image */}
+        <div className="rota-hero-bg" aria-hidden="true">
+          <img
+            src="/wine-images/rota-hero.jpg"
+            alt=""
+            loading="eager"
+          />
+        </div>
+        <div className="rota-hero-overlay" aria-hidden="true" />
+
         {/* Floating emojis */}
         {floatingEmojis.map((e, i) => (
           <span
@@ -304,16 +518,17 @@ export default function RotaDosVinhosPage() {
             <span className="text-blue-600">um copo de cada vez</span>
           </h1>
           <p className="text-lg text-slate-600 mb-8 max-w-lg mx-auto">
-            Rotas guiadas pelas melhores regiões vinícolas portuguesas
+            Rotas guiadas pelas melhores regioes vinicolas portuguesas.
+            Para familias, casais, amigos e grupos.
           </p>
 
           {/* Pill badges */}
-          <div className="flex flex-wrap justify-center gap-3 mb-10">
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
             {[
-              "🍷 6 Regiões",
-              "🚐 Transporte incluído",
-              "👨‍🍳 Almoço regional",
-              "📸 Guia local",
+              "\u{1F377} 6 Regioes",
+              "\u{1F690} Transporte incluido",
+              "\u{1F468}\u200D\u{1F373} Almoco regional",
+              "\u{1F4F8} Guia-sommelier",
             ].map((badge) => (
               <span key={badge} className="rota-badge">
                 {badge}
@@ -321,16 +536,49 @@ export default function RotaDosVinhosPage() {
             ))}
           </div>
 
-          <a
-            href="#regioes"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-4 rounded-full transition-colors min-h-[52px] shadow-lg shadow-blue-600/25"
-          >
-            Explorar Rotas →
-          </a>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+            <a
+              href="#experiencias"
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-4 rounded-full transition-colors min-h-[52px] shadow-lg shadow-blue-600/25"
+            >
+              Ver Tours \u2192
+            </a>
+            <a
+              href="https://wa.me/351934035971"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full transition-colors min-h-[52px] shadow-lg shadow-green-600/25"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              WhatsApp
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className="rota-stats">
+            <div className="rota-stat">
+              <span className="rota-stat-number">3000+</span>
+              <span className="rota-stat-label">Visitantes/ano</span>
+            </div>
+            <div className="rota-stat">
+              <span className="rota-stat-number">6</span>
+              <span className="rota-stat-label">Regioes</span>
+            </div>
+            <div className="rota-stat">
+              <span className="rota-stat-number">98%</span>
+              <span className="rota-stat-label">Recomendam</span>
+            </div>
+            <div className="rota-stat">
+              <span className="rota-stat-number">2018</span>
+              <span className="rota-stat-label">Desde</span>
+            </div>
+          </div>
         </motion.div>
       </section>
 
-      {/* ════════ REGIÕES ════════ */}
+      {/* ════════ REGIOES ════════ */}
       <section id="regioes" className="py-16">
         <div className="max-w-6xl mx-auto px-5">
           <motion.h2
@@ -341,7 +589,7 @@ export default function RotaDosVinhosPage() {
             custom={0}
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
           >
-            Regiões Vinícolas
+            Regioes Vinicolas
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -351,36 +599,66 @@ export default function RotaDosVinhosPage() {
             custom={1}
             className="text-slate-500 text-center mb-8 max-w-md mx-auto"
           >
-            Deslize para explorar as 6 regiões disponíveis
+            Toque num cartao para descobrir castas, quintas e a melhor epoca para visitar
           </motion.p>
         </div>
 
         <div className="rota-snap-x rota-hide-scrollbar pl-5 md:pl-[max(1.25rem,calc((100%-72rem)/2+1.25rem))]">
           {regions.map((r, i) => (
+            <RegionCard key={r.name} region={r} index={i} />
+          ))}
+        </div>
+      </section>
+
+      {/* ════════ PHOTO GALLERY ════════ */}
+      <section id="galeria" className="py-16 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-5">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
+          >
+            Galeria
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+            className="text-slate-500 text-center mb-8 max-w-md mx-auto"
+          >
+            Momentos reais das nossas rotas
+          </motion.p>
+        </div>
+
+        <div className="rota-gallery-scroll pl-5 md:pl-[max(1.25rem,calc((100%-72rem)/2+1.25rem))]">
+          {galleryItems.map((item, i) => (
             <motion.div
-              key={r.name}
+              key={i}
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               custom={i}
-              className={`${r.grad} rounded-3xl p-8 text-white flex flex-col justify-between min-h-[260px] w-[85vw] max-w-[340px] md:w-[300px]`}
+              className="rota-gallery-item"
             >
-              <span className="text-5xl mb-4 block">{r.emoji}</span>
-              <div>
-                <h3 className="text-2xl font-extrabold mb-1">{r.name}</h3>
-                <p className="text-white/80 text-sm mb-4">{r.tagline}</p>
-                <span className="text-sm font-bold opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
-                  Explorar →
-                </span>
-              </div>
+              <img
+                src={item.src}
+                alt={item.caption}
+                loading="lazy"
+              />
+              <div className="rota-gallery-caption">{item.caption}</div>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* ════════ COMO FUNCIONA ════════ */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-16">
         <div className="max-w-4xl mx-auto px-5">
           <motion.h2
             variants={fadeUp}
@@ -422,7 +700,7 @@ export default function RotaDosVinhosPage() {
                 <h3 className="font-extrabold text-slate-900 text-lg mb-1">
                   {step.title}
                 </h3>
-                <p className="text-slate-500 text-sm max-w-[240px]">
+                <p className="text-slate-500 text-sm max-w-[260px]">
                   {step.desc}
                 </p>
               </motion.div>
@@ -431,8 +709,8 @@ export default function RotaDosVinhosPage() {
         </div>
       </section>
 
-      {/* ════════ EXPERIÊNCIAS ════════ */}
-      <section id="experiencias" className="py-16">
+      {/* ════════ EXPERIENCIAS / TOURS ════════ */}
+      <section id="experiencias" className="py-16 bg-slate-50">
         <div className="max-w-5xl mx-auto px-5">
           <motion.h2
             variants={fadeUp}
@@ -442,7 +720,7 @@ export default function RotaDosVinhosPage() {
             custom={0}
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
           >
-            Experiências
+            Tours e Experiencias
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -452,7 +730,7 @@ export default function RotaDosVinhosPage() {
             custom={1}
             className="text-slate-500 text-center mb-10 max-w-md mx-auto"
           >
-            Escolha o tour perfeito para si
+            5 rotas unicas + opcoes corporativas. Escolha a sua aventura vinicola.
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -464,20 +742,23 @@ export default function RotaDosVinhosPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 custom={i}
-                className={`bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow ${exp.border}`}
+                className={`bg-white rounded-2xl p-6 shadow-sm ${exp.border} relative`}
               >
-                <div className="flex items-start justify-between gap-3 mb-4">
+                {exp.popular && (
+                  <span className="rota-popular-badge absolute top-4 right-4">
+                    Mais Popular
+                  </span>
+                )}
+                <div className="mb-2">
                   <h3 className="font-extrabold text-slate-900 text-lg">
                     {exp.title}
                   </h3>
-                  <span
-                    className={`${exp.priceColor} text-sm font-bold px-3 py-1 rounded-full whitespace-nowrap`}
-                  >
-                    {exp.price}
-                    <span className="font-normal">{exp.unit}</span>
-                  </span>
+                  <p className="text-slate-500 text-sm">{exp.subtitle}</p>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-5">
+                <p className="text-slate-600 text-sm mb-3 leading-relaxed">
+                  {exp.desc}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-3">
                   {exp.tags.map((tag) => (
                     <span
                       key={tag}
@@ -487,11 +768,22 @@ export default function RotaDosVinhosPage() {
                     </span>
                   ))}
                 </div>
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <span
+                    className={`${exp.priceColor} text-sm font-bold px-3 py-1 rounded-full whitespace-nowrap`}
+                  >
+                    {exp.price}
+                    <span className="font-normal">{exp.unit}</span>
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mb-4">{exp.familyPrice}</p>
                 <a
-                  href="#reservar"
+                  href="https://wa.me/351934035971"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors min-h-[44px]"
                 >
-                  Reservar →
+                  Reservar \u2192
                 </a>
               </motion.div>
             ))}
@@ -499,8 +791,272 @@ export default function RotaDosVinhosPage() {
         </div>
       </section>
 
-      {/* ════════ FAQ ════════ */}
+      {/* ════════ MEET THE GUIDES ════════ */}
+      <section id="guias" className="py-16">
+        <div className="max-w-5xl mx-auto px-5">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
+          >
+            Conheca os Nossos Guias
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+            className="text-slate-500 text-center mb-10 max-w-md mx-auto"
+          >
+            Sommeliers certificados, apaixonados por vinho e por pessoas
+          </motion.p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+            {guides.map((guide, i) => (
+              <motion.div
+                key={guide.name}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+                className="rota-guide-card"
+              >
+                <div
+                  className="rota-guide-avatar"
+                  style={{ backgroundColor: guide.color }}
+                >
+                  {guide.initials}
+                </div>
+                <div className="rota-guide-name">{guide.name}</div>
+                <div className="rota-guide-role">{guide.role}</div>
+                <p className="rota-guide-bio">{guide.bio}</p>
+                <div className="rota-guide-langs">
+                  {guide.langs.map((lang) => (
+                    <span key={lang} className="rota-guide-lang">
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ TESTIMONIALS ════════ */}
       <section className="py-16 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-5">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
+          >
+            O Que Dizem os Nossos Clientes
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+            className="text-slate-500 text-center mb-10 max-w-md mx-auto"
+          >
+            Mais de 3.000 visitantes felizes e a contar
+          </motion.p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.author}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+                className="rota-testimonial-card"
+              >
+                <div className="rota-stars">
+                  {Array.from({ length: t.rating }).map((_, s) => (
+                    <span key={s}>{"\u2605"}</span>
+                  ))}
+                </div>
+                <p className="rota-testimonial-text">&ldquo;{t.text}&rdquo;</p>
+                <div className="rota-testimonial-author">{t.author}</div>
+                <div className="rota-testimonial-meta">{t.meta}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ GROUP & PRIVATE ════════ */}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-5">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
+          >
+            Grupos e Eventos Privados
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+            className="text-slate-500 text-center mb-10 max-w-md mx-auto"
+          >
+            De 2 a 60 pessoas. Tours privados, team buildings e celebracoes especiais.
+          </motion.p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {[
+              {
+                icon: "\u{1F3E2}",
+                title: "Team Building",
+                desc: "Workshop de blending em equipa, prova as cegas competitiva, vindima em equipa, pisa de uvas. 10 a 60 pessoas, meio dia ou dia inteiro.",
+                price: "Desde \u20AC65/pessoa",
+              },
+              {
+                icon: "\u{1F389}",
+                title: "Despedidas de Solteiro/a",
+                desc: "Espumante de boas-vindas, prova animada com jogos e desafios, almoco ou jantar de grupo e surpresa para o/a noivo/a.",
+                price: "Desde \u20AC89/pessoa (min. 8)",
+              },
+              {
+                icon: "\u{1F382}",
+                title: "Aniversarios e Celebracoes",
+                desc: "Aniversarios, bodas de ouro, reunioes familiares em quintas vinicolas. Decoracao tematica e menu personalizado.",
+                price: "Orcamento sob consulta",
+              },
+              {
+                icon: "\u{1F464}",
+                title: "Tours Privados",
+                desc: "Qualquer rota pode ser privada. Guia exclusivo, itinerario a medida, horarios flexiveis. Perfeito para casais e pequenos grupos.",
+                price: "Desde 2 pessoas",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+                className="rota-group-card"
+              >
+                <span className="text-3xl mb-3 block">{item.icon}</span>
+                <h3 className="font-extrabold text-slate-900 text-lg mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-3">
+                  {item.desc}
+                </p>
+                <span className="text-sm font-bold text-blue-600">
+                  {item.price}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ PRACTICAL INFO ════════ */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-5">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
+          >
+            Informacoes Praticas
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+            className="text-slate-500 text-center mb-10 max-w-md mx-auto"
+          >
+            Tudo o que precisa de saber antes do tour
+          </motion.p>
+
+          <img
+            src="/wine-images/rota-landscape.jpg"
+            alt="Paisagem vinicola portuguesa"
+            className="rota-section-image"
+            loading="lazy"
+          />
+
+          <div className="rota-info-grid">
+            {[
+              {
+                icon: "\u{1F4CD}",
+                title: "Pontos de Recolha",
+                text: "Porto: Av. dos Aliados ou hotel. Lisboa: Praca do Comercio ou hotel. Braga, Guimaraes, Coimbra, Evora: centro da cidade ou hotel.",
+              },
+              {
+                icon: "\u{1F690}",
+                title: "Frota",
+                text: "Mercedes Vito (8 lugares), Classe V premium (7 lugares, couro), Sprinter (16 lugares). Todas com ar condicionado, wifi e agua.",
+              },
+              {
+                icon: "\u{1F455}",
+                title: "O Que Vestir",
+                text: "Roupa confortavel, sapatos fechados. Casaco leve (adegas a 12-15\u00B0C). Chapeu e oculos de sol no verao. Evitar perfumes fortes.",
+              },
+              {
+                icon: "\u{1F476}",
+                title: "Familias com Criancas",
+                text: "Cadeirinhas de bebe gratis (Grupo 0+, 1 e 2/3). Sumos de uva, bolachas e atividades para criancas incluidas na Rota Familiar.",
+              },
+              {
+                icon: "\u267F",
+                title: "Acessibilidade",
+                text: "Quintas com acessos adaptados, carrinhas com espaco para cadeira de rodas, percursos em piso regular. Provas adaptadas para deficiencia visual.",
+              },
+              {
+                icon: "\u{1F4B3}",
+                title: "Pagamentos",
+                text: "Multibanco, MBWay, cartao (Visa/Mastercard), transferencia, PayPal. Pagamento na reserva ou no dia. Cancelamento gratis ate 48h antes.",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+                className="rota-info-item"
+              >
+                <div className="rota-info-icon">{item.icon}</div>
+                <h3 className="rota-info-title">{item.title}</h3>
+                <p className="rota-info-text">{item.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ FAQ ════════ */}
+      <section id="faq" className="py-16">
         <div className="max-w-2xl mx-auto px-5">
           <motion.h2
             variants={fadeUp}
@@ -527,7 +1083,106 @@ export default function RotaDosVinhosPage() {
         </div>
       </section>
 
-      {/* ════════ RESERVAR / CTA ════════ */}
+      {/* ════════ PRICING TABLE ════════ */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-5">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
+          >
+            Comparar Rotas
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+            className="text-slate-500 text-center mb-10 max-w-md mx-auto"
+          >
+            Encontre o tour perfeito para si
+          </motion.p>
+
+          {/* Desktop table */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={2}
+            className="hidden md:block"
+          >
+            <table className="rota-pricing-table">
+              <thead>
+                <tr>
+                  <th>Rota</th>
+                  <th>Duracao</th>
+                  <th>Refeicoes</th>
+                  <th>Quintas</th>
+                  <th>Provas</th>
+                  <th>Preco</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pricingData.map((row) => (
+                  <tr key={row.name}>
+                    <td className="font-bold text-slate-900">{row.name}</td>
+                    <td>{row.duration}</td>
+                    <td>{row.meals}</td>
+                    <td>{row.wineries}</td>
+                    <td>{row.tastings}</td>
+                    <td className="font-bold text-blue-600">{row.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </motion.div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden flex flex-col gap-4">
+            {pricingData.map((row, i) => (
+              <motion.div
+                key={row.name}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+                className={`rota-pricing-card ${row.name === "Rota Classica" ? "rota-pricing-card-popular" : ""}`}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-extrabold text-slate-900">{row.name}</h3>
+                  <span className="font-bold text-blue-600 text-lg">{row.price}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-slate-400 text-xs">Duracao</span>
+                    <p className="text-slate-700 font-medium">{row.duration}</p>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 text-xs">Refeicoes</span>
+                    <p className="text-slate-700 font-medium">{row.meals}</p>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 text-xs">Quintas</span>
+                    <p className="text-slate-700 font-medium">{row.wineries}</p>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 text-xs">Provas</span>
+                    <p className="text-slate-700 font-medium">{row.tastings}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ CTA / RESERVAR ════════ */}
       <section
         id="reservar"
         className="py-20 bg-gradient-to-br from-blue-600 to-blue-700 text-white text-center"
@@ -544,27 +1199,39 @@ export default function RotaDosVinhosPage() {
             Pronto para a aventura?
           </h2>
           <p className="text-blue-100 text-lg mb-8">
-            Reserve o seu tour e descubra o melhor dos vinhos portugueses
+            Reserve o seu tour e descubra o melhor dos vinhos portugueses.
+            Resposta em menos de 2 horas.
           </p>
 
-          <a
-            href="https://wa.me/351934035971"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-white text-blue-700 font-bold text-lg px-8 py-4 rounded-full hover:bg-blue-50 transition-colors min-h-[52px] shadow-lg mb-6"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-6 h-6 text-green-600"
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+            <a
+              href="https://wa.me/351934035971"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 bg-white text-blue-700 font-bold text-lg px-8 py-4 rounded-full hover:bg-blue-50 transition-colors min-h-[52px] shadow-lg"
             >
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-            Reservar via WhatsApp
-          </a>
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6 text-green-600"
+              >
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              Reservar via WhatsApp
+            </a>
+            <a
+              href="mailto:reservas@rotadosvinhos.pt"
+              className="inline-flex items-center justify-center gap-2 bg-blue-500/30 text-white font-bold text-lg px-8 py-4 rounded-full hover:bg-blue-500/50 transition-colors min-h-[52px] border border-white/20"
+            >
+              Enviar E-mail
+            </a>
+          </div>
 
-          <p className="text-blue-200 text-sm font-medium">
-            🎉 Desconto de 10% para grupos de 6+
+          <p className="text-blue-200 text-sm font-medium mb-2">
+            Desconto de 10% para grupos de 6+
+          </p>
+          <p className="text-blue-300 text-xs">
+            reservas@rotadosvinhos.pt | +351 934 035 971
           </p>
         </motion.div>
       </section>
@@ -574,14 +1241,10 @@ export default function RotaDosVinhosPage() {
         <div className="max-w-5xl mx-auto px-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
             <span className="text-xl font-extrabold text-blue-600">
-              Rota dos Vinhos 🍇
+              Rota dos Vinhos
             </span>
-            <div className="flex items-center gap-6">
-              {[
-                { label: "Regiões", href: "#regioes" },
-                { label: "Experiências", href: "#experiencias" },
-                { label: "Reservar", href: "#reservar" },
-              ].map((link) => (
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+              {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
@@ -593,9 +1256,26 @@ export default function RotaDosVinhosPage() {
             </div>
           </div>
 
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {[
+              "3000+ visitantes",
+              "98% recomendam",
+              "Guias certificados WSET",
+              "Seguro incluido",
+            ].map((badge) => (
+              <span
+                key={badge}
+                className="text-xs bg-slate-100 text-slate-500 px-3 py-1.5 rounded-full font-medium"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+
           <div className="flex flex-col items-center gap-3 text-center">
             <p className="text-sm text-slate-400">
-              Uma experiência{" "}
+              Uma experiencia{" "}
               <a
                 href="/"
                 className="text-blue-500 hover:text-blue-600 font-semibold transition-colors"
@@ -604,7 +1284,7 @@ export default function RotaDosVinhosPage() {
               </a>
             </p>
             <p className="text-xs text-slate-300">
-              © {new Date().getFullYear()} Rota dos Vinhos. Todos os direitos
+              &copy; {new Date().getFullYear()} Rota dos Vinhos. Todos os direitos
               reservados.
             </p>
           </div>
