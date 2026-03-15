@@ -1,0 +1,187 @@
+/* ── Noir Tasting — Scoped Styles ── */
+
+.noir-root {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.noir-root h1,
+.noir-root h2,
+.noir-root h3,
+.noir-root h4 {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+}
+
+/* ── Gold Glow Pulse ── */
+@keyframes goldGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(201, 168, 76, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.6);
+  }
+}
+
+.noir-root .gold-glow {
+  animation: goldGlow 3s ease-in-out infinite;
+}
+
+/* ── Cinematic Reveal (fallback for non-JS) ── */
+@keyframes cinematicReveal {
+  0% {
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+/* ── Floating Particles ── */
+@keyframes floatParticle {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateY(-30px) translateX(10px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-15px) translateX(-8px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(-40px) translateX(5px);
+    opacity: 0.3;
+  }
+}
+
+.noir-root .particle {
+  position: fixed;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #c9a84c;
+  pointer-events: none;
+  z-index: 1;
+  animation: floatParticle 8s ease-in-out infinite;
+}
+
+.noir-root .particle:nth-child(2) {
+  animation-delay: 2s;
+  animation-duration: 10s;
+}
+.noir-root .particle:nth-child(3) {
+  animation-delay: 4s;
+  animation-duration: 12s;
+}
+.noir-root .particle:nth-child(4) {
+  animation-delay: 6s;
+  animation-duration: 9s;
+}
+
+/* ── Scroll Indicator ── */
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+.noir-root .scroll-indicator {
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+/* ── Dark Scrollbar ── */
+.noir-root::-webkit-scrollbar {
+  width: 6px;
+}
+.noir-root::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+.noir-root::-webkit-scrollbar-thumb {
+  background: #c9a84c33;
+  border-radius: 3px;
+}
+.noir-root::-webkit-scrollbar-thumb:hover {
+  background: #c9a84c66;
+}
+
+/* ── Grain Overlay ── */
+.noir-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ── Horizontal Scroll (Wines) ── */
+.noir-root .wine-scroll {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+.noir-root .wine-scroll::-webkit-scrollbar {
+  display: none;
+}
+.noir-root .wine-scroll > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ── Glass Card ── */
+.noir-root .glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.noir-root .glass-card-gold {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 12px;
+  transition: border-color 0.4s ease;
+}
+
+@media (hover: hover) {
+  .noir-root .glass-card-gold:hover {
+    border-color: rgba(201, 168, 76, 0.5);
+  }
+}
+
+/* ── Gold Line ── */
+.noir-root .gold-line {
+  width: 60px;
+  height: 1px;
+  background: #c9a84c;
+}
+
+/* ── Step Connector ── */
+.noir-root .step-connector {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #c9a84c44, transparent);
+}

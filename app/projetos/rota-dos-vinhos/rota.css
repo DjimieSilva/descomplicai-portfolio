@@ -1,0 +1,124 @@
+/* ── Rota dos Vinhos — Scoped Styles ── */
+
+.rota-root {
+  font-family: "Nunito", sans-serif;
+  color: #1e293b;
+  background: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+.rota-root ::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.rota-root ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+.rota-root ::-webkit-scrollbar-thumb {
+  background: #2563eb;
+  border-radius: 999px;
+}
+
+/* ── Horizontal Snap Scroll ── */
+.rota-snap-x {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-left: 1rem;
+  padding: 1rem;
+}
+.rota-snap-x > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ── Hide Scrollbar Utility ── */
+.rota-hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.rota-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Badge / Tag ── */
+.rota-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: #f0f9ff;
+  color: #2563eb;
+  white-space: nowrap;
+}
+
+/* ── Floating Emoji Animation ── */
+@keyframes rota-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(6deg);
+  }
+}
+.rota-float {
+  animation: rota-float 3s ease-in-out infinite;
+}
+.rota-float-delay-1 {
+  animation-delay: 0.5s;
+}
+.rota-float-delay-2 {
+  animation-delay: 1s;
+}
+.rota-float-delay-3 {
+  animation-delay: 1.5s;
+}
+
+/* ── Region Card Gradient Backgrounds ── */
+.rota-grad-douro {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
+}
+.rota-grad-alentejo {
+  background: linear-gradient(135deg, #f59e0b 0%, #eab308 50%, #ca8a04 100%);
+}
+.rota-grad-dao {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #166534 100%);
+}
+.rota-grad-bairrada {
+  background: linear-gradient(135deg, #f472b6 0%, #ec4899 50%, #db2777 100%);
+}
+.rota-grad-verdes {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #16a34a 100%);
+}
+.rota-grad-lisboa {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 50%, #f59e0b 100%);
+}
+
+/* ── Experience Card Left Border Colors ── */
+.rota-border-douro {
+  border-left: 4px solid #f97316;
+}
+.rota-border-alentejo {
+  border-left: 4px solid #f59e0b;
+}
+.rota-border-dao {
+  border-left: 4px solid #16a34a;
+}
+.rota-border-bairrada {
+  border-left: 4px solid #ec4899;
+}
+.rota-border-verdes {
+  border-left: 4px solid #06b6d4;
+}
+.rota-border-lisboa {
+  border-left: 4px solid #ef4444;
+}

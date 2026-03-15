@@ -38,6 +38,10 @@ const PROJECTS: Project[] = [
   { id: "image-gen", title: "Image Generator", category: "ai", type: "AI Tool", description: "Gerador de imagens IA via Puter.js — múltiplos estilos e categorias", gradient: "from-teal-500 to-cyan-400", emoji: "🎨", status: "live" },
   { id: "descomplicai-brutalist", title: "Descomplicai Brutalist", category: "creative", type: "Redesign Concept", description: "Versão brutalist dark do site Descomplicai — terminal UI, glitch effects, monospace", gradient: "from-gray-700 to-black", emoji: "🖤", status: "live" },
   { id: "descomplicai-editorial", title: "Descomplicai Editorial", category: "creative", type: "Redesign Concept", description: "Versão editorial premium do site Descomplicai — magazine layout, Playfair Display, cream", gradient: "from-amber-200 to-orange-100", emoji: "📰", status: "live" },
+  { id: "vindima-selvagem", title: "Vindima Selvagem", category: "food", type: "Wine Experience", description: "Experiência de vindima participativa no Douro — colha as suas uvas, pise a pé, prove vinhos DOC", gradient: "from-amber-700 to-orange-500", emoji: "🍇", status: "live" },
+  { id: "noir-tasting", title: "Noir Tasting", category: "food", type: "Wine Experience", description: "Provas privadas ultra-premium em caves centenárias do Porto — cinematic, exclusivo", gradient: "from-yellow-700 to-amber-900", emoji: "🖤", status: "live" },
+  { id: "rota-dos-vinhos", title: "Rota dos Vinhos", category: "food", type: "Wine Experience", description: "Rotas turísticas guiadas pelas 6 regiões vinícolas de Portugal — acessível e solar", gradient: "from-blue-500 to-green-400", emoji: "🌞", status: "live" },
+  { id: "terroir-alma", title: "Terroir & Alma", category: "food", type: "Wine Experience", description: "Retiros imersivos de 3 dias com produtores artesanais — editorial, storytelling, intimista", gradient: "from-rose-800 to-red-900", emoji: "📰", status: "live" },
 ];
 
 const CATEGORIES = [
@@ -64,7 +68,7 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
-const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds", "descomplicai-brutalist", "descomplicai-editorial"];
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "noir-tasting", "rota-dos-vinhos", "terroir-alma"];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isClickable = CLICKABLE_IDS.includes(project.id);

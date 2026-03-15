@@ -1,0 +1,566 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap");
+
+/* ───────── Variables ───────── */
+.vindima-root {
+  --terracotta: #C4704B;
+  --terracotta-dark: #a85c3b;
+  --olive: #6B7F3B;
+  --olive-light: #8a9f55;
+  --cream: #F5F0E6;
+  --cream-dark: #e8e0d0;
+  --brown: #3D2B1F;
+  --brown-light: #5a4235;
+
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  font-family: var(--font-sans);
+  color: var(--brown);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ───────── Grain overlay ───────── */
+.vindima-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ───────── Custom scrollbar ───────── */
+.vindima-root ::-webkit-scrollbar {
+  width: 8px;
+}
+.vindima-root ::-webkit-scrollbar-track {
+  background: var(--cream-dark);
+}
+.vindima-root ::-webkit-scrollbar-thumb {
+  background: var(--terracotta);
+  border-radius: 4px;
+}
+.vindima-root ::-webkit-scrollbar-thumb:hover {
+  background: var(--terracotta-dark);
+}
+
+/* ───────── Keyframes ───────── */
+@keyframes vindima-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+@keyframes vindima-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vindima-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ───────── Nav ───────── */
+.vindima-root .vindima-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 20px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+}
+
+.vindima-root .vindima-nav.scrolled {
+  background: var(--cream);
+  box-shadow: 0 2px 20px rgba(61, 43, 31, 0.08);
+  padding: 12px 20px;
+}
+
+.vindima-root .vindima-nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cream);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.vindima-root .vindima-nav.scrolled .vindima-nav-logo {
+  color: var(--brown);
+}
+
+.vindima-root .vindima-nav-link {
+  color: rgba(245, 240, 230, 0.8);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  padding: 10px 4px;
+}
+
+.vindima-root .vindima-nav.scrolled .vindima-nav-link {
+  color: var(--brown-light);
+}
+
+.vindima-root .vindima-nav-link:hover,
+.vindima-root .vindima-nav-link:active {
+  color: var(--terracotta);
+}
+
+/* Mobile menu button */
+.vindima-root .vindima-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.vindima-root .vindima-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--cream);
+  transition: background 0.3s ease, transform 0.3s ease;
+  border-radius: 1px;
+}
+
+.vindima-root .vindima-nav.scrolled .vindima-hamburger span {
+  background: var(--brown);
+}
+
+.vindima-root .vindima-hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.vindima-root .vindima-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.vindima-root .vindima-hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile menu overlay */
+.vindima-root .vindima-mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: var(--cream);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.vindima-root .vindima-mobile-menu a {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--brown);
+  text-decoration: none;
+  padding: 12px 24px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.vindima-root .vindima-mobile-menu a:active {
+  color: var(--terracotta);
+}
+
+/* ───────── Hero ───────── */
+.vindima-root .vindima-hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px 60px;
+  position: relative;
+  background:
+    linear-gradient(
+      180deg,
+      #3D2B1F 0%,
+      #5a3a28 15%,
+      #8B5E3C 30%,
+      #C4704B 45%,
+      #D4944A 60%,
+      #E8C547 72%,
+      #6B7F3B 85%,
+      #4a5c2a 100%
+    );
+}
+
+.vindima-root .vindima-hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--cream));
+  pointer-events: none;
+}
+
+.vindima-root .vindima-hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.15;
+  max-width: 700px;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 30px rgba(61, 43, 31, 0.3);
+}
+
+.vindima-root .vindima-hero-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: rgba(245, 240, 230, 0.85);
+  max-width: 500px;
+  margin-bottom: 32px;
+}
+
+.vindima-root .vindima-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: rgba(245, 240, 230, 0.7);
+  letter-spacing: 0.02em;
+}
+
+.vindima-root .vindima-scroll-indicator {
+  position: absolute;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(245, 240, 230, 0.5);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.vindima-root .vindima-scroll-indicator svg {
+  animation: vindima-bounce 2s ease-in-out infinite;
+}
+
+/* ───────── Section defaults ───────── */
+.vindima-root section {
+  padding: 64px 20px;
+}
+
+@media (min-width: 768px) {
+  .vindima-root section {
+    padding: 96px 40px;
+  }
+}
+
+.vindima-root .vindima-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--brown);
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.vindima-root .vindima-section-title span {
+  color: var(--terracotta);
+}
+
+/* ───────── Timeline ───────── */
+.vindima-root .vindima-timeline {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-left: 40px;
+}
+
+.vindima-root .vindima-timeline::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--terracotta), var(--olive));
+  border-radius: 1px;
+}
+
+.vindima-root .vindima-timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.vindima-root .vindima-timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.vindima-root .vindima-timeline-dot {
+  position: absolute;
+  left: -33px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  border: 3px solid var(--cream);
+  box-shadow: 0 0 0 2px var(--terracotta);
+}
+
+.vindima-root .vindima-timeline-time {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--terracotta);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.vindima-root .vindima-timeline-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+
+.vindima-root .vindima-timeline-desc {
+  font-size: 0.9rem;
+  color: var(--brown-light);
+  line-height: 1.5;
+}
+
+/* ───────── Feature cards ───────── */
+.vindima-root .vindima-features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .vindima-root .vindima-features-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+.vindima-root .vindima-feature-card {
+  background: white;
+  border: 1px solid rgba(61, 43, 31, 0.08);
+  border-radius: 12px;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+  .vindima-root .vindima-feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(61, 43, 31, 0.08);
+  }
+}
+
+.vindima-root .vindima-feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  background: var(--terracotta);
+  border-radius: 0 0 3px 3px;
+}
+
+.vindima-root .vindima-feature-card-emoji {
+  font-size: 1.75rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.vindima-root .vindima-feature-card-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brown);
+}
+
+/* ───────── Testimonials ───────── */
+.vindima-root .vindima-testimonials {
+  background: var(--brown);
+  color: var(--cream);
+}
+
+.vindima-root .vindima-testimonials .vindima-section-title {
+  color: var(--cream);
+}
+
+.vindima-root .vindima-testimonial-card {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+}
+
+.vindima-root .vindima-testimonial-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--cream);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.vindima-root .vindima-testimonial-quote::before {
+  content: "\201C";
+  font-size: 4rem;
+  color: var(--terracotta);
+  line-height: 1;
+  display: block;
+  margin-bottom: -16px;
+  font-family: var(--font-serif);
+}
+
+.vindima-root .vindima-testimonial-author {
+  font-size: 0.9rem;
+  color: rgba(245, 240, 230, 0.6);
+  font-weight: 500;
+}
+
+.vindima-root .vindima-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.vindima-root .vindima-dot {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.vindima-root .vindima-dot span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(245, 240, 230, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.vindima-root .vindima-dot.active span {
+  background: var(--terracotta);
+  transform: scale(1.2);
+}
+
+/* ───────── CTA ───────── */
+.vindima-root .vindima-cta {
+  text-align: center;
+  background:
+    linear-gradient(
+      135deg,
+      var(--cream) 0%,
+      var(--cream-dark) 100%
+    );
+}
+
+.vindima-root .vindima-price {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--terracotta);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.vindima-root .vindima-price-note {
+  font-size: 0.875rem;
+  color: var(--brown-light);
+  margin-bottom: 32px;
+}
+
+.vindima-root .vindima-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  min-height: 52px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
+}
+
+.vindima-root .vindima-whatsapp-btn:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .vindima-root .vindima-whatsapp-btn:hover {
+    background: #20b858;
+    transform: translateY(-1px);
+  }
+}
+
+/* ───────── Footer ───────── */
+.vindima-root .vindima-footer {
+  background: var(--brown);
+  color: rgba(245, 240, 230, 0.5);
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 0.8rem;
+}
+
+.vindima-root .vindima-footer-logo {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+
+.vindima-root .vindima-footer p {
+  margin: 4px 0;
+}
