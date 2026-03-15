@@ -45,8 +45,55 @@ export default function Produtores() {
         </motion.div>
 
         <motion.div
+          className="nk-producer-banner"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={fadeInUp}
+          style={{ marginTop: "2rem", marginBottom: "2rem" }}
+        >
+          <div style={{
+            position: "relative",
+            borderRadius: "12px",
+            overflow: "hidden",
+            height: "220px",
+          }}>
+            <img
+              src="/ninika-images/producer-vineyard.jpg"
+              alt="Produtor na vinha dos Biscoitos"
+              loading="lazy"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(to right, rgba(26, 26, 46, 0.7), transparent)",
+              display: "flex",
+              alignItems: "center",
+              padding: "2rem",
+            }}>
+              <p style={{
+                fontFamily: "var(--nk-font-display)",
+                fontSize: "clamp(1.25rem, 3vw, 1.75rem)",
+                fontWeight: 700,
+                color: "var(--nk-white)",
+                maxWidth: "360px",
+                lineHeight: 1.3,
+              }}>
+                Vinhos de vulcão,<br />feitos por quem conhece cada cepa.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
           className="nk-producer-grid"
-          style={{ marginTop: "2rem" }}
+          style={{ marginTop: "0" }}
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"

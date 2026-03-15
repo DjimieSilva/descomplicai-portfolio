@@ -37,8 +37,59 @@ export default function Precos() {
         </motion.div>
 
         <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={fadeInUp}
+          style={{ marginTop: "2rem", marginBottom: "2rem" }}
+        >
+          <div style={{
+            position: "relative",
+            borderRadius: "12px",
+            overflow: "hidden",
+            height: "160px",
+            maxWidth: "720px",
+            margin: "0 auto",
+          }}>
+            <img
+              src="/ninika-images/families.jpg"
+              alt="Experiência de vinho em grupo"
+              loading="lazy"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(to top, rgba(114, 47, 55, 0.6), rgba(26, 26, 46, 0.3))",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "1.5rem",
+            }}>
+              <p style={{
+                fontFamily: "var(--nk-font-display)",
+                fontSize: "clamp(1rem, 2.5vw, 1.35rem)",
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: "var(--nk-white)",
+                textAlign: "center",
+                maxWidth: "480px",
+                lineHeight: 1.5,
+              }}>
+                &ldquo;Sem formalidades, sem julgamentos. Apenas tu, vinho vulcânico e a melhor gastronomia da Terceira.&rdquo;
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
           className="nk-pricing-grid"
-          style={{ marginTop: "2.5rem" }}
+          style={{ marginTop: "0" }}
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"

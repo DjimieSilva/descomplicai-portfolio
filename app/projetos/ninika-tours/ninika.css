@@ -360,8 +360,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(165deg, #1a1a2e 0%, #722F37 50%, #5C262D 100%);
+  background: #1a1a2e;
   overflow: hidden;
+}
+
+.ninika-root .nk-hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.ninika-root .nk-hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(165deg, rgba(26, 26, 46, 0.7) 0%, rgba(114, 47, 55, 0.6) 50%, rgba(92, 38, 45, 0.7) 100%);
 }
 
 .ninika-root .nk-hero-content {
@@ -500,8 +516,42 @@
   background: var(--nk-white-pure);
   border: 1px solid var(--nk-gray-200);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 0;
+  overflow: hidden;
   transition: all var(--nk-duration) var(--nk-ease);
+}
+
+.ninika-root .nk-zone-img-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.ninika-root .nk-zone-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.ninika-root .nk-zone-card:hover .nk-zone-img {
+  transform: scale(1.05);
+}
+
+.ninika-root .nk-zone-card .nk-zone-emoji,
+.ninika-root .nk-zone-card .nk-zone-name,
+.ninika-root .nk-zone-card .nk-zone-desc,
+.ninika-root .nk-zone-card .nk-zone-tags {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.ninika-root .nk-zone-card .nk-zone-emoji {
+  padding-top: 1.25rem;
+}
+
+.ninika-root .nk-zone-card .nk-zone-tags {
+  padding-bottom: 1.5rem;
 }
 .ninika-root .nk-zone-card:hover {
   border-color: var(--nk-gold);
@@ -559,15 +609,58 @@
   background: var(--nk-white-pure);
   border: 1px solid var(--nk-gray-200);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 0;
   transition: all var(--nk-duration) var(--nk-ease);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .ninika-root .nk-exp-card:hover {
   border-color: var(--nk-gold);
   box-shadow: var(--nk-shadow-md);
   transform: translateY(-2px);
+}
+
+.ninika-root .nk-exp-thumb {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ninika-root .nk-exp-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s var(--nk-ease);
+}
+
+.ninika-root .nk-exp-card:hover .nk-exp-thumb img {
+  transform: scale(1.05);
+}
+
+.ninika-root .nk-exp-card .nk-badge,
+.ninika-root .nk-exp-card .nk-exp-emoji,
+.ninika-root .nk-exp-card .nk-exp-name,
+.ninika-root .nk-exp-card .nk-exp-tagline,
+.ninika-root .nk-exp-card .nk-exp-desc,
+.ninika-root .nk-exp-card .nk-exp-meta,
+.ninika-root .nk-exp-card .nk-exp-price {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.ninika-root .nk-exp-card .nk-badge {
+  margin-top: 1.25rem;
+}
+
+.ninika-root .nk-exp-card .nk-exp-emoji {
+  margin-top: 1rem;
+}
+
+.ninika-root .nk-exp-card .nk-exp-price {
+  padding-bottom: 1.5rem;
 }
 
 .ninika-root .nk-exp-emoji {
@@ -791,6 +884,19 @@
 .ninika-root .nk-gallery-item.portrait { aspect-ratio: 3/4; }
 .ninika-root .nk-gallery-item.landscape { aspect-ratio: 16/10; }
 .ninika-root .nk-gallery-item.square { aspect-ratio: 1; }
+
+.ninika-root .nk-gallery-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.ninika-root .nk-gallery-item:hover .nk-gallery-img {
+  transform: scale(1.05);
+}
 
 .ninika-root .nk-gallery-placeholder {
   position: absolute;

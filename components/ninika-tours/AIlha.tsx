@@ -57,26 +57,53 @@ export default function AIlha() {
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
         >
-          {ZONES.map((zone) => (
-            <motion.div
-              key={zone.id}
-              className="nk-zone-card"
-              variants={scaleIn}
-            >
-              <div className="nk-zone-emoji" aria-hidden="true">
-                {zone.emoji}
-              </div>
-              <h3 className="nk-zone-name">{zone.name}</h3>
-              <p className="nk-zone-desc">{zone.description}</p>
-              <div className="nk-zone-tags">
-                {zone.highlights.map((h) => (
-                  <span key={h} className="nk-zone-tag">
-                    {h}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+          {ZONES.map((zone) => {
+            const zoneImages: Record<string, { src: string; alt: string }> = {
+              biscoitos: {
+                src: '/ninika-images/biscoitos.jpg',
+                alt: 'Currais de vinha em basalto nos Biscoitos',
+              },
+              angra: {
+                src: '/ninika-images/angra.jpg',
+                alt: 'Ruas coloridas de Angra do Heroísmo',
+              },
+              praia: {
+                src: '/ninika-images/praia.jpg',
+                alt: 'Colinas verdes de Praia da Vitória',
+              },
+            };
+            const img = zoneImages[zone.id];
+            return (
+              <motion.div
+                key={zone.id}
+                className="nk-zone-card"
+                variants={scaleIn}
+              >
+                {img && (
+                  <div className="nk-zone-img-wrapper">
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      className="nk-zone-img"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div className="nk-zone-emoji" aria-hidden="true">
+                  {zone.emoji}
+                </div>
+                <h3 className="nk-zone-name">{zone.name}</h3>
+                <p className="nk-zone-desc">{zone.description}</p>
+                <div className="nk-zone-tags">
+                  {zone.highlights.map((h) => (
+                    <span key={h} className="nk-zone-tag">
+                      {h}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

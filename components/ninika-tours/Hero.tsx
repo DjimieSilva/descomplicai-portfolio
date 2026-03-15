@@ -126,6 +126,12 @@ export default function Hero() {
 
       {/* ─── HERO SECTION ─── */}
       <section id="hero" className="nk-hero nk-dark nk-grain">
+        <img
+          src="/ninika-images/hero.jpg"
+          alt="Paisagem vulcânica da Ilha Terceira, Açores"
+          className="nk-hero-bg-img"
+        />
+        <div className="nk-hero-bg-overlay" />
         <div className="nk-container nk-hero-content">
           {/* Badge */}
           <motion.div

@@ -3,6 +3,15 @@
 import { motion } from "framer-motion";
 import { EXPERIENCES } from "./data";
 
+const EXP_IMAGES: Record<string, string> = {
+  "rota-verdelho": "/ninika-images/rota-verdelho.jpg",
+  "tasquinha": "/ninika-images/tasquinha.jpg",
+  "vulcao-copo": "/ninika-images/vulcao-copo.jpg",
+  "mar-mesa": "/ninika-images/mar-mesa.jpg",
+  "espirito-santo": "/ninika-images/espirito-santo.jpg",
+  "sunset-sip": "/ninika-images/sunset-sip.jpg",
+};
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
   visible: {
@@ -49,6 +58,15 @@ export default function Experiencias() {
         >
           {EXPERIENCES.map((exp) => (
             <motion.div key={exp.id} className="nk-exp-card" variants={fadeInUp}>
+              {EXP_IMAGES[exp.id] && (
+                <div className="nk-exp-thumb">
+                  <img
+                    src={EXP_IMAGES[exp.id]}
+                    alt={exp.name}
+                    loading="lazy"
+                  />
+                </div>
+              )}
               {exp.badge && <span className="nk-badge">{exp.badge}</span>}
               <div className="nk-exp-emoji" aria-hidden="true">{exp.emoji}</div>
               <h3 className="nk-exp-name">{exp.name}</h3>
@@ -60,7 +78,7 @@ export default function Experiencias() {
               </div>
               <div className="nk-exp-price">{exp.price}</div>
               {exp.priceNote && (
-                <p style={{ fontSize: "0.75rem", color: "var(--nk-gray-400)", marginTop: "0.25rem" }}>
+                <p style={{ fontSize: "0.75rem", color: "var(--nk-gray-400)", marginTop: "0.25rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", paddingBottom: "1.5rem" }}>
                   {exp.priceNote}
                 </p>
               )}

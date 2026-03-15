@@ -12,9 +12,9 @@ import Image from "next/image";
 const NAV_LINKS = [
   { label: "Como Funciona", href: "#como-funciona" },
   { label: "Cidades", href: "#cidades" },
-  { label: "Tour Tipico", href: "#tour" },
+  { label: "Tour Típico", href: "#tour" },
   { label: "Petiscos", href: "#petiscos" },
-  { label: "Precos", href: "#precos" },
+  { label: "Preços", href: "#precos" },
   { label: "FAQ", href: "#faq" },
   { label: "Reservar", href: "#reservar" },
 ];
@@ -23,22 +23,22 @@ const STEPS = [
   {
     emoji: "\uD83E\uDD1D",
     title: "Juntamo-nos",
-    desc: "Encontramo-nos no ponto de encontro no centro da cidade. O teu guia local esta a espera com um sorriso.",
+    desc: "Encontramo-nos no ponto de encontro no centro da cidade. O teu guia local está à espera com um sorriso.",
   },
   {
     emoji: "\uD83D\uDEB6",
     title: "Caminhamos",
-    desc: "Percorremos ruas e becos que ate os locais nao conhecem. Historia, curiosidades e muita boa disposicao.",
+    desc: "Percorremos ruas e becos que até os locais não conhecem. História, curiosidades e muita boa disposição.",
   },
   {
     emoji: "\uD83C\uDF77",
     title: "Provamos",
-    desc: "Paramos em tascas autenticas para provar vinhos locais e petiscos que a tua avo aprovaria.",
+    desc: "Paramos em tascas autênticas para provar vinhos locais e petiscos que a tua avó aprovaria.",
   },
   {
     emoji: "\uD83D\uDD01",
     title: "Repetimos",
-    desc: "Mais uma tasca, mais um vinho, mais um petisco. E assim ate ao fim da noite (ou ate nao aguentares mais).",
+    desc: "Mais uma tasca, mais um vinho, mais um petisco. E assim até ao fim da noite (ou até não aguentares mais).",
   },
 ];
 
@@ -47,45 +47,45 @@ const CITIES = [
     name: "Porto",
     region: "Norte",
     emoji: "\uD83C\uDF09",
-    desc: "Das caves de Gaia as tascas da Ribeira. Francesinha nao incluida (mas o guia sabe onde ir depois).",
-    highlights: ["Vinho verde na fonte", "Tripas a moda", "Porto tawny com queijada"],
-    tours: "Classico + Completo",
+    desc: "Das caves de Gaia às tascas da Ribeira. Francesinha não incluída (mas o guia sabe onde ir depois).",
+    highlights: ["Vinho verde na fonte", "Tripas à moda", "Porto tawny com queijada"],
+    tours: "Clássico + Completo",
     img: "/wine-images/petiscos-bar.jpg",
   },
   {
     name: "Lisboa",
     region: "Centro",
     emoji: "\uD83D\uDE83",
-    desc: "Do Bairro Alto a Mouraria, pelos becos que o GPS nao encontra. Ginjinha obrigatoria.",
-    highlights: ["Ginjinha no balcao", "Sardinha fumada na Graca", "Vinho do Dao numa tasca de 1923"],
-    tours: "Classico + Completo + Privado",
+    desc: "Do Bairro Alto à Mouraria, pelos becos que o GPS não encontra. Ginjinha obrigatória.",
+    highlights: ["Ginjinha no balcão", "Sardinha fumada na Graça", "Vinho do Dão numa tasca de 1923"],
+    tours: "Clássico + Completo + Privado",
     img: "/wine-images/petiscos-group.jpg",
   },
   {
     name: "Braga",
     region: "Minho",
     emoji: "\u26EA",
-    desc: "A cidade mais jovem do pais, com as tascas mais antigas. Vinho verde como manda a tradicao.",
-    highlights: ["Vinho verde da sub-regiao", "Rojoes com sarrabulho", "Pudim Abade de Priscos"],
-    tours: "Classico + Completo",
+    desc: "A cidade mais jovem do país, com as tascas mais antigas. Vinho verde como manda a tradição.",
+    highlights: ["Vinho verde da sub-região", "Rojões com sarrabulho", "Pudim Abade de Priscos"],
+    tours: "Clássico + Completo",
     img: "/wine-images/petiscos-tapas.jpg",
   },
   {
-    name: "Evora",
+    name: "Évora",
     region: "Alentejo",
     emoji: "\uD83C\uDFDB\uFE0F",
-    desc: "Cidade-museu com as melhores tascas do Alentejo. Aqui o vinho e forte e os petiscos sao generosos.",
+    desc: "Cidade-museu com as melhores tascas do Alentejo. Aqui o vinho é forte e os petiscos são generosos.",
     highlights: ["Vinho do Alentejo", "Migas com carne de porco", "Queijo de Nisa"],
-    tours: "Classico + Privado",
+    tours: "Clássico + Privado",
     img: "/wine-images/petiscos-cheese.jpg",
   },
   {
     name: "Faro",
     region: "Algarve",
     emoji: "\u2600\uFE0F",
-    desc: "O Algarve que os turistas nao conhecem. Mariscos, cataplanas e vinhos surpreendentes.",
-    highlights: ["Cataplana de ameijoas", "Vinho do Algarve", "Figos com amendoa"],
-    tours: "Classico (verao)",
+    desc: "O Algarve que os turistas não conhecem. Mariscos, cataplanas e vinhos surpreendentes.",
+    highlights: ["Cataplana de amêijoas", "Vinho do Algarve", "Figos com amêndoa"],
+    tours: "Clássico (verão)",
     img: "/wine-images/petiscos-drinks.jpg",
   },
 ];
@@ -94,7 +94,7 @@ const TIMELINE = [
   {
     time: "18:30",
     title: "Ponto de Encontro",
-    desc: "O teu guia espera-te no centro historico. Breve introducao e apresentacoes do grupo.",
+    desc: "O teu guia espera-te no centro histórico. Breve introdução e apresentações do grupo.",
     emoji: "\uD83D\uDCCD",
   },
   {
@@ -106,19 +106,19 @@ const TIMELINE = [
   {
     time: "19:30",
     title: "Tasca 2 — Queijos & Tinto",
-    desc: "Tabua de queijos portugueses (Serra, Nisa, Azeitao) com pao quente e um tinto do Douro encorpado.",
+    desc: "Tábua de queijos portugueses (Serra, Nisa, Azeitão) com pão quente e um tinto do Douro encorpado.",
     emoji: "\uD83C\uDF77",
   },
   {
     time: "20:15",
     title: "Tasca 3 — Enchidos & Reserva",
-    desc: "Chourico assado na telha, presunto de porco preto, alheira de Mirandela. Acompanhado de um reserva selecionado.",
+    desc: "Chouriço assado na telha, presunto de porco preto, alheira de Mirandela. Acompanhado de um reserva selecionado.",
     emoji: "\uD83C\uDF56",
   },
   {
     time: "21:00",
     title: "Tasca 4 — Doce & Moscatel",
-    desc: "Pastel de nata acabado de fazer, queijadas e um copo de moscatel de Setubal para fechar em beleza.",
+    desc: "Pastel de nata acabado de fazer, queijadas e um copo de moscatel de Setúbal para fechar em beleza.",
     emoji: "\uD83C\uDF6E",
   },
   {
@@ -136,8 +136,8 @@ const PETISCOS = [
   { emoji: "\uD83E\uDDC0", name: "Queijo da Serra", desc: "Cremoso e intenso" },
   { emoji: "\uD83C\uDF56", name: "Presunto", desc: "Porco preto alentejano" },
   { emoji: "\uD83E\uDD50", name: "Pastel de Nata", desc: "Ainda quente do forno" },
-  { emoji: "\uD83E\uDD5C", name: "Tremocos", desc: "O snack de balcao" },
-  { emoji: "\uD83E\uDD6B", name: "Chourico Assado", desc: "Flambado na telha" },
+  { emoji: "\uD83E\uDD5C", name: "Tremoços", desc: "O snack de balcão" },
+  { emoji: "\uD83E\uDD6B", name: "Chouriço Assado", desc: "Flambado na telha" },
 ];
 
 const FAMILY_FEATURES = [
@@ -149,32 +149,32 @@ const FAMILY_FEATURES = [
   {
     emoji: "\uD83C\uDFAF",
     title: "Atividades pelo Caminho",
-    desc: "Caca ao tesouro pelas ruas, quiz sobre a cidade, e muitas curiosidades.",
+    desc: "Caça ao tesouro pelas ruas, quiz sobre a cidade, e muitas curiosidades.",
   },
   {
     emoji: "\uD83D\uDC76",
     title: "Ritmo Familiar",
-    desc: "Paragens mais longas, sem pressas. Carrinho de bebe? Sem problema.",
+    desc: "Paragens mais longas, sem pressas. Carrinho de bebé? Sem problema.",
   },
   {
     emoji: "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66",
     title: "Todos Bem-vindos",
-    desc: "Dos 3 aos 93 anos. A mesa portuguesa e para toda a gente.",
+    desc: "Dos 3 aos 93 anos. A mesa portuguesa é para toda a gente.",
   },
 ];
 
 const GALLERY_IMAGES = [
   { src: "/wine-images/petiscos-tapas.jpg", alt: "Petiscos variados numa tasca portuguesa" },
-  { src: "/wine-images/petiscos-bar.jpg", alt: "Bar tradicional portugues com vinhos" },
+  { src: "/wine-images/petiscos-bar.jpg", alt: "Bar tradicional português com vinhos" },
   { src: "/wine-images/petiscos-group.jpg", alt: "Grupo a provar petiscos e vinhos" },
-  { src: "/wine-images/petiscos-cheese.jpg", alt: "Tabua de queijos portugueses" },
+  { src: "/wine-images/petiscos-cheese.jpg", alt: "Tábua de queijos portugueses" },
   { src: "/wine-images/petiscos-drinks.jpg", alt: "Copos de vinho tinto e branco" },
   { src: "/wine-images/petiscos-food2.jpg", alt: "Petiscos tradicionais portugueses" },
 ];
 
 const TESTIMONIALS = [
   {
-    quote: "A melhor noite que tivemos no Porto! O guia levou-nos a sitios que nunca teriamos encontrado sozinhos.",
+    quote: "A melhor noite que tivemos no Porto! O guia levou-nos a sítios que nunca teríamos encontrado sozinhos.",
     author: "Ana & Pedro",
     origin: "Lisboa",
     tour: "Porto Completo",
@@ -186,13 +186,13 @@ const TESTIMONIALS = [
     tour: "Lisboa Privado",
   },
   {
-    quote: "Levamos os miudos e eles adoraram! Comeram mais petiscos que nos. Ja querem voltar.",
-    author: "Familia Santos",
+    quote: "Levámos os miúdos e eles adoraram! Comeram mais petiscos que nós. Já querem voltar.",
+    author: "Família Santos",
     origin: "Coimbra",
-    tour: "Braga Classico",
+    tour: "Braga Clássico",
   },
   {
-    quote: "Eu pensava que conhecia Lisboa. Estava enganado. Tascas incriveis que nao sabia que existiam!",
+    quote: "Eu pensava que conhecia Lisboa. Estava enganado. Tascas incríveis que não sabia que existiam!",
     author: "Miguel",
     origin: "Lisboa",
     tour: "Lisboa Completo",
@@ -201,7 +201,7 @@ const TESTIMONIALS = [
     quote: "The wine was fantastic and the food... oh the food! Best experience in Portugal by far.",
     author: "Hans & Brigitte",
     origin: "Berlin",
-    tour: "Porto Classico",
+    tour: "Porto Clássico",
   },
   {
     quote: "Perfeito para team building! A equipa toda se divertiu e ainda descobrimos a cidade. Top!",
@@ -213,7 +213,7 @@ const TESTIMONIALS = [
 
 const PRICING = [
   {
-    name: "Classico",
+    name: "Clássico",
     price: "25",
     per: "por pessoa",
     featured: false,
@@ -221,10 +221,10 @@ const PRICING = [
       "2 horas de tour",
       "4 paragens em tascas",
       "4 provas de vinho",
-      "4 petiscos incluidos",
+      "4 petiscos incluídos",
       "Guia local bilingue",
-      "Grupos ate 12 pessoas",
-      "Disponivel aos sabados",
+      "Grupos até 12 pessoas",
+      "Disponível aos sábados",
     ],
   },
   {
@@ -236,11 +236,11 @@ const PRICING = [
       "3 horas de tour",
       "6 paragens em tascas",
       "6 provas de vinho",
-      "8 petiscos incluidos",
+      "8 petiscos incluídos",
       "Ginjinha de despedida",
       "Guia local bilingue",
-      "Grupos ate 10 pessoas",
-      "Sextas e sabados",
+      "Grupos até 10 pessoas",
+      "Sextas e sábados",
     ],
   },
   {
@@ -249,13 +249,13 @@ const PRICING = [
     per: "por pessoa (min. 4)",
     featured: false,
     features: [
-      "Horario a tua escolha",
+      "Horário à tua escolha",
       "Rota personalizada",
       "Guia exclusivo",
-      "Ate 8 paragens",
+      "Até 8 paragens",
       "Vinhos premium",
       "Perfeito para grupos",
-      "Aniversarios & despedidas",
+      "Aniversários & despedidas",
     ],
   },
 ];
@@ -263,35 +263,35 @@ const PRICING = [
 const FAQ_ITEMS = [
   {
     q: "E se chover?",
-    a: "O tour acontece chuva ou sol! Boa parte do percurso e em tascas cobertas, por isso o vinho e os petiscos estao sempre secos. Em caso de chuva forte, ajustamos o percurso para maximizar os espacos interiores. So cancelamos em casos extremos (e ai remarcamos sem custo).",
+    a: "O tour acontece chuva ou sol! Boa parte do percurso é em tascas cobertas, por isso o vinho e os petiscos estão sempre secos. Em caso de chuva forte, ajustamos o percurso para maximizar os espaços interiores. Só cancelamos em casos extremos (e aí remarcamos sem custo).",
   },
   {
-    q: "Em que linguas sao os tours?",
-    a: "Todos os nossos guias falam portugues e ingles. Para grupos privados, tambem temos guias que falam espanhol, frances e alemao. Basta indicar a preferencia na reserva.",
+    q: "Em que línguas são os tours?",
+    a: "Todos os nossos guias falam português e inglês. Para grupos privados, também temos guias que falam espanhol, francês e alemão. Basta indicar a preferência na reserva.",
   },
   {
-    q: "Posso levar criancas?",
-    a: "Claro que sim! As criancas comem petiscos adaptados e bebem sumo de fruta natural. Em cada paragem ha mesa reservada para familias. Criancas ate 10 anos nao pagam no Tour Classico.",
+    q: "Posso levar crianças?",
+    a: "Claro que sim! As crianças comem petiscos adaptados e bebem sumo de fruta natural. Em cada paragem há mesa reservada para famílias. Crianças até 10 anos não pagam no Tour Clássico.",
   },
   {
-    q: "Tenho restricoes alimentares ou alergias. E possivel adaptar?",
-    a: "Sim! Avisem-nos na reserva e adaptamos o percurso. Temos opcoes vegetarianas, sem gluten e sem lactose em quase todas as paragens. Alergias graves devem ser comunicadas com antecedencia.",
+    q: "Tenho restrições alimentares ou alergias. É possível adaptar?",
+    a: "Sim! Avisem-nos na reserva e adaptamos o percurso. Temos opções vegetarianas, sem glúten e sem lactose em quase todas as paragens. Alergias graves devem ser comunicadas com antecedência.",
   },
   {
-    q: "O tour e acessivel a pessoas com mobilidade reduzida?",
-    a: "Os percursos incluem ruas de calcada e por vezes escadas. Para pessoas com mobilidade reduzida, temos rotas alternativas mais planas. Contactem-nos para discutirmos a melhor opcao.",
+    q: "O tour é acessível a pessoas com mobilidade reduzida?",
+    a: "Os percursos incluem ruas de calçada e por vezes escadas. Para pessoas com mobilidade reduzida, temos rotas alternativas mais planas. Contactem-nos para discutirmos a melhor opção.",
   },
   {
     q: "Qual o tamanho dos grupos?",
-    a: "O Tour Classico tem ate 12 pessoas, o Completo ate 10, e o Privado e exclusivo para o vosso grupo (minimo 4 pessoas). Queremos que seja intimista, nao uma excursao!",
+    a: "O Tour Clássico tem até 12 pessoas, o Completo até 10, e o Privado é exclusivo para o vosso grupo (mínimo 4 pessoas). Queremos que seja intimista, não uma excursão!",
   },
   {
     q: "Como reservo?",
-    a: "Reserva diretamente pelo WhatsApp ou email. Confirmamos em menos de 2 horas. Pagamento no dia do tour (dinheiro ou MB Way) ou por transferencia antecipada.",
+    a: "Reserva diretamente pelo WhatsApp ou email. Confirmamos em menos de 2 horas. Pagamento no dia do tour (dinheiro ou MB Way) ou por transferência antecipada.",
   },
   {
     q: "Posso cancelar?",
-    a: "Cancelamento gratuito ate 48 horas antes do tour. Cancelamentos com menos de 48 horas: remarcamos para outra data sem custo adicional. No-shows nao sao reembolsados.",
+    a: "Cancelamento gratuito até 48 horas antes do tour. Cancelamentos com menos de 48 horas: remarcamos para outra data sem custo adicional. No-shows não são reembolsados.",
   },
 ];
 
@@ -470,7 +470,7 @@ function Hero() {
         transition={{ delay: 0.6 }}
       >
         Walking tours casuais de vinho e petiscos pelas ruas de Portugal.
-        Sem formalidade. So sabor.
+        Sem formalidade. Só sabor.
       </motion.p>
 
       <motion.div
@@ -516,8 +516,8 @@ function HowItWorks() {
       <Reveal>
         <h2 className="rua-section-title">Como Funciona \uD83E\uDD37</h2>
         <p className="rua-section-subtitle">
-          E simples como abrir uma garrafa. Sem complicacoes, sem planos
-          rigidos. So boa disposicao.
+          É simples como abrir uma garrafa. Sem complicações, sem planos
+          rígidos. Só boa disposição.
         </p>
       </Reveal>
 
@@ -596,10 +596,10 @@ function TypicalTour() {
     >
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "0 1.25rem" }}>
         <Reveal>
-          <h2 className="rua-section-title">Um Tour Tipico \uD83C\uDF1C</h2>
+          <h2 className="rua-section-title">Um Tour Típico \uD83C\uDF1C</h2>
           <p className="rua-section-subtitle">
-            Um exemplo de como e uma noite connosco. Cada cidade tem o seu
-            percurso unico, mas a magia e sempre a mesma.
+            Um exemplo de como é uma noite connosco. Cada cidade tem o seu
+            percurso único, mas a magia é sempre a mesma.
           </p>
         </Reveal>
 
@@ -631,7 +631,7 @@ function WhatYoullTaste() {
         <h2 className="rua-section-title">O Que Vais Provar \uD83E\uDD24</h2>
         <p className="rua-section-subtitle">
           Petiscos tradicionais portugueses que fazem qualquer tasca cheirar a
-          casa. Muda com a estacao, mas o sabor e sempre honesto.
+          casa. Muda com a estação, mas o sabor é sempre honesto.
         </p>
       </Reveal>
 
@@ -660,12 +660,12 @@ function ForFamilies() {
           <span style={{ fontSize: "2.5rem", display: "block", marginBottom: "0.75rem" }}>
             \uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66
           </span>
-          <h3>Para Familias</h3>
+          <h3>Para Famílias</h3>
           <p>
-            O vinho e para quem gosta de viver bem. E isso inclui toda a gente.
-            Os miudos comem petiscos como gente grande e bebem sumo de fruta
-            natural. Os avos tem mesa garantida em cada paragem. Pessoas que
-            &quot;nao percebem de vinho&quot;? Perfeito &mdash; nos explicamos
+            O vinho é para quem gosta de viver bem. E isso inclui toda a gente.
+            Os miúdos comem petiscos como gente grande e bebem sumo de fruta
+            natural. Os avós têm mesa garantida em cada paragem. Pessoas que
+            &quot;não percebem de vinho&quot;? Perfeito &mdash; nós explicamos
             tudo sem complicar.
           </p>
 
@@ -734,7 +734,7 @@ function TestimonialsSection() {
       <Reveal>
         <h2 className="rua-section-title">O Que Dizem \u2B50</h2>
         <p className="rua-section-subtitle">
-          Palavras de quem ja caminhou, provou e repetiu.
+          Palavras de quem já caminhou, provou e repetiu.
         </p>
       </Reveal>
 
@@ -766,10 +766,10 @@ function PricingSection() {
   return (
     <section className="rua-section" id="precos">
       <Reveal>
-        <h2 className="rua-section-title">Precos \uD83C\uDFF7\uFE0F</h2>
+        <h2 className="rua-section-title">Preços \uD83C\uDFF7\uFE0F</h2>
         <p className="rua-section-subtitle">
-          Sem surpresas. O preco inclui tudo: guia, vinhos, petiscos e boa
-          disposicao.
+          Sem surpresas. O preço inclui tudo: guia, vinhos, petiscos e boa
+          disposição.
         </p>
       </Reveal>
 
@@ -878,8 +878,8 @@ function CTASection() {
         </span>
         <h2>Vamos Sair?</h2>
         <p>
-          Escolhe a tua cidade, junta os amigos (ou a familia!), e
-          reserva a tua noite de vinho e petiscos. A rua esta a chamar.
+          Escolhe a tua cidade, junta os amigos (ou a família!), e
+          reserva a tua noite de vinho e petiscos. A rua está a chamar.
         </p>
       </Reveal>
 
@@ -919,7 +919,7 @@ function Footer() {
         <strong>Vinho na Rua</strong> &mdash; Bebe. Come. Descomplica.
       </p>
       <p>
-        Uma experiencia{" "}
+        Uma experiência{" "}
         <a href="/" target="_blank" rel="noopener noreferrer">
           Descomplicai
         </a>

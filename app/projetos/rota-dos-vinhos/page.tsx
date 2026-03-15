@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 /* ─── Data ─── */
 
 const navLinks = [
-  { label: "Regioes", href: "#regioes" },
+  { label: "Regiões", href: "#regioes" },
   { label: "Galeria", href: "#galeria" },
   { label: "Tours", href: "#experiencias" },
   { label: "Guias", href: "#guias" },
@@ -17,92 +17,92 @@ const navLinks = [
 const regions = [
   {
     name: "Douro",
-    tagline: "O berco do vinho do Porto e Patrimonio Mundial da UNESCO",
+    tagline: "O berço do vinho do Porto e Património Mundial da UNESCO",
     emoji: "\u{1F3D4}\uFE0F",
     grad: "rota-grad-douro",
     grape: "Touriga Nacional, Touriga Franca, Tinta Roriz",
     bestTime: "Setembro-outubro (vindimas) ou abril-junho",
-    unique: "Regiao vinicola demarcada mais antiga do mundo (1756)",
+    unique: "Região vinícola demarcada mais antiga do mundo (1756)",
     quintas: "Quinta da Pacheca, Quinta do Crasto, Quinta de La Rosa",
   },
   {
     name: "Vinho Verde",
-    tagline: "Frescura atlantica do Minho",
+    tagline: "Frescura atlântica do Minho",
     emoji: "\u{1F30A}",
     grad: "rota-grad-verdes",
     grape: "Alvarinho, Loureiro, Trajadura",
     bestTime: "Maio a setembro (dias longos e festas populares)",
-    unique: "A maior regiao vinicola de Portugal em area",
-    quintas: "Quinta de Soalheiro, Quinta do Ameal, Paco de Calheiros",
+    unique: "A maior região vinícola de Portugal em área",
+    quintas: "Quinta de Soalheiro, Quinta do Ameal, Paço de Calheiros",
   },
   {
     name: "Alentejo",
-    tagline: "Planicies douradas, sobreiros centenarios e vinhos generosos",
+    tagline: "Planícies douradas, sobreiros centenários e vinhos generosos",
     emoji: "\u2600\uFE0F",
     grad: "rota-grad-alentejo",
-    grape: "Aragonez, Trincadeira, Antao Vaz",
-    bestTime: "Marco-junho ou setembro-novembro",
-    unique: "70+ vinicolas abertas a visitantes, 8 sub-regioes",
-    quintas: "Herdade do Esporao, Adega da Cartuxa, Herdade das Servas",
+    grape: "Aragonez, Trincadeira, Antão Vaz",
+    bestTime: "Março-junho ou setembro-novembro",
+    unique: "70+ vinícolas abertas a visitantes, 8 sub-regiões",
+    quintas: "Herdade do Esporão, Adega da Cartuxa, Herdade das Servas",
   },
   {
-    name: "Dao",
-    tagline: "Elegancia serrana entre granito e pinheiros",
+    name: "Dão",
+    tagline: "Elegância serrana entre granito e pinheiros",
     emoji: "\u{1F33F}",
     grad: "rota-grad-dao",
     grape: "Touriga Nacional, Encruzado, Alfrocheiro",
-    bestTime: "Maio a outubro (cores magnificas no outono)",
+    bestTime: "Maio a outubro (cores magníficas no outono)",
     unique: "Terra natal da Touriga Nacional, vinhos comparados a Borgonha",
     quintas: "Casa da Insua, Quinta da Taboadella, Quinta dos Roques",
   },
   {
     name: "Bairrada",
-    tagline: "Terra da Baga, do espumante e do leitao",
+    tagline: "Terra da Baga, do espumante e do leitão",
     emoji: "\u{1F942}",
     grad: "rota-grad-bairrada",
     grape: "Baga, Maria Gomes, Bical",
     bestTime: "Abril a outubro (vindima tardia em outubro)",
-    unique: "Patria do espumante portugues, metodo classico de excelencia",
-    quintas: "Quinta do Encontro, Luis Pato, Caves Sao Joao",
+    unique: "Pátria do espumante português, método clássico de excelência",
+    quintas: "Quinta do Encontro, Luís Pato, Caves São João",
   },
   {
     name: "Lisboa",
-    tagline: "Vinhos com brisa atlantica as portas da capital",
+    tagline: "Vinhos com brisa atlântica às portas da capital",
     emoji: "\u{1F307}",
     grad: "rota-grad-lisboa",
-    grape: "Arinto, Castelao, Moscatel de Setubal",
+    grape: "Arinto, Castelão, Moscatel de Setúbal",
     bestTime: "Abril a novembro (clima ameno quase todo o ano)",
-    unique: "Vinhas sobre areia em Colares -- caso unico no mundo",
-    quintas: "Quinta de Chocapalha, Jose Maria da Fonseca, Quinta de Sant'Ana",
+    unique: "Vinhas sobre areia em Colares -- caso único no mundo",
+    quintas: "Quinta de Chocapalha, José Maria da Fonseca, Quinta de Sant'Ana",
   },
 ];
 
 const galleryItems = [
-  { src: "/wine-images/rota-hero.jpg", caption: "Vista panoramica dos socalcos do Douro" },
-  { src: "/wine-images/rota-vineyard.jpg", caption: "Vinhas entre colinas e quintas centenarias" },
-  { src: "/wine-images/rota-cellar.jpg", caption: "Adegas historicas com seculos de tradicao" },
+  { src: "/wine-images/rota-hero.jpg", caption: "Vista panorâmica dos socalcos do Douro" },
+  { src: "/wine-images/rota-vineyard.jpg", caption: "Vinhas entre colinas e quintas centenárias" },
+  { src: "/wine-images/rota-cellar.jpg", caption: "Adegas históricas com séculos de tradição" },
   { src: "/wine-images/rota-glasses.jpg", caption: "Provas comentadas com os melhores vinhos" },
   { src: "/wine-images/rota-food.jpg", caption: "Gastronomia regional harmonizada com vinho" },
-  { src: "/wine-images/rota-landscape.jpg", caption: "Paisagens de tirar o folego em cada regiao" },
+  { src: "/wine-images/rota-landscape.jpg", caption: "Paisagens de tirar o fôlego em cada região" },
 ];
 
 const steps = [
   {
     icon: "\u{1F5D3}\uFE0F",
-    title: "Escolha a Regiao",
-    desc: "Selecione uma das 6 regioes vinicolas de Portugal ou peca-nos uma sugestao",
+    title: "Escolha a Região",
+    desc: "Selecione uma das 6 regiões vinícolas de Portugal ou peça-nos uma sugestão",
     color: "#2563EB",
   },
   {
     icon: "\u{1F4C5}",
     title: "Marque a Data",
-    desc: "Tours disponiveis de quinta a domingo. Reservas com 48h de antecedencia",
+    desc: "Tours disponíveis de quinta a domingo. Reservas com 48h de antecedência",
     color: "#F59E0B",
   },
   {
     icon: "\u{1F377}",
     title: "Aproveite",
-    desc: "Transporte, guia-sommelier, provas, almoco e seguro -- tudo incluido",
+    desc: "Transporte, guia-sommelier, provas, almoço e seguro -- tudo incluído",
     color: "#16A34A",
   },
 ];
@@ -110,38 +110,38 @@ const steps = [
 const experiences = [
   {
     title: "Rota Familiar",
-    subtitle: "Meio dia para toda a familia",
+    subtitle: "Meio dia para toda a família",
     price: "\u20AC65",
     unit: "/adulto",
-    familyPrice: "\u20AC150 (2 adultos + 2 criancas)",
-    tags: ["4-5 horas", "Criancas bem-vindas", "Lanche regional"],
+    familyPrice: "\u20AC150 (2 adultos + 2 crianças)",
+    tags: ["4-5 horas", "Crianças bem-vindas", "Lanche regional"],
     border: "rota-border-verdes",
     priceColor: "bg-cyan-100 text-cyan-700",
-    desc: "Passeio pelas vinhas, prova de vinhos para adultos, sumos e jogos para criancas, piquenique no jardim da quinta.",
+    desc: "Passeio pelas vinhas, prova de vinhos para adultos, sumos e jogos para crianças, piquenique no jardim da quinta.",
     popular: false,
   },
   {
-    title: "Rota Classica",
-    subtitle: "A essencia do enoturismo num so dia",
+    title: "Rota Clássica",
+    subtitle: "A essência do enoturismo num só dia",
     price: "\u20AC135",
     unit: "/pessoa",
     familyPrice: "Grupos 4-6: \u20AC115/pp | 7-8: \u20AC99/pp",
-    tags: ["8-9 horas", "2 quintas", "Almoco completo", "8-10 vinhos"],
+    tags: ["8-9 horas", "2 quintas", "Almoço completo", "8-10 vinhos"],
     border: "rota-border-douro",
     priceColor: "bg-orange-100 text-orange-700",
-    desc: "Visita a duas quintas, prova de 8-10 vinhos incluindo reservas, almoco regional e estrada panoramica.",
+    desc: "Visita a duas quintas, prova de 8-10 vinhos incluindo reservas, almoço regional e estrada panorâmica.",
     popular: true,
   },
   {
     title: "Rota Premium",
-    subtitle: "2 dias de imersao completa",
+    subtitle: "2 dias de imersão completa",
     price: "\u20AC395",
     unit: "/pessoa",
-    familyPrice: "Inclui 1 noite em quinta + jantar de degustacao",
+    familyPrice: "Inclui 1 noite em quinta + jantar de degustação",
     tags: ["2 dias", "3 quintas", "15-20 vinhos", "Workshop blending"],
     border: "rota-border-alentejo",
     priceColor: "bg-yellow-100 text-yellow-700",
-    desc: "Dormir numa quinta, jantar de 5 pratos harmonizados, prova vertical e criar o seu proprio blend.",
+    desc: "Dormir numa quinta, jantar de 5 pratos harmonizados, prova vertical e criar o seu próprio blend.",
     popular: false,
   },
   {
@@ -153,7 +153,7 @@ const experiences = [
     tags: ["7-8 horas", "Workshop cozinha", "Prova de azeite", "Cesto regional"],
     border: "rota-border-bairrada",
     priceColor: "bg-pink-100 text-pink-700",
-    desc: "Workshop de cozinha regional, almoco de harmonizacao, visita a queijaria artesanal e prova de azeites.",
+    desc: "Workshop de cozinha regional, almoço de harmonização, visita a queijaria artesanal e prova de azeites.",
     popular: false,
   },
   {
@@ -162,32 +162,32 @@ const experiences = [
     price: "\u20AC95",
     unit: "/pessoa",
     familyPrice: "Grupos 6-8: \u20AC79/pp | 9-12: \u20AC69/pp",
-    tags: ["7-8 horas", "8-12 km trilho", "Piquenique vinicola", "4-5 vinhos"],
+    tags: ["7-8 horas", "8-12 km trilho", "Piquenique vinícola", "4-5 vinhos"],
     border: "rota-border-dao",
     priceColor: "bg-green-100 text-green-700",
     desc: "Caminhada guiada pelos socalcos do Douro, piquenique com enchidos e queijo, prova na quinta.",
     popular: false,
   },
   {
-    title: "Team Building Vinicola",
+    title: "Team Building Vinícola",
     subtitle: "Para empresas e grupos corporativos",
     price: "\u20AC75",
     unit: "/pessoa",
     familyPrice: "10-20 pessoas, meio dia | Dia inteiro: \u20AC130/pp",
-    tags: ["10-60 pessoas", "Workshop blending", "Prova as cegas", "Competicao"],
+    tags: ["10-60 pessoas", "Workshop blending", "Prova às cegas", "Competição"],
     border: "rota-border-lisboa",
     priceColor: "bg-red-100 text-red-700",
-    desc: "Workshop de blending em equipa, prova as cegas competitiva, vindima em equipa e jantar de grupo.",
+    desc: "Workshop de blending em equipa, prova às cegas competitiva, vindima em equipa e jantar de grupo.",
     popular: false,
   },
 ];
 
 const guides = [
   {
-    name: "Joao Pereira",
+    name: "João Pereira",
     role: "Fundador e Diretor",
-    bio: "Nasceu nas vinhas de Sabrosa, no Douro. 15 anos de experiencia em turismo. Certificacao WSET Level 3.",
-    langs: ["Portugues", "Ingles", "Espanhol"],
+    bio: "Nasceu nas vinhas de Sabrosa, no Douro. 15 anos de experiência em turismo. Certificação WSET Level 3.",
+    langs: ["Português", "Inglês", "Espanhol"],
     color: "#2563eb",
     initials: "JP",
   },
@@ -195,23 +195,23 @@ const guides = [
     name: "Tiago Nogueira",
     role: "Sommelier Principal",
     bio: "Sommelier certificado (Court of Master Sommeliers), WSET Level 3 Distinction. Estagiou na Borgonha.",
-    langs: ["Portugues", "Ingles", "Frances", "Espanhol"],
+    langs: ["Português", "Inglês", "Francês", "Espanhol"],
     color: "#7c3aed",
     initials: "TN",
   },
   {
     name: "Sofia Barros",
     role: "Guia de Enoturismo e Natureza",
-    bio: "Biologa de formacao, amante de vinhos. Guia os trilhos da Rota Aventura com paixao pela biodiversidade.",
-    langs: ["Portugues", "Ingles"],
+    bio: "Bióloga de formação, amante de vinhos. Guia os trilhos da Rota Aventura com paixão pela biodiversidade.",
+    langs: ["Português", "Inglês"],
     color: "#16a34a",
     initials: "SB",
   },
   {
     name: "Miguel Azevedo",
     role: "Guia de Familias e Grupos",
-    bio: "Formacao em animacao sociocultural. O favorito das criancas -- ninguem sai sem pes roxos e um sorriso.",
-    langs: ["Portugues", "Ingles", "Espanhol"],
+    bio: "Formação em animação sociocultural. O favorito das crianças -- ninguém sai sem pés roxos e um sorriso.",
+    langs: ["Português", "Inglês", "Espanhol"],
     color: "#f59e0b",
     initials: "MA",
   },
@@ -219,77 +219,77 @@ const guides = [
 
 const testimonials = [
   {
-    text: "Levamos os nossos dois filhos (7 e 10 anos) e o guia Miguel foi espetacular com as criancas, que adoraram pisar as uvas. O piquenique no jardim da quinta foi o ponto alto. Ja estamos a planear voltar!",
+    text: "Levámos os nossos dois filhos (7 e 10 anos) e o guia Miguel foi espetacular com as crianças, que adoraram pisar as uvas. O piquenique no jardim da quinta foi o ponto alto. Já estamos a planear voltar!",
     author: "Ana e Ricardo Ferreira",
     meta: "Lisboa \u2022 Rota Familiar (Vinho Verde)",
     rating: 5,
   },
   {
-    text: "Somos um casal ingles apaixonado por vinhos e ja fizemos tours em Franca e Italia. O Douro superou tudo. A guia Sofia explicou tudo com paixao e bom humor. O vinho do Porto de 1985 -- nunca vou esquecer.",
+    text: "Somos um casal inglês apaixonado por vinhos e já fizemos tours em França e Itália. O Douro superou tudo. A guia Sofia explicou tudo com paixão e bom humor. O vinho do Porto de 1985 -- nunca vou esquecer.",
     author: "James e Sarah Mitchell",
-    meta: "Londres \u2022 Rota Classica (Douro)",
+    meta: "Londres \u2022 Rota Clássica (Douro)",
     rating: 5,
   },
   {
-    text: "Reservei a Rota Premium para celebrar 25 anos de casados. Dormir numa quinta no Douro, jantar com harmonizacao de 5 pratos, criar o nosso proprio blend... foi tudo perfeito.",
-    author: "Carlos Mendonca",
+    text: "Reservei a Rota Premium para celebrar 25 anos de casados. Dormir numa quinta no Douro, jantar com harmonização de 5 pratos, criar o nosso próprio blend... foi tudo perfeito.",
+    author: "Carlos Mendonça",
     meta: "Porto \u2022 Rota Premium (Douro)",
     rating: 5,
   },
   {
-    text: "Organizamos o team building da empresa (22 pessoas) e foi um sucesso. A competicao de blending gerou muita risada. Ate o nosso diretor acabou a dizer que o Encruzado do Dao era brutal!",
+    text: "Organizámos o team building da empresa (22 pessoas) e foi um sucesso. A competição de blending gerou muita risada. Até o nosso diretor acabou a dizer que o Encruzado do Dão era brutal!",
     author: "Margarida Santos",
-    meta: "Diretora de RH \u2022 Rota Corporativa (Dao)",
+    meta: "Diretora de RH \u2022 Rota Corporativa (Dão)",
     rating: 5,
   },
   {
-    text: "Viemos do Brasil e foi o ponto alto da viagem. A herdade era lindissima, o Pera-Manca era divino, e o ensopado de borrego no almoco... que saudade ja tenho! Recomendo a todos os brasileiros.",
+    text: "Viemos do Brasil e foi o ponto alto da viagem. A herdade era lindíssima, o Pera-Manca era divino, e o ensopado de borrego no almoço... que saudade já tenho! Recomendo a todos os brasileiros.",
     author: "Fernanda e Marcos Ribeiro",
-    meta: "Sao Paulo \u2022 Rota Classica (Alentejo)",
+    meta: "São Paulo \u2022 Rota Clássica (Alentejo)",
     rating: 5,
   },
 ];
 
 const faqs = [
   {
-    q: "O transporte esta incluido?",
-    a: "Sim. Fazemos recolha no seu hotel, alojamento local ou num ponto central da cidade. No Porto: Avenida dos Aliados ou hotel. Em Lisboa: Praca do Comercio ou hotel. Carrinhas Mercedes com ar condicionado, wifi e agua.",
+    q: "O transporte está incluído?",
+    a: "Sim. Fazemos recolha no seu hotel, alojamento local ou num ponto central da cidade. No Porto: Avenida dos Aliados ou hotel. Em Lisboa: Praça do Comércio ou hotel. Carrinhas Mercedes com ar condicionado, wifi e água.",
   },
   {
     q: "Posso ir com criancas?",
-    a: "Claro! A Rota Familiar foi desenhada para familias com criancas de todas as idades. Temos cadeirinhas na carrinha, sumos de uva naturais, bolachas e atividades para os mais pequenos. Nas outras rotas, consulte-nos.",
+    a: "Claro! A Rota Familiar foi desenhada para famílias com crianças de todas as idades. Temos cadeirinhas na carrinha, sumos de uva naturais, bolachas e atividades para os mais pequenos. Nas outras rotas, consulte-nos.",
   },
   {
-    q: "E preciso perceber de vinhos para participar?",
-    a: "De maneira nenhuma! Os nossos guias adaptam a linguagem a cada grupo. Explicamos tudo de forma simples, sem jargao. O objectivo e sempre divertir e dar prazer -- nao examinar.",
+    q: "É preciso perceber de vinhos para participar?",
+    a: "De maneira nenhuma! Os nossos guias adaptam a linguagem a cada grupo. Explicamos tudo de forma simples, sem jargão. O objetivo é sempre divertir e dar prazer -- não examinar.",
   },
   {
-    q: "Qual e a politica de cancelamento?",
-    a: "Cancelamento gratuito ate 48 horas antes. Entre 24 e 48 horas, reembolsamos 50%. Com menos de 24 horas, pode remarcar para outra data. Em caso de mau tempo severo, remarcamos sem custo.",
+    q: "Qual é a política de cancelamento?",
+    a: "Cancelamento gratuito até 48 horas antes. Entre 24 e 48 horas, reembolsamos 50%. Com menos de 24 horas, pode remarcar para outra data. Em caso de mau tempo severo, remarcamos sem custo.",
   },
   {
     q: "As rotas funcionam com chuva?",
-    a: "Sim! O enoturismo e maioritariamente em ambientes interiores (adegas, salas de prova, restaurantes). Apenas a Rota Aventura pode ser reagendada em caso de chuva intensa.",
+    a: "Sim! O enoturismo é maioritariamente em ambientes interiores (adegas, salas de prova, restaurantes). Apenas a Rota Aventura pode ser reagendada em caso de chuva intensa.",
   },
   {
     q: "Quantas pessoas cabem em cada grupo?",
-    a: "As nossas carrinhas levam ate 8 pessoas. Para grupos maiores, utilizamos autocarros ou multiplas carrinhas. Grupos de 2 a 60 pessoas sao bem-vindos. Tours privados a partir de 2 pessoas.",
+    a: "As nossas carrinhas levam até 8 pessoas. Para grupos maiores, utilizamos autocarros ou múltiplas carrinhas. Grupos de 2 a 60 pessoas são bem-vindos. Tours privados a partir de 2 pessoas.",
   },
   {
-    q: "As rotas sao acessiveis a pessoas com mobilidade reduzida?",
-    a: "Trabalhamos para tornar as experiencias acessiveis a todos. Temos quintas parceiras com acessos adaptados e carrinhas com espaco para cadeira de rodas dobravel. Informe-nos ao reservar.",
+    q: "As rotas são acessíveis a pessoas com mobilidade reduzida?",
+    a: "Trabalhamos para tornar as experiências acessíveis a todos. Temos quintas parceiras com acessos adaptados e carrinhas com espaço para cadeira de rodas dobrável. Informe-nos ao reservar.",
   },
   {
-    q: "Aceitam restricoes alimentares?",
-    a: "Sim. Vegetarianos, veganos, celiacos, intolerantes a lactose -- todos os restaurantes parceiros estao preparados. Opcoes halal e kosher mediante aviso previo. Basta informar ao reservar.",
+    q: "Aceitam restrições alimentares?",
+    a: "Sim. Vegetarianos, veganos, celíacos, intolerantes a lactose -- todos os restaurantes parceiros estão preparados. Opções halal e kosher mediante aviso prévio. Basta informar ao reservar.",
   },
 ];
 
 const pricingData = [
   { name: "Rota Familiar", duration: "4-5h", meals: "Lanche", wineries: 1, tastings: "3-4", price: "\u20AC65/adulto" },
-  { name: "Rota Classica", duration: "8-9h", meals: "Almoco", wineries: 2, tastings: "8-10", price: "\u20AC135/pp" },
-  { name: "Rota Premium", duration: "2 dias", meals: "Jantar + Almoco", wineries: 3, tastings: "15-20", price: "\u20AC395/pp" },
-  { name: "Rota dos Sabores", duration: "7-8h", meals: "Almoco harmonizado", wineries: 1, tastings: "4-5", price: "\u20AC155/pp" },
+  { name: "Rota Clássica", duration: "8-9h", meals: "Almoço", wineries: 2, tastings: "8-10", price: "\u20AC135/pp" },
+  { name: "Rota Premium", duration: "2 dias", meals: "Jantar + Almoço", wineries: 3, tastings: "15-20", price: "\u20AC395/pp" },
+  { name: "Rota dos Sabores", duration: "7-8h", meals: "Almoço harmonizado", wineries: 1, tastings: "4-5", price: "\u20AC155/pp" },
   { name: "Rota Aventura", duration: "7-8h", meals: "Piquenique", wineries: 1, tastings: "4-5", price: "\u20AC95/pp" },
 ];
 
@@ -394,7 +394,7 @@ function RegionCard({
                   <strong>Castas:</strong> {region.grape}
                 </li>
                 <li>
-                  <strong>Melhor epoca:</strong> {region.bestTime}
+                  <strong>Melhor época:</strong> {region.bestTime}
                 </li>
                 <li>
                   <strong>Destaque:</strong> {region.unique}
@@ -518,16 +518,16 @@ export default function RotaDosVinhosPage() {
             <span className="text-blue-600">um copo de cada vez</span>
           </h1>
           <p className="text-lg text-slate-600 mb-8 max-w-lg mx-auto">
-            Rotas guiadas pelas melhores regioes vinicolas portuguesas.
-            Para familias, casais, amigos e grupos.
+            Rotas guiadas pelas melhores regiões vinícolas portuguesas.
+            Para famílias, casais, amigos e grupos.
           </p>
 
           {/* Pill badges */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             {[
-              "\u{1F377} 6 Regioes",
-              "\u{1F690} Transporte incluido",
-              "\u{1F468}\u200D\u{1F373} Almoco regional",
+              "\u{1F377} 6 Regiões",
+              "\u{1F690} Transporte incluído",
+              "\u{1F468}\u200D\u{1F373} Almoço regional",
               "\u{1F4F8} Guia-sommelier",
             ].map((badge) => (
               <span key={badge} className="rota-badge">
@@ -564,7 +564,7 @@ export default function RotaDosVinhosPage() {
             </div>
             <div className="rota-stat">
               <span className="rota-stat-number">6</span>
-              <span className="rota-stat-label">Regioes</span>
+              <span className="rota-stat-label">Regiões</span>
             </div>
             <div className="rota-stat">
               <span className="rota-stat-number">98%</span>
@@ -589,7 +589,7 @@ export default function RotaDosVinhosPage() {
             custom={0}
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
           >
-            Regioes Vinicolas
+            Regiões Vinícolas
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -599,7 +599,7 @@ export default function RotaDosVinhosPage() {
             custom={1}
             className="text-slate-500 text-center mb-8 max-w-md mx-auto"
           >
-            Toque num cartao para descobrir castas, quintas e a melhor epoca para visitar
+            Toque num cartão para descobrir castas, quintas e a melhor época para visitar
           </motion.p>
         </div>
 
@@ -720,7 +720,7 @@ export default function RotaDosVinhosPage() {
             custom={0}
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
           >
-            Tours e Experiencias
+            Tours e Experiências
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -730,7 +730,7 @@ export default function RotaDosVinhosPage() {
             custom={1}
             className="text-slate-500 text-center mb-10 max-w-md mx-auto"
           >
-            5 rotas unicas + opcoes corporativas. Escolha a sua aventura vinicola.
+            5 rotas únicas + opções corporativas. Escolha a sua aventura vinícola.
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -802,7 +802,7 @@ export default function RotaDosVinhosPage() {
             custom={0}
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
           >
-            Conheca os Nossos Guias
+            Conheça os Nossos Guias
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -918,7 +918,7 @@ export default function RotaDosVinhosPage() {
             custom={1}
             className="text-slate-500 text-center mb-10 max-w-md mx-auto"
           >
-            De 2 a 60 pessoas. Tours privados, team buildings e celebracoes especiais.
+            De 2 a 60 pessoas. Tours privados, team buildings e celebrações especiais.
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -926,25 +926,25 @@ export default function RotaDosVinhosPage() {
               {
                 icon: "\u{1F3E2}",
                 title: "Team Building",
-                desc: "Workshop de blending em equipa, prova as cegas competitiva, vindima em equipa, pisa de uvas. 10 a 60 pessoas, meio dia ou dia inteiro.",
+                desc: "Workshop de blending em equipa, prova às cegas competitiva, vindima em equipa, pisa de uvas. 10 a 60 pessoas, meio dia ou dia inteiro.",
                 price: "Desde \u20AC65/pessoa",
               },
               {
                 icon: "\u{1F389}",
                 title: "Despedidas de Solteiro/a",
-                desc: "Espumante de boas-vindas, prova animada com jogos e desafios, almoco ou jantar de grupo e surpresa para o/a noivo/a.",
+                desc: "Espumante de boas-vindas, prova animada com jogos e desafios, almoço ou jantar de grupo e surpresa para o/a noivo/a.",
                 price: "Desde \u20AC89/pessoa (min. 8)",
               },
               {
                 icon: "\u{1F382}",
-                title: "Aniversarios e Celebracoes",
-                desc: "Aniversarios, bodas de ouro, reunioes familiares em quintas vinicolas. Decoracao tematica e menu personalizado.",
-                price: "Orcamento sob consulta",
+                title: "Aniversários e Celebrações",
+                desc: "Aniversários, bodas de ouro, reuniões familiares em quintas vinícolas. Decoração temática e menu personalizado.",
+                price: "Orçamento sob consulta",
               },
               {
                 icon: "\u{1F464}",
                 title: "Tours Privados",
-                desc: "Qualquer rota pode ser privada. Guia exclusivo, itinerario a medida, horarios flexiveis. Perfeito para casais e pequenos grupos.",
+                desc: "Qualquer rota pode ser privada. Guia exclusivo, itinerário à medida, horários flexíveis. Perfeito para casais e pequenos grupos.",
                 price: "Desde 2 pessoas",
               },
             ].map((item, i) => (
@@ -984,7 +984,7 @@ export default function RotaDosVinhosPage() {
             custom={0}
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-3"
           >
-            Informacoes Praticas
+            Informações Práticas
           </motion.h2>
           <motion.p
             variants={fadeUp}
@@ -999,7 +999,7 @@ export default function RotaDosVinhosPage() {
 
           <img
             src="/wine-images/rota-landscape.jpg"
-            alt="Paisagem vinicola portuguesa"
+            alt="Paisagem vinícola portuguesa"
             className="rota-section-image"
             loading="lazy"
           />
@@ -1009,32 +1009,32 @@ export default function RotaDosVinhosPage() {
               {
                 icon: "\u{1F4CD}",
                 title: "Pontos de Recolha",
-                text: "Porto: Av. dos Aliados ou hotel. Lisboa: Praca do Comercio ou hotel. Braga, Guimaraes, Coimbra, Evora: centro da cidade ou hotel.",
+                text: "Porto: Av. dos Aliados ou hotel. Lisboa: Praça do Comércio ou hotel. Braga, Guimarães, Coimbra, Évora: centro da cidade ou hotel.",
               },
               {
                 icon: "\u{1F690}",
                 title: "Frota",
-                text: "Mercedes Vito (8 lugares), Classe V premium (7 lugares, couro), Sprinter (16 lugares). Todas com ar condicionado, wifi e agua.",
+                text: "Mercedes Vito (8 lugares), Classe V premium (7 lugares, couro), Sprinter (16 lugares). Todas com ar condicionado, wifi e água.",
               },
               {
                 icon: "\u{1F455}",
                 title: "O Que Vestir",
-                text: "Roupa confortavel, sapatos fechados. Casaco leve (adegas a 12-15\u00B0C). Chapeu e oculos de sol no verao. Evitar perfumes fortes.",
+                text: "Roupa confortável, sapatos fechados. Casaco leve (adegas a 12-15\u00B0C). Chapéu e óculos de sol no verão. Evitar perfumes fortes.",
               },
               {
                 icon: "\u{1F476}",
-                title: "Familias com Criancas",
-                text: "Cadeirinhas de bebe gratis (Grupo 0+, 1 e 2/3). Sumos de uva, bolachas e atividades para criancas incluidas na Rota Familiar.",
+                title: "Famílias com Crianças",
+                text: "Cadeirinhas de bebé grátis (Grupo 0+, 1 e 2/3). Sumos de uva, bolachas e atividades para crianças incluídas na Rota Familiar.",
               },
               {
                 icon: "\u267F",
                 title: "Acessibilidade",
-                text: "Quintas com acessos adaptados, carrinhas com espaco para cadeira de rodas, percursos em piso regular. Provas adaptadas para deficiencia visual.",
+                text: "Quintas com acessos adaptados, carrinhas com espaço para cadeira de rodas, percursos em piso regular. Provas adaptadas para deficiência visual.",
               },
               {
                 icon: "\u{1F4B3}",
                 title: "Pagamentos",
-                text: "Multibanco, MBWay, cartao (Visa/Mastercard), transferencia, PayPal. Pagamento na reserva ou no dia. Cancelamento gratis ate 48h antes.",
+                text: "Multibanco, MBWay, cartão (Visa/Mastercard), transferência, PayPal. Pagamento na reserva ou no dia. Cancelamento grátis até 48h antes.",
               },
             ].map((item, i) => (
               <motion.div
@@ -1120,11 +1120,11 @@ export default function RotaDosVinhosPage() {
               <thead>
                 <tr>
                   <th>Rota</th>
-                  <th>Duracao</th>
-                  <th>Refeicoes</th>
+                  <th>Duração</th>
+                  <th>Refeições</th>
                   <th>Quintas</th>
                   <th>Provas</th>
-                  <th>Preco</th>
+                  <th>Preço</th>
                 </tr>
               </thead>
               <tbody>
@@ -1152,7 +1152,7 @@ export default function RotaDosVinhosPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 custom={i}
-                className={`rota-pricing-card ${row.name === "Rota Classica" ? "rota-pricing-card-popular" : ""}`}
+                className={`rota-pricing-card ${row.name === "Rota Clássica" ? "rota-pricing-card-popular" : ""}`}
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-extrabold text-slate-900">{row.name}</h3>
@@ -1160,11 +1160,11 @@ export default function RotaDosVinhosPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <span className="text-slate-400 text-xs">Duracao</span>
+                    <span className="text-slate-400 text-xs">Duração</span>
                     <p className="text-slate-700 font-medium">{row.duration}</p>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-xs">Refeicoes</span>
+                    <span className="text-slate-400 text-xs">Refeições</span>
                     <p className="text-slate-700 font-medium">{row.meals}</p>
                   </div>
                   <div>
@@ -1262,7 +1262,7 @@ export default function RotaDosVinhosPage() {
               "3000+ visitantes",
               "98% recomendam",
               "Guias certificados WSET",
-              "Seguro incluido",
+              "Seguro incluído",
             ].map((badge) => (
               <span
                 key={badge}
@@ -1275,7 +1275,7 @@ export default function RotaDosVinhosPage() {
 
           <div className="flex flex-col items-center gap-3 text-center">
             <p className="text-sm text-slate-400">
-              Uma experiencia{" "}
+              Uma experiência{" "}
               <a
                 href="/"
                 className="text-blue-500 hover:text-blue-600 font-semibold transition-colors"

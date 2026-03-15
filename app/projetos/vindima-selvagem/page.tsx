@@ -448,21 +448,67 @@ export default function VindimaSelvagem() {
           <div className="vindima-hero-overlay" />
         </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+        {/* Floating vineyard emojis */}
+        <div className="vindima-hero-floats">
+          <span className="vindima-float" style={{ left: "8%", top: "15%", animationDelay: "0s" }}>🍇</span>
+          <span className="vindima-float" style={{ right: "10%", top: "20%", animationDelay: "1.5s" }}>🍂</span>
+          <span className="vindima-float" style={{ left: "15%", bottom: "25%", animationDelay: "3s" }}>🌿</span>
+          <span className="vindima-float" style={{ right: "12%", bottom: "30%", animationDelay: "2s" }}>🍷</span>
+        </div>
+
+        {/* Badge */}
+        <motion.div
+          className="vindima-hero-badge"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Maos na terra. Pes no lagar.{"\n"}Coracao no Douro.
-        </motion.h1>
+          <span>🌍</span> Uma das experiências mais autênticas do Douro
+        </motion.div>
+
+        {/* Title with word-by-word reveal */}
+        <div className="vindima-hero-title-group">
+          <motion.span
+            className="vindima-hero-title-line vindima-hero-title-accent"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            Mãos na terra.
+          </motion.span>
+          <motion.span
+            className="vindima-hero-title-line"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+          >
+            Pés no lagar.
+          </motion.span>
+          <motion.span
+            className="vindima-hero-title-line vindima-hero-title-bold"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+          >
+            Coração no Douro.
+          </motion.span>
+        </div>
+
+        <motion.div
+          className="vindima-hero-divider"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+        />
 
         <motion.p
           className="vindima-hero-subtitle"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 1.0 }}
         >
-          A vindima como ela sempre foi -- real, crua, inesquecivel.
+          A vindima como ela sempre foi — real, crua, inesquecível.
+          <br />
           Venha vindimar connosco nos socalcos do Douro.
         </motion.p>
 
@@ -470,7 +516,7 @@ export default function VindimaSelvagem() {
           className="vindima-trust-badges"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
         >
           {TRUST_BADGES.map((badge) => (
             <div key={badge.label} className="vindima-trust-badge">
@@ -480,26 +526,45 @@ export default function VindimaSelvagem() {
           ))}
         </motion.div>
 
-        <motion.a
-          href="#reservar"
-          className="vindima-hero-cta"
+        <motion.div
+          className="vindima-hero-ctas"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.0 }}
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavClick("#reservar");
-          }}
+          transition={{ duration: 0.6, delay: 1.4 }}
         >
-          Reservar a minha vindima
-        </motion.a>
+          <a
+            href="#reservar"
+            className="vindima-hero-cta"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("#reservar");
+            }}
+          >
+            Reservar a minha vindima
+          </a>
+          <a
+            href="#experiencia"
+            className="vindima-hero-cta-secondary"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("#experiencia");
+            }}
+          >
+            Ver o dia completo ↓
+          </a>
+        </motion.div>
 
-        <div className="vindima-scroll-indicator">
+        <motion.div
+          className="vindima-scroll-indicator"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.8 }}
+        >
           <span>Explorar</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M10 4 L10 16 M5 11 L10 16 L15 11" />
           </svg>
-        </div>
+        </motion.div>
       </section>
 
       {/* ────── 3. ABOUT THE QUINTA ────── */}
