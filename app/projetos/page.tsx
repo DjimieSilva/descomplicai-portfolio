@@ -33,6 +33,7 @@ const PROJECTS: Project[] = [
   { id: "ninika-tours", title: "NinikaTours", category: "food", type: "Wine & Gastro Platform", description: "Experiências de vinho vulcânico e gastronomia açoriana na Ilha Terceira — lead capture + booking", gradient: "from-indigo-950 to-red-900", emoji: "🌋", status: "live" },
   { id: "design-system", title: "Design System", category: "creative", type: "UI Component Library", description: "15 componentes premium — glassmorphism, parallax, smooth scroll, text animations e mais", gradient: "from-blue-600 to-violet-500", emoji: "🧩", status: "live" },
   { id: "meiocheio", title: "MeioCheio", category: "restaurant", type: "Wine Bar Website", description: "Wine bar & petiscos em Figueira da Foz — carta de vinhos, experiências, reservas via WhatsApp", gradient: "from-red-900 to-amber-600", emoji: "🍷", status: "live" },
+  { id: "ribeirosanto", title: "Ribeiro Santo", category: "restaurant", type: "Wine Estate Website", description: "Quinta vinícola no Dão — vinhos premiados, enoturismo, 8 páginas com história, catálogo e experiências", gradient: "from-[#722F37] to-[#C9A96E]", emoji: "🍇", status: "live" },
 ];
 
 const CATEGORIES = [
@@ -59,7 +60,7 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
-const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "ondas-academy", "futuro", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system", "meiocheio"];
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "ondas-academy", "futuro", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system", "meiocheio", "ribeirosanto"];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isClickable = CLICKABLE_IDS.includes(project.id);
