@@ -541,7 +541,7 @@ export default function RotaDosVinhosPage() {
               href="#experiencias"
               className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-4 rounded-full transition-colors min-h-[52px] shadow-lg shadow-blue-600/25"
             >
-              Ver Tours \u2192
+              Ver Tours →
             </a>
             <a
               href="https://wa.me/351934035971"
@@ -783,7 +783,7 @@ export default function RotaDosVinhosPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors min-h-[44px]"
                 >
-                  Reservar \u2192
+                  Reservar →
                 </a>
               </motion.div>
             ))}

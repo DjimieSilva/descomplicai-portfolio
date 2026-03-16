@@ -450,7 +450,7 @@ function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <span>\uD83C\uDF77</span> Tours de vinho e petiscos
+        <span>🍷</span> Tours de vinho e petiscos
       </motion.div>
 
       <motion.h1
@@ -502,7 +502,7 @@ function Hero() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
       >
-        Ver Tours \uD83D\uDC49
+        Ver Tours 👉
       </motion.a>
     </section>
   );
@@ -514,7 +514,7 @@ function HowItWorks() {
   return (
     <section className="rua-section" id="como-funciona">
       <Reveal>
-        <h2 className="rua-section-title">Como Funciona \uD83E\uDD37</h2>
+        <h2 className="rua-section-title">Como Funciona 🤷</h2>
         <p className="rua-section-subtitle">
           É simples como abrir uma garrafa. Sem complicações, sem planos
           rígidos. Só boa disposição.
@@ -543,7 +543,7 @@ function Cities() {
   return (
     <section className="rua-section rua-section--cream" id="cidades">
       <Reveal>
-        <h2 className="rua-section-title">As Cidades \uD83C\uDFD9\uFE0F</h2>
+        <h2 className="rua-section-title">As Cidades 🏙️</h2>
         <p className="rua-section-subtitle">
           Cinco cidades, cinco personalidades. A mesma vibe casual e
           descomplicada em cada uma.
@@ -596,7 +596,7 @@ function TypicalTour() {
     >
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "0 1.25rem" }}>
         <Reveal>
-          <h2 className="rua-section-title">Um Tour Típico \uD83C\uDF1C</h2>
+          <h2 className="rua-section-title">Um Tour Típico 🌜</h2>
           <p className="rua-section-subtitle">
             Um exemplo de como é uma noite connosco. Cada cidade tem o seu
             percurso único, mas a magia é sempre a mesma.
@@ -628,7 +628,7 @@ function WhatYoullTaste() {
   return (
     <section className="rua-section" id="petiscos">
       <Reveal>
-        <h2 className="rua-section-title">O Que Vais Provar \uD83E\uDD24</h2>
+        <h2 className="rua-section-title">O Que Vais Provar 🤤</h2>
         <p className="rua-section-subtitle">
           Petiscos tradicionais portugueses que fazem qualquer tasca cheirar a
           casa. Muda com a estação, mas o sabor é sempre honesto.
@@ -658,7 +658,7 @@ function ForFamilies() {
       <Reveal>
         <div className="rua-families">
           <span style={{ fontSize: "2.5rem", display: "block", marginBottom: "0.75rem" }}>
-            \uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66
+            👨‍👩‍👧‍👦
           </span>
           <h3>Para Famílias</h3>
           <p>
@@ -696,7 +696,7 @@ function Gallery() {
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <Reveal>
           <h2 className="rua-section-title" style={{ padding: "0 1.25rem" }}>
-            Galeria \uD83D\uDCF8
+            Galeria 📸
           </h2>
           <p
             className="rua-section-subtitle"
@@ -732,7 +732,7 @@ function TestimonialsSection() {
   return (
     <section className="rua-section rua-section--cream" id="testemunhos">
       <Reveal>
-        <h2 className="rua-section-title">O Que Dizem \u2B50</h2>
+        <h2 className="rua-section-title">O Que Dizem ⭐</h2>
         <p className="rua-section-subtitle">
           Palavras de quem já caminhou, provou e repetiu.
         </p>
@@ -743,7 +743,7 @@ function TestimonialsSection() {
           <Reveal key={t.author} delay={i * 0.07}>
             <div className="rua-testimonial">
               <span className="rua-testimonial-stars">
-                \u2605\u2605\u2605\u2605\u2605
+                ★★★★★
               </span>
               <p>&ldquo;{t.quote}&rdquo;</p>
               <div className="rua-testimonial-author">
@@ -766,7 +766,7 @@ function PricingSection() {
   return (
     <section className="rua-section" id="precos">
       <Reveal>
-        <h2 className="rua-section-title">Preços \uD83C\uDFF7\uFE0F</h2>
+        <h2 className="rua-section-title">Preços 🏷️</h2>
         <p className="rua-section-subtitle">
           Sem surpresas. O preço inclui tudo: guia, vinhos, petiscos e boa
           disposição.
@@ -820,7 +820,7 @@ function FAQSection() {
   return (
     <section className="rua-section rua-section--cream" id="faq">
       <Reveal>
-        <h2 className="rua-section-title">Perguntas Frequentes \uD83E\uDD14</h2>
+        <h2 className="rua-section-title">Perguntas Frequentes 🤔</h2>
         <p className="rua-section-subtitle">
           Tudo o que precisas de saber antes de reservar.
         </p>
@@ -841,7 +841,7 @@ function FAQSection() {
                     openIdx === i ? "rua-faq-chevron--open" : ""
                   }`}
                 >
-                  \u25BC
+                  ▼
                 </span>
               </button>
               <AnimatePresence>
@@ -874,7 +874,7 @@ function CTASection() {
         <span
           style={{ fontSize: "3rem", display: "block", marginBottom: "1rem" }}
         >
-          \uD83C\uDF77
+          🍷
         </span>
         <h2>Vamos Sair?</h2>
         <p>
@@ -893,7 +893,7 @@ function CTASection() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >
-            \uD83D\uDCF2 Reservar por WhatsApp
+            📲 Reservar por WhatsApp
           </motion.a>
 
           <motion.a
@@ -902,7 +902,7 @@ function CTASection() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >
-            \u2709\uFE0F Enviar Email
+            ✉️ Enviar Email
           </motion.a>
         </div>
       </Reveal>
