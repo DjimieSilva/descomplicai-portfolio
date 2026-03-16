@@ -43,6 +43,7 @@ const PROJECTS: Project[] = [
   { id: "rota-dos-vinhos", title: "Rota dos Vinhos", category: "food", type: "Wine Experience", description: "Rotas turísticas guiadas pelas 6 regiões vinícolas de Portugal — acessível e solar", gradient: "from-blue-500 to-green-400", emoji: "🌞", status: "live" },
   { id: "vinho-na-rua", title: "Vinho na Rua", category: "food", type: "Wine Experience", description: "Walking tours de vinho e petiscos por Porto, Lisboa, Braga, Évora e Faro — casual e divertido", gradient: "from-red-800 to-yellow-600", emoji: "🍷", status: "live" },
   { id: "ninika-tours", title: "NinikaTours", category: "food", type: "Wine & Gastro Platform", description: "Experiências de vinho vulcânico e gastronomia açoriana na Ilha Terceira — lead capture + booking", gradient: "from-indigo-950 to-red-900", emoji: "🌋", status: "live" },
+  { id: "design-system", title: "Design System", category: "creative", type: "UI Component Library", description: "15 componentes premium — glassmorphism, parallax, smooth scroll, text animations e mais", gradient: "from-blue-600 to-violet-500", emoji: "🧩", status: "live" },
 ];
 
 const CATEGORIES = [
@@ -69,7 +70,7 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
-const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours"];
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system"];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isClickable = CLICKABLE_IDS.includes(project.id);
