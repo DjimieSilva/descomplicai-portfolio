@@ -20,22 +20,10 @@ type Project = {
 
 const PROJECTS: Project[] = [
   { id: "bfitfam", title: "BFITFAM", category: "fitness", type: "Website + PWA", description: "Plataforma de personal training com app de treinos interativa e tracking de progresso", gradient: "from-blue-600 to-cyan-500", emoji: "💪", status: "live" },
-  { id: "tasca-dentro", title: "Tás-cá Dentro", category: "restaurant", type: "Website", description: "Gastrobar de cozinha de autor com carta de vinhos premium e música ao vivo", gradient: "from-amber-600 to-orange-400", emoji: "🍷", status: "dev" },
-  { id: "mar-brasa", title: "Mar & Brasa", category: "restaurant", type: "Website", description: "Restaurante de marisco e grelhados — cataplana, peixe fresco, tradição", gradient: "from-orange-500 to-red-500", emoji: "🦐", status: "dev" },
-  { id: "bella-clinica", title: "Bella Clínica", category: "health", type: "Website", description: "Clínica estética premium — tratamentos faciais, corporais e anti-aging", gradient: "from-pink-500 to-rose-400", emoji: "✨", status: "dev" },
-  { id: "costa-dourada", title: "Costa Dourada", category: "realestate", type: "Website", description: "Imobiliária com 500+ vendidos — listagens, serviços financeiros, testemunhos", gradient: "from-emerald-500 to-teal-400", emoji: "🏠", status: "dev" },
-  { id: "ondas-academy", title: "Ondas Academy", category: "sports", type: "Website", description: "Escola de surf em Buarcos — pacotes de aulas para todos os níveis", gradient: "from-cyan-500 to-blue-400", emoji: "🏄", status: "dev" },
-  { id: "pao-da-serra", title: "Pão da Serra", category: "food", type: "Website", description: "Padaria artesanal familiar — pão de massa mãe desde 2010", gradient: "from-yellow-600 to-amber-500", emoji: "🍞", status: "dev" },
-  { id: "descomplicai", title: "Descomplicai", category: "saas", type: "Web Platform", description: "Plataforma educativa — IA acessível para pessoas e empresas", gradient: "from-blue-600 to-indigo-500", emoji: "🎓", status: "dev" },
-  { id: "figueira-print", title: "Figueira Print CRM", category: "saas", type: "Dashboard CRM", description: "Sistema de gestão de clientes para gráfica com Supabase backend", gradient: "from-red-500 to-rose-500", emoji: "🖨️", status: "dev" },
+  { id: "tasca-dentro", title: "Tás-cá Dentro", category: "restaurant", type: "Website", description: "Gastrobar de cozinha de autor com carta de vinhos premium e música ao vivo", gradient: "from-amber-600 to-orange-400", emoji: "🍷", status: "live" },
+  { id: "ondas-academy", title: "Ondas Academy", category: "sports", type: "Website", description: "Escola de surf em Buarcos — pacotes de aulas para todos os níveis", gradient: "from-cyan-500 to-blue-400", emoji: "🏄", status: "live" },
   { id: "futuro", title: "Futuro Portfolio", category: "creative", type: "3D Experience", description: "Portfolio pessoal com Three.js — 'O Futuro é Humano'", gradient: "from-violet-500 to-purple-500", emoji: "🌍", status: "live" },
-  { id: "seeds", title: "Seeds", category: "creative", type: "Storytelling Site", description: "A Gift to Humanity — parallax storytelling sobre plantar quando ninguém está a ver", gradient: "from-green-500 to-emerald-400", emoji: "🌱", status: "dev" },
-  { id: "pitch-hub", title: "Pitch Hub", category: "business", type: "Sales Tool", description: "Demos ao vivo para pitches — Figueira Print, Sorri Dente e mais", gradient: "from-blue-500 to-indigo-500", emoji: "📊", status: "dev" },
-  { id: "brocode", title: "BroCode Showcase", category: "business", type: "Interactive Cards", description: "7 project cards interativos — overview de capacidades", gradient: "from-indigo-500 to-blue-500", emoji: "💡", status: "dev" },
-  { id: "brocode-ai", title: "BroCode AI", category: "ai", type: "AI Platform", description: "Soluções IA municipais — ROI simulator, proposta piloto Olhão", gradient: "from-purple-600 to-violet-500", emoji: "🤖", status: "dev" },
-  { id: "mylo-experience", title: "MYLO Experience", category: "creative", type: "3D Interactive", description: "Experiência 3D interativa com Three.js — identidade MYLO", gradient: "from-cyan-500 to-teal-400", emoji: "🎭", status: "live" },
-  { id: "possiblai", title: "PossiblAI", category: "ai", type: "Charity Livestream", description: "Two AI souls. One mission. End suffering. — Livestream Twitch", gradient: "from-pink-500 to-purple-500", emoji: "💜", status: "live" },
-  { id: "image-gen", title: "Image Generator", category: "ai", type: "AI Tool", description: "Gerador de imagens IA via Puter.js — múltiplos estilos e categorias", gradient: "from-teal-500 to-cyan-400", emoji: "🎨", status: "live" },
+  { id: "seeds", title: "Seeds", category: "creative", type: "Storytelling Site", description: "A Gift to Humanity — parallax storytelling sobre plantar quando ninguém está a ver", gradient: "from-green-500 to-emerald-400", emoji: "🌱", status: "live" },
   { id: "descomplicai-brutalist", title: "Descomplicai Brutalist", category: "creative", type: "Redesign Concept", description: "Versão brutalist dark do site Descomplicai — terminal UI, glitch effects, monospace", gradient: "from-gray-700 to-black", emoji: "🖤", status: "live" },
   { id: "descomplicai-editorial", title: "Descomplicai Editorial", category: "creative", type: "Redesign Concept", description: "Versão editorial premium do site Descomplicai — magazine layout, Playfair Display, cream", gradient: "from-amber-200 to-orange-100", emoji: "📰", status: "live" },
   { id: "vindima-selvagem", title: "Vindima Selvagem", category: "food", type: "Wine Experience", description: "Experiência de vindima participativa no Douro — colha as suas uvas, pise a pé, prove vinhos DOC", gradient: "from-amber-700 to-orange-500", emoji: "🍇", status: "live" },
@@ -70,7 +58,7 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
-const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system"];
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "ondas-academy", "futuro", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system"];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isClickable = CLICKABLE_IDS.includes(project.id);
