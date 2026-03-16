@@ -86,6 +86,39 @@
   background: transparent;
 }
 
+/* Light page support — Contacto has cream bg, so nav needs dark text */
+.rs-nav--light .rs-nav__logo-light {
+  color: var(--rs-dark);
+}
+.rs-nav--light .rs-nav__link {
+  color: var(--rs-stone);
+}
+.rs-nav--light .rs-nav__link:hover {
+  color: var(--rs-dark);
+}
+.rs-nav--light .rs-nav__link--active {
+  color: var(--rs-burgundy);
+}
+.rs-nav--light .rs-nav__hamburger span {
+  background: var(--rs-dark);
+}
+/* Once scrolled, revert to dark nav style */
+.rs-nav--light.rs-nav--scrolled .rs-nav__logo-light {
+  color: var(--rs-cream);
+}
+.rs-nav--light.rs-nav--scrolled .rs-nav__link {
+  color: rgba(250, 247, 242, 0.65);
+}
+.rs-nav--light.rs-nav--scrolled .rs-nav__link:hover {
+  color: var(--rs-cream);
+}
+.rs-nav--light.rs-nav--scrolled .rs-nav__link--active {
+  color: var(--rs-gold);
+}
+.rs-nav--light.rs-nav--scrolled .rs-nav__hamburger span {
+  background: var(--rs-cream);
+}
+
 .rs-nav--scrolled {
   background: rgba(28, 18, 16, 0.92);
   backdrop-filter: blur(16px) saturate(1.4);
@@ -97,10 +130,11 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 3rem);
+  padding: 0 clamp(1rem, 4vw, 3rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: visible;
 }
 
 /* Logo */

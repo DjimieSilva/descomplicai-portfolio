@@ -268,7 +268,7 @@ export default function EnoturismoPage() {
       {/* ══════════════════════════════════════════
           1. HERO — Inviting opening
           ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[85svh] md:min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background: dark-to-wine gradient */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[#1C1210]" />

@@ -15,15 +15,15 @@ export default function DesignSystemPage() {
     <main className="relative min-h-screen bg-[#fafaf9]">
       {/* ─── Sticky Tab Navigation ─── */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-6">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-6 flex-shrink-0">
             <Link
               href="/projetos"
               className="text-slate-400 hover:text-slate-600 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <Link href="/" className="font-bold text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent">
+            <Link href="/" className="font-bold text-base sm:text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent hidden sm:block">
               descomplicai
             </Link>
           </div>
@@ -31,7 +31,7 @@ export default function DesignSystemPage() {
           <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100/80">
             <button
               onClick={() => setActiveTab("experience")}
-              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              className={`px-3 sm:px-5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                 activeTab === "experience"
                   ? "bg-white text-slate-900 shadow-sm"
                   : "text-slate-500 hover:text-slate-700"
@@ -41,13 +41,13 @@ export default function DesignSystemPage() {
             </button>
             <button
               onClick={() => setActiveTab("docs")}
-              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              className={`px-3 sm:px-5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                 activeTab === "docs"
                   ? "bg-white text-slate-900 shadow-sm"
                   : "text-slate-500 hover:text-slate-700"
               }`}
             >
-              Documentacao
+              Docs
             </button>
           </div>
 

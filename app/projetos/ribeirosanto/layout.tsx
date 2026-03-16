@@ -58,6 +58,10 @@ export default function RibeiroSantoLayout({
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  /* Pages with light/cream backgrounds need dark nav text */
+  const LIGHT_PAGES = ["/projetos/ribeirosanto/contacto"];
+  const isLightPage = LIGHT_PAGES.some((p) => pathname === p || pathname.startsWith(p + "/"));
+
   /* ── Scroll listener ──────────────────────── */
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 48);
@@ -91,7 +95,7 @@ export default function RibeiroSantoLayout({
     <div className="rs-root">
       {/* ═══════════════ NAVIGATION ═══════════════ */}
       <motion.header
-        className={`rs-nav ${scrolled ? "rs-nav--scrolled" : ""}`}
+        className={`rs-nav ${scrolled ? "rs-nav--scrolled" : ""} ${isLightPage ? "rs-nav--light" : ""}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}

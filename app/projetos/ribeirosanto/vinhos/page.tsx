@@ -416,8 +416,8 @@ export default function VinhosPage() {
 
       {/* ═══════════════ FILTER TABS ═══════════════ */}
       <section className="sticky top-16 z-30 bg-stone-50/95 backdrop-blur-sm border-b border-stone-200">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-1 md:gap-2">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1 md:gap-2 flex-shrink-0 overflow-x-auto">
             <Filter size={16} className="text-stone-400 mr-2 hidden md:block" />
             {FILTERS.map((f) => (
               <button
@@ -426,7 +426,7 @@ export default function VinhosPage() {
                   setFilter(f.key);
                   setExpandedId(null);
                 }}
-                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`relative px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-300 ${
                   filter === f.key
                     ? "text-white"
                     : "text-stone-500 hover:text-stone-700 hover:bg-stone-100"
@@ -445,7 +445,7 @@ export default function VinhosPage() {
             ))}
           </div>
 
-          <span className="text-sm text-stone-400">
+          <span className="text-sm text-stone-400 whitespace-nowrap flex-shrink-0">
             {sorted.length} vinho{sorted.length !== 1 ? "s" : ""}
           </span>
         </div>
