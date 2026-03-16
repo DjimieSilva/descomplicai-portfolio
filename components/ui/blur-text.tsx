@@ -81,7 +81,7 @@ export function BlurText({
               : {}),
           }}
         >
-          {segment}
+          {segment === " " ? "\u00A0" : segment}
           {animateBy === "words" && i < segments.length - 1 ? "\u00A0" : ""}
         </span>
       ))}
