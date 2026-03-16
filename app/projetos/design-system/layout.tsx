@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Design System — Descomplicai",
+  title: "Design System Masterclass — Descomplicai",
   description:
-    "Showcase interativo do design system Descomplicai — 15 componentes, GSAP, Lenis, glassmorphism e mais.",
+    "Masterclass interativa com 16 capitulos — 15 componentes UI, GSAP, Lenis, spring physics, glassmorphism e mais.",
   openGraph: {
-    title: "Design System — Descomplicai",
-    description: "15 componentes UI premium. Glassmorphism, parallax, smooth scroll.",
+    title: "Design System Masterclass — Descomplicai",
+    description: "16 capitulos. 15 componentes. Uma masterclass interativa sobre engenharia de interfaces.",
     type: "website",
   },
 };
