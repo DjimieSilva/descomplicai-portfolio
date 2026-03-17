@@ -217,7 +217,7 @@ export default function RabbitHolePage() {
           className="flex flex-col items-center gap-4"
         >
           <a
-            href="https://djimiesliva.github.io/rabbit-hole/"
+            href="https://djimiesilva.github.io/rabbit-hole/"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 px-8 py-3 rounded-full border transition-all duration-500 hover:scale-105"
@@ -561,7 +561,7 @@ export default function RabbitHolePage() {
           </p>
 
           <a
-            href="https://djimiesliva.github.io/rabbit-hole/"
+            href="https://djimiesilva.github.io/rabbit-hole/"
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-3 px-10 py-4 rounded-full border transition-all duration-700 hover:scale-105"
