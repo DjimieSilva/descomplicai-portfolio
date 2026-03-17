@@ -35,6 +35,7 @@ const PROJECTS: Project[] = [
   { id: "meiocheio", title: "MeioCheio", category: "restaurant", type: "Wine Bar Website", description: "Wine bar & petiscos em Figueira da Foz — carta de vinhos, experiências, reservas via WhatsApp", gradient: "from-red-900 to-amber-600", emoji: "🍷", status: "live" },
   { id: "ribeirosanto", title: "Ribeiro Santo", category: "restaurant", type: "Wine Estate Website", description: "Quinta vinícola no Dão — vinhos premiados, enoturismo, 8 páginas com história, catálogo e experiências", gradient: "from-[#722F37] to-[#C9A96E]", emoji: "🍇", status: "live" },
   { id: "sabor-abencoado", title: "Sabor Abençoado", category: "restaurant", type: "Pastry Takeaway", description: "Padaria caseira em Olhão — bolos, pães artesanais e pudins com entrega ao domicílio via WhatsApp", gradient: "from-amber-200 to-pink-200", emoji: "🧁", status: "live" },
+  { id: "rabbit-hole", title: "The Infinite Corridor", category: "creative", type: "Interactive Experience", description: "Experiência imersiva de mistério — 79 páginas, 11 secções, puzzles, narrativa não-linear e segredos escondidos", gradient: "from-amber-900 to-slate-900", emoji: "🕳️", status: "live" },
 ];
 
 const CATEGORIES = [
@@ -61,7 +62,7 @@ CATEGORIES.forEach((c) => {
 
 /* ─────────────────── PROJECT CARD ─────────────────── */
 
-const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "ondas-academy", "futuro", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system", "meiocheio", "ribeirosanto", "sabor-abencoado"];
+const CLICKABLE_IDS = ["bfitfam", "tasca-dentro", "ondas-academy", "futuro", "seeds", "descomplicai-brutalist", "descomplicai-editorial", "vindima-selvagem", "quintas-estrelas", "rota-dos-vinhos", "vinho-na-rua", "ninika-tours", "design-system", "meiocheio", "ribeirosanto", "sabor-abencoado", "rabbit-hole"];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const isClickable = CLICKABLE_IDS.includes(project.id);
