@@ -8,8 +8,8 @@ const info = [
   {
     icon: MapPin,
     label: "Morada",
-    value: "Estrada da Murtinheira, s/n",
-    sub: "3080-515 Murtinheira, Figueira da Foz",
+    value: "Rua Marecos do Sul",
+    sub: "3080-514 Quiaios, Figueira da Foz",
   },
   {
     icon: Clock,
@@ -26,8 +26,8 @@ const info = [
   {
     icon: Phone,
     label: "Contacto",
-    value: "+351 233 000 000",
-    sub: "reservas@sandmurtinheira.pt",
+    value: "+351 233 103 189",
+    sub: "sandmurtinheira@gmail.com",
   },
 ];
 

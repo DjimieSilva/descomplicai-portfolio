@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { MapPin, Phone, Instagram, Facebook, ArrowUp } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram, Facebook, ArrowUp } from "lucide-react";
 
 export default function Footer() {
   const ref = useRef<HTMLDivElement>(null);
@@ -85,14 +85,26 @@ export default function Footer() {
             </h4>
             <div className="flex flex-col gap-4">
               <a
-                href="tel:+351233000000"
+                href="tel:+351233098962"
                 className="flex items-center gap-3 group"
               >
                 <div className="w-8 h-8 bg-[#EAB308]/10 flex items-center justify-center group-hover:bg-[#EAB308]/20 transition-colors duration-200">
                   <Phone size={13} className="text-[#EAB308]" />
                 </div>
                 <span className="font-[family-name:var(--font-inter)] text-[#A3A3A3] text-sm group-hover:text-white transition-colors duration-200">
-                  +351 233 000 000
+                  +351 233 098 962
+                </span>
+              </a>
+
+              <a
+                href="mailto:geral@penobairro.pt"
+                className="flex items-center gap-3 group"
+              >
+                <div className="w-8 h-8 bg-[#EAB308]/10 flex items-center justify-center group-hover:bg-[#EAB308]/20 transition-colors duration-200">
+                  <Mail size={13} className="text-[#EAB308]" />
+                </div>
+                <span className="font-[family-name:var(--font-inter)] text-[#A3A3A3] text-sm group-hover:text-white transition-colors duration-200">
+                  geral@penobairro.pt
                 </span>
               </a>
 
@@ -102,10 +114,10 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="font-[family-name:var(--font-inter)] text-[#A3A3A3] text-sm">
-                    Rua do Bairro Novo, 42
+                    Rua de São Lourenço 1
                   </p>
                   <p className="font-[family-name:var(--font-inter)] text-[#A3A3A3] text-sm">
-                    3080-000 Figueira da Foz
+                    3080-147 Figueira da Foz
                   </p>
                 </div>
               </div>

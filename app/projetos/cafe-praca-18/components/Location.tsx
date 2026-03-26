@@ -9,13 +9,13 @@ const details = [
   {
     icon: MapPin,
     label: "Morada",
-    value: "Praça 8 de Maio, 18",
-    sub: "3080-151 Figueira da Foz",
+    value: "Praça General Freire de Andrade 18",
+    sub: "3080-058 Figueira da Foz",
   },
   {
     icon: Phone,
     label: "Telefone",
-    value: "+351 233 000 000",
+    value: "+351 914 418 757",
     sub: "Chamada nacional",
   },
   {
@@ -125,7 +125,7 @@ export default function Location() {
                       className="text-sm"
                       style={{ color: "rgba(232,213,183,0.6)" }}
                     >
-                      Praça 8 de Maio · Figueira da Foz
+                      Praça General Freire de Andrade 18 · Figueira da Foz
                     </div>
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export default function Location() {
             {/* Open in Maps CTA */}
             <div className="absolute bottom-0 left-0 right-0 p-5">
               <a
-                href="https://maps.google.com/?q=Praça+8+de+Maio+Figueira+da+Foz"
+                href="https://maps.google.com/?q=Praça+General+Freire+de+Andrade+18+Figueira+da+Foz"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 text-sm font-semibold tracking-wide transition-all duration-300 hover:brightness-110"

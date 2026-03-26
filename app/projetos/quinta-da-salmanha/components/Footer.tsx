@@ -132,18 +132,18 @@ export default function Footer() {
                   className="text-sm leading-relaxed"
                   style={{ color: "rgba(254,252,232,0.55)", fontFamily: "var(--font-inter)", fontWeight: 300 }}
                 >
-                  Estrada Nacional 111, Salmanha<br />
-                  3080-000 Figueira da Foz
+                  Rua da Salmanha 18, 3090-650 Vila Verde<br />
+                  Figueira da Foz
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <Phone size={14} style={{ color: "#722F37", flexShrink: 0 }} />
                 <a
-                  href="tel:+351239000000"
+                  href="tel:+351233431004"
                   className="text-sm transition-colors duration-200 hover:text-[#C4A55A]"
                   style={{ color: "rgba(254,252,232,0.55)", fontFamily: "var(--font-inter)", fontWeight: 300 }}
                 >
-                  +351 239 000 000
+                  +351 233 431 004
                 </a>
               </div>
               <div className="flex items-center gap-3">
@@ -198,7 +198,7 @@ export default function Footer() {
           className="text-xs text-center sm:text-right"
           style={{ color: "rgba(254,252,232,0.2)", fontFamily: "var(--font-inter)" }}
         >
-          NIF: 500 000 000 · Registo de Turismo: RNET/XXXXX
+          Website por Descomplicai
         </p>
       </div>
     </footer>

@@ -8,7 +8,7 @@ const accessInfo = [
   {
     icon: MapPin,
     title: "Morada",
-    lines: ["Rua do Picadeiro, 15", "3080-000 Figueira da Foz"],
+    lines: ["Rua Académico Zagalo 20", "3080-161 Figueira da Foz"],
   },
   {
     icon: Car,

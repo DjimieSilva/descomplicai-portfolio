@@ -133,7 +133,7 @@ export function Hours() {
 
             {/* Phone */}
             <a
-              href="tel:+351233000000"
+              href="tel:+351965768866"
               className="flex items-center gap-4 bg-white border border-[#C9B896]/40 rounded p-5 group hover:border-[#1E3A5F]/40 hover:shadow-sm transition-all"
             >
               <div className="w-11 h-11 rounded-full bg-[#1E3A5F]/5 flex items-center justify-center group-hover:bg-[#1E3A5F] transition-colors">
@@ -143,13 +143,13 @@ export function Hours() {
                 <p className="font-bold text-[#1E3A5F] text-sm" style={{ fontFamily: "var(--font-merriweather)" }}>
                   Ligar para Reservar
                 </p>
-                <p className="text-[#8B7355] text-base font-semibold">+351 233 000 000</p>
+                <p className="text-[#8B7355] text-base font-semibold">+351 965 768 866</p>
               </div>
             </a>
 
             {/* WhatsApp */}
             <a
-              href="https://wa.me/351930000000?text=Olá!%20Gostaria%20de%20fazer%20uma%20reserva%20na%20Tasca%20Da%20Praia."
+              href="https://wa.me/351965768866?text=Olá!%20Gostaria%20de%20fazer%20uma%20reserva%20na%20Tasca%20Da%20Praia."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-4 bg-[#25D366]/5 border border-[#25D366]/30 rounded p-5 group hover:bg-[#25D366]/10 transition-all"

@@ -2,29 +2,22 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Phone, MessageCircle, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { Facebook, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 
 const contactInfo = [
   {
-    icon: Phone,
-    label: "Telefone",
-    value: "+351 233 000 000",
-    href: "tel:+351233000000",
-    description: "Seg–Sex, 9h–19h · Sáb, 9h–13h",
-  },
-  {
-    icon: MessageCircle,
-    label: "WhatsApp",
-    value: "+351 910 000 000",
-    href: "https://wa.me/351910000000",
-    description: "Resposta em menos de 2 horas",
+    icon: Facebook,
+    label: "Facebook",
+    value: "Contacte via Facebook",
+    href: "https://www.facebook.com/premiumclinicadentaria",
+    description: "Envie mensagem pelo Facebook",
   },
   {
     icon: MapPin,
     label: "Morada",
     value: "Figueira da Foz",
-    href: "https://maps.google.com",
-    description: "Rua Principal, n.º 1, 3080 Figueira da Foz",
+    href: "https://maps.google.com/?q=Figueira+da+Foz",
+    description: "Figueira da Foz, Portugal",
   },
   {
     icon: Clock,

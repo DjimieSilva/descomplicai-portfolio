@@ -73,7 +73,7 @@ export default function Reservations() {
             {/* Contact info */}
             <div className="space-y-6 mb-10">
               <a
-                href="tel:+351233000000"
+                href="tel:+351233412288"
                 className="flex items-center gap-4 group"
               >
                 <div className="w-12 h-12 rounded-full bg-[#E63946]/10 flex items-center justify-center group-hover:bg-[#E63946]/20 transition-colors">
@@ -88,13 +88,13 @@ export default function Reservations() {
                     className="text-[#1D3557] text-lg font-light group-hover:text-[#E63946] transition-colors"
                     style={{ fontFamily: "var(--font-newsreader), serif" }}
                   >
-                    +351 233 000 000
+                    +351 233 412 288
                   </p>
                 </div>
               </a>
 
               <a
-                href="mailto:reservas@rosaameliafigueira.pt"
+                href="mailto:verdadeira.ra@gmail.com"
                 className="flex items-center gap-4 group"
               >
                 <div className="w-12 h-12 rounded-full bg-[#D4A574]/10 flex items-center justify-center group-hover:bg-[#D4A574]/20 transition-colors">
@@ -109,7 +109,7 @@ export default function Reservations() {
                     className="text-[#1D3557] text-base font-light group-hover:text-[#D4A574] transition-colors"
                     style={{ fontFamily: "var(--font-newsreader), serif" }}
                   >
-                    reservas@rosaameliafigueira.pt
+                    verdadeira.ra@gmail.com
                   </p>
                 </div>
               </a>

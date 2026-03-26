@@ -5,7 +5,6 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import {
   MapPin,
-  Phone,
   Clock,
   MessageCircle,
   Facebook,
@@ -21,10 +20,10 @@ const contactInfo = [
     sub: "Estacionamento disponível",
   },
   {
-    icon: Phone,
-    label: "Telefone",
-    value: "+351 239 000 000",
-    sub: "Chamada para rede fixa nacional",
+    icon: Facebook,
+    label: "Facebook",
+    value: "Clínica Dentária Tamargueira",
+    sub: "Envie-nos uma mensagem no Facebook",
   },
   {
     icon: Clock,
@@ -186,15 +185,15 @@ export default function Contact() {
           >
             {/* WhatsApp CTA */}
             <a
-              href="https://wa.me/351239000000?text=Olá!%20Gostaria%20de%20marcar%20uma%20consulta%20de%20avaliação%20de%20implantes."
+              href="https://www.facebook.com/people/Clínica-Dentária-Tamargueira/100054499598847/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-[#25D366] text-white rounded-2xl p-5 hover:bg-[#1ea952] transition-colors duration-200 shadow-lg"
+              className="flex items-center gap-4 bg-[#1877F2] text-white rounded-2xl p-5 hover:bg-[#1565c0] transition-colors duration-200 shadow-lg"
             >
-              <MessageCircle className="w-8 h-8 flex-shrink-0" />
+              <Facebook className="w-8 h-8 flex-shrink-0" />
               <div>
-                <p className="font-bold font-[family-name:var(--font-sora)]">WhatsApp — Resposta Imediata</p>
-                <p className="text-green-100 text-sm">Fale connosco agora pelo WhatsApp</p>
+                <p className="font-bold font-[family-name:var(--font-sora)]">Facebook — Envie-nos uma Mensagem</p>
+                <p className="text-blue-200 text-sm">Fale connosco no Facebook</p>
               </div>
             </a>
 
@@ -216,7 +215,7 @@ export default function Contact() {
 
             {/* Facebook */}
             <a
-              href="https://www.facebook.com"
+              href="https://www.facebook.com/people/Clínica-Dentária-Tamargueira/100054499598847/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-4 bg-[#1877F2] text-white rounded-2xl p-5 hover:bg-[#1565c0] transition-colors duration-200"

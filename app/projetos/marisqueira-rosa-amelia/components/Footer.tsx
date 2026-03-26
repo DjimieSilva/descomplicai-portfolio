@@ -88,23 +88,23 @@ export default function Footer() {
               Contactos
             </p>
             <div className="space-y-4">
-              <a href="tel:+351233000000" className="flex items-start gap-3 group">
+              <a href="tel:+351233412288" className="flex items-start gap-3 group">
                 <Phone className="w-4 h-4 text-[#D4A574]/50 mt-0.5 group-hover:text-[#D4A574] transition-colors flex-shrink-0" />
                 <span className="text-[#FFF1E6]/45 text-sm group-hover:text-[#FFF1E6]/70 transition-colors">
-                  +351 233 000 000
+                  +351 233 412 288
                 </span>
               </a>
-              <a href="mailto:reservas@rosaameliafigueira.pt" className="flex items-start gap-3 group">
+              <a href="mailto:verdadeira.ra@gmail.com" className="flex items-start gap-3 group">
                 <Mail className="w-4 h-4 text-[#D4A574]/50 mt-0.5 group-hover:text-[#D4A574] transition-colors flex-shrink-0" />
                 <span className="text-[#FFF1E6]/45 text-sm group-hover:text-[#FFF1E6]/70 transition-colors">
-                  reservas@rosaameliafigueira.pt
+                  verdadeira.ra@gmail.com
                 </span>
               </a>
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#D4A574]/50 mt-0.5 flex-shrink-0" />
                 <span className="text-[#FFF1E6]/45 text-sm">
-                  Rua da Marisqueira, 12<br />
-                  3080-000 Figueira da Foz
+                  Av. Dom João II, 2, Tamargueira<br />
+                  3080-229 Figueira da Foz
                 </span>
               </div>
             </div>

@@ -73,12 +73,12 @@ export default function Nav() {
           {/* CTA */}
           <div className="hidden md:flex items-center gap-4">
             <a
-              href="tel:+351239000000"
+              href="tel:+351233434447"
               className="flex items-center gap-2 text-xs tracking-wide"
               style={{ color: "#CFB53B", fontFamily: "var(--font-source-sans-3)" }}
             >
               <Phone size={13} />
-              239 000 000
+              233 434 447
             </a>
             <a
               href="#reservas"

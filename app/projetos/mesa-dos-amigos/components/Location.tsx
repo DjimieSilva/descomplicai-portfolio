@@ -93,7 +93,7 @@ export default function Location() {
 
             {/* Open maps button */}
             <motion.a
-              href="https://maps.google.com/?q=Figueira+da+Foz"
+              href="https://maps.google.com/?q=Rua+Vasco+da+Gama+64+Figueira+da+Foz"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 10 }}
@@ -134,9 +134,9 @@ export default function Location() {
                 >
                   Endereço
                 </h3>
-                <p style={{ color: "rgba(245,240,232,0.7)" }}>Figueira da Foz</p>
+                <p style={{ color: "rgba(245,240,232,0.7)" }}>Rua Vasco da Gama 64</p>
                 <p style={{ color: "rgba(245,240,232,0.5)" }} className="text-sm">
-                  Coimbra · Portugal
+                  3080-043 Figueira da Foz · Portugal
                 </p>
               </div>
             </div>

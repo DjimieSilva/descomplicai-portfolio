@@ -159,8 +159,8 @@ export default function Location() {
                   className="text-sm"
                   style={{ color: "rgba(254,252,232,0.65)", fontFamily: "var(--font-inter)", fontWeight: 300 }}
                 >
-                  Estrada Nacional 111, Salmanha<br />
-                  3080-000 Figueira da Foz<br />
+                  Rua da Salmanha 18, 3090-650 Vila Verde<br />
+                  Figueira da Foz<br />
                   Coimbra, Portugal
                 </p>
               </div>

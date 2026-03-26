@@ -30,7 +30,7 @@ export default function Reservations() {
     e.preventDefault();
     // Static site: open WhatsApp or mailto
     const msg = `Pedido de reserva — Bijou Restaurante%0ANome: ${formData.name}%0ATelefone: ${formData.phone}%0AData: ${formData.date}%0AHora: ${formData.time}%0APessoas: ${formData.guests}%0ANotas: ${formData.notes}`;
-    window.open(`https://wa.me/351239000000?text=${msg}`, "_blank");
+    window.open(`https://wa.me/351233434447?text=${msg}`, "_blank");
     setSubmitted(true);
   };
 
@@ -102,7 +102,7 @@ export default function Reservations() {
           >
             {/* Phone CTA */}
             <a
-              href="tel:+351239000000"
+              href="tel:+351233434447"
               className="flex items-center gap-4 p-5 mb-8 transition-all duration-300 hover:scale-[1.02]"
               style={{
                 background: "#800020",
@@ -126,7 +126,7 @@ export default function Reservations() {
                   className="text-2xl font-bold"
                   style={{ fontFamily: "var(--font-eb-garamond)", color: "#FFFFF0" }}
                 >
-                  239 000 000
+                  233 434 447
                 </p>
               </div>
             </a>

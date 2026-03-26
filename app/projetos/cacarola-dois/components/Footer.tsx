@@ -73,38 +73,38 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://maps.google.com/?q=Figueira+da+Foz"
+                  href="https://maps.google.com/?q=Rua+Bernardo+Lopes+85+Figueira+da+Foz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 group"
                 >
                   <MapPin size={14} className="text-[#FB923C] mt-0.5 flex-shrink-0" />
                   <span className="font-[family-name:var(--font-inter)] text-white/35 text-sm leading-snug group-hover:text-white/60 transition-colors">
-                    Rua do Mar, 42
+                    Rua Bernardo Lopes 85-89
                     <br />
-                    Figueira da Foz
+                    3080-395 Figueira da Foz
                   </span>
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+351233000000"
+                  href="tel:+351233426930"
                   className="flex items-center gap-3 group"
                 >
                   <Phone size={14} className="text-[#FB923C] flex-shrink-0" />
                   <span className="font-[family-name:var(--font-inter)] text-white/35 text-sm group-hover:text-white/60 transition-colors">
-                    +351 233 XXX XXX
+                    +351 233 426 930
                   </span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:reservas@cacarola-dois.pt"
+                  href="mailto:info@cacaroladois.com"
                   className="flex items-center gap-3 group"
                 >
                   <Mail size={14} className="text-[#FB923C] flex-shrink-0" />
                   <span className="font-[family-name:var(--font-inter)] text-white/35 text-sm group-hover:text-white/60 transition-colors">
-                    reservas@cacarola-dois.pt
+                    info@cacaroladois.com
                   </span>
                 </a>
               </li>

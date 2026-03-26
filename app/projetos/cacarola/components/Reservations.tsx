@@ -5,8 +5,8 @@ import { useRef, useState } from "react";
 import { Phone, Mail, MessageCircle, Users, Calendar } from "lucide-react";
 
 const restaurants = [
-  { id: "cacola-1", name: "Caçarola (Original)", phone: "+351 233 000 001" },
-  { id: "cacola-2", name: "Caçarola Dois", phone: "+351 233 000 002" },
+  { id: "cacola-1", name: "Caçarola (Original)", phone: "+351 233 424 861" },
+  { id: "cacola-2", name: "Caçarola Dois", phone: "+351 233 426 930" },
 ];
 
 export default function Reservations() {
@@ -111,9 +111,9 @@ export default function Reservations() {
                 {
                   icon: Mail,
                   label: "E-mail",
-                  value: "reservas@cacarola.pt",
+                  value: "geral@cacarola1.com",
                   sub: "Resposta em menos de 24 horas",
-                  href: "mailto:reservas@cacarola.pt",
+                  href: "mailto:geral@cacarola1.com",
                 },
                 {
                   icon: MessageCircle,
@@ -199,11 +199,11 @@ export default function Reservations() {
                 dispõe de sala privada para eventos até 60 pessoas.
               </p>
               <a
-                href="mailto:eventos@cacarola.pt"
+                href="mailto:geral@cacarola1.com"
                 className="text-xs tracking-widest uppercase font-semibold underline"
                 style={{ color: "#FDE68A", fontFamily: "var(--font-inter)" }}
               >
-                eventos@cacarola.pt
+                geral@cacarola1.com
               </a>
             </div>
 

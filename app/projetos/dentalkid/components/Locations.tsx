@@ -9,8 +9,8 @@ import { MapPin, Phone, Clock, Car, Bus } from "lucide-react";
 const locations = [
   {
     name: "Dentalkid Buarcos",
-    address: "Rua Principal, 123\n3080-100 Buarcos\nFigueira da Foz",
-    phone: "+351 233 000 001",
+    address: "Rua Joaquim Sotto Mayor 120\nLoja 11/2, 3080-300\nFigueira da Foz",
+    phone: "+351 233 429 538",
     hours: [
       { day: "Segunda–Sexta", time: "9h00–19h00" },
       { day: "Sábado", time: "9h00–13h00" },
@@ -23,13 +23,13 @@ const locations = [
     bg: "from-purple-500 to-violet-600",
     lightBg: "#F5F3FF",
     mapEmbedUrl: "https://www.google.com/maps?q=Buarcos,Figueira+da+Foz&output=embed",
-    whatsapp: "351930000001",
+    whatsapp: "351233429538",
     features: ["Sala de espera infantil", "Zona de brincar", "Ecrã de entretenimento"],
   },
   {
     name: "Dentalkid Tavarede",
-    address: "Avenida Central, 45\n3080-200 Tavarede\nFigueira da Foz",
-    phone: "+351 233 000 002",
+    address: "Rua Joaquim Sotto Mayor 120\nLoja 11/2, 3080-300\nFigueira da Foz",
+    phone: "+351 233 429 538",
     hours: [
       { day: "Segunda–Sexta", time: "9h00–19h00" },
       { day: "Sábado", time: "9h00–13h00" },
@@ -42,7 +42,7 @@ const locations = [
     bg: "from-sky-400 to-blue-500",
     lightBg: "#F0F9FF",
     mapEmbedUrl: "https://www.google.com/maps?q=Tavarede,Figueira+da+Foz&output=embed",
-    whatsapp: "351930000002",
+    whatsapp: "351233429538",
     features: ["Tecnologia de ponta", "Raio-X digital", "Sala dedicada à ortodontia"],
   },
 ];

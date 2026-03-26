@@ -58,9 +58,9 @@ export default function Reservations() {
               className="space-y-4"
             >
               {[
-                { icon: Phone, label: "Telefone", value: "+351 233 XXX XXX", href: "tel:+351233000000" },
-                { icon: MessageCircle, label: "WhatsApp", value: "+351 9XX XXX XXX", href: "https://wa.me/351900000000" },
-                { icon: Mail, label: "Email", value: "reservas@cacarola-dois.pt", href: "mailto:reservas@cacarola-dois.pt" },
+                { icon: Phone, label: "Telefone", value: "+351 233 426 930", href: "tel:+351233426930" },
+                { icon: Phone, label: "Telefone 2", value: "+351 233 425 347", href: "tel:+351233425347" },
+                { icon: Mail, label: "Email", value: "info@cacaroladois.com", href: "mailto:info@cacaroladois.com" },
               ].map((contact) => (
                 <a
                   key={contact.label}
@@ -155,7 +155,7 @@ export default function Reservations() {
 
             {/* CTA */}
             <a
-              href={`https://wa.me/351900000000?text=Olá! Gostaria de reservar uma mesa para ${guests} pessoa${guests > 1 ? "s" : ""}${selectedTime ? ` às ${selectedTime}` : ""}.`}
+              href={`https://wa.me/351233426930?text=Olá! Gostaria de reservar uma mesa para ${guests} pessoa${guests > 1 ? "s" : ""}${selectedTime ? ` às ${selectedTime}` : ""}.`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-[#0369A1] text-white font-[family-name:var(--font-hanken)] font-bold py-4 rounded-xl hover:bg-[#025d91] transition-colors duration-200 text-sm tracking-wide"

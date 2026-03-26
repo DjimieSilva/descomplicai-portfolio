@@ -85,22 +85,22 @@ export default function Footer() {
             </h4>
             <div className="space-y-4 mb-8">
               <a
-                href="tel:+351233000000"
+                href="tel:+351233097374"
                 className="flex items-center gap-3 text-[#FFFDF7]/55 hover:text-[#FFFDF7] text-sm transition-colors group"
               >
                 <Phone className="w-4 h-4 text-[#F59E0B]/60 group-hover:text-[#F59E0B] transition-colors" />
-                +351 233 000 000
+                +351 233 097 374
               </a>
               <a
-                href="mailto:reservas@cataventos.pt"
+                href="mailto:cataventos.ff@gmail.com"
                 className="flex items-center gap-3 text-[#FFFDF7]/55 hover:text-[#FFFDF7] text-sm transition-colors group"
               >
                 <Mail className="w-4 h-4 text-[#F59E0B]/60 group-hover:text-[#F59E0B] transition-colors" />
-                reservas@cataventos.pt
+                cataventos.ff@gmail.com
               </a>
               <div className="flex items-start gap-3 text-[#FFFDF7]/55 text-sm">
                 <MapPin className="w-4 h-4 text-[#F59E0B]/60 flex-shrink-0 mt-0.5" />
-                <span>Figueira da Foz, Portugal</span>
+                <span>Largo do Carvão 4/5, Figueira da Foz</span>
               </div>
             </div>
 

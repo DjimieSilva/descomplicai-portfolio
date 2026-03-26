@@ -92,11 +92,11 @@ export default function Reservations() {
                     Telefone
                   </p>
                   <a
-                    href="tel:+351233420000"
+                    href="tel:+351233041157"
                     className="text-[#FFFBEB] hover:text-[#B87333] transition-colors"
                     style={{ fontFamily: "var(--font-inter)" }}
                   >
-                    +351 233 420 000
+                    +351 233 041 157
                   </a>
                 </div>
               </div>
@@ -113,11 +113,11 @@ export default function Reservations() {
                     Email
                   </p>
                   <a
-                    href="mailto:reservas@opicadeiro.pt"
+                    href="mailto:opicadeiro.ff@gmail.com"
                     className="text-[#FFFBEB] hover:text-[#B87333] transition-colors"
                     style={{ fontFamily: "var(--font-inter)" }}
                   >
-                    reservas@opicadeiro.pt
+                    opicadeiro.ff@gmail.com
                   </a>
                 </div>
               </div>

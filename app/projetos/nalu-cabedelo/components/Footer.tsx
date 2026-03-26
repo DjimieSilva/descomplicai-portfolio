@@ -100,25 +100,25 @@ export default function Footer() {
             </h3>
             <div className="space-y-3">
               <a
-                href="https://maps.google.com/?q=Praia+de+Cabedelo+Figueira+da+Foz"
+                href="https://maps.google.com/?q=Rua+Domingos+São+Marcos+Laureano+2+Figueira+da+Foz"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 group"
               >
                 <MapPin size={16} className="text-[#FF6B35] shrink-0 mt-0.5" />
                 <span className="text-white/50 text-sm group-hover:text-white/80 transition-colors leading-relaxed">
-                  Praia de Cabedelo
+                  Rua Domingos São Marcos Laureano, 2
                   <br />
-                  3080-515 Figueira da Foz
+                  3090-661 Figueira da Foz (Cabedelo)
                 </span>
               </a>
               <a
-                href="tel:+351233000000"
+                href="tel:+351233011565"
                 className="flex items-center gap-3 group"
               >
                 <Phone size={16} className="text-[#FF6B35] shrink-0" />
                 <span className="text-white/50 text-sm group-hover:text-white/80 transition-colors">
-                  +351 233 000 000
+                  +351 233 011 565
                 </span>
               </a>
               <a

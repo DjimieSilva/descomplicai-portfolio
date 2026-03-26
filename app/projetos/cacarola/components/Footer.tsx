@@ -113,18 +113,18 @@ export default function Footer() {
                   className="text-xs leading-relaxed"
                   style={{ color: "rgba(255,251,235,0.65)", fontFamily: "var(--font-inter)" }}
                 >
-                  Rua da Tradição, 12<br />
-                  Figueira da Foz, 3080
+                  Rua Cândido dos Reis 65<br />
+                  3080-155 Figueira da Foz
                 </p>
               </div>
               <div className="flex items-center gap-2">
                 <Phone size={13} style={{ color: "#FDE68A" }} />
                 <a
-                  href="tel:+351233000001"
+                  href="tel:+351233424861"
                   className="text-xs hover:text-[#FDE68A] transition-colors"
                   style={{ color: "rgba(255,251,235,0.65)", fontFamily: "var(--font-inter)" }}
                 >
-                  +351 233 000 001
+                  +351 233 424 861
                 </a>
               </div>
               <p
@@ -158,28 +158,27 @@ export default function Footer() {
                   className="text-xs leading-relaxed"
                   style={{ color: "rgba(255,251,235,0.65)", fontFamily: "var(--font-inter)" }}
                 >
-                  Rua do Sabor, 45<br />
-                  Figueira da Foz, 3080
+                  Figueira da Foz
                 </p>
               </div>
               <div className="flex items-center gap-2">
                 <Phone size={13} style={{ color: "#FDE68A" }} />
                 <a
-                  href="tel:+351233000002"
+                  href="tel:+351233426930"
                   className="text-xs hover:text-[#FDE68A] transition-colors"
                   style={{ color: "rgba(255,251,235,0.65)", fontFamily: "var(--font-inter)" }}
                 >
-                  +351 233 000 002
+                  +351 233 426 930
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={13} style={{ color: "#FDE68A" }} />
                 <a
-                  href="mailto:reservas@cacarola.pt"
+                  href="mailto:geral@cacarola1.com"
                   className="text-xs hover:text-[#FDE68A] transition-colors"
                   style={{ color: "rgba(255,251,235,0.65)", fontFamily: "var(--font-inter)" }}
                 >
-                  reservas@cacarola.pt
+                  geral@cacarola1.com
                 </a>
               </div>
               <p

@@ -158,10 +158,10 @@ export default function Location() {
                 <MapPin className="text-[#FF6B35] shrink-0 mt-0.5" size={20} />
                 <div>
                   <p className="text-white font-bold" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                    Praia de Cabedelo
+                    Rua Domingos São Marcos Laureano, 2
                   </p>
-                  <p className="text-white/60 text-sm">3080-515 Figueira da Foz</p>
-                  <p className="text-white/60 text-sm">Coimbra, Portugal</p>
+                  <p className="text-white/60 text-sm">3090-661 Figueira da Foz (Cabedelo)</p>
+                  <p className="text-white/60 text-sm">Portugal</p>
                 </div>
               </div>
             </div>

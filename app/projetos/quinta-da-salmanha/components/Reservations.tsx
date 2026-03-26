@@ -67,7 +67,7 @@ export default function Reservations() {
             {/* Contact methods */}
             <div className="space-y-4">
               <a
-                href="tel:+351239000000"
+                href="tel:+351233431004"
                 className="flex items-center gap-4 group"
               >
                 <div
@@ -81,7 +81,7 @@ export default function Reservations() {
                     Telefone
                   </p>
                   <p className="font-medium" style={{ color: "#3D2B1F", fontFamily: "var(--font-inter)" }}>
-                    +351 239 000 000
+                    +351 233 431 004
                   </p>
                 </div>
               </a>

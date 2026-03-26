@@ -9,7 +9,7 @@ const infos = [
   {
     icon: <MapPin className="w-5 h-5" />,
     titulo: "Endereço",
-    texto: "Rua da Marisqueira, 12\n3080-000 Figueira da Foz\nPortugal",
+    texto: "Av. Dom João II, 2, Tamargueira\n3080-229 Figueira da Foz\nPortugal",
   },
   {
     icon: <Navigation className="w-5 h-5" />,

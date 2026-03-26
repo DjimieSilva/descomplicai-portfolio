@@ -79,7 +79,7 @@ export default function Reservations() {
               className="space-y-5 mb-10"
             >
               <a
-                href="tel:+351233000000"
+                href="tel:+351233104149"
                 className="group flex items-center gap-5 p-5 border border-[#DDB892]/10 rounded-xl hover:border-[#DDB892]/30 transition-all duration-300 bg-[#DDB892]/3"
               >
                 <div className="w-11 h-11 rounded-xl bg-[#DDB892]/10 flex items-center justify-center group-hover:bg-[#DDB892]/20 transition-colors">
@@ -93,7 +93,29 @@ export default function Reservations() {
                     Telefone
                   </p>
                   <p className="text-[#FAF8F4] text-base font-medium" style={{ fontFamily: "'Manrope', sans-serif" }}>
-                    +351 233 000 000
+                    +351 233 104 149
+                  </p>
+                </div>
+              </a>
+
+              <a
+                href="https://wa.me/351934352806"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-5 p-5 border border-[#DDB892]/10 rounded-xl hover:border-[#DDB892]/30 transition-all duration-300 bg-[#DDB892]/3"
+              >
+                <div className="w-11 h-11 rounded-xl bg-[#DDB892]/10 flex items-center justify-center group-hover:bg-[#DDB892]/20 transition-colors">
+                  <Phone className="w-4 h-4 text-[#DDB892]" />
+                </div>
+                <div>
+                  <p
+                    className="text-[9px] tracking-[0.3em] uppercase text-[#DDB892]/50 mb-0.5"
+                    style={{ fontFamily: "'Manrope', sans-serif" }}
+                  >
+                    WhatsApp / Telemóvel
+                  </p>
+                  <p className="text-[#FAF8F4] text-base font-medium" style={{ fontFamily: "'Manrope', sans-serif" }}>
+                    +351 934 352 806
                   </p>
                 </div>
               </a>

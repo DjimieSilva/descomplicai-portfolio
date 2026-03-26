@@ -148,13 +148,13 @@ export default function Footer() {
                       className="text-sm"
                       style={{ color: "rgba(232,213,183,0.7)" }}
                     >
-                      Praça 8 de Maio, 18
+                      Praça General Freire de Andrade 18
                     </div>
                     <div
                       className="text-xs"
                       style={{ color: "rgba(232,213,183,0.4)" }}
                     >
-                      3080-151 Figueira da Foz
+                      3080-058 Figueira da Foz
                     </div>
                   </div>
                 </div>
@@ -167,7 +167,7 @@ export default function Footer() {
                     className="text-sm"
                     style={{ color: "rgba(232,213,183,0.7)" }}
                   >
-                    +351 233 000 000
+                    +351 914 418 757
                   </span>
                 </div>
                 <div className="flex items-start gap-3">

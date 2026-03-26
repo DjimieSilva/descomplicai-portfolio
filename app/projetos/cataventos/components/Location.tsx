@@ -116,8 +116,8 @@ export default function Location() {
                     Morada
                   </div>
                   <div className="text-[#FFFDF7] font-semibold text-base">Restaurante Cataventos</div>
-                  <div className="text-[#FFFDF7]/60 text-sm mt-1">Figueira da Foz, Portugal</div>
-                  <div className="text-[#FFFDF7]/40 text-sm">3080 – Figueira da Foz</div>
+                  <div className="text-[#FFFDF7]/60 text-sm mt-1">Largo do Carvão 4/5</div>
+                  <div className="text-[#FFFDF7]/40 text-sm">Figueira da Foz</div>
                 </div>
               </div>
             </div>

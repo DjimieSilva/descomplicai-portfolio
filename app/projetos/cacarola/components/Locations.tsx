@@ -8,8 +8,8 @@ const locations = [
   {
     name: "Caçarola",
     subtitle: "O Restaurante Original",
-    address: "Rua da Tradição, 12\nFigueira da Foz, 3080",
-    phone: "+351 233 000 001",
+    address: "Rua Cândido dos Reis 65\n3080-155 Figueira da Foz",
+    phone: "+351 233 424 861",
     hours: [
       { days: "Terça a Sexta", time: "12h00 – 15h00 · 19h00 – 22h30" },
       { days: "Sábado", time: "12h00 – 15h30 · 19h00 – 23h00" },
@@ -23,8 +23,8 @@ const locations = [
   {
     name: "Caçarola Dois",
     subtitle: "O Restaurante Irmão",
-    address: "Rua do Sabor, 45\nFigueira da Foz, 3080",
-    phone: "+351 233 000 002",
+    address: "Figueira da Foz",
+    phone: "+351 233 426 930",
     hours: [
       { days: "Terça a Sexta", time: "12h00 – 15h00 · 19h00 – 22h30" },
       { days: "Sábado", time: "12h00 – 16h00 · 19h00 – 23h00" },

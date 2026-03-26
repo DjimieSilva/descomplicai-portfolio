@@ -123,26 +123,26 @@ export default function Footer() {
             </h4>
             <div className="space-y-3">
               <a
-                href="tel:+351233000000"
+                href="tel:+351233109109"
                 className="flex items-start gap-3 text-gray-500 hover:text-[#06B6D4] transition-colors duration-200 group"
               >
                 <Phone className="w-4 h-4 shrink-0 mt-0.5 group-hover:text-[#2563EB]" />
                 <span className="text-sm font-[family-name:var(--font-inter-uc)]">
-                  +351 233 000 000
+                  +351 233 109 109
                 </span>
               </a>
 
               <a
-                href="https://maps.google.com/?q=Figueira+da+Foz"
+                href="https://maps.google.com/?q=Lugar+4+Caminhos+Centro+Comercial+Leclerc+Figueira+da+Foz"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 text-gray-500 hover:text-[#06B6D4] transition-colors duration-200 group"
               >
                 <MapPin className="w-4 h-4 shrink-0 mt-0.5 group-hover:text-[#2563EB]" />
                 <span className="text-sm font-[family-name:var(--font-inter-uc)]">
-                  Rua de Exemplo, 123
+                  Lugar 4 Caminhos, Loja 1
                   <br />
-                  Figueira da Foz, Portugal
+                  C.C. E.Leclerc, 3080-510 Figueira da Foz
                 </span>
               </a>
 

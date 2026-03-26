@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Leaf, Phone, MapPin, Facebook, ArrowUp } from "lucide-react";
+import { Leaf, MapPin, Facebook, ArrowUp } from "lucide-react";
 
 const services = [
   "Prevenção e Higiene Oral",
@@ -110,22 +110,24 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="tel:+351233000000"
+                  href="https://www.facebook.com/premiumclinicadentaria"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-start gap-3 group"
-                  aria-label="Telefone da clínica"
+                  aria-label="Facebook da clínica"
                 >
-                  <Phone className="w-4 h-4 text-[#6B8F71] mt-0.5 flex-shrink-0" />
+                  <Facebook className="w-4 h-4 text-[#6B8F71] mt-0.5 flex-shrink-0" />
                   <div>
                     <div className="text-sm text-white/80 group-hover:text-white transition-colors">
-                      +351 233 000 000
+                      Contacte via Facebook
                     </div>
-                    <div className="text-xs text-white/45">Seg–Sex 9h–19h · Sáb 9h–13h</div>
+                    <div className="text-xs text-white/45">Envie mensagem pelo Facebook</div>
                   </div>
                 </a>
               </li>
               <li>
                 <a
-                  href="https://maps.google.com"
+                  href="https://maps.google.com/?q=Figueira+da+Foz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 group"
@@ -134,9 +136,9 @@ export default function Footer() {
                   <MapPin className="w-4 h-4 text-[#6B8F71] mt-0.5 flex-shrink-0" />
                   <div>
                     <div className="text-sm text-white/80 group-hover:text-white transition-colors">
-                      Rua Principal, n.º 1
+                      Figueira da Foz
                     </div>
-                    <div className="text-xs text-white/45">3080 Figueira da Foz</div>
+                    <div className="text-xs text-white/45">Portugal</div>
                   </div>
                 </a>
               </li>
@@ -165,7 +167,7 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row items-center gap-2 text-xs text-white/40">
             <span>© 2025 Premium — Clínica Médica e Dentária. Todos os direitos reservados.</span>
             <span className="hidden sm:inline">·</span>
-            <span>NIF: 000 000 000 · Membro da OMD</span>
+            <span>Membro da OMD</span>
           </div>
           <div className="flex items-center gap-4">
             <a href="#" className="text-xs text-white/40 hover:text-white/70 transition-colors">

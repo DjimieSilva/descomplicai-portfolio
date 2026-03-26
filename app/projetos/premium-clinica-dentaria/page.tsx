@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, MessageCircle } from "lucide-react";
+import { Facebook } from "lucide-react";
 
 import Hero from "./components/Hero";
 import Philosophy from "./components/Philosophy";
@@ -20,16 +20,16 @@ import Footer from "./components/Footer";
 function WhatsAppFloat() {
   return (
     <motion.a
-      href="https://wa.me/351910000000?text=Ol%C3%A1%2C%20gostaria%20de%20marcar%20uma%20consulta%20na%20Premium%20Cl%C3%ADnica."
+      href="https://www.facebook.com/premiumclinicadentaria"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/40 transition-transform hover:scale-110"
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#1877F2] shadow-lg shadow-[#1877F2]/40 transition-transform hover:scale-110"
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 2, type: "spring", stiffness: 260, damping: 20 }}
-      aria-label="Contactar via WhatsApp"
+      aria-label="Contactar via Facebook"
     >
-      <MessageCircle className="h-7 w-7 text-white" fill="white" />
+      <Facebook className="h-7 w-7 text-white" />
     </motion.a>
   );
 }
@@ -46,12 +46,14 @@ function StickyPhoneCTA() {
       transition={{ delay: 2.5, duration: 0.5 }}
     >
       <a
-        href="tel:+351233000000"
+        href="https://www.facebook.com/premiumclinicadentaria"
+        target="_blank"
+        rel="noopener noreferrer"
         className="flex-1 flex items-center justify-center gap-2 bg-[#064E3B] text-white py-3 rounded-xl text-sm font-semibold"
-        aria-label="Ligar para a clínica"
+        aria-label="Contactar via Facebook"
       >
-        <Phone className="w-4 h-4" />
-        Ligar agora
+        <Facebook className="w-4 h-4" />
+        Facebook
       </a>
       <a
         href="#contacto"

@@ -89,12 +89,12 @@ export default function Footer() {
             </p>
             <div className="space-y-4">
               <a
-                href="tel:+351239000000"
+                href="tel:+351233434447"
                 className="flex items-center gap-3 text-sm group"
                 style={{ color: "rgba(255,255,240,0.5)", fontFamily: "var(--font-source-sans-3)" }}
               >
                 <Phone size={14} style={{ color: "#CFB53B" }} />
-                <span className="group-hover:text-[#CFB53B] transition-colors">239 000 000</span>
+                <span className="group-hover:text-[#CFB53B] transition-colors">233 434 447</span>
               </a>
               <div
                 className="flex items-start gap-3 text-sm"
@@ -102,9 +102,7 @@ export default function Footer() {
               >
                 <MapPin size={14} style={{ color: "#CFB53B", flexShrink: 0, marginTop: 2 }} />
                 <span>
-                  Rua da República, 42
-                  <br />
-                  3080-159 Figueira da Foz
+                  Rua Cândido dos Reis 101, 3080-166 Figueira da Foz
                 </span>
               </div>
               <a

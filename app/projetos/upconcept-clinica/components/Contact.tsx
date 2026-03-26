@@ -17,15 +17,15 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Telefone",
-    value: "+351 233 000 000",
-    href: "tel:+351233000000",
+    value: "+351 233 109 109",
+    href: "tel:+351233109109",
     color: "#2563EB",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+351 910 000 000",
-    href: "https://wa.me/351910000000?text=Olá,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept.",
+    value: "+351 233 109 109",
+    href: "https://wa.me/351233109109?text=Olá,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept.",
     color: "#22c55e",
   },
   {
@@ -38,8 +38,8 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Morada",
-    value: "Rua de Exemplo, 123, Figueira da Foz",
-    href: "https://maps.google.com/?q=Figueira+da+Foz",
+    value: "Lugar 4 Caminhos, Loja 1, C.C. E.Leclerc, Figueira da Foz",
+    href: "https://maps.google.com/?q=Lugar+4+Caminhos+Centro+Comercial+Leclerc+Figueira+da+Foz",
     color: "#2563EB",
   },
   {
@@ -190,7 +190,7 @@ export default function Contact() {
 
             {/* WhatsApp CTA */}
             <motion.a
-              href="https://wa.me/351910000000?text=Olá,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept."
+              href="https://wa.me/351233109109?text=Olá,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept."
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}

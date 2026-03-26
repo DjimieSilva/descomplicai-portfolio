@@ -81,7 +81,7 @@ export default function Reservations() {
               </h3>
               <div className="space-y-4">
                 <a
-                  href="tel:+351233000000"
+                  href="tel:+351233097374"
                   className="flex items-center gap-4 p-4 border border-[#1E293B]/10 rounded-sm hover:border-[#F59E0B]/40 hover:bg-[#F59E0B]/5 transition-all group"
                 >
                   <div className="w-10 h-10 rounded-sm bg-[#F59E0B]/10 flex items-center justify-center text-[#B45309] group-hover:bg-[#F59E0B]/20">
@@ -89,11 +89,11 @@ export default function Reservations() {
                   </div>
                   <div>
                     <div className="text-[#1E293B]/50 text-xs uppercase tracking-wider mb-0.5">Telefone</div>
-                    <div className="text-[#1E293B] font-semibold">+351 233 000 000</div>
+                    <div className="text-[#1E293B] font-semibold">+351 233 097 374</div>
                   </div>
                 </a>
                 <a
-                  href="mailto:reservas@cataventos.pt"
+                  href="mailto:cataventos.ff@gmail.com"
                   className="flex items-center gap-4 p-4 border border-[#1E293B]/10 rounded-sm hover:border-[#F59E0B]/40 hover:bg-[#F59E0B]/5 transition-all group"
                 >
                   <div className="w-10 h-10 rounded-sm bg-[#F59E0B]/10 flex items-center justify-center text-[#B45309] group-hover:bg-[#F59E0B]/20">
@@ -101,7 +101,7 @@ export default function Reservations() {
                   </div>
                   <div>
                     <div className="text-[#1E293B]/50 text-xs uppercase tracking-wider mb-0.5">Email</div>
-                    <div className="text-[#1E293B] font-semibold">reservas@cataventos.pt</div>
+                    <div className="text-[#1E293B] font-semibold">cataventos.ff@gmail.com</div>
                   </div>
                 </a>
               </div>

@@ -8,9 +8,9 @@ const contactMethods = [
   {
     icon: Phone,
     label: "Telefone",
-    value: "+351 233 000 000",
+    value: "+351 233 435 133",
     subValue: "Seg — Sáb, 10h às 16h",
-    href: "tel:+351233000000",
+    href: "tel:+351233435133",
     color: "#DC2626",
     bg: "#FEE2E2",
     cta: "Ligar agora",
@@ -28,9 +28,9 @@ const contactMethods = [
   {
     icon: Mail,
     label: "E-mail",
-    value: "geral@casadospapagaios.pt",
+    value: "come.cala@sapo.pt",
     subValue: "Resposta em 24 horas",
-    href: "mailto:geral@casadospapagaios.pt",
+    href: "mailto:come.cala@sapo.pt",
     color: "#15803D",
     bg: "#DCFCE7",
     cta: "Enviar e-mail",
@@ -171,7 +171,7 @@ export default function Contact() {
                 <span>Menu personalizado</span>
               </div>
               <a
-                href="tel:+351233000000"
+                href="tel:+351233435133"
                 className="bg-white text-[#DC2626] font-bold px-6 py-3 rounded-full hover:bg-[#FEF3C7] transition-colors duration-200 text-center"
               >
                 Pedir Informações

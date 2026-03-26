@@ -8,7 +8,7 @@ const accessInfo = [
   {
     icon: MapPin,
     title: "Morada",
-    lines: ["Praia da Figueira da Foz", "3080-000 Figueira da Foz"],
+    lines: ["Avenida Brasil 218, Praia de Buarcos", "3080-323 Figueira da Foz"],
     color: "#DDB892",
   },
   {

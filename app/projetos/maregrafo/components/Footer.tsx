@@ -118,22 +118,20 @@ export default function Footer() {
             </h4>
             <div className="space-y-3">
               <a
-                href="tel:+351233000000"
+                href="tel:+351233433150"
                 className="flex items-center gap-2 text-sm transition-colors hover:text-white"
                 style={{ color: "rgba(184,224,210,0.6)" }}
               >
                 <Phone className="w-4 h-4 text-[#B8E0D2]" />
-                +351 233 000 000
+                +351 233 433 150
               </a>
               <a
-                href="https://wa.me/351910000000"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:rmanof@gmail.com"
                 className="flex items-center gap-2 text-sm transition-colors hover:text-white"
                 style={{ color: "rgba(184,224,210,0.6)" }}
               >
                 <MessageCircle className="w-4 h-4 text-[#B8E0D2]" />
-                WhatsApp
+                rmanof@gmail.com
               </a>
               <a
                 href="https://instagram.com/maregrafo"
@@ -151,9 +149,9 @@ export default function Footer() {
               >
                 <MapPin className="w-4 h-4 text-[#B8E0D2] mt-0.5 flex-shrink-0" />
                 <span>
-                  Av. do Mar, 42
+                  Largo Maria Jarra 2
                   <br />
-                  Buarcos, 3080-123
+                  3080-261 Buarcos, Figueira da Foz
                 </span>
               </div>
             </div>

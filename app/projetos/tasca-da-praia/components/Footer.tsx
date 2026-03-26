@@ -100,18 +100,18 @@ export function Footer() {
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#C9B896] shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-white/70 text-sm">Rua dos Pescadores</p>
-                  <p className="text-white/70 text-sm">Buarcos, 3080</p>
+                  <p className="text-white/70 text-sm">Rua dos Pescadores 90</p>
+                  <p className="text-white/70 text-sm">Buarcos, 3080-325</p>
                   <p className="text-white/70 text-sm">Figueira da Foz</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-[#C9B896] shrink-0" />
                 <a
-                  href="tel:+351233000000"
+                  href="tel:+351965768866"
                   className="text-white/70 text-sm hover:text-[#C9B896] transition-colors"
                 >
-                  +351 233 000 000
+                  +351 965 768 866
                 </a>
               </div>
             </div>

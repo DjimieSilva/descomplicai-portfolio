@@ -189,7 +189,7 @@ export default function FAQ() {
               📞 Ligar agora
             </a>
             <a
-              href="https://wa.me/351930000001"
+              href="https://wa.me/351233429538"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-black px-8 py-4 rounded-full text-base shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"

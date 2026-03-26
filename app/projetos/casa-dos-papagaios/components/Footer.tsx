@@ -92,9 +92,8 @@ export default function Footer() {
                 <div>
                   <p className="text-[#FEF3C7]/90 text-sm font-semibold">Localização</p>
                   <p className="text-[#FEF3C7]/60 text-sm" style={{ fontFamily: "var(--font-inter)" }}>
-                    Mercado Municipal<br />
-                    Rua Fernandes Tomás<br />
-                    3080 Figueira da Foz
+                    Rua Engenheiro Silva 8-12<br />
+                    3080-150 Figueira da Foz
                   </p>
                 </div>
               </div>
@@ -103,11 +102,11 @@ export default function Footer() {
                 <div>
                   <p className="text-[#FEF3C7]/90 text-sm font-semibold">Telefone</p>
                   <a
-                    href="tel:+351233000000"
+                    href="tel:+351233435133"
                     className="text-[#FEF3C7]/60 hover:text-[#DC2626] text-sm transition-colors duration-200"
                     style={{ fontFamily: "var(--font-inter)" }}
                   >
-                    +351 233 000 000
+                    +351 233 435 133
                   </a>
                 </div>
               </div>

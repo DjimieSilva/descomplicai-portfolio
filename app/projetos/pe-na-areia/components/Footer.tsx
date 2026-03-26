@@ -126,11 +126,20 @@ export default function Footer() {
               </p>
               <div className="space-y-3">
                 <a
-                  href="tel:+351233000000"
+                  href="tel:+351233104149"
                   className="flex items-center gap-3 text-[#9A8C72] hover:text-[#DDB892] transition-colors group"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#DDB892]/40 group-hover:text-[#DDB892] transition-colors flex-shrink-0" />
-                  <span className="text-sm">+351 233 000 000</span>
+                  <span className="text-sm">+351 233 104 149</span>
+                </a>
+                <a
+                  href="https://wa.me/351934352806"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-[#9A8C72] hover:text-[#DDB892] transition-colors group"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#DDB892]/40 group-hover:text-[#DDB892] transition-colors flex-shrink-0" />
+                  <span className="text-sm">+351 934 352 806 (WhatsApp)</span>
                 </a>
                 <a
                   href="mailto:reservas@penaareia.pt"
@@ -142,9 +151,9 @@ export default function Footer() {
                 <div className="flex items-start gap-3 text-[#9A8C72]">
                   <MapPin className="w-3.5 h-3.5 text-[#DDB892]/40 flex-shrink-0 mt-0.5" />
                   <span className="text-sm leading-relaxed">
-                    Praia da Figueira da Foz
+                    Avenida Brasil 218, Praia de Buarcos
                     <br />
-                    3080-000 Figueira da Foz
+                    3080-323 Figueira da Foz
                   </span>
                 </div>
               </div>

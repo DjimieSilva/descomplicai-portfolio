@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, MapPin, Facebook, Heart } from "lucide-react";
+import { MapPin, Facebook, Heart } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -25,7 +25,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="https://www.facebook.com"
+                href="https://www.facebook.com/people/Clínica-Dentária-Tamargueira/100054499598847/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook da Clínica Dentária Tamargueira"
@@ -76,9 +76,9 @@ export default function Footer() {
                 </div>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#60A5FA] flex-shrink-0" />
-                <a href="tel:+351239000000" className="text-[#93C5FD] hover:text-white text-sm transition-colors duration-200">
-                  +351 239 000 000
+                <Facebook className="w-4 h-4 text-[#60A5FA] flex-shrink-0" />
+                <a href="https://www.facebook.com/people/Clínica-Dentária-Tamargueira/100054499598847/" target="_blank" rel="noopener noreferrer" className="text-[#93C5FD] hover:text-white text-sm transition-colors duration-200">
+                  Facebook
                 </a>
               </li>
             </ul>

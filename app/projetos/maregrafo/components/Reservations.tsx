@@ -27,7 +27,7 @@ export default function Reservations() {
     const msg = encodeURIComponent(
       `Olá! Gostaria de reservar uma mesa no Marégrafo.\n\nNome: ${name}\nData: ${date}\nHora: ${time}\nPessoas: ${partySize}\nTelefone: ${phone}${notes ? `\nNota: ${notes}` : ""}`
     );
-    window.open(`https://wa.me/351910000000?text=${msg}`, "_blank");
+    window.open(`https://wa.me/351233433150?text=${msg}`, "_blank");
     setSubmitted(true);
   }
 
@@ -85,7 +85,7 @@ export default function Reservations() {
               </h3>
               <div className="space-y-4">
                 <a
-                  href="tel:+351233000000"
+                  href="tel:+351233433150"
                   className="flex items-center gap-3 text-[#B8E0D2] hover:text-white transition-colors"
                 >
                   <div
@@ -96,13 +96,11 @@ export default function Reservations() {
                   </div>
                   <div>
                     <p className="font-semibold text-sm">Telefone</p>
-                    <p className="text-[#B8E0D2]/70 text-xs">+351 233 000 000</p>
+                    <p className="text-[#B8E0D2]/70 text-xs">+351 233 433 150</p>
                   </div>
                 </a>
                 <a
-                  href="https://wa.me/351910000000"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:rmanof@gmail.com"
                   className="flex items-center gap-3 text-[#B8E0D2] hover:text-white transition-colors"
                 >
                   <div
@@ -112,8 +110,8 @@ export default function Reservations() {
                     <MessageCircle className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">WhatsApp</p>
-                    <p className="text-[#B8E0D2]/70 text-xs">+351 910 000 000</p>
+                    <p className="font-semibold text-sm">Email</p>
+                    <p className="text-[#B8E0D2]/70 text-xs">rmanof@gmail.com</p>
                   </div>
                 </a>
               </div>

@@ -53,12 +53,12 @@ export default function Footer() {
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#92702B] mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-[#D4C5A9]/70 text-sm font-['Libre_Franklin'] font-light">Estrada da Murtinheira, s/n</p>
-                  <p className="text-[#D4C5A9]/50 text-sm font-['Libre_Franklin'] font-light">3080-515 Murtinheira, Figueira da Foz</p>
+                  <p className="text-[#D4C5A9]/70 text-sm font-['Libre_Franklin'] font-light">Rua Marecos do Sul</p>
+                  <p className="text-[#D4C5A9]/50 text-sm font-['Libre_Franklin'] font-light">3080-514 Quiaios, Figueira da Foz</p>
                 </div>
               </div>
-              <p className="text-[#D4C5A9]/70 text-sm font-['Libre_Franklin'] font-light">+351 233 000 000</p>
-              <p className="text-[#D4C5A9]/70 text-sm font-['Libre_Franklin'] font-light">reservas@sandmurtinheira.pt</p>
+              <p className="text-[#D4C5A9]/70 text-sm font-['Libre_Franklin'] font-light">+351 233 103 189</p>
+              <p className="text-[#D4C5A9]/70 text-sm font-['Libre_Franklin'] font-light">sandmurtinheira@gmail.com</p>
               <div className="flex items-center gap-3 pt-2">
                 <a
                   href="https://instagram.com"

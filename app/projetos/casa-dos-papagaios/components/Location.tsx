@@ -10,7 +10,7 @@ const directions = [
     title: "De Carro",
     steps: [
       "Siga para o centro da Figueira da Foz",
-      "Dirija-se à Rua Fernandes Tomás",
+      "Dirija-se à Rua Engenheiro Silva",
       "Estacionamento gratuito junto ao mercado (primeiros 30 min)",
       "Procure a entrada principal do Mercado Municipal",
     ],
@@ -132,8 +132,8 @@ export default function Location() {
                     Mercado Municipal da Figueira da Foz
                   </p>
                   <p className="text-[#78350F]/60 text-sm mt-1" style={{ fontFamily: "var(--font-inter)" }}>
-                    Rua Fernandes Tomás<br />
-                    3080 Figueira da Foz<br />
+                    Rua Engenheiro Silva 8-12<br />
+                    3080-150 Figueira da Foz<br />
                     Portugal
                   </p>
                 </div>

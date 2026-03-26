@@ -114,7 +114,7 @@ export default function Hero() {
         </div>
 
         <a
-          href="tel:+351233000000"
+          href="tel:+351233433150"
           className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200"
           style={{ backgroundColor: "#D4A574", color: "white" }}
         >

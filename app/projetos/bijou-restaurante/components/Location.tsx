@@ -73,9 +73,7 @@ export default function Location() {
                   className="text-xs text-center px-4"
                   style={{ color: "#8B6E5A", fontFamily: "var(--font-source-sans-3)" }}
                 >
-                  Rua da República, 42
-                  <br />
-                  3080-159 Figueira da Foz
+                  Rua Cândido dos Reis 101, 3080-166 Figueira da Foz
                 </p>
               </div>
               {/* Vintage map grid overlay */}
@@ -139,13 +137,13 @@ export default function Location() {
                     className="text-base font-semibold"
                     style={{ fontFamily: "var(--font-eb-garamond)", color: "#4A3728" }}
                   >
-                    Rua da República, 42
+                    Rua Cândido dos Reis 101
                   </p>
                   <p
                     className="text-sm"
                     style={{ color: "#6B5344", fontFamily: "var(--font-source-sans-3)" }}
                   >
-                    3080-159 Figueira da Foz
+                    3080-166 Figueira da Foz
                     <br />
                     Coimbra, Portugal
                   </p>
@@ -179,11 +177,11 @@ export default function Location() {
                     Telefone & Reservas
                   </p>
                   <a
-                    href="tel:+351239000000"
+                    href="tel:+351233434447"
                     className="text-xl font-bold hover:text-[#800020] transition-colors"
                     style={{ fontFamily: "var(--font-eb-garamond)", color: "#4A3728" }}
                   >
-                    239 000 000
+                    233 434 447
                   </a>
                   <p
                     className="text-sm mt-1"
@@ -215,11 +213,11 @@ export default function Location() {
                     Email
                   </p>
                   <a
-                    href="mailto:reservas@bijourestaurante.pt"
+                    href="mailto:bijoufigfoz@gmail.com"
                     className="text-base font-medium hover:text-[#800020] transition-colors"
                     style={{ fontFamily: "var(--font-source-sans-3)", color: "#4A3728" }}
                   >
-                    reservas@bijourestaurante.pt
+                    bijoufigfoz@gmail.com
                   </a>
                 </div>
               </div>

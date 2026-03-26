@@ -103,7 +103,7 @@ export default function Reservations() {
               {
                 icon: <Phone size={20} />,
                 title: "Contacto Direto",
-                lines: ["(+351) 233 XXX XXX", "Whatsapp disponível"],
+                lines: ["Reservas via TheFork", "ou envie DM nas redes sociais"],
                 color: "#EC4899",
               },
               {

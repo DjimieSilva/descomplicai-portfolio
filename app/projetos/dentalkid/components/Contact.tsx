@@ -11,8 +11,7 @@ const contactMethods = [
     title: "Telefone",
     desc: "Liga diretamente para a clínica que preferes",
     items: [
-      { label: "Buarcos", value: "+351 233 000 001", href: "tel:+351233000001" },
-      { label: "Tavarede", value: "+351 233 000 002", href: "tel:+351233000002" },
+      { label: "Geral", value: "+351 233 429 538", href: "tel:+351233429538" },
     ],
     color: "#7C3AED",
     bg: "#F5F3FF",
@@ -24,14 +23,9 @@ const contactMethods = [
     desc: "Envia mensagem e responde-te rapidamente",
     items: [
       {
-        label: "Buarcos",
+        label: "Geral",
         value: "Chat WhatsApp",
-        href: "https://wa.me/351930000001?text=Olá!%20Gostaria%20de%20marcar%20uma%20consulta.",
-      },
-      {
-        label: "Tavarede",
-        value: "Chat WhatsApp",
-        href: "https://wa.me/351930000002?text=Olá!%20Gostaria%20de%20marcar%20uma%20consulta.",
+        href: "https://wa.me/351233429538?text=Olá!%20Gostaria%20de%20marcar%20uma%20consulta.",
       },
     ],
     color: "#34D399",
@@ -43,7 +37,7 @@ const contactMethods = [
     title: "E-mail",
     desc: "Para questões não urgentes ou orçamentos",
     items: [
-      { label: "Geral", value: "info@dentalkid.pt", href: "mailto:info@dentalkid.pt" },
+      { label: "Geral", value: "dentalkid@ccdo-dentistas.pt", href: "mailto:dentalkid@ccdo-dentistas.pt" },
     ],
     color: "#38BDF8",
     bg: "#F0F9FF",
@@ -81,8 +75,7 @@ export default function Contact() {
     const msg = encodeURIComponent(
       `Olá! Quero marcar uma consulta.\n\nNome: ${form.name}\nTelefone: ${form.phone}\nClínica: ${form.location}\nIdade da criança: ${form.age} anos\nMensagem: ${form.message || "Sem mensagem adicional"}`
     );
-    const phone =
-      form.location === "buarcos" ? "351930000001" : "351930000002";
+    const phone = "351233429538";
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
     setSubmitted(true);
   };

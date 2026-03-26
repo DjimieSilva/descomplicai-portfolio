@@ -61,7 +61,9 @@ export default function Hero() {
           ))}
         </div>
         <a
-          href="tel:+351239000000"
+          href="https://www.facebook.com/people/Clínica-Dentária-Tamargueira/100054499598847/"
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-2 bg-white text-[#1E40AF] px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#DBEAFE] transition-colors duration-200"
         >
           <Phone className="w-4 h-4" />

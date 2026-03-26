@@ -171,8 +171,8 @@ export function Location() {
                 </span>
               </div>
               <p className="text-sm text-[#1E3A5F]/65 ml-6">
-                Rua dos Pescadores<br />
-                Buarcos, 3080<br />
+                Rua dos Pescadores 90<br />
+                Buarcos, 3080-325<br />
                 Figueira da Foz
               </p>
             </div>

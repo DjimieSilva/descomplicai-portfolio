@@ -9,7 +9,7 @@ const transportInfo = [
   {
     icon: Car,
     title: "De Carro",
-    info: "Estacionamento gratuito na Rua do Bairro Novo (5 minutos a pé)",
+    info: "Estacionamento disponível nas proximidades",
   },
   {
     icon: Bus,
@@ -116,7 +116,7 @@ export default function Location() {
 
               {/* Open in maps overlay on hover */}
               <a
-                href="https://maps.google.com/?q=Figueira+da+Foz"
+                href="https://maps.google.com/?q=Rua+de+São+Lourenço+1+Figueira+da+Foz"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute inset-0 flex items-center justify-center bg-[#EAB308]/0 group-hover:bg-[#EAB308]/10 transition-colors duration-300"
@@ -133,10 +133,10 @@ export default function Location() {
               <MapPin size={18} className="text-[#EAB308] mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-[family-name:var(--font-space-grotesk)] font-bold text-white text-base">
-                  Rua do Bairro Novo, 42
+                  Rua de São Lourenço 1
                 </p>
                 <p className="font-[family-name:var(--font-inter)] text-[#A3A3A3] text-sm mt-1">
-                  3080-000 Figueira da Foz, Portugal
+                  3080-147 Figueira da Foz, Portugal
                 </p>
               </div>
             </div>
@@ -193,7 +193,7 @@ export default function Location() {
 
             {/* Google Maps CTA */}
             <a
-              href="https://maps.google.com/?q=Figueira+da+Foz"
+              href="https://maps.google.com/?q=Rua+de+São+Lourenço+1+Figueira+da+Foz"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-[#EAB308] text-[#171717] font-[family-name:var(--font-space-grotesk)] font-bold px-6 py-4 text-sm tracking-widest uppercase hover:bg-[#ca9a06] transition-colors duration-200 group"

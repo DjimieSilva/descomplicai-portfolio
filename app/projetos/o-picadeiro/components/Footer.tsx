@@ -94,24 +94,24 @@ export default function Footer() {
             >
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#B87333] shrink-0 mt-0.5" />
-                <p>Rua do Picadeiro, 15<br />Figueira da Foz, 3080</p>
+                <p>Rua Académico Zagalo 20<br />3080-161 Figueira da Foz</p>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-[#B87333] shrink-0" />
                 <a
-                  href="tel:+351233420000"
+                  href="tel:+351233041157"
                   className="hover:text-[#B87333] transition-colors"
                 >
-                  +351 233 420 000
+                  +351 233 041 157
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-[#B87333] shrink-0" />
                 <a
-                  href="mailto:reservas@opicadeiro.pt"
+                  href="mailto:opicadeiro.ff@gmail.com"
                   className="hover:text-[#B87333] transition-colors"
                 >
-                  reservas@opicadeiro.pt
+                  opicadeiro.ff@gmail.com
                 </a>
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function Footer() {
             className="text-xs text-[#FFFBEB]/25"
             style={{ fontFamily: "var(--font-inter)" }}
           >
-            © {currentYear} O Picadeiro · Todos os direitos reservados · NIF 500 000 000
+            © {currentYear} O Picadeiro · Todos os direitos reservados
           </p>
           <p
             className="text-xs text-[#FFFBEB]/20"

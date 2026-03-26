@@ -73,7 +73,7 @@ export default function Location() {
             />
             {/* Open maps link */}
             <a
-              href="https://maps.google.com/?q=Figueira+da+Foz"
+              href="https://maps.google.com/?q=Rua+Bernardo+Lopes+85+Figueira+da+Foz"
               target="_blank"
               rel="noopener noreferrer"
               className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 transition-colors duration-200"
@@ -101,9 +101,9 @@ export default function Location() {
                 </span>
               </div>
               <p className="font-[family-name:var(--font-hanken)] text-[#0C2340] font-semibold text-base leading-snug">
-                Rua do Mar, 42
+                Rua Bernardo Lopes 85-89
                 <br />
-                3080-000 Figueira da Foz
+                3080-395 Figueira da Foz
               </p>
             </div>
 

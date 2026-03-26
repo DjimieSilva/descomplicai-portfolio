@@ -20,7 +20,7 @@ const directions = [
     title: "Transportes públicos",
     steps: [
       "Autocarro n.º 4 (Figueira da Foz — Buarcos)",
-      "Paragem: Avenida do Mar, Buarcos",
+      "Paragem: Largo Maria Jarra, Buarcos",
       "A 2 min a pé do restaurante",
       "Frequência: cada 30 min",
     ],
@@ -146,9 +146,9 @@ export default function Location() {
                     Marégrafo — Restaurante de Marisco
                   </p>
                   <p className="text-sm mt-1" style={{ color: "rgba(184,224,210,0.7)" }}>
-                    Avenida do Mar, n.º 42
+                    Largo Maria Jarra 2
                     <br />
-                    3080-123 Buarcos, Figueira da Foz
+                    3080-261 Buarcos, Figueira da Foz
                   </p>
                 </div>
               </div>
