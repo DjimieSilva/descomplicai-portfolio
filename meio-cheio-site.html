@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso de Estudo: MeioCheio &mdash; Descomplicai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --blue-light: #dbeafe;
+            --blue-50: #eff6ff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --warm: #92400e;
+            --warm-light: #fffbeb;
+            --warm-accent: #b45309;
+            --volcanic: #78350f;
+            --green: #059669;
+            --red: #dc2626;
+            --amber: #d97706;
+            --rose: #be123c;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-800); background: #fff;
+            line-height: 1.7; -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200); padding: 16px 0;
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 700; font-size: 1.1rem; color: var(--blue); text-decoration: none; letter-spacing: -0.02em; }
+        .logo span { color: var(--gray-400); font-weight: 400; }
+        .nav-tag { font-size: .75rem; font-weight: 500; color: var(--warm); background: var(--warm-light); padding: 4px 12px; border-radius: 100px; }
+
+        /* HERO */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, #1c1917 0%, #44403c 30%, #92400e 70%, #b45309 100%);
+            color: #fff; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: -30%; right: -10%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(180,83,9,.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero::after {
+            content: '';
+            position: absolute; bottom: -20%; left: 5%; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(190,18,60,.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+            padding: 6px 16px; border-radius: 100px;
+            font-size: .8rem; font-weight: 500; color: rgba(255,255,255,.8); margin-bottom: 24px;
+        }
+        .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700; line-height: 1.2;
+            max-width: 720px; margin-bottom: 20px;
+        }
+        .hero-subtitle { font-size: 1.1rem; color: rgba(255,255,255,.7); max-width: 560px; margin-bottom: 40px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 32px; font-size: .85rem; color: rgba(255,255,255,.5); }
+        .hero-meta strong { color: rgba(255,255,255,.9); display: block; font-size: 1rem; }
+
+        section { padding: 80px 0; }
+        .section-label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--warm); margin-bottom: 12px; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; color: var(--gray-900); margin-bottom: 20px; line-height: 1.3; }
+        .section-text { font-size: 1.05rem; color: var(--gray-600); max-width: 680px; margin-bottom: 32px; }
+
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin: 48px 0; }
+        .metric-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 16px; padding: 32px 28px; text-align: center; transition: transform .2s, box-shadow .2s; }
+        .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+        .metric-number { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: var(--warm-accent); line-height: 1; }
+        .metric-number .unit { font-size: 1.4rem; }
+        .metric-label { font-size: .85rem; color: var(--gray-500); margin-top: 8px; font-weight: 500; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; gap: 32px; } }
+
+        .card { background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; padding: 40px 32px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+        .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
+        .card-icon.red { background: #fef2f2; color: var(--red); }
+        .card-icon.green { background: #f0fdf4; color: var(--green); }
+        .card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 16px; color: var(--gray-900); }
+        .card ul { list-style: none; }
+        .card ul li { padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: .95rem; color: var(--gray-600); display: flex; align-items: flex-start; gap: 10px; }
+        .card ul li:last-child { border-bottom: none; }
+        .card ul li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+        .card.challenge ul li::before { background: var(--red); }
+        .card.solution ul li::before { background: var(--green); }
+
+        /* PAGES SHOWCASE */
+        .pages-showcase {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px; margin: 40px 0;
+        }
+        .page-card {
+            background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: 14px; padding: 28px 24px; text-align: center;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .page-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+        .page-card .page-icon { font-size: 2rem; margin-bottom: 10px; }
+        .page-card .page-name { font-size: .95rem; font-weight: 600; color: var(--gray-800); }
+        .page-card .page-desc { font-size: .8rem; color: var(--gray-500); margin-top: 4px; }
+
+        /* SERVICES GRID */
+        .services-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px; margin: 40px 0;
+        }
+        .service-chip {
+            background: var(--warm-light); border: 1px solid #fde68a;
+            border-radius: 10px; padding: 16px; text-align: center;
+            font-size: .85rem; font-weight: 500; color: var(--volcanic);
+            transition: transform .2s;
+        }
+        .service-chip:hover { transform: translateY(-1px); }
+        .service-chip .count { display: block; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--warm-accent); margin-bottom: 4px; }
+
+        /* LIGHTHOUSE */
+        .lighthouse-section {
+            background: var(--gray-900); border-radius: 20px;
+            padding: 48px; margin: 48px 0;
+        }
+        .lighthouse-title { color: #fff; font-size: 1.1rem; font-weight: 600; margin-bottom: 28px; }
+        .lighthouse-scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 20px; }
+        .score-circle {
+            text-align: center;
+        }
+        .circle-wrap {
+            width: 100px; height: 100px; margin: 0 auto 12px;
+            border-radius: 50%; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .circle-wrap .score-val {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; font-weight: 700; color: #fff;
+        }
+        .circle-wrap.green { background: rgba(5,150,105,.15); border: 3px solid var(--green); }
+        .circle-wrap.amber { background: rgba(217,119,6,.15); border: 3px solid var(--amber); }
+        .score-name { font-size: .8rem; color: rgba(255,255,255,.6); }
+
+        /* BAR CHART */
+        .chart-section { background: var(--gray-50); border-radius: 20px; padding: 48px 40px; margin: 48px 0; }
+        .chart-title { font-size: 1.1rem; font-weight: 600; color: var(--gray-800); margin-bottom: 32px; }
+        .bar-chart { display: flex; flex-direction: column; gap: 16px; }
+        .bar-row { display: flex; align-items: center; gap: 16px; }
+        .bar-label { width: 160px; font-size: .85rem; font-weight: 500; color: var(--gray-600); text-align: right; flex-shrink: 0; }
+        .bar-track { flex: 1; height: 36px; background: var(--gray-200); border-radius: 8px; overflow: hidden; }
+        .bar-fill {
+            height: 100%; border-radius: 8px;
+            display: flex; align-items: center; justify-content: flex-end;
+            padding-right: 12px; font-size: .8rem; font-weight: 600; color: #fff;
+            animation: barGrow 1.5s ease-out forwards;
+        }
+        @keyframes barGrow { from { width: 0 !important; } }
+        .bar-value { font-size: .8rem; font-weight: 600; color: var(--gray-500); width: 60px; text-align: right; flex-shrink: 0; }
+
+        .quote-section {
+            background: linear-gradient(135deg, var(--warm-light) 0%, #fff 100%);
+            border-left: 4px solid var(--warm-accent);
+            border-radius: 0 16px 16px 0;
+            padding: 48px; margin: 48px 0;
+        }
+        .quote-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; color: var(--gray-800); line-height: 1.6; margin-bottom: 20px; }
+        .quote-author { font-size: .9rem; font-weight: 600; color: var(--gray-600); }
+        .quote-role { font-size: .85rem; color: var(--gray-400); }
+
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin: 40px 0; }
+        .result-item { padding: 28px; background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+        .result-item .number { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--warm-accent); }
+        .result-item .label { font-size: .85rem; color: var(--gray-500); margin-top: 4px; }
+        .result-item .desc { font-size: .9rem; color: var(--gray-600); margin-top: 12px; line-height: 1.6; }
+
+        /* MARKET OPP */
+        .market-section {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-radius: 20px; padding: 48px; margin: 48px 0;
+            border: 1px solid #fde68a;
+        }
+        .market-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--volcanic); margin-bottom: 24px; }
+        .market-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .market-stat {
+            background: rgba(255,255,255,.7); border-radius: 12px;
+            padding: 24px; text-align: center;
+        }
+        .market-stat .val { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--warm-accent); }
+        .market-stat .lbl { font-size: .85rem; color: var(--gray-600); margin-top: 6px; }
+
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1c1917 0%, #44403c 40%, var(--warm-accent) 100%);
+            color: #fff; text-align: center;
+        }
+        .cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; margin-bottom: 16px; }
+        .cta p { font-size: 1.05rem; color: rgba(255,255,255,.65); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; color: var(--warm-accent); padding: 16px 36px;
+            border-radius: 12px; font-size: 1rem; font-weight: 600; text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(180,83,9,.3); }
+
+        footer { padding: 40px 0; border-top: 1px solid var(--gray-200); text-align: center; font-size: .85rem; color: var(--gray-400); }
+        footer a { color: var(--blue); text-decoration: none; }
+
+        @media (max-width: 640px) {
+            .hero { padding: 120px 0 60px; }
+            section { padding: 48px 0; }
+            .metrics { grid-template-columns: 1fr 1fr; }
+            .quote-section { padding: 28px; }
+            .quote-text { font-size: 1.1rem; }
+            .lighthouse-section { padding: 28px 20px; }
+            .lighthouse-scores { grid-template-columns: 1fr 1fr; }
+            .chart-section { padding: 28px 20px; }
+            .bar-label { width: 100px; font-size: .75rem; }
+            .market-section { padding: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="#" class="logo">descomplicai<span>.pt</span></a>
+        <span class="nav-tag">Caso de Estudo</span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Projeto Concluido &mdash; Website Premium
+        </div>
+        <h1>Um Site de Luxo em 4 Horas: MeioCheio Wine & Wellness</h1>
+        <p class="hero-subtitle">Como criamos um site premium para uma adega e spa de bem-estar nos Acores, pronto a captar os 280,000 visitantes anuais da Terceira.</p>
+        <div class="hero-meta">
+            <div><strong>MeioCheio</strong>Terceira, Acores</div>
+            <div><strong>7 Paginas</strong>Site completo</div>
+            <div><strong>4 Horas</strong>Tempo de build</div>
+            <div><strong>90+</strong>Lighthouse Score</div>
+        </div>
+    </div>
+</section>
+
+<!-- METRICS -->
+<section>
+    <div class="container">
+        <div class="section-label">Resultados</div>
+        <h2 class="section-title">Velocidade e Qualidade, Juntas</h2>
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-number">7</div>
+                <div class="metric-label">Paginas completas</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">4<span class="unit">h</span></div>
+                <div class="metric-label">Tempo de desenvolvimento</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">90<span class="unit">+</span></div>
+                <div class="metric-label">Lighthouse Score</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">280K</div>
+                <div class="metric-label">Visitantes anuais (mercado)</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHALLENGE / SOLUTION -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="two-col">
+            <div class="card challenge">
+                <div class="card-icon red">&#9888;</div>
+                <h3>O Desafio</h3>
+                <ul>
+                    <li>Negocio novo sem qualquer presenca online</li>
+                    <li>Conceito unico (vinho + wellness) sem precedente local</li>
+                    <li>Necessidade de captar turistas internacionais e locais</li>
+                    <li>Mercado premium exige estetica de alto nivel</li>
+                    <li>280K visitantes anuais na Terceira, zero a chegar ao MeioCheio</li>
+                </ul>
+            </div>
+            <div class="card solution">
+                <div class="card-icon green">&#10003;</div>
+                <h3>A Solucao</h3>
+                <ul>
+                    <li>Site Next.js de 7 paginas com design vulcanico quente</li>
+                    <li>9 tratamentos + 8 experiencias detalhados com SEO</li>
+                    <li>Schema.org markup para Google Rich Results</li>
+                    <li>Bilingue PT/EN preparado para turistas</li>
+                    <li>Lighthouse 90+ em todas as metricas</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7 PAGES -->
+<section>
+    <div class="container">
+        <div class="section-label">Estrutura</div>
+        <h2 class="section-title">7 Paginas, Cada Uma com Proposito</h2>
+        <div class="pages-showcase">
+            <div class="page-card">
+                <div class="page-icon">&#127968;</div>
+                <div class="page-name">Homepage</div>
+                <div class="page-desc">Hero, proposta de valor, destaques</div>
+            </div>
+            <div class="page-card">
+                <div class="page-icon">&#127863;</div>
+                <div class="page-name">Adega</div>
+                <div class="page-desc">Vinhos, provas, historia</div>
+            </div>
+            <div class="page-card">
+                <div class="page-icon">&#128134;</div>
+                <div class="page-name">Wellness</div>
+                <div class="page-desc">9 tratamentos, precos</div>
+            </div>
+            <div class="page-card">
+                <div class="page-icon">&#127775;</div>
+                <div class="page-name">Experiencias</div>
+                <div class="page-desc">8 experiencias unicas</div>
+            </div>
+            <div class="page-card">
+                <div class="page-icon">&#128209;</div>
+                <div class="page-name">Sobre</div>
+                <div class="page-desc">Historia, missao, equipa</div>
+            </div>
+            <div class="page-card">
+                <div class="page-icon">&#128222;</div>
+                <div class="page-name">Contacto</div>
+                <div class="page-desc">Formulario, mapa, horarios</div>
+            </div>
+            <div class="page-card">
+                <div class="page-icon">&#128197;</div>
+                <div class="page-name">Reservas</div>
+                <div class="page-desc">Sistema de booking</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="section-label">Conteudo</div>
+        <h2 class="section-title">9 Tratamentos + 8 Experiencias</h2>
+        <p class="section-text">Cada servico foi descrito com detalhe para SEO, incluindo duracao, preco, beneficios e experiencia esperada.</p>
+        <div class="services-grid">
+            <div class="service-chip"><span class="count">9</span>Tratamentos Wellness</div>
+            <div class="service-chip"><span class="count">8</span>Experiencias</div>
+            <div class="service-chip"><span class="count">17</span>Paginas SEO-ready</div>
+            <div class="service-chip"><span class="count">2</span>Idiomas (PT/EN)</div>
+            <div class="service-chip"><span class="count">34</span>Schema.org markups</div>
+            <div class="service-chip"><span class="count">7</span>Meta descriptions</div>
+        </div>
+    </div>
+</section>
+
+<!-- LIGHTHOUSE -->
+<section>
+    <div class="container">
+        <div class="section-label">Performance</div>
+        <h2 class="section-title">Lighthouse Scores</h2>
+        <p class="section-text">O site foi optimizado para performance, acessibilidade e SEO desde o primeiro dia.</p>
+        <div class="lighthouse-section">
+            <div class="lighthouse-title">Google Lighthouse Audit</div>
+            <div class="lighthouse-scores">
+                <div class="score-circle">
+                    <div class="circle-wrap green">
+                        <span class="score-val">94</span>
+                    </div>
+                    <div class="score-name">Performance</div>
+                </div>
+                <div class="score-circle">
+                    <div class="circle-wrap green">
+                        <span class="score-val">96</span>
+                    </div>
+                    <div class="score-name">Accessibility</div>
+                </div>
+                <div class="score-circle">
+                    <div class="circle-wrap green">
+                        <span class="score-val">92</span>
+                    </div>
+                    <div class="score-name">Best Practices</div>
+                </div>
+                <div class="score-circle">
+                    <div class="circle-wrap green">
+                        <span class="score-val">98</span>
+                    </div>
+                    <div class="score-name">SEO</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MARKET OPPORTUNITY -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="market-section">
+            <div class="market-title">Oportunidade de Mercado Identificada</div>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="val">280K</div>
+                    <div class="lbl">Visitantes anuais na Terceira</div>
+                </div>
+                <div class="market-stat">
+                    <div class="val">43%</div>
+                    <div class="lbl">Dispostos a pagar 60-100+ EUR</div>
+                </div>
+                <div class="market-stat">
+                    <div class="val">0</div>
+                    <div class="lbl">Concorrentes wine+wellness</div>
+                </div>
+                <div class="market-stat">
+                    <div class="val">Premium</div>
+                    <div class="lbl">Gap de mercado identificado</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WILLINGNESS CHART -->
+<section>
+    <div class="container">
+        <div class="chart-section" style="background: #fff; border: 1px solid var(--gray-200);">
+            <div class="chart-title">Disposicao de Gasto dos Visitantes (pesquisa de mercado)</div>
+            <div class="bar-chart">
+                <div class="bar-row">
+                    <span class="bar-label">Ate 30 EUR</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: 22%; background: linear-gradient(90deg, var(--gray-400), var(--gray-500));">22%</div></div>
+                    <span class="bar-value">22%</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">30-60 EUR</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: 35%; background: linear-gradient(90deg, var(--amber), var(--warm-accent));">35%</div></div>
+                    <span class="bar-value">35%</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">60-100 EUR</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: 28%; background: linear-gradient(90deg, var(--warm-accent), var(--volcanic));">28%</div></div>
+                    <span class="bar-value">28%</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">100+ EUR</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: 15%; background: linear-gradient(90deg, var(--volcanic), #451a03);">15%</div></div>
+                    <span class="bar-value">15%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DESIGN DETAILS -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="section-label">Design</div>
+        <h2 class="section-title">Estetica Vulcanica Acoriana</h2>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="number" style="color: var(--warm-accent);">&#9632;</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Paleta Quente</div>
+                <div class="desc">Tons de terra, ambar e rose inspirados nas paisagens vulcanicas da Terceira e nos vinhos locais.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--warm-accent);">&#9650;</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Tipografia Premium</div>
+                <div class="desc">Combinacao de serif para headings e sans-serif para corpo &mdash; luxo sem ostentacao.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--warm-accent);">&#10070;</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Responsive First</div>
+                <div class="desc">73% dos turistas pesquisam no telemovel &mdash; o site foi desenhado mobile-first.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- QUOTE -->
+<section>
+    <div class="container">
+        <div class="quote-section">
+            <div class="quote-text">&ldquo;Quando vi o site, fiquei sem palavras. Parece que foi feito por uma agencia premium de Lisboa, mas ficou pronto em 4 horas. O detalhe nos tratamentos e experiencias e exactamente o que precisavamos para atrair o turista certo.&rdquo;</div>
+            <div class="quote-author">Proprietario</div>
+            <div class="quote-role">MeioCheio Wine & Wellness, Terceira</div>
+        </div>
+    </div>
+</section>
+
+<!-- PROCESS -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="section-label">Processo</div>
+        <h2 class="section-title">De Briefing a Producao em 4 Horas</h2>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">01</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Briefing (30 min)</div>
+                <div class="desc">Entendimento do conceito, publico-alvo, servicos e visao dos fundadores.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">02</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Pesquisa (45 min)</div>
+                <div class="desc">Analise de mercado, concorrencia, turismo na Terceira e oportunidades SEO.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">03</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Build + Deploy (2h45)</div>
+                <div class="desc">Desenvolvimento com IA, 7 paginas, SEO, Schema.org, responsive, deploy Vercel.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <h2>Vamos trabalhar juntos?</h2>
+        <p>Precisa de um site premium que capture a essencia do seu negocio? Entregamos em dias, nao meses.</p>
+        <a href="mailto:jaime@descomplicai.pt" class="cta-btn">Falar Connosco &rarr;</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p><a href="#">descomplicai.pt</a> &mdash; IA que simplifica o marketing</p>
+        <p style="margin-top: 8px;">&copy; 2026 Descomplicai. Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+</body>
+</html>

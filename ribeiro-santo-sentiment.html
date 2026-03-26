@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso de Estudo: Ribeiro Santo &mdash; Descomplicai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --blue-light: #dbeafe;
+            --blue-50: #eff6ff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --wine: #7c2d36;
+            --wine-light: #fdf2f4;
+            --green: #059669;
+            --amber: #d97706;
+            --red: #dc2626;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-800);
+            background: #fff;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 0;
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 700; font-size: 1.1rem; color: var(--blue); text-decoration: none; letter-spacing: -0.02em; }
+        .logo span { color: var(--gray-400); font-weight: 400; }
+        .nav-tag {
+            font-size: .75rem; font-weight: 500; color: var(--blue);
+            background: var(--blue-light); padding: 4px 12px; border-radius: 100px;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #7c2d36 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: -50%; right: -20%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(124,45,54,.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+            padding: 6px 16px; border-radius: 100px;
+            font-size: .8rem; font-weight: 500; color: rgba(255,255,255,.8);
+            margin-bottom: 24px;
+        }
+        .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.2;
+            max-width: 720px;
+            margin-bottom: 20px;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem; color: rgba(255,255,255,.7);
+            max-width: 560px; margin-bottom: 40px;
+        }
+        .hero-meta {
+            display: flex; flex-wrap: wrap; gap: 32px;
+            font-size: .85rem; color: rgba(255,255,255,.5);
+        }
+        .hero-meta strong { color: rgba(255,255,255,.9); display: block; font-size: 1rem; }
+
+        /* ── SECTIONS ── */
+        section { padding: 80px 0; }
+        .section-label {
+            font-size: .75rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: .08em; color: var(--blue); margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 600; color: var(--gray-900);
+            margin-bottom: 20px; line-height: 1.3;
+        }
+        .section-text {
+            font-size: 1.05rem; color: var(--gray-600);
+            max-width: 680px; margin-bottom: 32px;
+        }
+
+        /* ── METRICS ROW ── */
+        .metrics {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px; margin: 48px 0;
+        }
+        .metric-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 32px 28px;
+            text-align: center;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,.06);
+        }
+        .metric-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem; font-weight: 700; color: var(--blue);
+            line-height: 1;
+        }
+        .metric-number .unit { font-size: 1.4rem; color: var(--blue); }
+        .metric-label {
+            font-size: .85rem; color: var(--gray-500);
+            margin-top: 8px; font-weight: 500;
+        }
+
+        /* ── CHALLENGE / SOLUTION GRID ── */
+        .two-col {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+            align-items: start;
+        }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; gap: 32px; } }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 40px 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        }
+        .card-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; margin-bottom: 20px;
+        }
+        .card-icon.red { background: #fef2f2; color: var(--red); }
+        .card-icon.green { background: #f0fdf4; color: var(--green); }
+        .card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 16px; color: var(--gray-900); }
+        .card ul { list-style: none; }
+        .card ul li {
+            padding: 8px 0; border-bottom: 1px solid var(--gray-100);
+            font-size: .95rem; color: var(--gray-600);
+            display: flex; align-items: flex-start; gap: 10px;
+        }
+        .card ul li:last-child { border-bottom: none; }
+        .card ul li::before {
+            content: '';
+            width: 6px; height: 6px; border-radius: 50%;
+            margin-top: 9px; flex-shrink: 0;
+        }
+        .card.challenge ul li::before { background: var(--red); }
+        .card.solution ul li::before { background: var(--green); }
+
+        /* ── PLATFORMS ── */
+        .platforms {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px; margin: 32px 0;
+        }
+        .platform {
+            background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: 12px; padding: 20px 16px; text-align: center;
+            font-size: .9rem; font-weight: 500; color: var(--gray-700);
+        }
+        .platform .count {
+            display: block; font-family: 'Playfair Display', serif;
+            font-size: 1.5rem; font-weight: 700; color: var(--blue);
+            margin-bottom: 4px;
+        }
+
+        /* ── BAR CHART ── */
+        .chart-section { background: var(--gray-50); border-radius: 20px; padding: 48px 40px; margin: 48px 0; }
+        .chart-title { font-size: 1.1rem; font-weight: 600; color: var(--gray-800); margin-bottom: 32px; }
+        .bar-chart { display: flex; flex-direction: column; gap: 16px; }
+        .bar-row { display: flex; align-items: center; gap: 16px; }
+        .bar-label { width: 140px; font-size: .85rem; font-weight: 500; color: var(--gray-600); text-align: right; flex-shrink: 0; }
+        .bar-track { flex: 1; height: 36px; background: var(--gray-200); border-radius: 8px; overflow: hidden; position: relative; }
+        .bar-fill {
+            height: 100%; border-radius: 8px;
+            display: flex; align-items: center; justify-content: flex-end;
+            padding-right: 12px;
+            font-size: .8rem; font-weight: 600; color: #fff;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+        @keyframes barGrow { from { width: 0 !important; } }
+        .bar-fill.brand { background: linear-gradient(90deg, var(--blue), var(--blue-dark)); }
+        .bar-fill.comp1 { background: linear-gradient(90deg, #6b7280, #4b5563); }
+        .bar-fill.comp2 { background: linear-gradient(90deg, #9ca3af, #6b7280); }
+        .bar-fill.comp3 { background: linear-gradient(90deg, #d1d5db, #9ca3af); color: var(--gray-700); }
+        .bar-value { font-size: .8rem; font-weight: 600; color: var(--gray-500); width: 40px; text-align: right; flex-shrink: 0; }
+
+        /* ── QUOTE ── */
+        .quote-section {
+            background: linear-gradient(135deg, var(--blue-50) 0%, #fff 100%);
+            border-left: 4px solid var(--blue);
+            border-radius: 0 16px 16px 0;
+            padding: 48px;
+            margin: 48px 0;
+        }
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; font-style: italic;
+            color: var(--gray-800); line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .quote-author { font-size: .9rem; font-weight: 600; color: var(--gray-600); }
+        .quote-role { font-size: .85rem; color: var(--gray-400); }
+
+        /* ── RESULTS GRID ── */
+        .results-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; margin: 40px 0;
+        }
+        .result-item {
+            padding: 28px;
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        }
+        .result-item .number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem; font-weight: 700; color: var(--blue);
+        }
+        .result-item .label { font-size: .85rem; color: var(--gray-500); margin-top: 4px; }
+        .result-item .desc { font-size: .9rem; color: var(--gray-600); margin-top: 12px; line-height: 1.6; }
+
+        /* ── CTA ── */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, var(--blue-dark) 100%);
+            color: #fff;
+            text-align: center;
+        }
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 600; margin-bottom: 16px;
+        }
+        .cta p { font-size: 1.05rem; color: rgba(255,255,255,.65); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; color: var(--blue-dark);
+            padding: 16px 36px; border-radius: 12px;
+            font-size: 1rem; font-weight: 600;
+            text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(37,99,235,.3);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--gray-200);
+            text-align: center;
+            font-size: .85rem; color: var(--gray-400);
+        }
+        footer a { color: var(--blue); text-decoration: none; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .hero { padding: 120px 0 60px; }
+            .hero-meta { gap: 20px; }
+            section { padding: 48px 0; }
+            .metrics { grid-template-columns: 1fr 1fr; }
+            .platforms { grid-template-columns: 1fr 1fr; }
+            .bar-label { width: 80px; font-size: .75rem; }
+            .quote-section { padding: 28px; }
+            .quote-text { font-size: 1.1rem; }
+            .chart-section { padding: 28px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="container">
+        <a href="#" class="logo">descomplicai<span>.pt</span></a>
+        <span class="nav-tag">Caso de Estudo</span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Projeto Concluido &mdash; Analise de Sentimento
+        </div>
+        <h1>Como a IA Revelou Oportunidades Escondidas para a Ribeiro Santo</h1>
+        <p class="hero-subtitle">Uma analise profunda de sentimento digital que transformou dados dispersos em estrategia acionavel para uma marca historica do Dao.</p>
+        <div class="hero-meta">
+            <div><strong>Ribeiro Santo</strong>Regiao do Dao, Portugal</div>
+            <div><strong>6 Plataformas</strong>Monitorizadas com IA</div>
+            <div><strong>2,847</strong>Avaliacoes Analisadas</div>
+            <div><strong>78/100</strong>Sentiment Score</div>
+        </div>
+    </div>
+</section>
+
+<!-- KEY METRICS -->
+<section>
+    <div class="container">
+        <div class="section-label">Resultados em Numeros</div>
+        <h2 class="section-title">Impacto Mensuravel, Decisoes Informadas</h2>
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-number">2,847</div>
+                <div class="metric-label">Avaliacoes Vivino analisadas</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">156</div>
+                <div class="metric-label">Reviews Google processadas</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">78<span class="unit">/100</span></div>
+                <div class="metric-label">Sentiment Score global</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">12</div>
+                <div class="metric-label">Oportunidades identificadas</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHALLENGE & SOLUTION -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="two-col">
+            <div class="card challenge">
+                <div class="card-icon red">&#9888;</div>
+                <h3>O Desafio</h3>
+                <ul>
+                    <li>Nenhuma monitorizacao da presenca digital da marca</li>
+                    <li>Concorrentes a ganhar terreno com estrategias agressivas online</li>
+                    <li>Dados de clientes dispersos por 6+ plataformas sem conexao</li>
+                    <li>Impossivel medir reputacao ou identificar tendencias</li>
+                    <li>Decisoes de marketing baseadas em intuicao, nao em dados</li>
+                </ul>
+            </div>
+            <div class="card solution">
+                <div class="card-icon green">&#10003;</div>
+                <h3>A Solucao</h3>
+                <ul>
+                    <li>Analise de sentimento com IA em 6 plataformas simultaneas</li>
+                    <li>Benchmarking contra 5 concorrentes directos do Dao</li>
+                    <li>Relatorio de 45 paginas com insights acionaveis</li>
+                    <li>Scoring proprietario de sentimento (0-100)</li>
+                    <li>Identificacao automatica de ameacas e oportunidades</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PLATFORMS -->
+<section>
+    <div class="container">
+        <div class="section-label">Cobertura</div>
+        <h2 class="section-title">6 Plataformas Monitorizadas</h2>
+        <p class="section-text">Cada plataforma contribui com um tipo diferente de insight. Juntas, criam uma visao holistica da presenca digital da marca.</p>
+        <div class="platforms">
+            <div class="platform"><span class="count">2,847</span>Vivino</div>
+            <div class="platform"><span class="count">156</span>Google Reviews</div>
+            <div class="platform"><span class="count">89</span>TripAdvisor</div>
+            <div class="platform"><span class="count">234</span>Instagram</div>
+            <div class="platform"><span class="count">178</span>Facebook</div>
+            <div class="platform"><span class="count">43</span>Imprensa</div>
+        </div>
+    </div>
+</section>
+
+<!-- CHART -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="chart-section" style="background: #fff;">
+            <div class="chart-title">Comparacao de Sentimento &mdash; Ribeiro Santo vs. Concorrentes</div>
+            <div class="bar-chart">
+                <div class="bar-row">
+                    <span class="bar-label">Ribeiro Santo</span>
+                    <div class="bar-track"><div class="bar-fill brand" style="width: 78%;">78</div></div>
+                    <span class="bar-value">78</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">Concorrente A</span>
+                    <div class="bar-track"><div class="bar-fill comp1" style="width: 72%;">72</div></div>
+                    <span class="bar-value">72</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">Concorrente B</span>
+                    <div class="bar-track"><div class="bar-fill comp2" style="width: 65%;">65</div></div>
+                    <span class="bar-value">65</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">Concorrente C</span>
+                    <div class="bar-track"><div class="bar-fill comp3" style="width: 58%;">58</div></div>
+                    <span class="bar-value">58</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">Concorrente D</span>
+                    <div class="bar-track"><div class="bar-fill comp3" style="width: 51%;">51</div></div>
+                    <span class="bar-value">51</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">Concorrente E</span>
+                    <div class="bar-track"><div class="bar-fill comp3" style="width: 44%;">44</div></div>
+                    <span class="bar-value">44</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section>
+    <div class="container">
+        <div class="section-label">Entregaveis</div>
+        <h2 class="section-title">O Que Entregamos</h2>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="number">45</div>
+                <div class="label">Paginas de relatorio</div>
+                <div class="desc">Analise completa com graficos, tabelas comparativas, word clouds e recomendacoes estrategicas priorizadas.</div>
+            </div>
+            <div class="result-item">
+                <div class="number">5</div>
+                <div class="label">Concorrentes benchmarked</div>
+                <div class="desc">Comparacao directa em todas as metricas: sentimento, volume, engagement, pontos fortes e fracos de cada marca.</div>
+            </div>
+            <div class="result-item">
+                <div class="number">12</div>
+                <div class="label">Oportunidades acionaveis</div>
+                <div class="desc">Desde gaps de comunicacao a nichos nao explorados &mdash; cada oportunidade com plano de acao concreto.</div>
+            </div>
+            <div class="result-item">
+                <div class="number">3</div>
+                <div class="label">Ameacas criticas flagged</div>
+                <div class="desc">Tendencias negativas detectadas antes de se tornarem problemas visiveis, com estrategias de mitigacao.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- QUOTE -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="quote-section">
+            <div class="quote-text">&ldquo;Pela primeira vez, conseguimos ver exactamente o que os clientes dizem sobre nos &mdash; e onde estamos a perder terreno para a concorrencia. Os insights foram surpreendentes e imediatamente uteis.&rdquo;</div>
+            <div class="quote-author">Director de Marketing</div>
+            <div class="quote-role">Ribeiro Santo, Regiao do Dao</div>
+        </div>
+    </div>
+</section>
+
+<!-- PROCESS -->
+<section>
+    <div class="container">
+        <div class="section-label">Processo</div>
+        <h2 class="section-title">Como Trabalhamos</h2>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">01</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Recolha de Dados</div>
+                <div class="desc">Scraping etico e agregacao de avaliacoes, reviews, mencoes e comentarios em 6 plataformas.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">02</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Analise com IA</div>
+                <div class="desc">Processamento de linguagem natural para classificar sentimento, identificar temas e extrair insights.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">03</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Estrategia</div>
+                <div class="desc">Transformacao de dados em recomendacoes priorizadas com impacto estimado e planos de acao.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <h2>Vamos trabalhar juntos?</h2>
+        <p>Descubra o que os seus clientes realmente pensam &mdash; e transforme esses insights em vantagem competitiva.</p>
+        <a href="mailto:jaime@descomplicai.pt" class="cta-btn">Falar Connosco &rarr;</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><a href="#">descomplicai.pt</a> &mdash; IA que simplifica o marketing</p>
+        <p style="margin-top: 8px;">&copy; 2026 Descomplicai. Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -31,6 +31,7 @@ type Project = {
 };
 
 const PROJECTS: Project[] = [
+  /* ── Original 17 ── */
   { id: "bfitfam", title: "BFITFAM", category: "fitness", type: "Website + PWA", description: "Plataforma de personal training com app de treinos interativa e tracking de progresso", gradient: "from-blue-600 to-cyan-500", emoji: "💪", status: "live" },
   { id: "tasca-dentro", title: "Tás-cá Dentro", category: "restaurant", type: "Website", description: "Gastrobar de cozinha de autor com carta de vinhos premium e música ao vivo", gradient: "from-amber-600 to-orange-400", emoji: "🍷", status: "dev" },
   { id: "mar-brasa", title: "Mar & Brasa", category: "restaurant", type: "Website", description: "Restaurante de marisco e grelhados — cataplana, peixe fresco, tradição", gradient: "from-orange-500 to-red-500", emoji: "🦐", status: "dev" },
@@ -48,16 +49,52 @@ const PROJECTS: Project[] = [
   { id: "mylo-experience", title: "MYLO Experience", category: "creative", type: "3D Interactive", description: "Experiência 3D interativa com Three.js — identidade MYLO", gradient: "from-cyan-500 to-teal-400", emoji: "🎭", status: "live" },
   { id: "possiblai", title: "PossiblAI", category: "ai", type: "Charity Livestream", description: "Two AI souls. One mission. End suffering. — Livestream Twitch", gradient: "from-pink-500 to-purple-500", emoji: "💜", status: "live" },
   { id: "image-gen", title: "Image Generator", category: "ai", type: "AI Tool", description: "Gerador de imagens IA via Puter.js — múltiplos estilos e categorias", gradient: "from-teal-500 to-cyan-400", emoji: "🎨", status: "live" },
+
+  /* ── New: Restaurants ── */
+  { id: "zeff-pizza", title: "Zeff Pizza", category: "restaurant", type: "3 Concept Sites", description: "Três conceitos de website para pizzaria romana — Pirate Tavern, Figueira Sun e Roman Artisan", gradient: "from-orange-600 to-red-800", emoji: "🍕", status: "live" },
+  { id: "bijou-restaurante", title: "Bijou Restaurante", category: "restaurant", type: "Fine Dining", description: "Restaurante de cozinha de autor com menu de degustação e ambiente intimista", gradient: "from-[#4A3728] to-[#CFB53B]", emoji: "🍽️", status: "live" },
+  { id: "cacarola", title: "Caçarola", category: "restaurant", type: "Comfort Food", description: "Restaurante tradicional com cozinha caseira e ambiente familiar desde 1976", gradient: "from-amber-800 to-orange-500", emoji: "🥘", status: "live" },
+  { id: "cacarola-dois", title: "Caçarola Dois", category: "restaurant", type: "Seafood & Market", description: "Segundo espaço com mercado de frescos e menu sazonal de marisco", gradient: "from-teal-700 to-amber-500", emoji: "🦐", status: "live" },
+  { id: "cafe-praca-18", title: "Café Praça 18", category: "restaurant", type: "Café & Terrace", description: "Café na praça central com brunch, cocktails e esplanada", gradient: "from-yellow-600 to-amber-400", emoji: "☕", status: "live" },
+  { id: "casa-dos-papagaios", title: "Casa dos Papagaios", category: "restaurant", type: "Traditional", description: "Restaurante tradicional com cozinha regional e pratos de forno", gradient: "from-green-700 to-lime-500", emoji: "🦜", status: "live" },
+  { id: "cataventos", title: "Cataventos", category: "restaurant", type: "Petiscos Bar", description: "Petiscos & companhia no Largo do Carvão", gradient: "from-sky-400 to-orange-300", emoji: "🌊", status: "live" },
+  { id: "maregrafo", title: "Marégrafo", category: "restaurant", type: "Seafood Petiscos", description: "Petisqueira junto ao mar com 21 anos de história", gradient: "from-blue-800 to-cyan-400", emoji: "🐟", status: "live" },
+  { id: "marisqueira-rosa-amelia", title: "Rosa Amélia", category: "restaurant", type: "Seafood House", description: "Marisqueira tradicional com marisco fresco e lagosta", gradient: "from-rose-700 to-pink-400", emoji: "🦞", status: "live" },
+  { id: "mesa-dos-amigos", title: "Mesa dos Amigos", category: "restaurant", type: "Thai Cuisine", description: "Restaurante tailandês com 9.2/10 no TheFork", gradient: "from-orange-600 to-red-400", emoji: "🤝", status: "live" },
+  { id: "nalu-cabedelo", title: "Nalu Cabedelo", category: "restaurant", type: "Surf Café", description: "Café de praia com açaí bowls e vibe surf", gradient: "from-teal-400 to-blue-300", emoji: "🏄‍♂️", status: "live" },
+  { id: "o-picadeiro", title: "O Picadeiro", category: "restaurant", type: "Historic Bar", description: "Bar histórico desde 1995, Comércio com História", gradient: "from-red-800 to-amber-600", emoji: "🥩", status: "live" },
+  { id: "pe-na-areia", title: "Pé na Areia", category: "restaurant", type: "Beach Restaurant", description: "Restaurante pé na areia com peixe grelhado junto ao mar", gradient: "from-amber-300 to-sky-300", emoji: "👣", status: "live" },
+  { id: "pe-no-bairro", title: "Pé no Bairro", category: "restaurant", type: "Neighborhood", description: "Restaurante de bairro com cocktails e petiscos criativos", gradient: "from-slate-700 to-amber-500", emoji: "🏘️", status: "live" },
+  { id: "quinta-da-salmanha", title: "Quinta da Salmanha", category: "restaurant", type: "Rural Estate", description: "Quinta rural com restaurante regional e eventos", gradient: "from-green-800 to-amber-400", emoji: "🏡", status: "live" },
+  { id: "sand-murtinheira", title: "Sand Murtinheira", category: "restaurant", type: "Beach Lounge", description: "Beach lounge na Murtinheira com cocktails e sunset", gradient: "from-amber-400 to-rose-300", emoji: "🌅", status: "live" },
+  { id: "tasca-da-praia", title: "Tasca da Praia", category: "restaurant", type: "Seaside Tavern", description: "Tasca à beira-mar com petiscos e marisco", gradient: "from-blue-600 to-amber-400", emoji: "⚓", status: "live" },
+
+  /* ── New: Wine & Food ── */
+  { id: "ribeirosanto", title: "Ribeiro Santo", category: "food", type: "Wine Estate", description: "Herdade vitivinícola premium com enoturismo, loja e experiências sensoriais", gradient: "from-[#6B2737] to-[#C9A84C]", emoji: "🍷", status: "live" },
+  { id: "ninika-tours", title: "Ninika Tours", category: "food", type: "Wine & Gastro", description: "Plataforma de enoturismo e gastronomia com tours personalizados", gradient: "from-emerald-800 to-amber-500", emoji: "🍇", status: "live" },
+
+  /* ── New: Design ── */
+  { id: "design-system", title: "Design System", category: "creative", type: "UI Components", description: "Sistema de design com componentes reutilizáveis e guia de estilo", gradient: "from-slate-800 to-blue-600", emoji: "🎨", status: "live" },
+
+  /* ── New: Clinics ── */
+  { id: "alba-saude-dentaria", title: "Alba Saúde", category: "health", type: "Dental Clinic", description: "Clínica dentária moderna com estética e ortodontia", gradient: "from-sky-400 to-teal-300", emoji: "🦷", status: "live" },
+  { id: "clinica-dentaria-quiaios", title: "Clínica Quiaios", category: "health", type: "Dental", description: "Clínica familiar em Quiaios", gradient: "from-blue-400 to-sky-300", emoji: "🏥", status: "live" },
+  { id: "clinica-tamargueira", title: "Clínica Tamargueira", category: "health", type: "Implants", description: "Referência em implantologia", gradient: "from-blue-800 to-blue-500", emoji: "🔬", status: "live" },
+  { id: "clinica-vasco-da-gama", title: "Clínica Vasco da Gama", category: "health", type: "Premium Dental", description: "Clínica de luxo com design gold & navy", gradient: "from-[#0A1628] to-[#C9A84C]", emoji: "👑", status: "live" },
+  { id: "dentalkid", title: "DentalKid", category: "health", type: "Pediatric", description: "Dentária pediátrica com ambiente lúdico", gradient: "from-pink-400 to-purple-400", emoji: "🧒", status: "live" },
+  { id: "fozclinica", title: "FozClínica", category: "health", type: "Medical", description: "Clínica multidisciplinar", gradient: "from-teal-600 to-emerald-400", emoji: "🏨", status: "live" },
+  { id: "premium-clinica-dentaria", title: "Premium Clínica", category: "health", type: "Preventive", description: "Focada em prevenção e saúde oral", gradient: "from-emerald-700 to-emerald-400", emoji: "🌿", status: "live" },
+  { id: "upconcept-clinica", title: "UpConcept", category: "health", type: "Modern Clinic", description: "Clínica moderna aberta 7 dias", gradient: "from-blue-700 to-cyan-400", emoji: "⚡", status: "live" },
 ];
 
 /* ─────────────────── FEATURED (homepage preview) ─────────────────── */
 
-const FEATURED_IDS = ["bfitfam", "tasca-dentro", "futuro", "seeds", "possiblai", "ondas-academy"];
+const FEATURED_IDS = ["ribeirosanto", "ninika-tours", "clinica-vasco-da-gama", "bijou-restaurante", "futuro", "design-system"];
 const FEATURED_PROJECTS = PROJECTS.filter((p) => FEATURED_IDS.includes(p.id));
 
-/* ─────────────────── LINKABLE PROJECTS ─────────────────── */
+/* ─────────────────── LINKABLE PROJECTS (all 41 have pages) ─────────────────── */
 
-const LINKABLE_IDS = ["bfitfam", "tasca-dentro", "futuro", "ondas-academy", "seeds"];
+const LINKABLE_IDS = PROJECTS.map((p) => p.id);
 
 /* ─────────────────── FLOATING ELEMENT ─────────────────── */
 
@@ -78,6 +115,11 @@ const PREVIEW_IMAGES: Record<string, string> = {
   seeds: "/previews/seeds.jpg",
   possiblai: "/previews/possiblai.jpg",
   "ondas-academy": "/previews/ondas-academy.jpg",
+  ribeirosanto: "/previews/ribeirosanto.jpg",
+  "ninika-tours": "/previews/ninika-tours.jpg",
+  "clinica-vasco-da-gama": "/previews/clinica-vasco-da-gama.jpg",
+  "bijou-restaurante": "/previews/bijou-restaurante.jpg",
+  "design-system": "/previews/design-system.jpg",
 };
 
 function PreviewCard({ project, index }: { project: Project; index: number }) {
@@ -213,9 +255,9 @@ export default function Portfolio() {
         {/* Stats */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16 max-w-2xl w-full">
           {[
-            { value: "100+", label: "Projetos" },
+            { value: "41", label: "Projetos" },
             { value: "24/7", label: "Agentes" },
-            { value: "7+", label: "Indústrias" },
+            { value: "6+", label: "Indústrias" },
             { value: "∞", label: "Criatividade infinita" },
           ].map((s) => (
             <div key={s.label} className="p-4 bg-white/70 backdrop-blur-sm rounded-xl border border-slate-100 shadow-sm text-center">
@@ -253,7 +295,7 @@ export default function Portfolio() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-xs font-medium text-blue-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> 17+ sites entregues
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> 41 sites entregues
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-medium text-indigo-700">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Landing pages a PWAs

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso de Estudo: Research Tool &mdash; Descomplicai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --blue-light: #dbeafe;
+            --blue-50: #eff6ff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --teal: #0d9488;
+            --teal-light: #f0fdfa;
+            --green: #059669;
+            --red: #dc2626;
+            --amber: #d97706;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-800); background: #fff;
+            line-height: 1.7; -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200); padding: 16px 0;
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 700; font-size: 1.1rem; color: var(--blue); text-decoration: none; letter-spacing: -0.02em; }
+        .logo span { color: var(--gray-400); font-weight: 400; }
+        .nav-tag { font-size: .75rem; font-weight: 500; color: var(--teal); background: var(--teal-light); padding: 4px 12px; border-radius: 100px; }
+
+        /* HERO */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, #0f172a 0%, #134e4a 50%, #0d9488 100%);
+            color: #fff; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: -30%; right: -15%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(13,148,136,.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+            padding: 6px 16px; border-radius: 100px;
+            font-size: .8rem; font-weight: 500; color: rgba(255,255,255,.8); margin-bottom: 24px;
+        }
+        .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700; line-height: 1.2;
+            max-width: 720px; margin-bottom: 20px;
+        }
+        .hero-subtitle { font-size: 1.1rem; color: rgba(255,255,255,.7); max-width: 560px; margin-bottom: 40px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 32px; font-size: .85rem; color: rgba(255,255,255,.5); }
+        .hero-meta strong { color: rgba(255,255,255,.9); display: block; font-size: 1rem; }
+
+        section { padding: 80px 0; }
+        .section-label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--teal); margin-bottom: 12px; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; color: var(--gray-900); margin-bottom: 20px; line-height: 1.3; }
+        .section-text { font-size: 1.05rem; color: var(--gray-600); max-width: 680px; margin-bottom: 32px; }
+
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin: 48px 0; }
+        .metric-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 16px; padding: 32px 28px; text-align: center; transition: transform .2s, box-shadow .2s; }
+        .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+        .metric-number { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: var(--teal); line-height: 1; }
+        .metric-number .unit { font-size: 1.4rem; }
+        .metric-label { font-size: .85rem; color: var(--gray-500); margin-top: 8px; font-weight: 500; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; gap: 32px; } }
+
+        .card { background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; padding: 40px 32px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+        .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
+        .card-icon.red { background: #fef2f2; color: var(--red); }
+        .card-icon.green { background: #f0fdf4; color: var(--green); }
+        .card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 16px; color: var(--gray-900); }
+        .card ul { list-style: none; }
+        .card ul li { padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: .95rem; color: var(--gray-600); display: flex; align-items: flex-start; gap: 10px; }
+        .card ul li:last-child { border-bottom: none; }
+        .card ul li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+        .card.challenge ul li::before { background: var(--red); }
+        .card.solution ul li::before { background: var(--green); }
+
+        /* TECH STACK */
+        .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 40px 0; }
+        .stack-item {
+            background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: 14px; padding: 28px 24px; text-align: center;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .stack-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+        .stack-item .tech-icon { font-size: 2rem; margin-bottom: 12px; }
+        .stack-item .tech-name { font-size: .95rem; font-weight: 600; color: var(--gray-800); }
+        .stack-item .tech-role { font-size: .8rem; color: var(--gray-500); margin-top: 4px; }
+
+        /* FEED VISUALIZATION */
+        .feed-grid {
+            background: var(--gray-50); border-radius: 20px; padding: 40px;
+            margin: 48px 0;
+        }
+        .feed-grid-title { font-size: 1.1rem; font-weight: 600; color: var(--gray-800); margin-bottom: 24px; }
+        .feed-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .feed-cat {
+            background: #fff; border: 1px solid var(--gray-200);
+            border-radius: 12px; padding: 20px;
+        }
+        .feed-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .feed-cat-name { font-size: .9rem; font-weight: 600; color: var(--gray-800); }
+        .feed-cat-count { font-size: .75rem; font-weight: 600; color: var(--teal); background: var(--teal-light); padding: 2px 10px; border-radius: 100px; }
+        .feed-bar-bg { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+        .feed-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal), #0d9488); animation: barGrow 1.5s ease-out forwards; }
+        @keyframes barGrow { from { width: 0 !important; } }
+
+        /* DASHBOARD MOCK */
+        .dashboard-mock {
+            background: var(--gray-900); border-radius: 16px; padding: 24px;
+            margin: 48px 0; overflow: hidden;
+        }
+        .dash-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1);
+            margin-bottom: 20px;
+        }
+        .dash-title { color: #fff; font-size: 1rem; font-weight: 600; }
+        .dash-badge { font-size: .7rem; color: #34d399; background: rgba(52,211,153,.15); padding: 3px 10px; border-radius: 100px; }
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .dash-card {
+            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+            border-radius: 12px; padding: 20px;
+        }
+        .dash-card .val { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .dash-card .lbl { font-size: .8rem; color: rgba(255,255,255,.5); margin-top: 4px; }
+
+        .quote-section {
+            background: linear-gradient(135deg, var(--teal-light) 0%, #fff 100%);
+            border-left: 4px solid var(--teal);
+            border-radius: 0 16px 16px 0;
+            padding: 48px; margin: 48px 0;
+        }
+        .quote-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; color: var(--gray-800); line-height: 1.6; margin-bottom: 20px; }
+        .quote-author { font-size: .9rem; font-weight: 600; color: var(--gray-600); }
+        .quote-role { font-size: .85rem; color: var(--gray-400); }
+
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin: 40px 0; }
+        .result-item { padding: 28px; background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+        .result-item .number { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--teal); }
+        .result-item .label { font-size: .85rem; color: var(--gray-500); margin-top: 4px; }
+        .result-item .desc { font-size: .9rem; color: var(--gray-600); margin-top: 12px; line-height: 1.6; }
+
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #0f172a 0%, #134e4a 50%, var(--teal) 100%);
+            color: #fff; text-align: center;
+        }
+        .cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; margin-bottom: 16px; }
+        .cta p { font-size: 1.05rem; color: rgba(255,255,255,.65); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; color: var(--teal); padding: 16px 36px;
+            border-radius: 12px; font-size: 1rem; font-weight: 600; text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(13,148,136,.3); }
+
+        footer { padding: 40px 0; border-top: 1px solid var(--gray-200); text-align: center; font-size: .85rem; color: var(--gray-400); }
+        footer a { color: var(--blue); text-decoration: none; }
+
+        @media (max-width: 640px) {
+            .hero { padding: 120px 0 60px; }
+            section { padding: 48px 0; }
+            .metrics { grid-template-columns: 1fr 1fr; }
+            .quote-section { padding: 28px; }
+            .quote-text { font-size: 1.1rem; }
+            .dashboard-mock { padding: 16px; }
+            .feed-grid { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="#" class="logo">descomplicai<span>.pt</span></a>
+        <span class="nav-tag">Ferramenta Interna</span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Em Producao &mdash; Intelligence Tool
+        </div>
+        <h1>357 Artigos em 37 Feeds: Inteligencia Competitiva Automatizada</h1>
+        <p class="hero-subtitle">Uma ferramenta interna que monitoriza o ecossistema do marketing digital portugues em tempo real &mdash; porque informacao e poder.</p>
+        <div class="hero-meta">
+            <div><strong>Descomplicai</strong>Ferramenta Interna</div>
+            <div><strong>37 Feeds</strong>RSS Monitorizados</div>
+            <div><strong>357</strong>Artigos na 1a run</div>
+            <div><strong>-15h/sem</strong>Tempo poupado</div>
+        </div>
+    </div>
+</section>
+
+<!-- METRICS -->
+<section>
+    <div class="container">
+        <div class="section-label">Resultados</div>
+        <h2 class="section-title">Automacao que Trabalha 24/7</h2>
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-number">37</div>
+                <div class="metric-label">Feeds monitorizados</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">357</div>
+                <div class="metric-label">Artigos analisados (1a run)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">15<span class="unit">h</span></div>
+                <div class="metric-label">Poupadas por semana</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">&lt;24<span class="unit">h</span></div>
+                <div class="metric-label">Deteccao de movimentos</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHALLENGE / SOLUTION -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="two-col">
+            <div class="card challenge">
+                <div class="card-icon red">&#9888;</div>
+                <h3>O Desafio</h3>
+                <ul>
+                    <li>Monitorizacao manual de dezenas de sites concorrentes</li>
+                    <li>Horas perdidas a ler artigos sem valor estrategico</li>
+                    <li>Sem dados estruturados sobre tendencias do sector</li>
+                    <li>Movimentos de concorrentes so detectados com dias de atraso</li>
+                    <li>Impossivel quantificar o panorama competitivo</li>
+                </ul>
+            </div>
+            <div class="card solution">
+                <div class="card-icon green">&#10003;</div>
+                <h3>A Solucao</h3>
+                <ul>
+                    <li>Collector Python com 37 feeds RSS configurados</li>
+                    <li>Base de dados Supabase para artigos + snapshots</li>
+                    <li>Dashboard Next.js para visualizacao em tempo real</li>
+                    <li>Digests diarios + semanais automaticos</li>
+                    <li>Classificacao automatica por relevancia e tema</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TECH STACK -->
+<section>
+    <div class="container">
+        <div class="section-label">Stack Tecnologico</div>
+        <h2 class="section-title">Construido com Ferramentas Modernas</h2>
+        <div class="stack-grid">
+            <div class="stack-item">
+                <div class="tech-icon">&#128013;</div>
+                <div class="tech-name">Python</div>
+                <div class="tech-role">Collector + Analyzer</div>
+            </div>
+            <div class="stack-item">
+                <div class="tech-icon">&#9889;</div>
+                <div class="tech-name">Supabase</div>
+                <div class="tech-role">Database + RLS</div>
+            </div>
+            <div class="stack-item">
+                <div class="tech-icon">&#9650;</div>
+                <div class="tech-name">Next.js</div>
+                <div class="tech-role">Dashboard UI</div>
+            </div>
+            <div class="stack-item">
+                <div class="tech-icon">&#128225;</div>
+                <div class="tech-name">RSS Feeds</div>
+                <div class="tech-role">37 Fontes</div>
+            </div>
+            <div class="stack-item">
+                <div class="tech-icon">&#128200;</div>
+                <div class="tech-name">IA Analysis</div>
+                <div class="tech-role">Classificacao</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEED CATEGORIES -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="feed-grid" style="background: #fff;">
+            <div class="feed-grid-title">Distribuicao por Categoria de Feed</div>
+            <div class="feed-categories">
+                <div class="feed-cat">
+                    <div class="feed-cat-header">
+                        <span class="feed-cat-name">Marketing Digital</span>
+                        <span class="feed-cat-count">12 feeds</span>
+                    </div>
+                    <div class="feed-bar-bg"><div class="feed-bar-fill" style="width: 100%;"></div></div>
+                </div>
+                <div class="feed-cat">
+                    <div class="feed-cat-header">
+                        <span class="feed-cat-name">Vinho & Enoturismo</span>
+                        <span class="feed-cat-count">8 feeds</span>
+                    </div>
+                    <div class="feed-bar-bg"><div class="feed-bar-fill" style="width: 67%;"></div></div>
+                </div>
+                <div class="feed-cat">
+                    <div class="feed-cat-header">
+                        <span class="feed-cat-name">IA & Tecnologia</span>
+                        <span class="feed-cat-count">7 feeds</span>
+                    </div>
+                    <div class="feed-bar-bg"><div class="feed-bar-fill" style="width: 58%;"></div></div>
+                </div>
+                <div class="feed-cat">
+                    <div class="feed-cat-header">
+                        <span class="feed-cat-name">Concorrencia Directa</span>
+                        <span class="feed-cat-count">6 feeds</span>
+                    </div>
+                    <div class="feed-bar-bg"><div class="feed-bar-fill" style="width: 50%;"></div></div>
+                </div>
+                <div class="feed-cat">
+                    <div class="feed-cat-header">
+                        <span class="feed-cat-name">Restauracao & Turismo</span>
+                        <span class="feed-cat-count">4 feeds</span>
+                    </div>
+                    <div class="feed-bar-bg"><div class="feed-bar-fill" style="width: 33%;"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DASHBOARD MOCK -->
+<section>
+    <div class="container">
+        <div class="section-label">Dashboard</div>
+        <h2 class="section-title">Tudo Num So Sitio</h2>
+        <p class="section-text">O dashboard agrega todas as metricas e permite filtrar por fonte, data, tema ou relevancia.</p>
+        <div class="dashboard-mock">
+            <div class="dash-header">
+                <div class="dash-title">Research Dashboard &mdash; Descomplicai</div>
+                <div class="dash-badge">&#9679; Live</div>
+            </div>
+            <div class="dash-grid">
+                <div class="dash-card">
+                    <div class="val">357</div>
+                    <div class="lbl">Artigos esta semana</div>
+                </div>
+                <div class="dash-card">
+                    <div class="val">37</div>
+                    <div class="lbl">Feeds activos</div>
+                </div>
+                <div class="dash-card">
+                    <div class="val">12</div>
+                    <div class="lbl">Alertas de concorrencia</div>
+                </div>
+                <div class="dash-card">
+                    <div class="val">3</div>
+                    <div class="lbl">Digests gerados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- QUOTE -->
+<section style="background: var(--gray-50);">
+    <div class="container">
+        <div class="quote-section">
+            <div class="quote-text">&ldquo;Em vez de passar 3 horas por dia a ler blogs e noticias, agora recebo um digest de 2 minutos com exactamente o que preciso saber. E o mais impressionante e que detecta movimentos de concorrentes antes de eu os ver nas redes sociais.&rdquo;</div>
+            <div class="quote-author">Jaime Santos</div>
+            <div class="quote-role">Fundador, Descomplicai</div>
+        </div>
+    </div>
+</section>
+
+<!-- PROCESS -->
+<section>
+    <div class="container">
+        <div class="section-label">Processo Automatico</div>
+        <h2 class="section-title">Ciclo Diario</h2>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">08:00</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Recolha Automatica</div>
+                <div class="desc">O collector Python percorre os 37 feeds, extrai novos artigos e guarda na base de dados.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">08:15</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Analise IA</div>
+                <div class="desc">Cada artigo e classificado por tema, relevancia e potencial impacto competitivo.</div>
+            </div>
+            <div class="result-item">
+                <div class="number" style="color: var(--gray-400);">08:30</div>
+                <div class="label" style="font-weight: 600; color: var(--gray-800);">Digest Pronto</div>
+                <div class="desc">Resumo executivo disponivel no dashboard e por email com os destaques do dia.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <h2>Vamos trabalhar juntos?</h2>
+        <p>Precisa de uma ferramenta personalizada de inteligencia competitiva? Construimos a medida.</p>
+        <a href="mailto:jaime@descomplicai.pt" class="cta-btn">Falar Connosco &rarr;</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p><a href="#">descomplicai.pt</a> &mdash; IA que simplifica o marketing</p>
+        <p style="margin-top: 8px;">&copy; 2026 Descomplicai. Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -38,7 +38,8 @@ const PROJECTS: Project[] = [
   { id: "sabor-abencoado", title: "Sabor Abençoado", category: "restaurant", type: "Pastry Takeaway", description: "Padaria caseira em Olhão — bolos, pães artesanais e pudins com entrega ao domicílio via WhatsApp", gradient: "from-amber-200 to-pink-200", emoji: "🧁", status: "live" },
   { id: "rabbit-hole", title: "The Infinite Corridor", category: "creative", type: "Interactive Experience", description: "Experiência imersiva de mistério — 79 páginas, 11 secções, puzzles, narrativa não-linear e segredos escondidos", gradient: "from-amber-900 to-slate-900", emoji: "🕳️", status: "live" },
 
-  // ═══ NOVOS — RESTAURANTES (16) ═══
+  // ═══ NOVOS — RESTAURANTES (17) ═══
+  { id: "zeff-pizza", title: "Zeff Pizza", category: "restaurant", type: "3 Concept Sites", description: "Três conceitos de website para pizzaria romana — Pirate Tavern, Figueira Sun e Roman Artisan", gradient: "from-orange-600 to-red-800", emoji: "🍕", status: "live" },
   { id: "bijou-restaurante", title: "Bijou Restaurante", category: "restaurant", type: "Fine Dining", description: "Restaurante de cozinha de autor com menu de degustação, carta de vinhos premium e ambiente intimista", gradient: "from-[#4A3728] to-[#CFB53B]", emoji: "🍽️", status: "live" },
   { id: "cacarola", title: "Caçarola", category: "restaurant", type: "Comfort Food", description: "Restaurante tradicional português com cozinha caseira, petiscos e ambiente familiar em Figueira da Foz", gradient: "from-amber-800 to-orange-500", emoji: "🥘", status: "live" },
   { id: "cacarola-dois", title: "Caçarola Dois", category: "restaurant", type: "Seafood & Market", description: "Segundo espaço Caçarola com mercado de frescos, wine bar e menu sazonal de marisco", gradient: "from-teal-700 to-amber-500", emoji: "🦐", status: "live" },
