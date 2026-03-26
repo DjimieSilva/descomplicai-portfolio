@@ -115,11 +115,6 @@ const PREVIEW_IMAGES: Record<string, string> = {
   seeds: "/previews/seeds.jpg",
   possiblai: "/previews/possiblai.jpg",
   "ondas-academy": "/previews/ondas-academy.jpg",
-  ribeirosanto: "/previews/ribeirosanto.jpg",
-  "ninika-tours": "/previews/ninika-tours.jpg",
-  "clinica-vasco-da-gama": "/previews/clinica-vasco-da-gama.jpg",
-  "bijou-restaurante": "/previews/bijou-restaurante.jpg",
-  "design-system": "/previews/design-system.jpg",
 };
 
 function PreviewCard({ project, index }: { project: Project; index: number }) {
@@ -146,7 +141,39 @@ function PreviewCard({ project, index }: { project: Project; index: number }) {
           <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent" />
         </div>
       ) : (
-        <div className={`h-24 w-full bg-gradient-to-br ${project.gradient} opacity-20`} />
+        <div className={`relative aspect-[16/9] w-full overflow-hidden bg-gradient-to-br ${project.gradient}`}>
+          {/* Subtle dot-grid texture overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+              backgroundSize: "20px 20px",
+            }}
+          />
+          {/* Soft vignette for depth */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/30" />
+          {/* Frosted glass pill — top left category badge */}
+          <div className="absolute top-3 left-3">
+            <span className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white/90 border border-white/25">
+              {project.type}
+            </span>
+          </div>
+          {/* Central emoji — large and prominent */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span
+              className="text-5xl drop-shadow-lg select-none"
+              style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.25))" }}
+            >
+              {project.emoji}
+            </span>
+          </div>
+          {/* Bottom title bar — frosted glass strip */}
+          <div className="absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-black/50 to-transparent backdrop-blur-[2px]">
+            <p className="text-white font-semibold text-sm leading-tight drop-shadow">{project.title}</p>
+          </div>
+          {/* Hover shimmer line */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
       )}
 
       <div className="p-5">

@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
 
 /* ─────────────────── DATA ─────────────────── */
 
@@ -23,6 +23,8 @@ const CONCEPTS = [
     typographyNote: "Serifado clássico com peso histórico",
     mood: ["Dark", "Bold", "Histórico", "Imersivo"],
     highlight: "Fundo escuro como carvão, detalhes a brasa — comunica exclusividade e atitude.",
+    liveUrl: "/zeff-pizza/site-a-pirate-tavern.html",
+    accentColor: "#D4652A",
   },
   {
     id: "B",
@@ -39,6 +41,8 @@ const CONCEPTS = [
     typographyNote: "Sans-serif arredondado, amigável e acessível",
     mood: ["Vibrante", "Solar", "Acolhedor", "Atlântico"],
     highlight: "Fundo creme-areia com acentos azul-oceano — fresco, convidativo, único na zona.",
+    liveUrl: "/zeff-pizza/site-b-figueira-sun.html",
+    accentColor: "#E8A946",
   },
   {
     id: "C",
@@ -55,6 +59,8 @@ const CONCEPTS = [
     typographyNote: "Contraste serifado-sans para elegância editorial",
     mood: ["Minimalista", "Premium", "Artesanal", "Editorial"],
     highlight: "Brancos sujos e terras naturais — comunica qualidade sem precisar de gritar.",
+    liveUrl: "/zeff-pizza/site-c-roman-artisan.html",
+    accentColor: "#8B7355",
   },
 ];
 
@@ -170,14 +176,27 @@ function ConceptCard({ concept, index }: { concept: (typeof CONCEPTS)[number]; i
         </div>
       </div>
 
-      {/* Card Footer — highlight */}
+      {/* Card Footer — highlight + live link */}
       <div
-        className={`px-8 sm:px-10 py-5 border-t ${dividerColor}`}
+        className={`px-8 sm:px-10 py-5 border-t ${dividerColor} flex flex-col sm:flex-row sm:items-center gap-4`}
         style={{ backgroundColor: isDark ? "rgba(0,0,0,0.3)" : isLight ? "rgba(0,0,0,0.04)" : "rgba(0,0,0,0.15)" }}
       >
-        <p className={`text-sm italic ${subTextColor}`}>
+        <p className={`text-sm italic ${subTextColor} flex-1`}>
           {concept.highlight}
         </p>
+        <a
+          href={concept.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-opacity hover:opacity-80 shrink-0"
+          style={{
+            backgroundColor: concept.accentColor,
+            color: isDark || concept.id === "B" ? "#fff" : "#fff",
+          }}
+        >
+          <ExternalLink className="w-4 h-4" />
+          Ver Conceito ao Vivo
+        </a>
       </div>
     </motion.div>
   );
@@ -290,6 +309,19 @@ export default function ZeffPizzaPage() {
             Em vez de um único caminho, apresentámos três direções criativas completamente distintas. Paletas diferentes, tipografias diferentes, histórias diferentes — para que o Amir escolha com convicção.
           </p>
         </motion.div>
+
+        {/* Selector page link */}
+        <div className="flex justify-center mb-10">
+          <a
+            href="/zeff-pizza/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl border border-orange-500/40 bg-orange-500/10 text-orange-300 font-semibold text-sm hover:bg-orange-500/20 hover:border-orange-500/60 transition-all"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Abrir Página de Seleção de Conceitos
+          </a>
+        </div>
 
         {/* Concept Cards Stack */}
         <div className="flex flex-col gap-8">

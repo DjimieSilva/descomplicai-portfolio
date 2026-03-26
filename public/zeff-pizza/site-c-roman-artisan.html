@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEFF PIZZA — Desde Roma até à Figueira</title>
+    <meta name="description" content="Zeff Pizza — Tradição artesanal de pizza romana desde 2004. Figueira da Foz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #FAFAF7;
+            --text: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --accent: #8B7355;
+            --divider: #E5E0D8;
+            --hover: #D4652A;
+            --card-bg: #F2EDE6;
+            --serif: 'Cormorant Garamond', serif;
+            --sans: 'Montserrat', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg);
+            color: var(--text);
+            font-weight: 400;
+            font-size: 15.5px;
+            line-height: 1.75;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.8rem 4rem;
+            border-bottom: 1px solid transparent;
+            background: rgba(250, 250, 247, 0.0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            transition: padding 0.5s ease, background 0.5s ease, border-color 0.5s ease, backdrop-filter 0.5s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 1.1rem 4rem;
+            background: rgba(250, 250, 247, 0.95);
+            border-color: var(--divider);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .navbar-brand {
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            font-weight: 500;
+            font-style: italic;
+            letter-spacing: 0.1em;
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: var(--accent);
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .navbar-links a {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .navbar-links a:hover {
+            color: var(--text);
+        }
+
+        .navbar-links .separator {
+            color: var(--divider);
+            font-size: 0.6rem;
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            font-family: var(--serif);
+            font-size: 18vw;
+            font-weight: 300;
+            color: var(--divider);
+            letter-spacing: 0.05em;
+            user-select: none;
+            pointer-events: none;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero-subtitle-top {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.3s;
+        }
+
+        .hero-title {
+            font-family: var(--serif);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.5s;
+        }
+
+        .hero-tagline {
+            font-family: var(--sans);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.7s;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1400px;
+            margin: 6rem auto 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.9s;
+            box-shadow: 0 8px 60px rgba(139, 115, 85, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 68vh;
+            object-fit: cover;
+            display: block;
+            will-change: transform;
+            filter: sepia(0.05) grayscale(0.1);
+            transition: filter 0.8s ease;
+        }
+
+        .hero-image-wrapper:hover .hero-image {
+            filter: sepia(0.08) grayscale(0.05);
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* ==================== PHILOSOPHY ==================== */
+        .philosophy {
+            padding: 10rem 2rem 8rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 28px;
+            height: 1px;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .philosophy-quote {
+            font-family: var(--serif);
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.4;
+            color: var(--text);
+            max-width: 860px;
+            margin-bottom: 5rem;
+            padding-left: 2.5rem;
+            border-left: 2px solid var(--accent);
+            position: relative;
+        }
+
+        .philosophy-quote::before {
+            content: '\201C';
+            display: block;
+            font-size: 4.5rem;
+            color: var(--accent);
+            line-height: 0.5;
+            margin-bottom: 1.2rem;
+            opacity: 0.6;
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1px 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .philosophy-text p {
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .philosophy-divider {
+            width: 1px;
+            height: 100%;
+            min-height: 300px;
+            background: var(--accent);
+            opacity: 0.4;
+        }
+
+        .philosophy-image {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            filter: sepia(0.05) grayscale(0.1);
+            display: block;
+            box-shadow: 0 12px 50px rgba(139, 115, 85, 0.15), 0 2px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--divider);
+            transition: filter 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        .philosophy-image:hover {
+            filter: sepia(0.0) grayscale(0.0);
+            box-shadow: 0 20px 70px rgba(139, 115, 85, 0.2), 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .philosophy-counter {
+            margin-top: 5rem;
+            text-align: center;
+            padding-top: 4rem;
+            border-top: 1px solid var(--divider);
+        }
+
+        .counter-number {
+            font-family: var(--serif);
+            font-size: clamp(6rem, 12vw, 10rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--accent);
+            line-height: 0.9;
+            display: block;
+        }
+
+        .counter-label {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        /* ==================== MENU ==================== */
+        .menu-section {
+            padding: 8rem 2rem 10rem;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .menu-section .section-label {
+            justify-content: center;
+        }
+
+        .menu-section .section-label::before {
+            display: none;
+        }
+
+        .menu-title {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .menu-group {
+            margin-bottom: 5rem;
+        }
+
+        .menu-group-title {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            font-style: italic;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--divider);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .menu-group-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--divider);
+            display: none;
+        }
+
+        .menu-item {
+            border-bottom: 1px dotted var(--divider);
+            cursor: default;
+            transition: background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:hover {
+            background-color: var(--card-bg);
+        }
+
+        .menu-item-thumb {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%) scale(0.92);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: none;
+            filter: sepia(0.05) grayscale(0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .menu-item:hover .menu-item-thumb {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 1.1rem 0.75rem;
+            min-height: 48px;
+        }
+
+        .menu-item-name {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .menu-item-dots {
+            flex: 1;
+            margin: 0 1rem;
+            border-bottom: 1px dotted var(--divider);
+            min-width: 30px;
+            align-self: center;
+            transform: translateY(-4px);
+        }
+
+        .menu-item-price {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .menu-item-desc {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 0.5rem;
+        }
+
+        .menu-item:hover .menu-item-desc {
+            max-height: 80px;
+            padding: 0 0.5rem 1rem;
+        }
+
+        .menu-item-desc p {
+            font-family: var(--sans);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.65;
+        }
+
+        /* On touch devices, show desc by default */
+        @media (hover: none) {
+            .menu-item-desc {
+                max-height: 80px;
+                padding: 0 0.75rem 0.9rem;
+            }
+
+            .menu-item:hover .menu-item-desc {
+                max-height: 80px;
+                padding: 0 0.75rem 0.9rem;
+            }
+        }
+
+        /* ==================== INGREDIENTS ==================== */
+        .ingredients {
+            position: relative;
+            height: 80vh;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .ingredients-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3);
+        }
+
+        .ingredients-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+        }
+
+        .ingredients-label {
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 3rem;
+        }
+
+        .ingredients-title {
+            font-family: var(--serif);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 4rem;
+            line-height: 1.3;
+        }
+
+        .ingredient-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .ingredient-item {
+            font-family: var(--sans);
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ingredient-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.6s ease;
+        }
+
+        .ingredient-item.visible::after {
+            width: 60px;
+        }
+
+        .ingredient-separator {
+            color: var(--accent);
+            font-size: 0.6rem;
+            padding: 0.3rem 0;
+        }
+
+        /* ==================== TESTIMONIALS ==================== */
+        .testimonials {
+            padding: 10rem 2rem 8rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testimonials .section-label {
+            justify-content: center;
+        }
+
+        .testimonials .section-label::before {
+            display: none;
+        }
+
+        .testimonial-rating {
+            font-family: var(--serif);
+            font-size: clamp(5rem, 10vw, 8rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-rating-label {
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 5rem;
+        }
+
+        .testimonial-item {
+            margin-bottom: 5rem;
+        }
+
+        .testimonial-text {
+            font-family: var(--serif);
+            font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-text::before {
+            content: '\201C';
+        }
+
+        .testimonial-text::after {
+            content: '\201D';
+        }
+
+        .testimonial-author {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .testimonial-source {
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            font-weight: 400;
+            color: var(--accent);
+            margin-top: 0.3rem;
+        }
+
+        .testimonial-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--accent);
+            margin: 0 auto 5rem;
+        }
+
+        /* ==================== CONTACT ==================== */
+        .contact {
+            padding: 8rem 2rem 10rem;
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto;
+            border-top: 1px solid var(--divider);
+        }
+
+        .contact .section-label {
+            justify-content: center;
+        }
+
+        .contact .section-label::before {
+            display: none;
+        }
+
+        .contact-title {
+            font-family: var(--serif);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            margin-bottom: 3rem;
+        }
+
+        .contact-address {
+            font-family: var(--sans);
+            font-size: 0.85rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-address strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .contact-phone {
+            font-family: var(--serif);
+            font-size: 2.2rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 3.5rem;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+            letter-spacing: 0.03em;
+        }
+
+        .contact-phone:hover {
+            color: var(--accent);
+        }
+
+        .contact-hours {
+            margin-bottom: 3rem;
+        }
+
+        .contact-hours-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-hours-block {
+            text-align: center;
+        }
+
+        .hours-label {
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .hours-time {
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text);
+        }
+
+        .contact-map-toggle {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--divider);
+            transition: color 0.3s ease, border-color 0.3s ease;
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        .contact-map-toggle:hover {
+            color: var(--text);
+            border-color: var(--text);
+        }
+
+        .contact-map-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease, margin 0.6s ease;
+            margin: 0;
+        }
+
+        .contact-map-wrapper.open {
+            max-height: 400px;
+            margin: 2rem 0;
+        }
+
+        .contact-map-wrapper iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            filter: grayscale(0.8) contrast(1.1);
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-outline {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 1.1rem 3rem;
+            border: 1px solid var(--text);
+            background: none;
+            color: var(--text);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            min-height: 50px;
+            transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .btn-outline.accent {
+            border-color: var(--hover);
+            color: var(--hover);
+        }
+
+        .btn-outline.accent:hover {
+            background: var(--hover);
+            color: #fff;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            border-top: 1px solid var(--divider);
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--card-bg);
+        }
+
+        .footer-brand {
+            font-family: var(--serif);
+            font-size: 1.8rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text);
+            letter-spacing: 0.1em;
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-detail {
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            line-height: 2.2;
+        }
+
+        .footer-detail a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-detail a:hover {
+            color: var(--accent);
+        }
+
+        .footer-divider {
+            width: 30px;
+            height: 1px;
+            background: var(--divider);
+            margin: 2rem auto;
+        }
+
+        .footer-copy {
+            font-family: var(--sans);
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--divider);
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger within groups */
+        .reveal:nth-child(2) { transition-delay: 0.08s; }
+        .reveal:nth-child(3) { transition-delay: 0.16s; }
+        .reveal:nth-child(4) { transition-delay: 0.24s; }
+        .reveal:nth-child(5) { transition-delay: 0.32s; }
+
+        .line-draw {
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        .line-draw.visible {
+            width: 100%;
+        }
+
+        /* Ornamental divider between major sections */
+        .section-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 0 2rem;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .section-ornament::before,
+        .section-ornament::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--divider);
+        }
+
+        .section-ornament-icon {
+            font-family: var(--serif);
+            font-size: 1rem;
+            color: var(--accent);
+            opacity: 0.5;
+            line-height: 1;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1.2rem 1.5rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .navbar-links a {
+                font-size: 0.65rem;
+                letter-spacing: 0.12em;
+                min-height: 44px;
+            }
+
+            .navbar-links {
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 4rem;
+            }
+
+            .hero-bg-text {
+                font-size: 28vw;
+            }
+
+            .hero-image {
+                height: 50vh;
+            }
+
+            .hero-image-wrapper {
+                margin-top: 3.5rem;
+                box-shadow: 0 4px 30px rgba(139, 115, 85, 0.1);
+            }
+
+            .philosophy {
+                padding: 6rem 1.5rem 5rem;
+            }
+
+            .section-label {
+                font-size: 0.62rem;
+            }
+
+            .philosophy-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .philosophy-divider {
+                width: 60px;
+                height: 1px;
+                min-height: auto;
+                margin: 0 auto;
+            }
+
+            .philosophy-image {
+                height: 280px;
+            }
+
+            .philosophy-counter {
+                margin-top: 3rem;
+                padding-top: 3rem;
+            }
+
+            .menu-section {
+                padding: 5rem 1.5rem 7rem;
+            }
+
+            .menu-item-header {
+                padding: 0.9rem 0.5rem;
+                min-height: 52px;
+            }
+
+            .menu-item-thumb {
+                display: none;
+            }
+
+            .menu-item-name {
+                font-size: 1.05rem;
+            }
+
+            .menu-item-price {
+                font-size: 1.05rem;
+            }
+
+            .menu-group-title {
+                font-size: 1.25rem;
+            }
+
+            .ingredients {
+                height: auto;
+                min-height: 560px;
+                padding: 5rem 0;
+            }
+
+            .testimonials {
+                padding: 6rem 1.5rem 5rem;
+            }
+
+            .testimonial-text {
+                font-size: clamp(1.3rem, 4.5vw, 1.7rem);
+            }
+
+            .contact {
+                padding: 5rem 1.5rem 7rem;
+            }
+
+            .contact-phone {
+                font-size: 1.9rem;
+            }
+
+            .contact-hours-row {
+                gap: 2.5rem;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .btn-outline {
+                width: 100%;
+                max-width: 320px;
+                justify-content: center;
+                min-height: 54px;
+                font-size: 0.72rem;
+            }
+
+            .footer {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .footer-brand {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-bg-text {
+                font-size: 35vw;
+            }
+
+            .navbar-links .separator {
+                display: none;
+            }
+
+            .navbar-links {
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="navbar-brand">Zeff</a>
+        <div class="navbar-links">
+            <a href="#carta">Menu</a>
+            <span class="separator">&middot;</span>
+            <a href="#contacto">Reservar</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-text" aria-hidden="true">PIZZA</div>
+        <div class="hero-content">
+            <p class="hero-subtitle-top">Pizza Romana &middot; Figueira da Foz</p>
+            <h1 class="hero-title">Desde Roma<br>até à Figueira</h1>
+            <p class="hero-tagline">Tradição artesanal desde 2004</p>
+        </div>
+        <div class="hero-image-wrapper">
+            <img
+                src="scraped/glovo-quattro-formaggi-hq.png"
+                alt="Pizza Quattro Formaggi da Zeff Pizza"
+                class="hero-image"
+                id="hero-img"
+                loading="eager"
+            >
+            <div class="hero-image-overlay"></div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="philosophy">
+        <p class="section-label reveal">A Nossa Filosofia</p>
+        <blockquote class="philosophy-quote reveal">
+            A verdadeira pizza romana é fina, crocante, e honesta. Cada ingrediente conta, cada segundo no forno importa.
+        </blockquote>
+
+        <div class="philosophy-grid">
+            <div class="philosophy-text reveal">
+                <p>
+                    A pizza romana distingue-se pela sua massa fina e crocante, esticada à mão com paciência e precisão. Na Zeff, seguimos a tradição que Amir Soliman aprendeu nas padarias artesanais de Roma — onde a simplicidade é a maior sofisticação.
+                </p>
+                <p>
+                    Há mais de 20 anos que aperfeiçoamos cada detalhe: a fermentação lenta da massa, a selecção rigorosa dos ingredientes, o tempo exacto no forno de pedra. Não procuramos reinventar a pizza. Procuramos honrá-la.
+                </p>
+            </div>
+            <div class="philosophy-divider reveal"></div>
+            <div class="reveal">
+                <img
+                    src="scraped/glovo-bella-hq.png"
+                    alt="Pizza Bella da Zeff — a nossa criação premium"
+                    class="philosophy-image"
+                    loading="lazy"
+                >
+            </div>
+        </div>
+
+        <div class="philosophy-counter reveal">
+            <span class="counter-number">20</span>
+            <p class="counter-label">Anos de tradição</p>
+        </div>
+    </section>
+
+    <!-- ORNAMENT -->
+    <div class="section-ornament reveal" aria-hidden="true">
+        <span class="section-ornament-icon">&#10022;</span>
+    </div>
+
+    <!-- MENU -->
+    <section class="menu-section" id="carta">
+        <p class="section-label reveal">A Nossa Carta</p>
+        <h2 class="menu-title reveal">Carta</h2>
+
+        <!-- Clássicas -->
+        <div class="menu-group reveal">
+            <h3 class="menu-group-title">Clássicas</h3>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Margherita</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;8</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Molho de tomate San Marzano, mozzarella fior di latte, manjericão fresco</p>
+                </div>
+                <img src="scraped/glovo-margherita-hq.png" alt="Pizza Margherita" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Napoli</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;11</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Molho de tomate, mozzarella, anchovas, alcaparras, azeitonas</p>
+                </div>
+                <img src="scraped/glovo-napoli-hq.png" alt="Pizza Napoli" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Diavola</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;10</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Molho de tomate, mozzarella, salame picante, pimento</p>
+                </div>
+                <img src="scraped/glovo-diavola-hq.png" alt="Pizza Diavola" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Prosciutto e Funghi</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;10</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Molho de tomate, mozzarella, presunto, cogumelos frescos</p>
+                </div>
+                <img src="scraped/glovo-prosciutto-funghi-hq.png" alt="Pizza Prosciutto e Funghi" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Quattro Formaggi</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;13</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Mozzarella, gorgonzola, parmigiano reggiano, fontina</p>
+                </div>
+                <img src="scraped/glovo-quattro-formaggi-hq.png" alt="Pizza Quattro Formaggi" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Capricciosa</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;14</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Molho de tomate, mozzarella, presunto, cogumelos, alcachofras, azeitonas</p>
+                </div>
+                <img src="scraped/glovo-capricciosa-hq.png" alt="Pizza Capricciosa" class="menu-item-thumb" loading="lazy">
+            </div>
+        </div>
+
+        <!-- Da Casa -->
+        <div class="menu-group reveal">
+            <h3 class="menu-group-title">Da Casa</h3>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Bote</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;11</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Especialidade do chef — criação exclusiva Zeff</p>
+                </div>
+                <img src="scraped/glovo-bote-hq.png" alt="Pizza Bote — especialidade Zeff" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Calzone</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;11</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Massa dobrada recheada, assada no forno de pedra</p>
+                </div>
+                <img src="scraped/glovo-calzone-hq.png" alt="Calzone assado no forno de pedra" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Saracena</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;13</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Receita inspirada na tradição mediterrânica</p>
+                </div>
+                <img src="scraped/glovo-saracena-hq.png" alt="Pizza Saracena — tradição mediterrânica" class="menu-item-thumb" loading="lazy">
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Bella</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;15</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Presunto di Parma, grana padano, mozzarella di bufala, rúcula</p>
+                </div>
+                <img src="scraped/glovo-bella-hq.png" alt="Pizza Bella — a nossa criação premium" class="menu-item-thumb" loading="lazy">
+            </div>
+        </div>
+
+        <!-- Acompanhamentos -->
+        <div class="menu-group reveal">
+            <h3 class="menu-group-title">Acompanhamentos</h3>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Pão de Alho</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;5 — &euro;7</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Simples ou com queijo gratinado</p>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Vinhos</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;10 — &euro;23</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>Selecção de vinhos portugueses e italianos</p>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-header">
+                    <span class="menu-item-name">Cerveja</span>
+                    <span class="menu-item-dots"></span>
+                    <span class="menu-item-price">&euro;2 — &euro;3</span>
+                </div>
+                <div class="menu-item-desc">
+                    <p>De pressão e artesanal</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INGREDIENTS -->
+    <section class="ingredients">
+        <img
+            src="scraped/glovo-store-banner.png"
+            alt="Ingredientes artesanais da Zeff Pizza"
+            class="ingredients-bg"
+            loading="lazy"
+        >
+        <div class="ingredients-content">
+            <p class="ingredients-label reveal">Qualidade sem compromisso</p>
+            <h2 class="ingredients-title reveal">Os Nossos Ingredientes</h2>
+            <ul class="ingredient-list">
+                <li class="ingredient-item reveal">Mozzarella di Bufala</li>
+                <li class="ingredient-separator reveal">&middot;</li>
+                <li class="ingredient-item reveal">Presunto di Parma</li>
+                <li class="ingredient-separator reveal">&middot;</li>
+                <li class="ingredient-item reveal">Farinha Tipo 00</li>
+                <li class="ingredient-separator reveal">&middot;</li>
+                <li class="ingredient-item reveal">Tomate San Marzano</li>
+                <li class="ingredient-separator reveal">&middot;</li>
+                <li class="ingredient-item reveal">Azeite Extra Virgem</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <p class="section-label reveal">Experiências</p>
+
+        <div class="reveal">
+            <div class="testimonial-rating">4.8</div>
+            <p class="testimonial-rating-label">Google &middot; 49 avaliações</p>
+        </div>
+
+        <div class="testimonial-item reveal">
+            <p class="testimonial-text">A melhor pizza que comi em Portugal. A massa fina e crocante leva-nos directamente a Roma. Ingredientes de qualidade excepcional.</p>
+            <p class="testimonial-author">Ricardo M.</p>
+            <p class="testimonial-source">Google Reviews</p>
+        </div>
+
+        <div class="testimonial-divider reveal"></div>
+
+        <div class="testimonial-item reveal">
+            <p class="testimonial-text">Um lugar autêntico, sem pretensões. A pizza fala por si. O Amir é um verdadeiro artesão.</p>
+            <p class="testimonial-author">Sofia L.</p>
+            <p class="testimonial-source">TripAdvisor &middot; 5.0</p>
+        </div>
+
+        <div class="testimonial-divider reveal"></div>
+
+        <div class="testimonial-item reveal">
+            <p class="testimonial-text">Voltamos sempre que estamos na Figueira. A Bella com presunto di Parma e rúcula é simplesmente perfeita.</p>
+            <p class="testimonial-author">Marco &amp; Ana</p>
+            <p class="testimonial-source">Google Reviews</p>
+        </div>
+    </section>
+
+    <!-- ORNAMENT -->
+    <div class="section-ornament reveal" aria-hidden="true">
+        <span class="section-ornament-icon">&#10022;</span>
+    </div>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contacto">
+        <p class="section-label reveal">Informações</p>
+        <h2 class="contact-title reveal">Visite-nos</h2>
+
+        <div class="contact-address reveal">
+            <strong>Rua Poeta Acácio Antunes 1/A</strong><br>
+            3080-158 Figueira da Foz
+        </div>
+
+        <a href="tel:+351233096420" class="contact-phone reveal">233 096 420</a>
+
+        <div class="contact-hours reveal">
+            <div class="contact-hours-row">
+                <div class="contact-hours-block">
+                    <p class="hours-label">Almoço</p>
+                    <p class="hours-time">12:00 — 15:00</p>
+                </div>
+                <div class="contact-hours-block">
+                    <p class="hours-label">Jantar</p>
+                    <p class="hours-time">19:00 — 22:30</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="contact-map-toggle reveal" id="map-toggle" aria-expanded="false">
+            Ver no mapa &#8595;
+        </button>
+
+        <div class="contact-map-wrapper" id="map-wrapper">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3056.8!2d-8.8575!3d40.1508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd22f94b2c8f7c0d%3A0x0!2sR.+Poeta+Ac%C3%A1cio+Antunes+1%2FA%2C+3080-158+Figueira+da+Foz!5e0!3m2!1spt-PT!2spt!4v1"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Localização Zeff Pizza"
+            ></iframe>
+        </div>
+
+        <div class="contact-buttons reveal">
+            <a href="tel:+351233096420" class="btn-outline">Ligar para reservar</a>
+            <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" class="btn-outline accent">Encomendar via Glovo</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="footer-brand">Zeff Pizza</span>
+        <p class="footer-detail">
+            Rua Poeta Acácio Antunes 1/A &middot; Figueira da Foz<br>
+            <a href="tel:+351233096420">233 096 420</a>
+        </p>
+        <div class="footer-divider"></div>
+        <p class="footer-copy">Est. 2004 &middot; Tradição Artesanal Romana</p>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        (function() {
+            var reveals = document.querySelectorAll('.reveal');
+            var ingredientItems = document.querySelectorAll('.ingredient-item');
+
+            function checkReveal() {
+                var windowHeight = window.innerHeight;
+                var revealPoint = 80;
+
+                reveals.forEach(function(el) {
+                    var top = el.getBoundingClientRect().top;
+                    if (top < windowHeight - revealPoint) {
+                        el.classList.add('visible');
+                    }
+                });
+
+                ingredientItems.forEach(function(el) {
+                    var top = el.getBoundingClientRect().top;
+                    if (top < windowHeight - revealPoint) {
+                        el.classList.add('visible');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', checkReveal, { passive: true });
+            window.addEventListener('load', checkReveal);
+            checkReveal();
+        })();
+
+        // Navbar scroll behavior
+        (function() {
+            var navbar = document.getElementById('navbar');
+            var lastScroll = 0;
+
+            window.addEventListener('scroll', function() {
+                var currentScroll = window.pageYOffset;
+                if (currentScroll > 60) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                lastScroll = currentScroll;
+            }, { passive: true });
+        })();
+
+        // Hero parallax
+        (function() {
+            var heroImg = document.getElementById('hero-img');
+            if (!heroImg) return;
+
+            window.addEventListener('scroll', function() {
+                var scrollY = window.pageYOffset;
+                if (scrollY < window.innerHeight * 1.5) {
+                    heroImg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+                }
+            }, { passive: true });
+        })();
+
+        // Map toggle
+        (function() {
+            var toggle = document.getElementById('map-toggle');
+            var wrapper = document.getElementById('map-wrapper');
+            if (!toggle || !wrapper) return;
+
+            toggle.addEventListener('click', function() {
+                var isOpen = wrapper.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', isOpen);
+                toggle.innerHTML = isOpen ? 'Fechar mapa &#8593;' : 'Ver no mapa &#8595;';
+            });
+        })();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
