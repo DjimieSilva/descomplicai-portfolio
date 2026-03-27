@@ -177,9 +177,9 @@ interface GameState {
 const ZONE_NAMES: Record<ZoneId, string> = {
   centro: "Centro Hub",
   restaurantes: "Vila dos Restaurantes",
-  clinicas: "Distrito das Clinicas",
-  lab: "Laboratorio Tech",
-  torre: "Torre do Portfolio",
+  clinicas: "Distrito das Clínicas",
+  lab: "Laboratório Tech",
+  torre: "Torre do Portfólio",
   floresta: "Floresta Encantada",
   praia: "Praia do Sul",
 };
@@ -375,11 +375,11 @@ const NPCS: NPC[] = [
     bodyColor: "#22c55e",
     headColor: "#fde68a",
     dialogue: [
-      "Bem-vindo a Descomplicai! Eu sou o Guia.",
-      "Explora o nosso mundo! Tens 5 zonas para descobrir.",
-      "Fala com os NPCs, abre baus e completa quests!",
-      "Usa WASD ou setas para mover, E para interagir.",
-      "Boa aventura, explorador!",
+      "Bem-vindo à Descomplicai! Eu sou o Guia — o único NPC que não faz piadas más.",
+      "Tens 7 zonas para descobrir! Restaurantes, clínicas, um laboratório... e até uma praia.",
+      "Fala com os NPCs, abre baús e completa quests! O Jaime escondeu surpresas por todo o lado.",
+      "Usa WASD ou setas para mover, E para interagir. No telemóvel tens o D-pad ali em baixo.",
+      "Boa aventura, explorador! E se ficares perdido... bom, faz parte da diversão.",
     ],
   },
   {
@@ -390,10 +390,10 @@ const NPCS: NPC[] = [
     bodyColor: "#f97316",
     headColor: "#fde68a",
     dialogue: [
-      "Ola! Sou o Chef Marco.",
-      "Criamos sites para os melhores restaurantes da Figueira!",
-      "O MeioCheio, a Cacarola... todos digitais agora.",
-      "A comida e boa, mas o design e ainda melhor!",
+      "Olá! Sou o Chef Marco. Cozinho websites como cozinho bacalhau — com amor e azeite!",
+      "O MeioCheio, a Caçarola... cada restaurante tem o seu tempero digital único.",
+      "Sabias que um bom site abre mais apetite que o cheiro do pão quente? Quase, pelo menos.",
+      "Se o site não dá água na boca, não está bem feito. Essa é a minha filosofia!",
     ],
   },
   {
@@ -404,10 +404,10 @@ const NPCS: NPC[] = [
     bodyColor: "#fb923c",
     headColor: "#fde68a",
     dialogue: [
-      "Ola! Sou a Chef Ana.",
-      "O Bijou, a Cacarola Dois, o Pe no Bairro...",
-      "Todos tem presenca digital agora gracas a Descomplicai!",
-      "Cada restaurante tem a sua identidade unica.",
+      "Olá! Sou a Chef Ana. O meu segredo? Misturar ingredientes certos — na cozinha e no design.",
+      "O Bijou ficou tão elegante que até os clientes fazem reserva só para ver o site!",
+      "A Caçarola Dois, o Pé no Bairro... cada um com a sua personalidade. Como os meus pratos!",
+      "Diz-me: já almoçaste? Não? Então vai ver os menus nos sites... mas aviso: vais ficar com fome!",
     ],
   },
   {
@@ -418,10 +418,10 @@ const NPCS: NPC[] = [
     bodyColor: "#06b6d4",
     headColor: "#fde68a",
     dialogue: [
-      "Ola! Sou a Dra. Sofia.",
-      "A DentalKid foi o nosso projeto mais divertido!",
-      "Um site de dentista para criancas — colorido e amigavel.",
-      "A saude digital tambem pode ser divertida!",
+      "Olá! Sou a Dra. Sofia. Antes de perguntares: sim, também tenho medo de dentistas.",
+      "A DentalKid é o nosso orgulho — um site tão divertido que as crianças pedem para ir ao dentista!",
+      "Consegues imaginar? Um miúdo a dizer 'Mãe, quero ir ao dentista!' Isso sim é magia digital.",
+      "Clínicas digitais não mordem. Bom... pelo menos as que nós fazemos não mordem!",
     ],
   },
   {
@@ -432,10 +432,10 @@ const NPCS: NPC[] = [
     bodyColor: "#a855f7",
     headColor: "#fde68a",
     dialogue: [
-      "Psst! Sou a Luna, hacker residente.",
-      "Temos 30+ ferramentas: Fractal Explorer, Synth, Chess...",
-      "O Jaime adora construir coisas interativas!",
-      "Ja experimentaste o Pixel Art Editor?",
+      "Psst! Sou a Luna. Não, 'hacker' não é mau — é alguém que resolve problemas com estilo.",
+      "Temos 30+ ferramentas aqui no lab. O Jaime não dorme, acho eu. Ou tem um clone.",
+      "Fractal Explorer, Synth, Chess, Pixel Art... tudo feito com código e café. Muito café.",
+      "Já experimentaste o Pixel Art Editor? Aviso: é viciante. O Jaime perdeu um fim de semana inteiro lá.",
     ],
   },
   {
@@ -446,10 +446,10 @@ const NPCS: NPC[] = [
     bodyColor: "#8b5cf6",
     headColor: "#fde68a",
     dialogue: [
-      "Saudacoes! Sou o Cientista Pedro.",
-      "A Tabela Periodica Interativa tem todos os 118 elementos!",
-      "Cada elemento com dados reais e visualizacoes.",
-      "Ciencia e tecnologia andam sempre juntas.",
+      "Eureka! Quer dizer... Saudações! Sou o Cientista Pedro. Desculpa, estou sempre entusiasmado.",
+      "A Tabela Periódica Interativa tem todos os 118 elementos! Sim, incluindo o Oganessão. Eu sei, ninguém perguntou.",
+      "Sabias que o teu corpo tem oxigénio, carbono, hidrogénio e... um bocadinho de irónio? Ok, essa inventei.",
+      "Ciência + tecnologia + um gajo que não larga o computador = magia pura!",
     ],
   },
   {
@@ -460,11 +460,12 @@ const NPCS: NPC[] = [
     bodyColor: "#eab308",
     headColor: "#fde68a",
     dialogue: [
-      "Ola! Sou o Jaime Silva, fundador da Descomplicai.",
-      "Keep building. Share Love.",
-      "O futuro e humano, mas a tecnologia ajuda!",
-      "Obrigado por explorares o meu portfolio.",
-      "Visita descomplicai.pt para ver tudo ao vivo!",
+      "Epa! Finalmente alguém me encontrou! Sou o Jaime, o gajo que criou tudo isto.",
+      "Sabias que fiz este RPG inteiro com IA? Sim, até os diálogos. Estou a falar comigo próprio, basicamente.",
+      "A Descomplicai nasceu porque eu não percebia nada de tecnologia... e pensei: 'Se eu não percebo, mais gente não percebe!'",
+      "Já me disseram que sou teimoso. Eu prefiro dizer que sou 'persistentemente otimista'. É diferente. Acho eu.",
+      "Dica do Jaime: se alguma coisa não funciona, faz Ctrl+Z até funcionar. Na vida real não há Ctrl+Z, mas pronto.",
+      "Visita descomplicai.pt — prometo que é mais bonito que este pixel art. Embora eu ache que fiquei giro em 8-bit!",
     ],
   },
   {
@@ -478,23 +479,23 @@ const NPCS: NPC[] = [
       "Shhh... encontraste-me!",
       "Sou o Mylo, o assistente de IA secreto do Jaime!",
       "Ajudo a responder perguntas no site da Descomplicai.",
-      "Poucos sabem que existo... es especial!",
+      "Poucos sabem que existo... és especial!",
       "Completa todas as quests para seres um verdadeiro mestre!",
     ],
   },
   {
     id: "ermitao",
-    name: "Ermitao da Floresta",
+    name: "Ermitão da Floresta",
     x: 65 * TILE_SIZE + 4,
     y: 10 * TILE_SIZE + 4,
     bodyColor: "#78350f",
     headColor: "#fde68a",
     dialogue: [
-      "Bem-vindo, viajante, a Floresta Encantada!",
+      "Bem-vindo, viajante, à Floresta Encantada!",
       "O Jaime comecou a programar sozinho, com tutoriais online.",
-      "Os primeiros projetos foram simples: HTML puro, CSS basico.",
+      "Os primeiros projetos foram simples: HTML puro, CSS básico.",
       "Mas a curiosidade era imensa — cada dia um novo desafio.",
-      "E assim nasceu a Descomplicai: do zero, com paixao.",
+      "E assim nasceu a Descomplicai: do zero, com paixão.",
     ],
   },
   {
@@ -506,7 +507,7 @@ const NPCS: NPC[] = [
     headColor: "#fde68a",
     questId: "explorador_floresta",
     dialogue: [
-      "Ooh, um aventureiro corajoso chegou ate mim!",
+      "Ooh, um aventureiro corajoso chegou até mim!",
       "Tenho um segredo especial para quem explora a floresta...",
       "Existe uma quest oculta: a Quest da Floresta Encantada!",
       "Visita todos os cantos da floresta para a completar.",
@@ -522,7 +523,7 @@ const NPCS: NPC[] = [
     headColor: "#fde68a",
     dialogue: [
       "Ei! Apanhas boas ondas por aqui?",
-      "Ja ouviste falar do projeto Ondas Academy?",
+      "Já ouviste falar do projeto Ondas Academy?",
       "Foi uma plataforma de ensino de surf — design limpo e moderno.",
       "O Jaime criou tudo: booking, galeria, mapa de praias.",
       "A vida e melhor com o mar ao lado!",
@@ -536,11 +537,11 @@ const NPCS: NPC[] = [
     bodyColor: "#1e40af",
     headColor: "#fde68a",
     dialogue: [
-      "Boa tarde, amigo! Hoje o mar esta calmo.",
+      "Boa tarde, amigo! Hoje o mar está calmo.",
       "Sou da Figueira da Foz — terra de pescadores e surfistas.",
-      "O Jaime tambem e da Figueira, sabia?",
+      "O Jaime também é da Figueira, sabia?",
       "Foi aqui que ele cresceu, entre o mar e a tecnologia.",
-      "Figueira inspira... o mar ensina-nos a ter paciencia.",
+      "Figueira inspira... o mar ensina-nos a ter paciência.",
     ],
   },
 ];
@@ -672,8 +673,8 @@ function createQuests(): Quest[] {
     },
     {
       id: "caca_tesouro",
-      name: "Caca ao Tesouro",
-      description: "Abre 5 baus",
+      name: "Caça ao Tesouro",
+      description: "Abre 5 baús",
       target: 5,
       progress: 0,
       completed: false,
@@ -725,10 +726,10 @@ function createQuests(): Quest[] {
 // ================================================================
 
 const SPECIAL_ITEMS: SpecialItem[] = [
-  { id: "chave_dourada", name: "Chave Dourada", emoji: "\u{1F511}", description: "Uma chave dourada antiga que brilha com luz propria.", foundIn: "Bau na Torre do Portfolio", usable: false },
-  { id: "mapa_antigo", name: "Mapa Antigo", emoji: "\u{1F4DC}", description: "Um mapa que revela todos os baus no minimapa.", foundIn: "Dado pelo Guia apos falar com 3 NPCs", usable: false },
-  { id: "cristal_magico", name: "Cristal Magico", emoji: "\u{1F52E}", description: "Duplica a velocidade de movimento por 30 segundos!", foundIn: "Canteiro de flores no Centro", usable: true, useDescription: "Duplica velocidade 30s" },
-  { id: "flauta_vento", name: "Flauta do Vento", emoji: "\u{1F3B5}", description: "Uma flauta magica encantadora.", foundIn: "Recompensa da quest Conversador", usable: false },
+  { id: "chave_dourada", name: "Chave Dourada", emoji: "\u{1F511}", description: "Uma chave dourada antiga que brilha com luz própria.", foundIn: "Baú na Torre do Portfólio", usable: false },
+  { id: "mapa_antigo", name: "Mapa Antigo", emoji: "\u{1F4DC}", description: "Um mapa que revela todos os baús no minimapa.", foundIn: "Dado pelo Guia após falar com 3 NPCs", usable: false },
+  { id: "cristal_magico", name: "Cristal Mágico", emoji: "\u{1F52E}", description: "Duplica a velocidade de movimento por 30 segundos!", foundIn: "Canteiro de flores no Centro", usable: true, useDescription: "Duplica velocidade 30s" },
+  { id: "flauta_vento", name: "Flauta do Vento", emoji: "\u{1F3B5}", description: "Uma flauta mágica encantadora.", foundIn: "Recompensa da quest Conversador", usable: false },
   { id: "escudo_programador", name: "Escudo do Programador", emoji: "\u{1F6E1}\u{FE0F}", description: "Escudo decorativo da Descomplicai.", foundIn: "Bau secreto no Lab", usable: false },
 ];
 
@@ -747,16 +748,16 @@ function createAchievements(): Achievement[] {
   return [
     { id: "primeiros_passos", name: "Primeiros Passos", emoji: "\u{1F3C3}", description: "Anda 500 tiles", unlocked: false },
     { id: "linguarudo", name: "Linguarudo", emoji: "\u{1F5E3}\u{FE0F}", description: "Fala com todos os NPCs", unlocked: false },
-    { id: "colecionador", name: "Colecionador", emoji: "\u{1F4E6}", description: "Abre todos os baus", unlocked: false },
-    { id: "cartografo", name: "Cartografo", emoji: "\u{1F5FA}\u{FE0F}", description: "Revela 90% do mapa", unlocked: false },
+    { id: "colecionador", name: "Colecionador", emoji: "\u{1F4E6}", description: "Abre todos os baús", unlocked: false },
+    { id: "cartografo", name: "Cartógrafo", emoji: "\u{1F5FA}\u{FE0F}", description: "Revela 90% do mapa", unlocked: false },
     { id: "speed_runner", name: "Speed Runner", emoji: "\u26A1", description: "Completa o jogo em <5 min", unlocked: false },
-    { id: "focado", name: "Focado", emoji: "\u{1F3AF}", description: "3 quests sem abrir inventario", unlocked: false },
+    { id: "focado", name: "Focado", emoji: "\u{1F3AF}", description: "3 quests sem abrir inventário", unlocked: false },
     { id: "observador", name: "Observador", emoji: "\u{1F440}", description: "Encontra todos os itens especiais", unlocked: false },
     { id: "cem_porcento", name: "100%", emoji: "\u{1F3C6}", description: "Todas as outras conquistas", unlocked: false },
-    { id: "noctambulo", name: "Noctambulo", emoji: "\u{1F319}", description: "Joga por 10+ minutos", unlocked: false },
-    { id: "filosofo", name: "Filosofo", emoji: "\u{1F4AC}", description: "Le todos os dialogos sem saltar", unlocked: false },
+    { id: "noctambulo", name: "Noctâmbulo", emoji: "\u{1F319}", description: "Joga por 10+ minutos", unlocked: false },
+    { id: "filosofo", name: "Filósofo", emoji: "\u{1F4AC}", description: "Lê todos os diálogos sem saltar", unlocked: false },
     { id: "pro_gamer", name: "Pro Gamer", emoji: "\u{1F3AE}", description: "Usa exclusivamente o teclado", unlocked: false },
-    { id: "amigavel", name: "Amigavel", emoji: "\u{1F91D}", description: "Fala com o mesmo NPC 3 vezes", unlocked: false },
+    { id: "amigavel", name: "Amigável", emoji: "\u{1F91D}", description: "Fala com o mesmo NPC 3 vezes", unlocked: false },
   ];
 }
 
@@ -2071,7 +2072,7 @@ const skipTypewriter = useCallback(() => {
           const cdy = ch.y - gs.player.y;
           if (Math.sqrt(cdx * cdx + cdy * cdy) < INTERACT_DIST) {
             nearInteractive = true;
-            promptText = "[E] Abrir bau";
+            promptText = "[E] Abrir baú";
             break;
           }
         }
@@ -2084,7 +2085,7 @@ const skipTypewriter = useCallback(() => {
           if (Math.sqrt(sdx * sdx + sdy * sdy) < INTERACT_DIST) {
             nearInteractive = true;
             const item = SPECIAL_ITEMS.find((i: SpecialItem) => i.id === sic.itemId);
-            promptText = "[E] Abrir bau " + (item ? item.emoji : "");
+            promptText = "[E] Abrir baú " + (item ? item.emoji : "");
             break;
           }
         }
@@ -2289,7 +2290,7 @@ setShowEPrompt(nearInteractive && overlay === "none");
       if (gs.startTime > 0 && Date.now() - gs.startTime < 10000) {
         const fadeAlpha = Math.max(0, 1 - (Date.now() - gs.startTime) / 10000);
         ctx.fillStyle = `rgba(0,0,0,${0.5 * fadeAlpha})`;
-        const hintText = "WASD/Setas: Mover | E: Interagir | Q: Quests | I: Inventario";
+        const hintText = "WASD/Setas: Mover | E: Interagir | Q: Quests | I: Inventário";
         ctx.font = "9px monospace";
         const hw = ctx.measureText(hintText).width;
         ctx.fillRect(canvas.width / 2 - hw / 2 - 8, canvas.height - 30, hw + 16, 20);
@@ -2362,7 +2363,7 @@ setShowEPrompt(nearInteractive && overlay === "none");
     if (frame % 60 < 40) {
       ctx.font = `${Math.min(width * 0.025, 18)}px monospace`;
       ctx.fillStyle = "#d4d4d8";
-      ctx.fillText("Pressiona ENTER para comecar", width / 2, height * 0.55);
+      ctx.fillText("Pressiona ENTER para começar", width / 2, height * 0.55);
     }
 
     // Controls info
@@ -2373,7 +2374,7 @@ setShowEPrompt(nearInteractive && overlay === "none");
     ctx.fillText("WASD / Setas — Mover", width / 2, controlsY);
     ctx.fillText("E — Interagir / Falar", width / 2, controlsY + lineHeight);
     ctx.fillText("Q — Quests", width / 2, controlsY + lineHeight * 2);
-    ctx.fillText("I — Inventario", width / 2, controlsY + lineHeight * 3);
+    ctx.fillText("I — Inventário", width / 2, controlsY + lineHeight * 3);
     ctx.fillText("ESC — Pausa", width / 2, controlsY + lineHeight * 4);
 
     // Footer
@@ -2690,12 +2691,12 @@ setShowEPrompt(nearInteractive && overlay === "none");
                 <div className={selectedItem ? "w-1/2 transition-all" : "w-full transition-all"}>
                   {inventoryTab === "badges" && (
                     <>{badges.length === 0 ? (
-                      <p className="text-zinc-400 text-sm font-mono text-center py-8">Ainda nao tens badges. Abre baus para colecionar!</p>
+                      <p className="text-zinc-400 text-sm font-mono text-center py-8">Ainda não tens badges. Abre baús para colecionar!</p>
                     ) : (
                       <div className="grid grid-cols-4 gap-2">
                         {badges.map((badge, i) => (
                           <div key={i} className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 text-center hover:border-[#fbbf24]/50 transition-colors cursor-pointer"
-                            onClick={() => setSelectedItem({ id: badge, name: badge, emoji: badgeEmojis[badge] || "\u{1F3C6}", description: `Badge tecnico: ${badge}`, foundIn: "Bau do tesouro", usable: false })}>
+                            onClick={() => setSelectedItem({ id: badge, name: badge, emoji: badgeEmojis[badge] || "\u{1F3C6}", description: `Badge técnico: ${badge}`, foundIn: "Baú do tesouro", usable: false })}>
                             <p className="text-2xl mb-1">{badgeEmojis[badge] || "\u{1F3C6}"}</p>
                             <p className="text-white text-xs font-mono truncate">{badge}</p>
                           </div>
@@ -2832,7 +2833,7 @@ setShowEPrompt(nearInteractive && overlay === "none");
                 className="w-full bg-red-600 hover:bg-red-700 text-white font-mono py-3 rounded-lg transition-colors"
                 onClick={startGame}
               >
-                Recomeca
+                Recomeça
               </button>
             </div>
 
