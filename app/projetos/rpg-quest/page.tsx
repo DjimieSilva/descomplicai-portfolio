@@ -113,6 +113,24 @@ interface Quest {
   completed: boolean;
 }
 
+interface SpecialItem {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  foundIn: string;
+  usable: boolean;
+  useDescription?: string;
+}
+
+interface Achievement {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  unlocked: boolean;
+}
+
 interface PlayerState {
   x: number;
   y: number;
@@ -139,6 +157,17 @@ interface GameState {
   totalTime: number;
   currentZone: ZoneId | null;
   explored: boolean[][];
+  specialItems: Set<string>;
+  achievements: Set<string>;
+  stepsTaken: number;
+  dialoguePagesRead: number;
+  dialoguePagesSkipped: number;
+  npcTalkCounts: Record<string, number>;
+  questsCompletedWithoutInventory: number;
+  inventoryOpenedSinceLastQuest: boolean;
+  usedKeyboardOnly: boolean;
+  usedTouchControls: boolean;
+  crystalSpeedEndTime: number;
 }
 
 // ================================================================
@@ -536,6 +565,46 @@ function createQuests(): Quest[] {
     },
   ];
 }
+// ================================================================
+// SECTION 7B: SPECIAL ITEM & ACHIEVEMENT DEFINITIONS
+// ================================================================
+
+const SPECIAL_ITEMS: SpecialItem[] = [
+  { id: "chave_dourada", name: "Chave Dourada", emoji: "\u{1F511}", description: "Uma chave dourada antiga que brilha com luz propria.", foundIn: "Bau na Torre do Portfolio", usable: false },
+  { id: "mapa_antigo", name: "Mapa Antigo", emoji: "\u{1F4DC}", description: "Um mapa que revela todos os baus no minimapa.", foundIn: "Dado pelo Guia apos falar com 3 NPCs", usable: false },
+  { id: "cristal_magico", name: "Cristal Magico", emoji: "\u{1F52E}", description: "Duplica a velocidade de movimento por 30 segundos!", foundIn: "Canteiro de flores no Centro", usable: true, useDescription: "Duplica velocidade 30s" },
+  { id: "flauta_vento", name: "Flauta do Vento", emoji: "\u{1F3B5}", description: "Uma flauta magica encantadora.", foundIn: "Recompensa da quest Conversador", usable: false },
+  { id: "escudo_programador", name: "Escudo do Programador", emoji: "\u{1F6E1}\u{FE0F}", description: "Escudo decorativo da Descomplicai.", foundIn: "Bau secreto no Lab", usable: false },
+];
+
+interface SpecialItemChest { id: string; itemId: string; x: number; y: number; opened: boolean; }
+
+const SPECIAL_ITEM_CHESTS: SpecialItemChest[] = [
+  { id: "si_chest_chave", itemId: "chave_dourada", x: 22 * TILE_SIZE, y: 35 * TILE_SIZE, opened: false },
+  { id: "si_chest_cristal", itemId: "cristal_magico", x: 24 * TILE_SIZE, y: 18 * TILE_SIZE + 10, opened: false },
+  { id: "si_chest_escudo", itemId: "escudo_programador", x: 17 * TILE_SIZE, y: 8 * TILE_SIZE, opened: false },
+];
+
+const CRISTAL_FLOWER_COL = 24;
+const CRISTAL_FLOWER_ROW = 17;
+
+function createAchievements(): Achievement[] {
+  return [
+    { id: "primeiros_passos", name: "Primeiros Passos", emoji: "\u{1F3C3}", description: "Anda 500 tiles", unlocked: false },
+    { id: "linguarudo", name: "Linguarudo", emoji: "\u{1F5E3}\u{FE0F}", description: "Fala com todos os NPCs", unlocked: false },
+    { id: "colecionador", name: "Colecionador", emoji: "\u{1F4E6}", description: "Abre todos os baus", unlocked: false },
+    { id: "cartografo", name: "Cartografo", emoji: "\u{1F5FA}\u{FE0F}", description: "Revela 90% do mapa", unlocked: false },
+    { id: "speed_runner", name: "Speed Runner", emoji: "\u26A1", description: "Completa o jogo em <5 min", unlocked: false },
+    { id: "focado", name: "Focado", emoji: "\u{1F3AF}", description: "3 quests sem abrir inventario", unlocked: false },
+    { id: "observador", name: "Observador", emoji: "\u{1F440}", description: "Encontra todos os itens especiais", unlocked: false },
+    { id: "cem_porcento", name: "100%", emoji: "\u{1F3C6}", description: "Todas as outras conquistas", unlocked: false },
+    { id: "noctambulo", name: "Noctambulo", emoji: "\u{1F319}", description: "Joga por 10+ minutos", unlocked: false },
+    { id: "filosofo", name: "Filosofo", emoji: "\u{1F4AC}", description: "Le todos os dialogos sem saltar", unlocked: false },
+    { id: "pro_gamer", name: "Pro Gamer", emoji: "\u{1F3AE}", description: "Usa exclusivamente o teclado", unlocked: false },
+    { id: "amigavel", name: "Amigavel", emoji: "\u{1F91D}", description: "Fala com o mesmo NPC 3 vezes", unlocked: false },
+  ];
+}
+
 
 // ================================================================
 // SECTION 8: GAME RENDERING FUNCTIONS
@@ -866,7 +935,8 @@ function drawMinimap(
   playerRow: number,
   npcs: NPC[],
   chests: Chest[],
-  explored: boolean[][]
+  explored: boolean[][],
+  hasMapItem?: boolean
 ) {
   const mmW = 120;
   const mmH = 96;
@@ -906,7 +976,7 @@ function drawMinimap(
     if (ch.opened) continue;
     const cc = Math.floor(ch.x / TILE_SIZE);
     const cr = Math.floor(ch.y / TILE_SIZE);
-    if (explored[cr]?.[cc]) {
+    if (hasMapItem || explored[cr]?.[cc]) {
       ctx.fillStyle = "#fbbf24";
       ctx.fillRect(mmX + cc * tileW - 1, mmY + cr * tileH - 1, 3, 3);
     }
@@ -1073,7 +1143,10 @@ type OverlayType =
   | "quest_log"
   | "inventory"
   | "badge_popup"
-  | "zone_banner";
+  | "zone_banner"
+  | "item_popup";
+
+type InventoryTab = "badges" | "itens" | "conquistas";
 
 export default function RPGQuestPage() {
   // Canvas ref
@@ -1123,6 +1196,14 @@ export default function RPGQuestPage() {
   // Viewport size
   const [viewSize, setViewSize] = useState({ w: 800, h: 600 });
 
+  const [inventoryTab, setInventoryTab] = useState<InventoryTab>("badges");
+  const [specialItems, setSpecialItems] = useState<Set<string>>(new Set());
+  const [selectedItem, setSelectedItem] = useState<SpecialItem | null>(null);
+  const [popupItem, setPopupItem] = useState<SpecialItem | null>(null);
+  const [achievements, setAchievements] = useState<Achievement[]>(createAchievements);
+  const [achievementBanner, setAchievementBanner] = useState<Achievement | null>(null);
+  const [achievementBannerVisible, setAchievementBannerVisible] = useState(false);
+
   // ================================================================
   // SECTION 13: GAME STATE REFS (hot path, no re-renders)
   // ================================================================
@@ -1148,6 +1229,17 @@ export default function RPGQuestPage() {
     explored: Array.from({ length: MAP_ROWS }, () =>
       Array.from({ length: MAP_COLS }, () => false)
     ),
+      specialItems: new Set(),
+    achievements: new Set(),
+    stepsTaken: 0,
+    dialoguePagesRead: 0,
+    dialoguePagesSkipped: 0,
+    npcTalkCounts: {},
+    questsCompletedWithoutInventory: 0,
+    inventoryOpenedSinceLastQuest: false,
+    usedKeyboardOnly: true,
+    usedTouchControls: false,
+    crystalSpeedEndTime: 0,
   });
 
   const keysRef = useRef<Set<string>>(new Set());
@@ -1156,6 +1248,9 @@ export default function RPGQuestPage() {
   const chestsRef = useRef<Chest[]>(
     CHESTS.map((c) => ({ ...c }))
   );
+  const specialItemChestsRef = useRef<SpecialItemChest[]>(
+    SPECIAL_ITEM_CHESTS.map((c) => ({ ...c }))
+  );
   const particlesRef = useRef<Particle[]>([]);
   const starsRef = useRef<Star[]>([]);
   const lastZoneRef = useRef<ZoneId | null>(null);
@@ -1163,6 +1258,9 @@ export default function RPGQuestPage() {
   const typewriterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const zoneBannerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const interactCooldownRef = useRef<boolean>(false);
+  const achievementBannerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const achievementQueueRef = useRef<Achievement[]>([]);
+  const cristalPickedUpRef = useRef<boolean>(false);
 
   // NPC AI runtime state
   const npcRuntimeRef = useRef<NPCRuntime[]>(
@@ -1219,7 +1317,67 @@ export default function RPGQuestPage() {
     []
   );
 
-  const skipTypewriter = useCallback(() => {
+  
+  // ================================================================
+  // ACHIEVEMENT & ITEM SYSTEM
+  // ================================================================
+
+  const showAchievementBanner = useCallback((achievement: Achievement) => {
+    setAchievementBanner(achievement);
+    setAchievementBannerVisible(true);
+    if (achievementBannerTimerRef.current) clearTimeout(achievementBannerTimerRef.current);
+    achievementBannerTimerRef.current = setTimeout(() => {
+      setAchievementBannerVisible(false);
+      setTimeout(() => {
+        if (achievementQueueRef.current.length > 0) {
+          const next = achievementQueueRef.current.shift()!;
+          // Re-show for queued achievements
+          setAchievementBanner(next);
+          setAchievementBannerVisible(true);
+          if (achievementBannerTimerRef.current) clearTimeout(achievementBannerTimerRef.current);
+          achievementBannerTimerRef.current = setTimeout(() => setAchievementBannerVisible(false), 3000);
+        }
+      }, 300);
+    }, 3000);
+  }, []);
+
+  const unlockAchievement = useCallback((achievementId: string) => {
+    const gs = gameStateRef.current;
+    if (gs.achievements.has(achievementId)) return;
+    gs.achievements.add(achievementId);
+    setAchievements(prev => prev.map(a => a.id === achievementId ? { ...a, unlocked: true } : a));
+    const ach = createAchievements().find(a => a.id === achievementId);
+    if (ach) {
+      const unlocked = { ...ach, unlocked: true };
+      if (achievementBannerTimerRef.current) {
+        achievementQueueRef.current.push(unlocked);
+      } else {
+        showAchievementBanner(unlocked);
+      }
+    }
+  }, [showAchievementBanner]);
+
+  const pickupSpecialItem = useCallback((itemId: string) => {
+    const gs = gameStateRef.current;
+    if (gs.specialItems.has(itemId)) return;
+    gs.specialItems.add(itemId);
+    setSpecialItems(prev => { const n = new Set(prev); n.add(itemId); return n; });
+    const item = SPECIAL_ITEMS.find(i => i.id === itemId);
+    if (item) {
+      setPopupItem(item);
+      setOverlay("item_popup");
+      particlesRef.current = [...particlesRef.current, ...createConfettiParticles(gs.player.x - gs.camera.x + 8, gs.player.y - gs.camera.y, 30)];
+      setTimeout(() => setOverlay(prev => (prev === "item_popup" ? "none" : prev)), 2500);
+    }
+  }, []);
+
+  const useSpecialItem = useCallback((itemId: string) => {
+    const gs = gameStateRef.current;
+    if (!gs.specialItems.has(itemId)) return;
+    if (itemId === "cristal_magico") gs.crystalSpeedEndTime = Date.now() + 30000;
+  }, []);
+
+const skipTypewriter = useCallback(() => {
     if (typewriterTimerRef.current) {
       clearTimeout(typewriterTimerRef.current);
       typewriterTimerRef.current = null;
@@ -1242,6 +1400,12 @@ export default function RPGQuestPage() {
       // Track NPC spoken
       const gs = gameStateRef.current;
       gs.npcsSpoken.add(npc.id);
+      gs.npcTalkCounts[npc.id] = (gs.npcTalkCounts[npc.id] || 0) + 1;
+      if (gs.npcTalkCounts[npc.id] >= 3) unlockAchievement("amigavel");
+      if (npc.id === "guia" && !gs.specialItems.has("mapa_antigo")) {
+        const otherNPCs = Array.from(gs.npcsSpoken).filter(id => id !== "guia").length;
+        if (otherNPCs >= 3) setTimeout(() => pickupSpecialItem("mapa_antigo"), 500);
+      }
     },
     [startTypewriter]
   );
@@ -1252,8 +1416,12 @@ export default function RPGQuestPage() {
       skipTypewriter();
       setDialogueText(dialoguePages[dialoguePage]);
       setTypewriterDone(true);
+      
+      gameStateRef.current.dialoguePagesSkipped++;
       return;
     }
+
+    gameStateRef.current.dialoguePagesRead++;
 
     const nextPage = dialoguePage + 1;
     if (nextPage < dialoguePages.length) {
@@ -1354,7 +1522,19 @@ export default function RPGQuestPage() {
         return;
       }
     }
-  }, [advanceDialogue, openDialogue, openChest]);
+  
+    // Check special item chests
+    for (const sic of specialItemChestsRef.current) {
+      if (sic.opened) continue;
+      const dx2 = sic.x - px;
+      const dy2 = sic.y - py;
+      if (Math.sqrt(dx2 * dx2 + dy2 * dy2) < INTERACT_DIST) {
+        sic.opened = true;
+        pickupSpecialItem(sic.itemId);
+        return;
+      }
+    }
+  }, [advanceDialogue, openDialogue, openChest, pickupSpecialItem]);
 
   // ================================================================
   // SECTION 19: QUEST UPDATE
@@ -1435,7 +1615,24 @@ export default function RPGQuestPage() {
       return newQuests;
     });
 
-    // Check victory (quests 1-5 completed)
+    
+    // ============ ACHIEVEMENT CHECKS ============
+    if (gs.stepsTaken >= 500) unlockAchievement("primeiros_passos");
+    if (gs.npcsSpoken.size >= NPCS.length) unlockAchievement("linguarudo");
+    if (gs.chestsOpened.size >= CHESTS.length) unlockAchievement("colecionador");
+    let exploredCount = 0; let totalTiles = 0;
+    for (let r = 0; r < MAP_ROWS; r++) for (let c = 0; c < MAP_COLS; c++) { const t = GAME_MAP[r]?.[c]; if (t !== undefined && t !== TREE) { totalTiles++; if (gs.explored[r]?.[c]) exploredCount++; } }
+    if (totalTiles > 0 && exploredCount / totalTiles >= 0.9) unlockAchievement("cartografo");
+    if (gs.questsCompleted.has("mestre_digital") && gs.startTime > 0 && (Date.now() - gs.startTime) / 1000 < 300) unlockAchievement("speed_runner");
+    if (!gs.inventoryOpenedSinceLastQuest && gs.questsCompletedWithoutInventory >= 3) unlockAchievement("focado");
+    if (gs.specialItems.size >= SPECIAL_ITEMS.length) unlockAchievement("observador");
+    if (gs.startTime > 0 && (Date.now() - gs.startTime) / 1000 >= 600) unlockAchievement("noctambulo");
+    const totalPages = NPCS.reduce((s, n) => s + n.dialogue.length, 0);
+    if (gs.dialoguePagesRead >= totalPages && gs.dialoguePagesSkipped === 0) unlockAchievement("filosofo");
+    if (gs.usedKeyboardOnly && !gs.usedTouchControls && gs.questsCompleted.size >= 3) unlockAchievement("pro_gamer");
+    if (gs.achievements.size >= 11) unlockAchievement("cem_porcento");
+
+// Check victory (quests 1-5 completed)
     if (
       gs.questsCompleted.has("primeiro_passo") &&
       gs.questsCompleted.has("conversador") &&
@@ -1453,7 +1650,7 @@ export default function RPGQuestPage() {
       });
       setScreen("victory");
     }
-  }, []);
+  }, [unlockAchievement, pickupSpecialItem]);
 
   // ================================================================
   // SECTION 20: KEYBOARD HANDLERS
@@ -1509,7 +1706,7 @@ export default function RPGQuestPage() {
           setOverlay((prev) => (prev === "quest_log" ? "none" : "quest_log"));
         }
         if (key === "i" && overlay !== "dialogue") {
-          setOverlay((prev) => (prev === "inventory" ? "none" : "inventory"));
+          setOverlay((prev) => { if (prev === "inventory") return "none"; gameStateRef.current.inventoryOpenedSinceLastQuest = true; return "inventory"; });
         }
       }
     }
@@ -1576,6 +1773,9 @@ export default function RPGQuestPage() {
         let dx = 0;
         let dy = 0;
 
+        const speedMult = (gs.crystalSpeedEndTime > Date.now()) ? 2 : 1;
+        const currentSpeed = PLAYER_SPEED * speedMult;
+
         if (keys.has("w") || keys.has("arrowup") || touch.up) dy -= currentSpeed;
         if (keys.has("s") || keys.has("arrowdown") || touch.down) dy += currentSpeed;
         if (keys.has("a") || keys.has("arrowleft") || touch.left) dx -= currentSpeed;
@@ -1616,6 +1816,13 @@ export default function RPGQuestPage() {
           if (gs.player.walkTimer >= walkSpeed) {
             gs.player.walkTimer = 0;
             gs.player.walkFrame++;
+            gs.stepsTaken++;
+            const pCol = Math.floor(gs.player.x / TILE_SIZE);
+            const pRow = Math.floor(gs.player.y / TILE_SIZE);
+            if (pCol === CRISTAL_FLOWER_COL && pRow === CRISTAL_FLOWER_ROW && !cristalPickedUpRef.current && !gs.specialItems.has("cristal_magico")) {
+              cristalPickedUpRef.current = true;
+              pickupSpecialItem("cristal_magico");
+            }
           }
           if (frame % (isSprinting ? 3 : 6) === 0) { const dustX = gs.player.x - gs.camera.x + 8, dustY = gs.player.y - gs.camera.y + 18; particlesRef.current.push(...createDustParticles(dustX, dustY, isSprinting ? 3 : 1)); }
         } else {
@@ -1693,7 +1900,20 @@ export default function RPGQuestPage() {
           }
         }
       }
-      setShowEPrompt(nearInteractive && overlay === "none");
+            if (!nearInteractive) {
+        for (const sic of specialItemChestsRef.current) {
+          if (sic.opened) continue;
+          const sdx = sic.x - gs.player.x;
+          const sdy = sic.y - gs.player.y;
+          if (Math.sqrt(sdx * sdx + sdy * sdy) < INTERACT_DIST) {
+            nearInteractive = true;
+            const item = SPECIAL_ITEMS.find((i: SpecialItem) => i.id === sic.itemId);
+            promptText = "[E] Abrir bau " + (item ? item.emoji : "");
+            break;
+          }
+        }
+      }
+setShowEPrompt(nearInteractive && overlay === "none");
       setEPromptText(promptText);
 
       // 6. Update quests (throttled)
@@ -1757,7 +1977,30 @@ export default function RPGQuestPage() {
         }
       }
 
-      // Draw NPCs with AI state
+      
+      // Draw special item chests (purple)
+      for (const sic of specialItemChestsRef.current) {
+        if (sic.opened) continue;
+        const sc = Math.floor(sic.x / TILE_SIZE);
+        const sr = Math.floor(sic.y / TILE_SIZE);
+        if (sc >= startCol && sc < endCol && sr >= startRow && sr < endRow) {
+          const sx = sic.x - gs.camera.x;
+          const sy = sic.y - gs.camera.y;
+          ctx.fillStyle = "#7c3aed";
+          ctx.fillRect(sx + 2, sy + 8, 16, 8);
+          ctx.fillStyle = "#6d28d9";
+          ctx.fillRect(sx + 1, sy + 4, 18, 6);
+          ctx.fillStyle = "#fbbf24";
+          ctx.fillRect(sx + 8, sy + 7, 4, 4);
+          const sparkle = Math.sin(frame * 0.08) * 0.5 + 0.5;
+          ctx.fillStyle = `rgba(167,139,250,${sparkle * 0.8})`;
+          ctx.beginPath();
+          ctx.arc(sx + 10 + Math.cos(frame * 0.06) * 8, sy + 2 + Math.sin(frame * 0.08) * 3, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+// Draw NPCs with AI state
       for (let ni = 0; ni < NPCS.length; ni++) {
         const npc = NPCS[ni]; const nrt = npcRuntimeRef.current[ni];
         const nc = Math.floor(nrt.x / TILE_SIZE); const nr = Math.floor(nrt.y / TILE_SIZE);
@@ -1792,7 +2035,8 @@ export default function RPGQuestPage() {
         playerRow,
         NPCS,
         chestsRef.current,
-        gs.explored
+        gs.explored,
+        gs.specialItems.has("mapa_antigo")
       );
 
       // HUD: Badge counter (top right, below minimap)
@@ -1853,7 +2097,19 @@ export default function RPGQuestPage() {
         ctx.textAlign = "start";
       }
 
-      // HUD: Controls hint (bottom center, fades after 10s)
+            // HUD: Crystal speed boost
+      if (gs.crystalSpeedEndTime > Date.now()) {
+        const remaining = Math.ceil((gs.crystalSpeedEndTime - Date.now()) / 1000);
+        ctx.fillStyle = "rgba(109,40,217,0.7)";
+        ctx.fillRect(canvas.width - 132, 138, 124, 20);
+        ctx.fillStyle = "#a78bfa";
+        ctx.font = "bold 10px monospace";
+        ctx.textAlign = "right";
+        ctx.fillText("Speed x2: " + remaining + "s", canvas.width - 16, 152);
+        ctx.textAlign = "start";
+      }
+
+// HUD: Controls hint (bottom center, fades after 10s)
       if (gs.startTime > 0 && Date.now() - gs.startTime < 10000) {
         const fadeAlpha = Math.max(0, 1 - (Date.now() - gs.startTime) / 10000);
         ctx.fillStyle = `rgba(0,0,0,${0.5 * fadeAlpha})`;
@@ -1981,17 +2237,38 @@ export default function RPGQuestPage() {
       explored: Array.from({ length: MAP_ROWS }, () =>
         Array.from({ length: MAP_COLS }, () => false)
       ),
+          specialItems: new Set(),
+      achievements: new Set(),
+      stepsTaken: 0,
+      dialoguePagesRead: 0,
+      dialoguePagesSkipped: 0,
+      npcTalkCounts: {},
+      questsCompletedWithoutInventory: 0,
+      inventoryOpenedSinceLastQuest: false,
+      usedKeyboardOnly: true,
+      usedTouchControls: false,
+      crystalSpeedEndTime: 0,
     };
     chestsRef.current = CHESTS.map((c) => ({ ...c }));
+    specialItemChestsRef.current = SPECIAL_ITEM_CHESTS.map((c: SpecialItemChest) => ({ ...c }));
     particlesRef.current = [];
     lastZoneRef.current = null;
     dialogueActiveRef.current = false;
+    cristalPickedUpRef.current = false;
+    achievementQueueRef.current = [];
     npcRuntimeRef.current = NPCS.map((npc) => ({ id: npc.id, x: npc.x, y: npc.y, originX: npc.x, originY: npc.y, direction: DIR_DOWN as Direction, walkFrame: 0, walkTimer: 0, state: "idle" as NPCState, idleAnimation: (["bounce", "look_around", "wave"] as NPCIdleAnim[])[Math.floor(Math.random() * 3)], patrolTimer: Math.random() * 180 + 60, patrolTarget: null, patrolCooldown: 0 }));
     windRef.current = { dirX: 1, dirY: 0.2, strength: 0.5, timer: 0, changeCooldown: 1800 + Math.random() * 1800 };
     interactFlashRef.current = 0; sprintingRef.current = false;
     setQuests(createQuests());
     setBadges([]);
     setBadgeEmojis({});
+    setSpecialItems(new Set());
+    setAchievements(createAchievements());
+    setAchievementBanner(null);
+    setAchievementBannerVisible(false);
+    setSelectedItem(null);
+    setPopupItem(null);
+    setInventoryTab("badges");
     setOverlay("none");
     setScreen("playing");
   }, []);
@@ -2003,6 +2280,7 @@ export default function RPGQuestPage() {
   const handleTouchDir = useCallback(
     (dir: "up" | "down" | "left" | "right", pressed: boolean) => {
       touchDirRef.current[dir] = pressed;
+      if (pressed) { gameStateRef.current.usedTouchControls = true; gameStateRef.current.usedKeyboardOnly = false; }
     },
     []
   );
@@ -2202,67 +2480,139 @@ export default function RPGQuestPage() {
       )}
 
       {/* ============================================ */}
-      {/* OVERLAY: Inventory */}
+      {/* OVERLAY: Inventory (Full Tabbed System) */}
       {/* ============================================ */}
       {overlay === "inventory" && (
-        <div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/60"
-          onClick={() => setOverlay("none")}
-        >
-          <div
-            className="bg-[#1a1a2e] border-2 border-[#fbbf24]/60 rounded-xl p-6 w-[90%] max-w-[500px] shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-[#fbbf24] font-bold text-xl font-mono">
-                Inventario
-              </h2>
-              <button
-                className="text-zinc-400 hover:text-white text-xl font-mono"
-                onClick={() => setOverlay("none")}
-              >
-                X
-              </button>
-            </div>
-
-            {badges.length === 0 ? (
-              <p className="text-zinc-400 text-sm font-mono text-center py-8">
-                Ainda nao tens badges. Abre baus para colecionar!
-              </p>
-            ) : (
-              <div className="grid grid-cols-4 gap-3">
-                {badges.map((badge, i) => (
-                  <div
-                    key={i}
-                    className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 text-center hover:border-[#fbbf24]/50 transition-colors"
-                  >
-                    <p className="text-2xl mb-1">{badgeEmojis[badge] || "\uD83C\uDFC6"}</p>
-                    <p className="text-white text-xs font-mono">{badge}</p>
-                  </div>
-                ))}
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={() => { setOverlay("none"); setSelectedItem(null); }}>
+          <div className="bg-[#1a1a2e]/95 border-2 border-[#fbbf24]/40 rounded-xl w-[95%] max-w-[700px] max-h-[85vh] shadow-2xl backdrop-blur-md flex flex-col"
+            onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-5 pb-0">
+              <h2 className="text-[#fbbf24] font-bold text-xl font-mono">Inventario</h2>
+              <div className="flex items-center gap-3">
+                <span className="text-zinc-400 text-xs font-mono">
+                  {badges.length + specialItems.size + achievements.filter((a: Achievement) => a.unlocked).length}/{CHESTS.length + SPECIAL_ITEMS.length + achievements.length} coletados
+                </span>
+                <button className="text-zinc-400 hover:text-white text-xl font-mono" onClick={() => { setOverlay("none"); setSelectedItem(null); }}>X</button>
               </div>
-            )}
-
-            {/* Empty slots */}
-            {badges.length > 0 && badges.length < CHESTS.length && (
-              <div className="grid grid-cols-4 gap-3 mt-3">
-                {Array.from({ length: CHESTS.length - badges.length }).map(
-                  (_, i) => (
-                    <div
-                      key={`empty-${i}`}
-                      className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-3 text-center"
-                    >
-                      <p className="text-2xl mb-1 opacity-20">?</p>
-                      <p className="text-zinc-600 text-xs font-mono">???</p>
+            </div>
+            <div className="flex gap-1 px-5 pt-4">
+              {([
+                { key: "badges" as InventoryTab, label: "Badges", count: `${badges.length}/${CHESTS.length}` },
+                { key: "itens" as InventoryTab, label: "Itens", count: `${specialItems.size}/${SPECIAL_ITEMS.length}` },
+                { key: "conquistas" as InventoryTab, label: "Conquistas", count: `${achievements.filter((a: Achievement) => a.unlocked).length}/${achievements.length}` },
+              ]).map(tab => (
+                <button key={tab.key}
+                  className={`flex-1 py-2 px-3 rounded-t-lg font-mono text-sm font-bold transition-colors ${inventoryTab === tab.key ? "bg-zinc-800 text-[#fbbf24] border-t border-x border-[#fbbf24]/30" : "bg-zinc-900/50 text-zinc-500 hover:text-zinc-300"}`}
+                  onClick={() => { setInventoryTab(tab.key); setSelectedItem(null); }}>
+                  {tab.label} <span className="text-xs opacity-60">({tab.count})</span>
+                </button>
+              ))}
+            </div>
+            <div className="bg-zinc-800/50 p-5 overflow-y-auto flex-1 min-h-[200px]">
+              <div className="flex gap-4">
+                <div className={selectedItem ? "w-1/2 transition-all" : "w-full transition-all"}>
+                  {inventoryTab === "badges" && (
+                    <>{badges.length === 0 ? (
+                      <p className="text-zinc-400 text-sm font-mono text-center py-8">Ainda nao tens badges. Abre baus para colecionar!</p>
+                    ) : (
+                      <div className="grid grid-cols-4 gap-2">
+                        {badges.map((badge, i) => (
+                          <div key={i} className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 text-center hover:border-[#fbbf24]/50 transition-colors cursor-pointer"
+                            onClick={() => setSelectedItem({ id: badge, name: badge, emoji: badgeEmojis[badge] || "\u{1F3C6}", description: `Badge tecnico: ${badge}`, foundIn: "Bau do tesouro", usable: false })}>
+                            <p className="text-2xl mb-1">{badgeEmojis[badge] || "\u{1F3C6}"}</p>
+                            <p className="text-white text-xs font-mono truncate">{badge}</p>
+                          </div>
+                        ))}
+                        {Array.from({ length: CHESTS.length - badges.length }).map((_, i) => (
+                          <div key={`empty-${i}`} className="bg-zinc-900/30 border border-zinc-800/50 rounded-lg p-3 text-center">
+                            <p className="text-2xl mb-1 opacity-20">?</p><p className="text-zinc-700 text-xs font-mono">???</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}</>
+                  )}
+                  {inventoryTab === "itens" && (
+                    <div className="grid grid-cols-3 gap-2">
+                      {SPECIAL_ITEMS.map((item) => {
+                        const owned = specialItems.has(item.id);
+                        return (<div key={item.id} className={`border rounded-lg p-3 text-center transition-colors ${owned ? "bg-zinc-900 border-purple-500/40 hover:border-purple-400/60 cursor-pointer" : "bg-zinc-900/30 border-zinc-800/50 opacity-50"} ${selectedItem?.id === item.id ? "ring-2 ring-purple-500" : ""}`}
+                          onClick={() => owned && setSelectedItem(item)}>
+                          <p className="text-2xl mb-1">{owned ? item.emoji : "?"}</p>
+                          <p className={`text-xs font-mono ${owned ? "text-white" : "text-zinc-600"}`}>{owned ? item.name : "???"}</p>
+                        </div>);
+                      })}
                     </div>
-                  )
+                  )}
+                  {inventoryTab === "conquistas" && (
+                    <div className="space-y-2">
+                      {achievements.map((ach) => (
+                        <div key={ach.id} className={`flex items-center gap-3 border rounded-lg p-3 transition-colors ${ach.unlocked ? "border-[#fbbf24]/40 bg-[#fbbf24]/5" : "border-zinc-800 bg-zinc-900/30 opacity-50"}`}>
+                          <span className="text-2xl">{ach.unlocked ? ach.emoji : "\u{1F512}"}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className={`font-bold text-sm font-mono ${ach.unlocked ? "text-[#fbbf24]" : "text-zinc-500"}`}>{ach.unlocked ? ach.name : "???"}</p>
+                            <p className="text-zinc-400 text-xs font-mono">{ach.description}</p>
+                          </div>
+                          {ach.unlocked && <span className="text-green-400 text-xs font-mono shrink-0">Desbloqueado</span>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {selectedItem && (
+                  <div className="w-1/2 bg-zinc-900/80 border border-zinc-700 rounded-lg p-4">
+                    <div className="text-center mb-4">
+                      <p className="text-5xl mb-2">{selectedItem.emoji}</p>
+                      <p className="text-white font-bold text-lg font-mono">{selectedItem.name}</p>
+                    </div>
+                    <div className="space-y-3">
+                      <div><p className="text-zinc-500 text-xs font-mono uppercase mb-1">Descricao</p><p className="text-zinc-300 text-sm font-mono">{selectedItem.description}</p></div>
+                      <div><p className="text-zinc-500 text-xs font-mono uppercase mb-1">Encontrado em</p><p className="text-zinc-300 text-sm font-mono">{selectedItem.foundIn}</p></div>
+                      {selectedItem.usable && (
+                        <button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold py-2 rounded-lg transition-colors mt-2"
+                          onClick={() => { useSpecialItem(selectedItem.id); setOverlay("none"); setSelectedItem(null); }}>
+                          Usar {selectedItem.useDescription && `(${selectedItem.useDescription})`}
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
-            )}
+            </div>
+            <p className="text-zinc-500 text-xs font-mono p-3 text-center">Pressiona I ou ESC para fechar</p>
+          </div>
+        </div>
+      )}
+      {/* ============================================ */}
+      {/* OVERLAY: Item Popup */}
+      {/* ============================================ */}
+      {overlay === "item_popup" && popupItem && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none">
+          <div className="bg-[#1a1a2e]/95 border-2 border-purple-500/60 rounded-xl p-6 text-center shadow-2xl"
+            style={{ animation: "popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)" }}>
+            <p className="text-4xl mb-2">{popupItem.emoji}</p>
+            <p className="text-purple-400 font-bold text-lg font-mono">Item Encontrado!</p>
+            <p className="text-white font-mono mt-1">{popupItem.name}</p>
+            <p className="text-zinc-400 text-xs font-mono mt-2 max-w-[250px]">{popupItem.description}</p>
+          </div>
+        </div>
+      )}
 
-            <p className="text-zinc-500 text-xs font-mono mt-4 text-center">
-              Pressiona I ou ESC para fechar
-            </p>
+      {/* ============================================ */}
+      {/* BANNER: Achievement Notification */}
+      {/* ============================================ */}
+      {achievementBannerVisible && achievementBanner && (
+        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
+          style={{ animation: "achievementSlide 3s ease-in-out" }}>
+          <div className="mt-2 bg-gradient-to-r from-[#f59e0b] via-[#fbbf24] to-[#f59e0b] rounded-lg px-6 py-3 shadow-2xl border border-yellow-300/50">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">{achievementBanner.emoji}</span>
+              <div>
+                <p className="text-[#1a1a2e] font-bold text-sm font-mono">Conquista Desbloqueada!</p>
+                <p className="text-[#1a1a2e]/80 text-xs font-mono">{achievementBanner.name} &mdash; {achievementBanner.description}</p>
+              </div>
+              <span className="text-2xl">&#127942;</span>
+            </div>
           </div>
         </div>
       )}
@@ -2390,6 +2740,7 @@ function VictoryScreen({
         maxLife: 400,
         color: colors[Math.floor(Math.random() * colors.length)],
         size: 3 + Math.random() * 5,
+        type: "confetti" as ParticleType,
       });
     }
     setConfetti(particles);
