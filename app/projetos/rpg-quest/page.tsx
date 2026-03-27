@@ -6,8 +6,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
    DESCOMPLICAI RPG: THE QUEST
    ================================================================
    A full 2D top-down RPG portfolio explorer
-   Canvas 2D rendering, 50x40 tile map, 5 zones
-   8 NPCs, 6 quests, 8 treasure chests
+   Canvas 2D rendering, 80x60 tile map, 7 zones
+   12 NPCs, 8 quests, 12 treasure chests
    All dialogue in Portuguese (PT-PT)
    Pure React + Canvas, zero game engines
    ================================================================ */
@@ -482,6 +482,67 @@ const NPCS: NPC[] = [
       "Completa todas as quests para seres um verdadeiro mestre!",
     ],
   },
+  {
+    id: "ermitao",
+    name: "Ermitao da Floresta",
+    x: 65 * TILE_SIZE + 4,
+    y: 10 * TILE_SIZE + 4,
+    bodyColor: "#78350f",
+    headColor: "#fde68a",
+    dialogue: [
+      "Bem-vindo, viajante, a Floresta Encantada!",
+      "O Jaime comecou a programar sozinho, com tutoriais online.",
+      "Os primeiros projetos foram simples: HTML puro, CSS basico.",
+      "Mas a curiosidade era imensa — cada dia um novo desafio.",
+      "E assim nasceu a Descomplicai: do zero, com paixao.",
+    ],
+  },
+  {
+    id: "fada",
+    name: "Fada da Floresta",
+    x: 72 * TILE_SIZE + 4,
+    y: 20 * TILE_SIZE + 4,
+    bodyColor: "#a78bfa",
+    headColor: "#fde68a",
+    questId: "explorador_floresta",
+    dialogue: [
+      "Ooh, um aventureiro corajoso chegou ate mim!",
+      "Tenho um segredo especial para quem explora a floresta...",
+      "Existe uma quest oculta: a Quest da Floresta Encantada!",
+      "Visita todos os cantos da floresta para a completar.",
+      "As arvores guardam muita sabedoria, se souberes ouvir!",
+    ],
+  },
+  {
+    id: "surfista",
+    name: "Surfista",
+    x: 20 * TILE_SIZE + 4,
+    y: 55 * TILE_SIZE + 4,
+    bodyColor: "#0ea5e9",
+    headColor: "#fde68a",
+    dialogue: [
+      "Ei! Apanhas boas ondas por aqui?",
+      "Ja ouviste falar do projeto Ondas Academy?",
+      "Foi uma plataforma de ensino de surf — design limpo e moderno.",
+      "O Jaime criou tudo: booking, galeria, mapa de praias.",
+      "A vida e melhor com o mar ao lado!",
+    ],
+  },
+  {
+    id: "pescador",
+    name: "Pescador",
+    x: 58 * TILE_SIZE + 4,
+    y: 55 * TILE_SIZE + 4,
+    bodyColor: "#1e40af",
+    headColor: "#fde68a",
+    dialogue: [
+      "Boa tarde, amigo! Hoje o mar esta calmo.",
+      "Sou da Figueira da Foz — terra de pescadores e surfistas.",
+      "O Jaime tambem e da Figueira, sabia?",
+      "Foi aqui que ele cresceu, entre o mar e a tecnologia.",
+      "Figueira inspira... o mar ensina-nos a ter paciencia.",
+    ],
+  },
 ];
 
 // ================================================================
@@ -553,6 +614,38 @@ const CHESTS: Chest[] = [
     badge: "AI/ML",
     badgeEmoji: "\uD83E\uDD16",
   },
+  {
+    id: "chest_threejs",
+    x: 68 * TILE_SIZE,
+    y: 8 * TILE_SIZE,
+    opened: false,
+    badge: "Three.js",
+    badgeEmoji: "\uD83D\uDD37",
+  },
+  {
+    id: "chest_gsap",
+    x: 75 * TILE_SIZE,
+    y: 15 * TILE_SIZE,
+    opened: false,
+    badge: "GSAP",
+    badgeEmoji: "\u26A1",
+  },
+  {
+    id: "chest_supabase",
+    x: 30 * TILE_SIZE,
+    y: 52 * TILE_SIZE,
+    opened: false,
+    badge: "Supabase",
+    badgeEmoji: "\uD83D\uDDC4\uFE0F",
+  },
+  {
+    id: "chest_docker",
+    x: 50 * TILE_SIZE,
+    y: 53 * TILE_SIZE,
+    opened: false,
+    badge: "Docker",
+    badgeEmoji: "\uD83D\uDC33",
+  },
 ];
 
 // ================================================================
@@ -564,16 +657,16 @@ function createQuests(): Quest[] {
     {
       id: "primeiro_passo",
       name: "Primeiro Passo",
-      description: "Visita todas as 5 zonas",
-      target: 5,
+      description: "Visita todas as 7 zonas",
+      target: 7,
       progress: 0,
       completed: false,
     },
     {
       id: "conversador",
       name: "Conversador",
-      description: "Fala com todos os 8 NPCs",
-      target: 8,
+      description: "Fala com todos os 12 NPCs",
+      target: 12,
       progress: 0,
       completed: false,
     },
@@ -606,6 +699,22 @@ function createQuests(): Quest[] {
       name: "Speedrunner",
       description: "Completa tudo em menos de 3 minutos",
       target: 1,
+      progress: 0,
+      completed: false,
+    },
+    {
+      id: "explorador_floresta",
+      name: "Explorador da Floresta",
+      description: "Visita a zona Floresta Encantada",
+      target: 1,
+      progress: 0,
+      completed: false,
+    },
+    {
+      id: "vida_de_praia",
+      name: "Vida de Praia",
+      description: "Fala com o Surfista e o Pescador",
+      target: 2,
       progress: 0,
       completed: false,
     },
@@ -1256,8 +1365,8 @@ export default function RPGQuestPage() {
 
   const gameStateRef = useRef<GameState>({
     player: {
-      x: 24 * TILE_SIZE,
-      y: 20 * TILE_SIZE,
+      x: 39 * TILE_SIZE,
+      y: 28 * TILE_SIZE,
       direction: DIR_DOWN,
       moving: false,
       walkFrame: 0,
@@ -1655,6 +1764,29 @@ const skipTypewriter = useCallback(() => {
           q6.progress = 1;
           q6.completed = true;
           gs.questsCompleted.add(q6.id);
+        }
+      }
+
+      // Quest 7: Explorador da Floresta — visit floresta zone
+      const q7 = newQuests.find((q) => q.id === "explorador_floresta");
+      if (q7 && !q7.completed) {
+        if (gs.zonesVisited.has("floresta")) {
+          q7.progress = 1;
+          q7.completed = true;
+          gs.questsCompleted.add(q7.id);
+        }
+      }
+
+      // Quest 8: Vida de Praia — talk to Surfista and Pescador
+      const q8 = newQuests.find((q) => q.id === "vida_de_praia");
+      if (q8 && !q8.completed) {
+        let beachCount = 0;
+        if (gs.npcsSpoken.has("surfista")) beachCount++;
+        if (gs.npcsSpoken.has("pescador")) beachCount++;
+        q8.progress = beachCount;
+        if (q8.progress >= q8.target) {
+          q8.completed = true;
+          gs.questsCompleted.add(q8.id);
         }
       }
 
@@ -2262,8 +2394,8 @@ setShowEPrompt(nearInteractive && overlay === "none");
   const startGame = useCallback(() => {
     gameStateRef.current = {
       player: {
-        x: 24 * TILE_SIZE,
-        y: 20 * TILE_SIZE,
+        x: 39 * TILE_SIZE,
+        y: 28 * TILE_SIZE,
         direction: DIR_DOWN,
         moving: false,
         walkFrame: 0,
@@ -2865,25 +2997,25 @@ function VictoryScreen({
           <div className="bg-zinc-900 rounded-lg p-3">
             <p className="text-zinc-400 text-xs font-mono">NPCs</p>
             <p className="text-white font-bold text-lg font-mono">
-              {stats.npcs}/8
+              {stats.npcs}/12
             </p>
           </div>
           <div className="bg-zinc-900 rounded-lg p-3">
             <p className="text-zinc-400 text-xs font-mono">Baus</p>
             <p className="text-white font-bold text-lg font-mono">
-              {stats.chests}/8
+              {stats.chests}/12
             </p>
           </div>
           <div className="bg-zinc-900 rounded-lg p-3">
             <p className="text-zinc-400 text-xs font-mono">Zonas</p>
             <p className="text-white font-bold text-lg font-mono">
-              {stats.zones}/5
+              {stats.zones}/7
             </p>
           </div>
           <div className="bg-zinc-900 rounded-lg p-3 col-span-2">
             <p className="text-zinc-400 text-xs font-mono">Quests</p>
             <p className="text-white font-bold text-lg font-mono">
-              {stats.quests}/6
+              {stats.quests}/8
             </p>
           </div>
         </div>
