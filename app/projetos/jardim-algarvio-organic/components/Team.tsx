@@ -8,30 +8,30 @@ const team = [
     name: "António Soares",
     role: "Fundador & Paisagista",
     bio: "Com mais de 15 anos de experiência, o António fundou a JardimAlgarvio com a visão de criar jardins que respeitem a natureza algarvia.",
-    gradient: "linear-gradient(135deg, #4A5D23 0%, #6B8F3C 100%)",
+    gradient: "linear-gradient(135deg, #2E7D32 0%, #43A047 100%)",
   },
   {
     name: "Sofia Rodrigues",
     role: "Designer de Jardins",
     bio: "Formada em Arquitetura Paisagista, a Sofia traz uma abordagem artística a cada projeto.",
-    gradient: "linear-gradient(135deg, #8BA888 0%, #B8D4E3 100%)",
+    gradient: "linear-gradient(135deg, #4CAF50 0%, #64B5F6 100%)",
   },
   {
     name: "Miguel Costa",
     role: "Chefe de Equipa",
     bio: "O Miguel lidera a equipa de campo com dedicação e conhecimento profundo das espécies mediterrânicas.",
-    gradient: "linear-gradient(135deg, #C2703E 0%, #E8A87C 100%)",
+    gradient: "linear-gradient(135deg, #D4552A 0%, #E8A87C 100%)",
   },
   {
     name: "Inês Martins",
     role: "Especialista em Rega",
     bio: "A Inês é responsável por todos os sistemas de rega, garantindo eficiência hídrica em cada jardim.",
-    gradient: "linear-gradient(135deg, #B8D4E3 0%, #8BA888 100%)",
+    gradient: "linear-gradient(135deg, #64B5F6 0%, #4CAF50 100%)",
   },
 ];
 
 function AvatarWreath({ gradient, index }: { gradient: string; index: number }) {
-  const wreathColors = ["#4A5D23", "#8BA888", "#6B8F3C", "#4A5D23"];
+  const wreathColors = ["#2E7D32", "#4CAF50", "#43A047", "#2E7D32"];
   const wreathColor = wreathColors[index % wreathColors.length];
 
   return (
@@ -103,10 +103,10 @@ function AvatarWreath({ gradient, index }: { gradient: string; index: number }) 
       >
         {/* Person icon silhouette */}
         <svg viewBox="0 0 40 40" fill="none" className="w-10 h-10">
-          <circle cx="20" cy="14" r="6" fill="#FDF6EC" fillOpacity={0.6} />
+          <circle cx="20" cy="14" r="6" fill="#FBF1E0" fillOpacity={0.6} />
           <path
             d="M8 36 C8 28, 13 24, 20 24 C27 24, 32 28, 32 36"
-            fill="#FDF6EC"
+            fill="#FBF1E0"
             fillOpacity={0.4}
           />
         </svg>
@@ -129,7 +129,7 @@ export default function Team() {
           className="text-4xl md:text-5xl mb-4"
           style={{
             fontFamily: "var(--font-libre-caslon), serif",
-            color: "#4A5D23",
+            color: "#2E7D32",
           }}
         >
           A Nossa Equipa
@@ -139,7 +139,7 @@ export default function Team() {
           style={{
             fontFamily: "var(--font-newsreader), serif",
             fontStyle: "italic",
-            color: "#8BA888",
+            color: "#4CAF50",
           }}
         >
           Pessoas apaixonadas por jardins
@@ -152,7 +152,7 @@ export default function Team() {
             key={member.name}
             className="rounded-2xl p-6 text-center"
             style={{
-              backgroundColor: "#FDF6EC",
+              backgroundColor: "#FBF1E0",
               boxShadow: "0 2px 16px rgba(92,64,51,0.06)",
             }}
             initial={{ opacity: 0, y: 40 }}
@@ -170,7 +170,7 @@ export default function Team() {
               className="text-lg font-bold mb-1"
               style={{
                 fontFamily: "var(--font-libre-caslon), serif",
-                color: "#4A5D23",
+                color: "#2E7D32",
               }}
             >
               {member.name}
@@ -179,7 +179,7 @@ export default function Team() {
               className="text-sm font-semibold mb-3"
               style={{
                 fontFamily: "var(--font-source-sans), sans-serif",
-                color: "#C2703E",
+                color: "#D4552A",
               }}
             >
               {member.role}
@@ -188,7 +188,7 @@ export default function Team() {
               className="text-sm leading-relaxed"
               style={{
                 fontFamily: "var(--font-source-sans), sans-serif",
-                color: "#5C4033",
+                color: "#3E2723",
                 opacity: 0.85,
               }}
             >
@@ -199,7 +199,7 @@ export default function Team() {
       </div>
 
       <div className="mt-20">
-        <BotanicalDivider variant="flowers" color="#8BA888" />
+        <BotanicalDivider variant="flowers" color="#4CAF50" />
       </div>
     </section>
   );

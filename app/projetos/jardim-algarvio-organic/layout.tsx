@@ -33,8 +33,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div
       className={`${libreCaslon.variable} ${sourceSans.variable} ${newsreader.variable}`}
       style={{
-        backgroundColor: "#FDF6EC",
-        color: "#5C4033",
+        backgroundColor: "#FBF1E0",
+        color: "#3E2723",
         fontFamily: "var(--font-source-sans), sans-serif",
       }}
     >

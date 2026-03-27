@@ -19,7 +19,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "#4A5D23" }}>
+    <footer style={{ backgroundColor: "#2E7D32" }}>
       {/* Top botanical vine border */}
       <div className="w-full overflow-hidden">
         <svg
@@ -33,7 +33,7 @@ export default function Footer() {
           {/* Continuous vine */}
           <path
             d="M0 20 C50 18, 100 22, 150 20 S250 22, 300 20 S400 18, 450 20 S550 22, 600 20 S700 18, 750 20 S850 22, 900 20 S1000 18, 1050 20 S1150 22, 1200 20"
-            stroke="#FDF6EC"
+            stroke="#FBF1E0"
             strokeWidth="1"
             strokeOpacity={0.3}
             fill="none"
@@ -47,7 +47,7 @@ export default function Footer() {
                   ? `M${x} 20 C${x - 6} 14, ${x - 12} 13, ${x - 10} 17 C${x - 8} 21, ${x - 3} 22, ${x} 20Z`
                   : `M${x} 20 C${x + 6} 26, ${x + 12} 27, ${x + 10} 23 C${x + 8} 19, ${x + 3} 18, ${x} 20Z`
               }
-              fill="#FDF6EC"
+              fill="#FBF1E0"
               fillOpacity={0.15}
             />
           ))}
@@ -58,7 +58,7 @@ export default function Footer() {
               cx={x}
               cy={i % 2 === 0 ? 17 : 23}
               r="2"
-              fill="#FDF6EC"
+              fill="#FBF1E0"
               fillOpacity={0.2}
             />
           ))}
@@ -74,7 +74,7 @@ export default function Footer() {
               style={{
                 fontFamily: "var(--font-libre-caslon), serif",
                 fontStyle: "italic",
-                color: "#FDF6EC",
+                color: "#FBF1E0",
               }}
             >
               JardimAlgarvio
@@ -84,7 +84,7 @@ export default function Footer() {
               style={{
                 fontFamily: "var(--font-newsreader), serif",
                 fontStyle: "italic",
-                color: "#FDF6EC",
+                color: "#FBF1E0",
                 opacity: 0.7,
               }}
             >
@@ -98,7 +98,7 @@ export default function Footer() {
                   href={link.href}
                   className="flex items-center justify-center text-xs font-semibold px-4 py-2"
                   style={{
-                    color: "#4A5D23",
+                    color: "#2E7D32",
                     backgroundColor: "rgba(253,246,236,0.9)",
                     borderRadius: "50% 10% 50% 10%",
                     fontFamily: "var(--font-source-sans), sans-serif",
@@ -121,7 +121,7 @@ export default function Footer() {
               className="text-sm font-semibold mb-4 uppercase tracking-wider"
               style={{
                 fontFamily: "var(--font-source-sans), sans-serif",
-                color: "#FDF6EC",
+                color: "#FBF1E0",
                 opacity: 0.5,
               }}
             >
@@ -135,7 +135,7 @@ export default function Footer() {
                     className="text-sm transition-opacity duration-200 hover:opacity-100"
                     style={{
                       fontFamily: "var(--font-source-sans), sans-serif",
-                      color: "#FDF6EC",
+                      color: "#FBF1E0",
                       opacity: 0.7,
                     }}
                   >
@@ -152,7 +152,7 @@ export default function Footer() {
               className="text-sm font-semibold mb-4 uppercase tracking-wider"
               style={{
                 fontFamily: "var(--font-source-sans), sans-serif",
-                color: "#FDF6EC",
+                color: "#FBF1E0",
                 opacity: 0.5,
               }}
             >
@@ -163,7 +163,7 @@ export default function Footer() {
                 className="text-sm"
                 style={{
                   fontFamily: "var(--font-source-sans), sans-serif",
-                  color: "#FDF6EC",
+                  color: "#FBF1E0",
                   opacity: 0.7,
                 }}
               >
@@ -173,7 +173,7 @@ export default function Footer() {
                 className="text-sm"
                 style={{
                   fontFamily: "var(--font-source-sans), sans-serif",
-                  color: "#FDF6EC",
+                  color: "#FBF1E0",
                   opacity: 0.7,
                 }}
               >
@@ -183,7 +183,7 @@ export default function Footer() {
                 className="text-sm"
                 style={{
                   fontFamily: "var(--font-source-sans), sans-serif",
-                  color: "#FDF6EC",
+                  color: "#FBF1E0",
                   opacity: 0.7,
                 }}
               >
@@ -206,7 +206,7 @@ export default function Footer() {
             className="text-xs"
             style={{
               fontFamily: "var(--font-source-sans), sans-serif",
-              color: "#FDF6EC",
+              color: "#FBF1E0",
               opacity: 0.5,
             }}
           >
@@ -216,7 +216,7 @@ export default function Footer() {
             className="text-xs"
             style={{
               fontFamily: "var(--font-source-sans), sans-serif",
-              color: "#FDF6EC",
+              color: "#FBF1E0",
               opacity: 0.5,
             }}
           >
@@ -224,7 +224,7 @@ export default function Footer() {
             <a
               href="https://descomplicai.pt"
               className="underline hover:opacity-100 transition-opacity"
-              style={{ color: "#FDF6EC", opacity: 0.8 }}
+              style={{ color: "#FBF1E0", opacity: 0.8 }}
               target="_blank"
               rel="noopener noreferrer"
             >

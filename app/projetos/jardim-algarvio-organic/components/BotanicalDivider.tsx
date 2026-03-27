@@ -8,7 +8,7 @@ interface BotanicalDividerProps {
 }
 
 export default function BotanicalDivider({
-  color = "#4A5D23",
+  color = "#2E7D32",
   variant = "olive",
 }: BotanicalDividerProps) {
   const pathProps = {

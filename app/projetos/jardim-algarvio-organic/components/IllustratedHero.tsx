@@ -79,14 +79,14 @@ export default function IllustratedHero() {
   return (
     <section
       className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden"
-      style={{ backgroundColor: "#FDF6EC" }}
+      style={{ backgroundColor: "#FBF1E0" }}
     >
       {/* Floating leaves */}
-      <FloatingLeaf delay={0} x="8%" y="15%" size={45} rotation={-15} color="#4A5D23" />
-      <FloatingLeaf delay={1.5} x="85%" y="20%" size={35} rotation={20} color="#8BA888" />
-      <FloatingLeaf delay={0.8} x="12%" y="70%" size={40} rotation={10} color="#6B8F3C" />
-      <FloatingLeaf delay={2} x="90%" y="65%" size={50} rotation={-25} color="#4A5D23" />
-      <FloatingLeaf delay={1.2} x="50%" y="8%" size={30} rotation={5} color="#8BA888" />
+      <FloatingLeaf delay={0} x="8%" y="15%" size={45} rotation={-15} color="#2E7D32" />
+      <FloatingLeaf delay={1.5} x="85%" y="20%" size={35} rotation={20} color="#4CAF50" />
+      <FloatingLeaf delay={0.8} x="12%" y="70%" size={40} rotation={10} color="#43A047" />
+      <FloatingLeaf delay={2} x="90%" y="65%" size={50} rotation={-25} color="#2E7D32" />
+      <FloatingLeaf delay={1.2} x="50%" y="8%" size={30} rotation={5} color="#4CAF50" />
 
       {/* Main botanical SVG illustration */}
       <motion.div
@@ -104,7 +104,7 @@ export default function IllustratedHero() {
           {/* Olive tree trunk */}
           <motion.path
             d="M400 480 C398 460, 395 420, 390 380 C385 340, 375 300, 380 280 C385 260, 395 250, 400 240 C405 250, 415 260, 420 280 C425 300, 415 340, 410 380 C405 420, 402 460, 400 480Z"
-            stroke="#5C4033"
+            stroke="#3E2723"
             strokeWidth="2.5"
             fill="none"
             {...drawPath}
@@ -113,7 +113,7 @@ export default function IllustratedHero() {
           {/* Trunk texture lines */}
           <motion.path
             d="M393 460 C394 440, 392 400, 390 370"
-            stroke="#5C4033"
+            stroke="#3E2723"
             strokeWidth="0.8"
             strokeOpacity={0.5}
             fill="none"
@@ -122,7 +122,7 @@ export default function IllustratedHero() {
           />
           <motion.path
             d="M407 450 C406 430, 408 390, 410 360"
-            stroke="#5C4033"
+            stroke="#3E2723"
             strokeWidth="0.8"
             strokeOpacity={0.5}
             fill="none"
@@ -133,7 +133,7 @@ export default function IllustratedHero() {
           {/* Main canopy - large organic shape */}
           <motion.path
             d="M400 250 C350 240, 280 220, 260 200 C240 180, 250 150, 280 140 C310 130, 320 145, 330 150 C325 130, 310 110, 320 95 C330 80, 360 75, 375 90 C380 70, 395 55, 410 60 C425 55, 440 70, 445 90 C460 75, 490 80, 500 95 C510 110, 495 130, 490 150 C500 145, 510 130, 540 140 C570 150, 580 180, 560 200 C540 220, 470 240, 400 250Z"
-            stroke="#4A5D23"
+            stroke="#2E7D32"
             strokeWidth="2"
             fill="none"
             {...drawPath}
@@ -143,7 +143,7 @@ export default function IllustratedHero() {
           {/* Canopy fill - subtle */}
           <motion.path
             d="M400 250 C350 240, 280 220, 260 200 C240 180, 250 150, 280 140 C310 130, 320 145, 330 150 C325 130, 310 110, 320 95 C330 80, 360 75, 375 90 C380 70, 395 55, 410 60 C425 55, 440 70, 445 90 C460 75, 490 80, 500 95 C510 110, 495 130, 490 150 C500 145, 510 130, 540 140 C570 150, 580 180, 560 200 C540 220, 470 240, 400 250Z"
-            fill="#4A5D23"
+            fill="#2E7D32"
             fillOpacity={0.08}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -153,7 +153,7 @@ export default function IllustratedHero() {
           {/* Inner leaf details */}
           <motion.path
             d="M340 180 C330 170, 320 160, 310 165 C300 170, 310 180, 325 185"
-            stroke="#4A5D23"
+            stroke="#2E7D32"
             strokeWidth="1.2"
             fill="none"
             {...drawPath}
@@ -161,7 +161,7 @@ export default function IllustratedHero() {
           />
           <motion.path
             d="M370 150 C365 140, 355 130, 345 135 C335 140, 345 150, 360 155"
-            stroke="#4A5D23"
+            stroke="#2E7D32"
             strokeWidth="1.2"
             fill="none"
             {...drawPath}
@@ -169,7 +169,7 @@ export default function IllustratedHero() {
           />
           <motion.path
             d="M430 150 C435 140, 445 130, 455 135 C465 140, 455 150, 440 155"
-            stroke="#4A5D23"
+            stroke="#2E7D32"
             strokeWidth="1.2"
             fill="none"
             {...drawPath}
@@ -177,7 +177,7 @@ export default function IllustratedHero() {
           />
           <motion.path
             d="M460 180 C470 170, 480 160, 490 165 C500 170, 490 180, 475 185"
-            stroke="#4A5D23"
+            stroke="#2E7D32"
             strokeWidth="1.2"
             fill="none"
             {...drawPath}
@@ -199,7 +199,7 @@ export default function IllustratedHero() {
               cy={olive.cy}
               rx="5"
               ry="6.5"
-              fill="#4A5D23"
+              fill="#2E7D32"
               fillOpacity={0.6}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -214,9 +214,9 @@ export default function IllustratedHero() {
             transition={{ duration: 1, delay: 1.2 }}
           >
             {/* Stems */}
-            <path d="M150 480 C155 440, 145 400, 140 370" stroke="#6B8F3C" strokeWidth="1.5" fill="none" />
-            <path d="M170 480 C172 440, 165 400, 160 365" stroke="#6B8F3C" strokeWidth="1.5" fill="none" />
-            <path d="M185 480 C180 445, 185 410, 180 375" stroke="#6B8F3C" strokeWidth="1.5" fill="none" />
+            <path d="M150 480 C155 440, 145 400, 140 370" stroke="#43A047" strokeWidth="1.5" fill="none" />
+            <path d="M170 480 C172 440, 165 400, 160 365" stroke="#43A047" strokeWidth="1.5" fill="none" />
+            <path d="M185 480 C180 445, 185 410, 180 375" stroke="#43A047" strokeWidth="1.5" fill="none" />
             {/* Lavender flowers */}
             {[
               { x: 140, y: 370 },
@@ -236,8 +236,8 @@ export default function IllustratedHero() {
               ))
             )}
             {/* Lavender leaves */}
-            <path d="M150 430 C140 425, 130 428, 135 435" stroke="#6B8F3C" strokeWidth="1" fill="#6B8F3C" fillOpacity={0.3} />
-            <path d="M170 440 C180 435, 190 438, 185 445" stroke="#6B8F3C" strokeWidth="1" fill="#6B8F3C" fillOpacity={0.3} />
+            <path d="M150 430 C140 425, 130 428, 135 435" stroke="#43A047" strokeWidth="1" fill="#43A047" fillOpacity={0.3} />
+            <path d="M170 440 C180 435, 190 438, 185 445" stroke="#43A047" strokeWidth="1" fill="#43A047" fillOpacity={0.3} />
           </motion.g>
 
           {/* Right: Rosemary sprigs */}
@@ -246,23 +246,23 @@ export default function IllustratedHero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 1.4 }}
           >
-            <path d="M620 480 C625 440, 630 400, 640 360" stroke="#4A5D23" strokeWidth="1.5" fill="none" />
-            <path d="M645 480 C643 445, 650 410, 655 370" stroke="#4A5D23" strokeWidth="1.5" fill="none" />
+            <path d="M620 480 C625 440, 630 400, 640 360" stroke="#2E7D32" strokeWidth="1.5" fill="none" />
+            <path d="M645 480 C643 445, 650 410, 655 370" stroke="#2E7D32" strokeWidth="1.5" fill="none" />
             {/* Rosemary needle-like leaves */}
             {[360, 375, 390, 405, 420, 435, 450].map((y, i) => (
               <g key={`rm-${i}`}>
                 <path
                   d={`M${640 + (i % 2 === 0 ? 0 : 2)} ${y} C${635 - i} ${y - 3}, ${630 - i} ${y - 2}, ${632 - i} ${y + 1}`}
-                  stroke="#4A5D23"
+                  stroke="#2E7D32"
                   strokeWidth="0.8"
-                  fill="#4A5D23"
+                  fill="#2E7D32"
                   fillOpacity={0.25}
                 />
                 <path
                   d={`M${640 + (i % 2 === 0 ? 2 : 0)} ${y} C${645 + i} ${y - 3}, ${650 + i} ${y - 2}, ${648 + i} ${y + 1}`}
-                  stroke="#4A5D23"
+                  stroke="#2E7D32"
                   strokeWidth="0.8"
-                  fill="#4A5D23"
+                  fill="#2E7D32"
                   fillOpacity={0.25}
                 />
               </g>
@@ -272,16 +272,16 @@ export default function IllustratedHero() {
               <g key={`rm2-${i}`}>
                 <path
                   d={`M${655} ${y} C${650} ${y - 3}, ${645} ${y - 1}, ${647} ${y + 2}`}
-                  stroke="#4A5D23"
+                  stroke="#2E7D32"
                   strokeWidth="0.7"
-                  fill="#4A5D23"
+                  fill="#2E7D32"
                   fillOpacity={0.2}
                 />
                 <path
                   d={`M${655} ${y} C${660} ${y - 3}, ${665} ${y - 1}, ${663} ${y + 2}`}
-                  stroke="#4A5D23"
+                  stroke="#2E7D32"
                   strokeWidth="0.7"
-                  fill="#4A5D23"
+                  fill="#2E7D32"
                   fillOpacity={0.2}
                 />
               </g>
@@ -294,9 +294,9 @@ export default function IllustratedHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.6 }}
           >
-            <path d="M80 480 C90 440, 75 410, 70 380 C65 350, 80 330, 95 310" stroke="#5C4033" strokeWidth="1.8" fill="none" />
-            <path d="M95 310 C85 300, 70 295, 60 300" stroke="#5C4033" strokeWidth="1" fill="none" />
-            <path d="M95 310 C100 298, 110 290, 120 295" stroke="#5C4033" strokeWidth="1" fill="none" />
+            <path d="M80 480 C90 440, 75 410, 70 380 C65 350, 80 330, 95 310" stroke="#3E2723" strokeWidth="1.8" fill="none" />
+            <path d="M95 310 C85 300, 70 295, 60 300" stroke="#3E2723" strokeWidth="1" fill="none" />
+            <path d="M95 310 C100 298, 110 290, 120 295" stroke="#3E2723" strokeWidth="1" fill="none" />
             {/* Bougainvillea flower clusters */}
             {[
               { x: 60, y: 295 },
@@ -308,25 +308,25 @@ export default function IllustratedHero() {
               <g key={`boug-${i}`}>
                 <path
                   d={`M${pos.x} ${pos.y} L${pos.x - 6} ${pos.y - 8} L${pos.x + 2} ${pos.y - 10} Z`}
-                  fill="#C2703E"
+                  fill="#D4552A"
                   fillOpacity={0.7}
                 />
                 <path
                   d={`M${pos.x} ${pos.y} L${pos.x + 7} ${pos.y - 7} L${pos.x + 9} ${pos.y + 1} Z`}
-                  fill="#C2703E"
+                  fill="#D4552A"
                   fillOpacity={0.6}
                 />
                 <path
                   d={`M${pos.x} ${pos.y} L${pos.x - 3} ${pos.y + 8} L${pos.x + 5} ${pos.y + 6} Z`}
-                  fill="#C2703E"
+                  fill="#D4552A"
                   fillOpacity={0.5}
                 />
-                <circle cx={pos.x + 1} cy={pos.y - 1} r="1.5" fill="#FDF6EC" fillOpacity={0.8} />
+                <circle cx={pos.x + 1} cy={pos.y - 1} r="1.5" fill="#FBF1E0" fillOpacity={0.8} />
               </g>
             ))}
             {/* Leaves */}
-            <path d="M80 370 C70 365, 60 370, 65 378" fill="#4A5D23" fillOpacity={0.3} />
-            <path d="M85 350 C95 345, 100 350, 95 358" fill="#4A5D23" fillOpacity={0.3} />
+            <path d="M80 370 C70 365, 60 370, 65 378" fill="#2E7D32" fillOpacity={0.3} />
+            <path d="M85 350 C95 345, 100 350, 95 358" fill="#2E7D32" fillOpacity={0.3} />
           </motion.g>
 
           {/* Far right: Mediterranean herbs ground */}
@@ -340,18 +340,18 @@ export default function IllustratedHero() {
               <g key={`herb-${i}`}>
                 <path
                   d={`M${x} 480 C${x - 3} 465, ${x + 2} 450, ${x - 1} 440`}
-                  stroke="#6B8F3C"
+                  stroke="#43A047"
                   strokeWidth="1"
                   fill="none"
                 />
                 <path
                   d={`M${x - 1} 455 C${x - 8} 450, ${x - 10} 455, ${x - 6} 460`}
-                  fill="#6B8F3C"
+                  fill="#43A047"
                   fillOpacity={0.3}
                 />
                 <path
                   d={`M${x + 1} 450 C${x + 8} 445, ${x + 10} 450, ${x + 6} 455`}
-                  fill="#6B8F3C"
+                  fill="#43A047"
                   fillOpacity={0.3}
                 />
               </g>
@@ -361,7 +361,7 @@ export default function IllustratedHero() {
           {/* Ground line */}
           <motion.path
             d="M0 480 C100 478, 200 482, 300 480 S500 478, 600 481 S700 479, 800 480"
-            stroke="#5C4033"
+            stroke="#3E2723"
             strokeWidth="1"
             strokeOpacity={0.3}
             fill="none"
@@ -376,7 +376,7 @@ export default function IllustratedHero() {
         className="text-center mb-4 leading-tight"
         style={{
           fontFamily: "var(--font-libre-caslon), serif",
-          color: "#4A5D23",
+          color: "#2E7D32",
           fontSize: "clamp(2rem, 5vw, 3.5rem)",
         }}
         initial={{ opacity: 0, y: 30 }}
@@ -391,7 +391,7 @@ export default function IllustratedHero() {
         className="text-center max-w-xl mx-auto mb-10 text-lg leading-relaxed"
         style={{
           fontFamily: "var(--font-source-sans), sans-serif",
-          color: "#5C4033",
+          color: "#3E2723",
           opacity: 0.85,
           fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
         }}
@@ -409,39 +409,30 @@ export default function IllustratedHero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 1.1 }}
       >
-        <motion.a
+        <a
           href="#jardins"
-          className="px-8 py-4 text-base font-semibold transition-all duration-300"
+          className="px-8 py-4 text-base font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-[0.98]"
           style={{
-            backgroundColor: "#C2703E",
-            color: "#FDF6EC",
-            borderRadius: "9999px",
+            backgroundColor: "#D4552A",
+            color: "#FBF1E0",
             fontFamily: "var(--font-source-sans), sans-serif",
+            boxShadow: "0 4px 14px rgba(212,85,42,0.25)",
           }}
-          whileHover={{ scale: 1.05, boxShadow: "0 8px 30px rgba(194,112,62,0.3)" }}
-          whileTap={{ scale: 0.98 }}
         >
           Descubra os Nossos Jardins
-        </motion.a>
-        <motion.a
+        </a>
+        <a
           href="#historia"
-          className="px-8 py-4 text-base font-semibold transition-all duration-300"
+          className="px-8 py-4 text-base font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:bg-[#2E7D32] hover:text-[#FBF1E0] hover:border-[#2E7D32] active:scale-[0.98]"
           style={{
-            border: "2px solid #4A5D23",
-            color: "#4A5D23",
-            borderRadius: "9999px",
+            border: "2px solid #2E7D32",
+            color: "#2E7D32",
             fontFamily: "var(--font-source-sans), sans-serif",
             backgroundColor: "transparent",
           }}
-          whileHover={{
-            scale: 1.05,
-            backgroundColor: "#4A5D23",
-            color: "#FDF6EC",
-          }}
-          whileTap={{ scale: 0.98 }}
         >
           A Nossa História
-        </motion.a>
+        </a>
       </motion.div>
 
       {/* Bottom divider */}
