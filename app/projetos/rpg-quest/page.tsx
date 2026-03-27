@@ -17,10 +17,10 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 // ================================================================
 
 const TILE_SIZE = 20;
-const MAP_COLS = 50;
-const MAP_ROWS = 40;
-const CANVAS_W = MAP_COLS * TILE_SIZE; // 1000
-const CANVAS_H = MAP_ROWS * TILE_SIZE; // 800
+const MAP_COLS = 80;
+const MAP_ROWS = 60;
+const CANVAS_W = MAP_COLS * TILE_SIZE; // 1600
+const CANVAS_H = MAP_ROWS * TILE_SIZE; // 1200
 
 const PLAYER_SPEED = 2.5;
 const PLAYER_SPRINT_MULT = 1.5;
@@ -71,7 +71,7 @@ const WALKABLE = new Set([GRASS, PATH, SAND, FLOOR, DOOR, BRIDGE, FLOWER]);
 
 type Direction = 0 | 1 | 2 | 3;
 
-type ZoneId = "centro" | "restaurantes" | "clinicas" | "lab" | "torre";
+type ZoneId = "centro" | "restaurantes" | "clinicas" | "lab" | "torre" | "floresta" | "praia";
 
 interface NPC {
   id: string;
@@ -180,6 +180,8 @@ const ZONE_NAMES: Record<ZoneId, string> = {
   clinicas: "Distrito das Clinicas",
   lab: "Laboratorio Tech",
   torre: "Torre do Portfolio",
+  floresta: "Floresta Encantada",
+  praia: "Praia do Sul",
 };
 
 const ZONE_COLORS: Record<ZoneId, string> = {
@@ -188,6 +190,8 @@ const ZONE_COLORS: Record<ZoneId, string> = {
   clinicas: "#06b6d4",
   lab: "#a855f7",
   torre: "#eab308",
+  floresta: "#059669",
+  praia: "#0ea5e9",
 };
 
 interface ZoneBounds {
@@ -204,6 +208,8 @@ const ZONE_BOUNDS: ZoneBounds[] = [
   { id: "clinicas", c0: 1, c1: 15, r0: 12, r1: 27 },
   { id: "lab", c0: 15, c1: 35, r0: 1, r1: 11 },
   { id: "torre", c0: 18, c1: 31, r0: 28, r1: 38 },
+  { id: "floresta", c0: 55, c1: 79, r0: 1, r1: 28 },
+  { id: "praia", c0: 2, c1: 78, r0: 50, r1: 59 },
 ];
 
 function getZone(col: number, row: number): ZoneId | null {
@@ -234,86 +240,126 @@ const L = FLOWER;
 
 // prettier-ignore
 const GAME_MAP: number[][] = [
-  // Row 0 - top border
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 1 - lab top border + trees
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 2 - lab buildings start
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,X,X,X,D,X,X,G,X,X,X,D,X,X,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 3
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,F,F,F,F,F,X,G,X,F,F,F,F,F,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 4
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,F,F,F,F,F,X,G,X,F,F,F,F,F,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 5
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,F,F,F,F,F,X,G,X,F,F,F,F,F,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 6 - lab buildings bottom
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,X,X,X,X,X,X,G,X,X,X,X,X,X,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 7 - lab open area
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 8
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,L,F,F,F,F,L,F,F,F,L,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 9 - lab lower area
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 10 - lab bottom + path to centro
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 11 - transition zone lab->centro
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,P,P,P,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 12 - water + paths to east/west zones
-  [T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T],
-  // Row 13 - clinicas top + water + restaurantes top
-  [T,G,G,G,G,G,G,G,G,G,G,G,G,G,W,W,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T],
-  // Row 14 - clinicas buildings start + centro start + restaurantes start
-  [T,G,X,X,X,D,X,X,G,G,L,G,G,G,W,W,W,W,G,P,P,P,P,P,G,P,P,P,P,P,G,W,W,W,W,G,G,G,L,G,G,S,S,S,S,S,S,G,G,T],
+  // Row 0 - top border (80 cols)
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 1 - lab top border + forest start
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 2 - lab buildings start + forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,X,X,X,D,X,X,G,X,X,X,D,X,X,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 3 - forest begins NE
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,F,F,F,F,F,X,G,X,F,F,F,F,F,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 4 - forest NE expanding
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,F,F,F,F,F,X,G,X,F,F,F,F,F,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 5 - forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,F,F,F,F,F,X,G,X,F,F,F,F,F,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 6 - lab buildings bottom + forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,X,X,X,X,X,X,X,G,X,X,X,X,X,X,X,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 7 - lab open area + forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 8 - forest spreading
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,L,F,F,F,F,L,F,F,F,L,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 9 - lab lower area + forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 10 - lab bottom + forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 11 - transition zone lab->centro + forest boundary
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,P,P,P,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 12 - water + paths to east/west zones + forest
+  [T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 13 - clinicas top + water + restaurantes top + forest
+  [T,G,G,G,G,G,G,G,G,G,G,G,G,G,W,W,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 14 - clinicas buildings start + centro start + restaurantes start + forest
+  [T,G,X,X,X,D,X,X,G,G,L,G,G,G,W,W,W,W,G,P,P,P,P,P,G,P,P,P,P,P,G,W,W,W,W,G,G,G,L,G,G,S,S,S,S,S,S,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 15
-  [T,G,X,F,F,F,F,X,G,G,G,G,P,P,B,B,P,P,P,P,G,G,G,G,G,G,G,G,G,P,P,P,P,B,B,P,P,G,G,G,S,S,X,X,D,X,X,S,G,T],
+  [T,G,X,F,F,F,F,X,G,G,G,G,P,P,B,B,P,P,P,P,G,G,G,G,G,G,G,G,G,P,P,P,P,B,B,P,P,G,G,G,S,S,X,X,D,X,X,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 16
-  [T,G,X,F,F,F,F,X,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,X,S,G,T],
+  [T,G,X,F,F,F,F,X,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,X,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 17 - clinicas first building bottom
-  [T,G,X,X,X,X,X,X,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,L,G,L,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,X,S,G,T],
+  [T,G,X,X,X,X,X,X,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,L,G,L,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,X,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 18 - centro area middle
-  [T,G,G,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,L,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,X,X,X,X,S,G,T],
+  [T,G,G,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,L,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,X,X,X,X,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 19 - centro area with fountain
-  [T,G,G,P,P,P,P,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,L,L,L,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,G,G,G,G,S,S,G,T],
+  [T,G,G,P,P,P,P,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,L,L,L,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,G,G,G,G,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 20 - centro area
-  [T,G,X,X,D,X,X,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,L,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,X,D,X,S,S,G,T],
+  [T,G,X,X,D,X,X,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,L,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,X,D,X,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 21
-  [T,G,X,F,F,F,X,G,G,G,L,G,P,G,W,W,W,W,G,P,G,G,G,L,G,L,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,S,S,G,T],
+  [T,G,X,F,F,F,X,G,G,G,L,G,P,G,W,W,W,W,G,P,G,G,G,L,G,L,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 22
-  [T,G,X,F,F,F,X,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,S,S,G,T],
+  [T,G,X,F,F,F,X,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,F,F,F,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 23 - clinicas second building bottom
-  [T,G,X,X,X,X,X,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,X,X,X,S,S,G,T],
-  // Row 24 - clinicas third building start + centro continues + restaurantes
-  [T,G,G,G,G,G,G,G,G,G,G,G,P,P,B,B,P,P,P,P,G,G,G,G,G,G,G,G,G,P,P,P,P,B,B,P,P,G,G,G,S,S,G,G,G,S,S,S,G,T],
+  [T,G,X,X,X,X,X,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,G,G,G,G,G,G,P,G,W,W,W,W,G,P,G,G,G,S,S,X,X,X,X,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 24 - clinicas third building + centro + restaurantes
+  [T,G,G,G,G,G,G,G,G,G,G,G,P,P,B,B,P,P,P,P,G,G,G,G,G,G,G,G,G,P,P,P,P,B,B,P,P,G,G,G,S,S,G,G,G,S,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 25
-  [T,G,X,X,X,D,X,G,G,G,G,G,G,G,W,W,W,W,G,P,P,P,P,P,G,P,P,P,P,P,G,W,W,W,W,G,G,G,G,G,S,X,X,D,X,X,S,S,G,T],
+  [T,G,X,X,X,D,X,G,G,G,G,G,G,G,W,W,W,W,G,P,P,P,P,P,G,P,P,P,P,P,G,W,W,W,W,G,G,G,G,G,S,X,X,D,X,X,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 26
-  [T,G,X,F,F,F,X,G,G,L,G,G,G,G,W,W,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,W,W,G,G,L,G,G,S,X,F,F,F,X,S,S,G,T],
-  // Row 27 - clinicas bottom + water + restaurantes bottom
-  [T,G,X,X,X,X,X,G,G,G,G,G,G,G,G,G,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,G,G,G,G,G,G,G,S,X,X,X,X,X,S,S,G,T],
-  // Row 28 - transition to torre zone
-  [T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,P,G,P,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T],
-  // Row 29
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,P,P,P,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 30 - torre zone start
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,P,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,G,X,F,F,F,X,G,G,L,G,G,G,G,W,W,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,W,W,G,G,L,G,G,S,X,F,F,F,X,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 27 - clinicas bottom + water + restaurantes bottom + forest
+  [T,G,X,X,X,X,X,G,G,G,G,G,G,G,G,G,W,W,W,W,W,W,G,P,G,P,G,W,W,W,W,W,W,G,G,G,G,G,G,G,S,X,X,X,X,X,S,S,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 28 - transition to torre zone + forest boundary
+  [T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,P,G,P,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 29 - torre approach + forest dense
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,P,P,P,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 30 - torre zone start + forest
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,P,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 31 - torre golden floor
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,S,S,S,S,P,S,S,S,S,S,S,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,S,S,S,S,P,S,S,S,S,S,S,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 32 - torre building
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,S,L,S,S,S,S,S,L,S,S,S,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 33
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,X,X,X,X,D,X,X,X,X,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,S,L,S,S,S,S,S,L,S,S,S,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 33 - torre
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,X,X,X,X,D,X,X,X,X,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 34
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,F,F,F,F,F,F,F,F,F,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,F,F,F,F,F,F,F,F,F,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 35
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,F,F,F,F,F,F,F,F,F,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,F,F,F,F,F,F,F,F,F,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 36
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,F,F,F,F,F,F,F,F,F,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,F,F,F,F,F,F,F,F,F,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 37 - torre building bottom
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,X,X,X,X,X,X,X,X,X,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,X,X,X,X,X,X,X,X,X,X,X,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
   // Row 38 - torre bottom area
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,S,S,S,S,S,S,S,S,S,S,S,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
-  // Row 39 - bottom border
-  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,S,S,S,S,S,S,S,S,S,S,S,S,S,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 39 - bottom of torre, grass transition
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,P,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 40 - forest zone (southeast continues) + diagonal river begins
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 41 - transition grass
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 42 - river row (diagonal: W at col 20-22)
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,W,W,W,B,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 43 - river diagonal NW->SE (W at col 22-24)
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,W,W,W,B,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 44 - river diagonal (W at col 24-26)
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,W,W,W,B,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 45 - river diagonal (W at col 26-28)
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,W,W,W,B,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 46 - river diagonal (W at col 28-30)
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,W,W,W,B,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 47 - river continues + grass
+  [T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,G,G,G,G,G,G,G,G,G,G,W,W,W,B,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  // Row 48 - transition to beach
+  [G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,W,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G],
+  // Row 49 - pre-beach grass/sand mix
+  [G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G],
+  // Row 50 - beach starts (SAND)
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 51 - beach with buildings
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,X,D,X,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,X,D,X,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 52 - beach buildings interior
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,F,F,F,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,F,F,F,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 53 - beach buildings
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,F,F,F,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,F,F,F,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 54 - beach buildings bottom + pier start
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,X,X,X,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,X,X,X,X,X,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 55 - open beach + pier structure
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,B,B,B,B,B,B,B,B,B,B,B,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 56 - beach open walkable
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 57 - beach lower
+  [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S],
+  // Row 58 - beach meets water
+  [W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W],
+  // Row 59 - bottom border (ocean)
+  [W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W],
 ];
 
 // ================================================================
