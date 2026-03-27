@@ -14,6 +14,7 @@ import {
   useScroll,
   useTransform,
   useSpring,
+  useMotionValue,
   useMotionValueEvent,
   AnimatePresence,
   type MotionValue,
@@ -809,6 +810,132 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 /* =============================================================================
+   ACHIEVEMENT & STATISTICS TYPES
+   ============================================================================= */
+
+interface Achievement {
+  id: string;
+  icon: string;
+  name: string;
+  description: string;
+  hiddenDescription: string;
+}
+
+interface AchievementState {
+  unlocked: Record<string, boolean>;
+  unlockedAt: Record<string, number>;
+}
+
+interface StatsState {
+  totalScroll: number;
+  timeSpent: number;
+  chaptersCompleted: Record<number, boolean>;
+  interactiveClicks: number;
+  characterClicks: number;
+  returnVisits: number;
+  chapterTimes: Record<number, number>;
+  easterEggsFound: number;
+  miniGamesCompleted: number;
+  startTime: number;
+  backToTopUsed: boolean;
+}
+
+const ACHIEVEMENTS: Achievement[] = [
+  {
+    id: "primeiro-capitulo",
+    icon: "\u{1F31F}",
+    name: "Primeiro Capitulo",
+    description: "Scrollar para la do Capitulo 0",
+    hiddenDescription: "???",
+  },
+  {
+    id: "leitor-avido",
+    icon: "\u{1F4D6}",
+    name: "Leitor Avido",
+    description: "Explorar todos os 8 capitulos",
+    hiddenDescription: "???",
+  },
+  {
+    id: "observador",
+    icon: "\u{1F50D}",
+    name: "Observador",
+    description: "Clicar em 5 elementos interativos diferentes",
+    hiddenDescription: "???",
+  },
+  {
+    id: "speed-reader",
+    icon: "\u26A1",
+    name: "Speed Reader",
+    description: "Completar todos os capitulos em menos de 2 minutos",
+    hiddenDescription: "???",
+  },
+  {
+    id: "apreciador",
+    icon: "\u{1F40C}",
+    name: "Apreciador",
+    description: "Passar mais de 10 minutos a explorar",
+    hiddenDescription: "???",
+  },
+  {
+    id: "jogador",
+    icon: "\u{1F3AE}",
+    name: "Jogador",
+    description: "Completar pelo menos 1 mini-jogo",
+    hiddenDescription: "???",
+  },
+  {
+    id: "noctambulo",
+    icon: "\u{1F319}",
+    name: "Noctambulo",
+    description: "Visitar o site entre as 22:00 e as 06:00",
+    hiddenDescription: "???",
+  },
+  {
+    id: "mobile-explorer",
+    icon: "\u{1F4F1}",
+    name: "Mobile Explorer",
+    description: "Visitar numa tela mobile",
+    hiddenDescription: "???",
+  },
+  {
+    id: "volta-ao-inicio",
+    icon: "\u{1F504}",
+    name: "Volta ao Inicio",
+    description: "Usar o botao de voltar ao topo",
+    hiddenDescription: "???",
+  },
+  {
+    id: "completista",
+    icon: "\u{1F3C6}",
+    name: "Completista",
+    description: "Desbloquear todas as outras conquistas",
+    hiddenDescription: "???",
+  },
+];
+
+const STORAGE_KEY_ACHIEVEMENTS = "rpg-chronicle-achievements";
+const STORAGE_KEY_STATS = "rpg-chronicle-stats";
+
+const DEFAULT_ACHIEVEMENT_STATE: AchievementState = {
+  unlocked: {},
+  unlockedAt: {},
+};
+
+const DEFAULT_STATS_STATE: StatsState = {
+  totalScroll: 0,
+  timeSpent: 0,
+  chaptersCompleted: {},
+  interactiveClicks: 0,
+  characterClicks: 0,
+  returnVisits: 0,
+  chapterTimes: {},
+  easterEggsFound: 0,
+  miniGamesCompleted: 0,
+  startTime: Date.now(),
+  backToTopUsed: false,
+};
+
+/* =============================================================================
    UTILITY HOOKS
    ============================================================================= */
 
@@ -853,6 +980,243 @@ function useInView(threshold = 0.1): [React.RefObject<HTMLDivElement | null>, bo
     return () => obs.disconnect();
   }, [threshold]);
   return [ref, inView];
+}
+
+/* =============================================================================
+   SCROLL TRACKER HOOK
+   ============================================================================= */
+
+function getCurrentChapter(): number {
+  const scrollPx = window.scrollY;
+  for (let i = CHAPTER_RANGES.length - 1; i >= 0; i--) {
+    if (scrollPx >= CHAPTER_RANGES[i].start) return i;
+  }
+  return 0;
+}
+
+function useScrollTracker() {
+  const totalScroll = useRef(0);
+  const chapterTimes = useRef<Record<number, number>>({});
+  const lastScrollY = useRef(0);
+  const lastTimestamp = useRef(Date.now());
+  const chaptersVisited = useRef<Record<number, boolean>>({});
+
+  useEffect(() => {
+    const handler = () => {
+      const now = Date.now();
+      const delta = Math.abs(window.scrollY - lastScrollY.current);
+      totalScroll.current += delta;
+
+      const chapter = getCurrentChapter();
+      chaptersVisited.current[chapter] = true;
+      chapterTimes.current[chapter] =
+        (chapterTimes.current[chapter] || 0) + (now - lastTimestamp.current);
+
+      lastScrollY.current = window.scrollY;
+      lastTimestamp.current = now;
+    };
+
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  return { totalScroll, chapterTimes, chaptersVisited };
+}
+
+/* =============================================================================
+   ACHIEVEMENT & STATS MANAGER HOOK
+   ============================================================================= */
+
+function useAchievements() {
+  const [achievements, setAchievements] = useState<AchievementState>(DEFAULT_ACHIEVEMENT_STATE);
+  const [stats, setStats] = useState<StatsState>(DEFAULT_STATS_STATE);
+  const [toastQueue, setToastQueue] = useState<string[]>([]);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelTab, setPanelTab] = useState<"achievements" | "stats">("achievements");
+  const [mounted, setMounted] = useState(false);
+
+  const scrollTracker = useScrollTracker();
+  const startTimeRef = useRef(Date.now());
+  const interactiveClicksRef = useRef(0);
+  const characterClicksRef = useRef(0);
+
+  // Load from localStorage after hydration
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const savedAch = localStorage.getItem(STORAGE_KEY_ACHIEVEMENTS);
+      if (savedAch) {
+        const parsed = JSON.parse(savedAch);
+        setAchievements(parsed);
+      }
+    } catch {}
+    try {
+      const savedStats = localStorage.getItem(STORAGE_KEY_STATS);
+      if (savedStats) {
+        const parsed = JSON.parse(savedStats);
+        setStats((prev) => ({
+          ...prev,
+          ...parsed,
+          returnVisits: (parsed.returnVisits || 0) + 1,
+          startTime: Date.now(),
+        }));
+      } else {
+        setStats((prev) => ({ ...prev, returnVisits: 1 }));
+      }
+    } catch {
+      setStats((prev) => ({ ...prev, returnVisits: 1 }));
+    }
+  }, []);
+
+  // Save to localStorage periodically and on unload
+  const saveToStorage = useCallback(() => {
+    if (!mounted) return;
+    const elapsed = (Date.now() - startTimeRef.current) / 1000;
+    const currentStats: StatsState = {
+      ...stats,
+      totalScroll: stats.totalScroll + scrollTracker.totalScroll.current,
+      timeSpent: stats.timeSpent + elapsed,
+      chapterTimes: { ...stats.chapterTimes },
+      interactiveClicks: stats.interactiveClicks + interactiveClicksRef.current,
+      characterClicks: stats.characterClicks + characterClicksRef.current,
+    };
+    // Merge chapter times
+    Object.entries(scrollTracker.chapterTimes.current).forEach(([ch, time]) => {
+      const chNum = Number(ch);
+      currentStats.chapterTimes[chNum] = (currentStats.chapterTimes[chNum] || 0) + time;
+    });
+    // Merge chapters completed
+    Object.keys(scrollTracker.chaptersVisited.current).forEach((ch) => {
+      currentStats.chaptersCompleted[Number(ch)] = true;
+    });
+
+    try {
+      localStorage.setItem(STORAGE_KEY_ACHIEVEMENTS, JSON.stringify(achievements));
+      localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(currentStats));
+    } catch {}
+  }, [mounted, stats, achievements, scrollTracker]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const interval = setInterval(saveToStorage, 30000);
+    const handleUnload = () => saveToStorage();
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [mounted, saveToStorage]);
+
+  // Unlock achievement
+  const unlock = useCallback(
+    (id: string) => {
+      setAchievements((prev) => {
+        if (prev.unlocked[id]) return prev;
+        const next = {
+          unlocked: { ...prev.unlocked, [id]: true },
+          unlockedAt: { ...prev.unlockedAt, [id]: Date.now() },
+        };
+        setToastQueue((q) => [...q, id]);
+        return next;
+      });
+    },
+    []
+  );
+
+  const dismissToast = useCallback(() => {
+    setToastQueue((q) => q.slice(1));
+  }, []);
+
+  const unlockedCount = Object.values(achievements.unlocked).filter(Boolean).length;
+
+  const registerInteractiveClick = useCallback(() => {
+    interactiveClicksRef.current += 1;
+  }, []);
+
+  const registerCharacterClick = useCallback(() => {
+    characterClicksRef.current += 1;
+  }, []);
+
+  const markBackToTop = useCallback(() => {
+    setStats((prev) => ({ ...prev, backToTopUsed: true }));
+  }, []);
+
+  // Compute live stats for display
+  const getLiveStats = useCallback((): StatsState => {
+    const elapsed = (Date.now() - startTimeRef.current) / 1000;
+    const result: StatsState = {
+      ...stats,
+      totalScroll: stats.totalScroll + scrollTracker.totalScroll.current,
+      timeSpent: stats.timeSpent + elapsed,
+      chapterTimes: { ...stats.chapterTimes },
+      chaptersCompleted: { ...stats.chaptersCompleted },
+      interactiveClicks: stats.interactiveClicks + interactiveClicksRef.current,
+      characterClicks: stats.characterClicks + characterClicksRef.current,
+    };
+    Object.entries(scrollTracker.chapterTimes.current).forEach(([ch, time]) => {
+      const chNum = Number(ch);
+      result.chapterTimes[chNum] = (result.chapterTimes[chNum] || 0) + time;
+    });
+    Object.keys(scrollTracker.chaptersVisited.current).forEach((ch) => {
+      result.chaptersCompleted[Number(ch)] = true;
+    });
+    return result;
+  }, [stats, scrollTracker]);
+
+  return {
+    achievements,
+    stats,
+    toastQueue,
+    panelOpen,
+    setPanelOpen,
+    panelTab,
+    setPanelTab,
+    unlock,
+    dismissToast,
+    unlockedCount,
+    mounted,
+    scrollTracker,
+    registerInteractiveClick,
+    registerCharacterClick,
+    markBackToTop,
+    getLiveStats,
+    startTimeRef,
+  };
+}
+
+/* =============================================================================
+   MOUSE PARALLAX HOOK (desktop only)
+   ============================================================================= */
+
+function useMouseParallax(): {
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+  layer2X: MotionValue<number>;
+  layer2Y: MotionValue<number>;
+  layer3X: MotionValue<number>;
+  layer3Y: MotionValue<number>;
+} {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const layer2X = useTransform(mouseX, [-1, 1], [-15, 15]);
+  const layer2Y = useTransform(mouseY, [-1, 1], [-15, 15]);
+  const layer3X = useTransform(mouseX, [-1, 1], [-8, 8]);
+  const layer3Y = useTransform(mouseY, [-1, 1], [-8, 8]);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) return;
+    const handler = (e: MouseEvent) => {
+      const nx = (e.clientX / window.innerWidth) * 2 - 1;
+      const ny = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(nx);
+      mouseY.set(ny);
+    };
+    window.addEventListener("mousemove", handler, { passive: true });
+    return () => window.removeEventListener("mousemove", handler);
+  }, [mouseX, mouseY]);
+
+  return { mouseX, mouseY, layer2X, layer2Y, layer3X, layer3Y };
 }
 
 /* =============================================================================
@@ -1056,6 +1420,386 @@ const AmbientParticles = memo(function AmbientParticles({
 });
 
 /* =============================================================================
+   CODE RAIN EFFECT (Matrix-style)
+   ============================================================================= */
+
+const CodeRain = memo(function CodeRain({ count = 20 }: { count?: number }) {
+  const columns = useMemo(() => {
+    const chars = "01{}[]<>/;:=()+-*&#@!?%$ABCDEFabcdef";
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: seededRandom(i * 29 + 1) * 100,
+      speed: seededRandom(i * 29 + 2) * 8 + 4,
+      delay: seededRandom(i * 29 + 3) * 6,
+      fontSize: seededRandom(i * 29 + 4) * 8 + 10,
+      opacity: seededRandom(i * 29 + 5) * 0.15 + 0.05,
+      chars: Array.from(
+        { length: Math.floor(seededRandom(i * 29 + 6) * 12) + 8 },
+        (_, j) => chars[Math.floor(seededRandom(i * 100 + j * 7) * chars.length)]
+      ).join("\n"),
+    }));
+  }, [count]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {columns.map((col) => (
+        <div
+          key={col.id}
+          className="absolute whitespace-pre font-mono"
+          style={{
+            left: `${col.x}%`,
+            top: "-20%",
+            fontSize: `${col.fontSize}px`,
+            color: "#22C55E",
+            opacity: col.opacity,
+            lineHeight: "1.2",
+            animation: `codeRainFall ${col.speed}s linear ${col.delay}s infinite`,
+            willChange: "transform",
+            textShadow: "0 0 8px rgba(34,197,94,0.4)",
+          }}
+        >
+          {col.chars}
+        </div>
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   FIREFLIES (warm blink)
+   ============================================================================= */
+
+const Fireflies = memo(function Fireflies({ count = 15 }: { count?: number }) {
+  const flies = useMemo(() => {
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: seededRandom(i * 37 + 1) * 100,
+      y: seededRandom(i * 37 + 2) * 100,
+      size: seededRandom(i * 37 + 3) * 4 + 2,
+      driftDuration: seededRandom(i * 37 + 4) * 10 + 8,
+      blinkDuration: seededRandom(i * 37 + 5) * 3 + 1.5,
+      delay: seededRandom(i * 37 + 6) * 5,
+    }));
+  }, [count]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {flies.map((f) => (
+        <div
+          key={f.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${f.x}%`,
+            top: `${f.y}%`,
+            width: `${f.size}px`,
+            height: `${f.size}px`,
+            backgroundColor: "#FBBF24",
+            boxShadow: "0 0 6px 2px rgba(251,191,36,0.5)",
+            animation: `fireflyBlink ${f.blinkDuration}s ease-in-out ${f.delay}s infinite, fireflyDrift ${f.driftDuration}s ease-in-out ${f.delay}s infinite`,
+            willChange: "transform, opacity",
+          }}
+        />
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   CHAPTER TRANSITION OVERLAY
+   ============================================================================= */
+
+const ChapterTransition = memo(function ChapterTransition({
+  fromColor,
+  toColor,
+  progress,
+  reducedMotion,
+}: {
+  fromColor: string;
+  toColor: string;
+  progress: MotionValue<number>;
+  reducedMotion: boolean;
+}) {
+  const opacity = useTransform(progress, [0.85, 1], [0, 1]);
+  if (reducedMotion) return null;
+  return (
+    <motion.div
+      className="absolute inset-0 pointer-events-none z-[5]"
+      style={{
+        background: `linear-gradient(180deg, transparent 0%, ${toColor}80 60%, ${toColor} 100%)`,
+        opacity,
+        willChange: "opacity",
+      }}
+    />
+  );
+});
+
+/* =============================================================================
+   FLOATING TOOL ICONS (orbit effect)
+   ============================================================================= */
+
+const FloatingToolIcons = memo(function FloatingToolIcons() {
+  const tools = useMemo(() => {
+    const icons = ["\u{1F527}", "\u2699\uFE0F", "\u{1F4BB}", "\u{1F3A8}", "\u{1F50C}", "\u{1F4D0}"];
+    return icons.map((icon, i) => ({
+      id: i,
+      icon,
+      radius: 100 + i * 30,
+      speed: 12 + i * 4,
+      delay: i * 2,
+      startAngle: i * 60,
+    }));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {tools.map((t) => (
+        <div
+          key={t.id}
+          className="absolute text-2xl"
+          style={{
+            left: "50%",
+            top: "40%",
+            animation: `orbitFloat ${t.speed}s linear ${t.delay}s infinite`,
+            transformOrigin: `0 ${t.radius}px`,
+            willChange: "transform",
+            opacity: 0.3,
+          }}
+        >
+          {t.icon}
+        </div>
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   STEAM CHIMNEYS
+   ============================================================================= */
+
+const SteamChimneys = memo(function SteamChimneys() {
+  const chimneyPositions = useMemo(
+    () => [15, 35, 55, 78].map((x, i) => ({
+      x,
+      particles: Array.from({ length: 4 }, (_, j) => ({
+        id: j,
+        size: seededRandom(i * 50 + j * 11 + 1) * 10 + 6,
+        duration: seededRandom(i * 50 + j * 11 + 2) * 3 + 2,
+        delay: seededRandom(i * 50 + j * 11 + 3) * 2,
+        drift: seededRandom(i * 50 + j * 11 + 4) * 30 - 15,
+      })),
+    })),
+    []
+  );
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {chimneyPositions.map((chimney, ci) => (
+        <div key={ci} className="absolute" style={{ left: `${chimney.x}%`, bottom: "60%" }}>
+          {chimney.particles.map((p) => (
+            <div
+              key={p.id}
+              className="absolute rounded-full"
+              style={{
+                width: `${p.size}px`,
+                height: `${p.size}px`,
+                backgroundColor: "rgba(255,255,255,0.15)",
+                animation: `steamRise ${p.duration}s ease-out ${p.delay}s infinite`,
+                willChange: "transform, opacity",
+              }}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   STREET LAMPS (warm glow)
+   ============================================================================= */
+
+const StreetLamps = memo(function StreetLamps() {
+  const lamps = [20, 40, 60, 80];
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {lamps.map((x, i) => (
+        <div key={i} className="absolute" style={{ left: `${x}%`, bottom: "35%" }}>
+          {/* Lamp post */}
+          <div className="w-1 h-16 bg-gray-600 mx-auto" />
+          {/* Lamp head */}
+          <div className="w-6 h-4 bg-gray-500 rounded-t mx-auto -mt-1" />
+          {/* Glow */}
+          <div
+            className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full"
+            style={{
+              width: "40px",
+              height: "40px",
+              background: "radial-gradient(circle, rgba(251,191,36,0.4) 0%, transparent 70%)",
+              animation: `lampGlow 3s ease-in-out ${i * 0.5}s infinite`,
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   MEDICAL CROSSES (clinical floating particles)
+   ============================================================================= */
+
+const MedicalCrosses = memo(function MedicalCrosses({ count = 12 }: { count?: number }) {
+  const crosses = useMemo(() => {
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: seededRandom(i * 43 + 1) * 100,
+      y: seededRandom(i * 43 + 2) * 100,
+      size: seededRandom(i * 43 + 3) * 8 + 6,
+      duration: seededRandom(i * 43 + 4) * 8 + 5,
+      delay: seededRandom(i * 43 + 5) * 5,
+      opacity: seededRandom(i * 43 + 6) * 0.08 + 0.02,
+    }));
+  }, [count]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {crosses.map((c) => (
+        <div
+          key={c.id}
+          className="absolute font-bold"
+          style={{
+            left: `${c.x}%`,
+            top: `${c.y}%`,
+            fontSize: `${c.size}px`,
+            color: "#93C5FD",
+            opacity: c.opacity,
+            animation: `medicalFloat ${c.duration}s ease-in-out ${c.delay}s infinite`,
+            willChange: "transform, opacity",
+          }}
+        >
+          +
+        </div>
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   CIRCUIT GRID LINES (glowing)
+   ============================================================================= */
+
+const CircuitGrid = memo(function CircuitGrid() {
+  const lines = useMemo(() => {
+    return Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      x1: seededRandom(i * 53 + 1) * 100,
+      y1: seededRandom(i * 53 + 2) * 100,
+      x2: seededRandom(i * 53 + 3) * 100,
+      y2: seededRandom(i * 53 + 4) * 100,
+      delay: seededRandom(i * 53 + 5) * 4,
+    }));
+  }, []);
+
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden" style={{ opacity: 0.08 }}>
+      {lines.map((l) => (
+        <line
+          key={l.id}
+          x1={`${l.x1}%`}
+          y1={`${l.y1}%`}
+          x2={`${l.x2}%`}
+          y2={`${l.y2}%`}
+          stroke="#06B6D4"
+          strokeWidth="1"
+          strokeDasharray="200"
+          strokeDashoffset="200"
+          style={{
+            animation: `circuitDraw 3s ease-out ${l.delay}s infinite`,
+            filter: "drop-shadow(0 0 4px #06B6D4)",
+          }}
+        />
+      ))}
+      {/* Circuit nodes */}
+      {lines.map((l) => (
+        <React.Fragment key={`node-${l.id}`}>
+          <circle cx={`${l.x1}%`} cy={`${l.y1}%`} r="2" fill="#06B6D4" opacity="0.3" />
+          <circle cx={`${l.x2}%`} cy={`${l.y2}%`} r="2" fill="#8B5CF6" opacity="0.3" />
+        </React.Fragment>
+      ))}
+    </svg>
+  );
+});
+
+/* =============================================================================
+   GOLDEN MILESTONE PARTICLES
+   ============================================================================= */
+
+const GoldenParticles = memo(function GoldenParticles({ active, count = 20 }: { active: boolean; count?: number }) {
+  const particles = useMemo(() => {
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      angle: seededRandom(i * 61 + 1) * 360,
+      distance: seededRandom(i * 61 + 2) * 40 + 10,
+      size: seededRandom(i * 61 + 3) * 3 + 1,
+      duration: seededRandom(i * 61 + 4) * 2 + 1,
+      delay: seededRandom(i * 61 + 5) * 0.5,
+    }));
+  }, [count]);
+
+  if (!active) return null;
+
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute rounded-full"
+          style={{
+            left: "50%",
+            top: "50%",
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            backgroundColor: "#FBBF24",
+            boxShadow: "0 0 4px rgba(251,191,36,0.6)",
+            animation: `goldenBurst ${p.duration}s ease-out ${p.delay}s forwards`,
+            transform: `rotate(${p.angle}deg) translateX(${p.distance}px)`,
+            willChange: "transform, opacity",
+          }}
+        />
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
+   LIGHT RAYS (from top)
+   ============================================================================= */
+
+const LightRays = memo(function LightRays() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className="absolute"
+          style={{
+            top: 0,
+            left: `${15 + i * 18}%`,
+            width: "2px",
+            height: "60%",
+            background: `linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 40%, transparent 100%)`,
+            transform: `rotate(${-10 + i * 5}deg)`,
+            transformOrigin: "top center",
+            animation: `lightRayPulse ${4 + i}s ease-in-out ${i * 0.8}s infinite`,
+            willChange: "opacity",
+          }}
+        />
+      ))}
+    </div>
+  );
+});
+
+/* =============================================================================
    NEBULA BLOBS
    ============================================================================= */
 
@@ -1072,11 +1816,11 @@ const NebulaBlobs = memo(function NebulaBlobs() {
           top: "20%",
           background:
             "radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.05) 40%, transparent 70%)",
-          animation: "nebulaDrift1 20s ease-in-out infinite",
-          willChange: "transform",
+          animation: "nebulaDrift1 20s ease-in-out infinite, nebulaPulse 6s ease-in-out infinite",
+          willChange: "transform, opacity",
         }}
       />
-      {/* Blue nebula */}
+      {/* Blue nebula - pulsing */}
       <div
         className="absolute rounded-full"
         style={{
@@ -1086,11 +1830,11 @@ const NebulaBlobs = memo(function NebulaBlobs() {
           top: "40%",
           background:
             "radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.04) 40%, transparent 70%)",
-          animation: "nebulaDrift2 25s ease-in-out infinite",
-          willChange: "transform",
+          animation: "nebulaDrift2 25s ease-in-out infinite, nebulaPulse 8s ease-in-out 2s infinite",
+          willChange: "transform, opacity",
         }}
       />
-      {/* Pink nebula */}
+      {/* Pink nebula - pulsing */}
       <div
         className="absolute rounded-full"
         style={{
@@ -1100,8 +1844,8 @@ const NebulaBlobs = memo(function NebulaBlobs() {
           top: "60%",
           background:
             "radial-gradient(circle, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0.03) 40%, transparent 70%)",
-          animation: "nebulaDrift3 22s ease-in-out infinite",
-          willChange: "transform",
+          animation: "nebulaDrift3 22s ease-in-out infinite, nebulaPulse 7s ease-in-out 4s infinite",
+          willChange: "transform, opacity",
         }}
       />
     </div>
@@ -1132,10 +1876,28 @@ const ShootingStar = memo(function ShootingStar() {
     </div>
   );
 });
-
 /* =============================================================================
-   CHARACTER COMPONENT (PIXEL JAIME)
+   CHARACTER COMPONENT (PIXEL JAIME) — DETAILED PIXEL ART
    ============================================================================= */
+
+type CharacterVariant =
+  | "normal"
+  | "sitting"
+  | "chef"
+  | "lab"
+  | "hacker"
+  | "hero"
+  | "climbing";
+
+const SHIRT_COLORS: Record<CharacterVariant, string> = {
+  normal: "#3B82F6",
+  sitting: "#3B82F6",
+  chef: "#FFFFFF",
+  lab: "#FFFFFF",
+  hacker: "#1E293B",
+  hero: "#EAB308",
+  climbing: "#F97316",
+};
 
 const PixelCharacter = memo(function PixelCharacter({
   variant = "normal",
@@ -1143,279 +1905,865 @@ const PixelCharacter = memo(function PixelCharacter({
   flipped = false,
   size = 48,
 }: {
-  variant?:
-    | "normal"
-    | "sitting"
-    | "chef"
-    | "lab"
-    | "hacker"
-    | "hero";
+  variant?: CharacterVariant;
   walking?: boolean;
   flipped?: boolean;
   size?: number;
 }) {
-  const scale = size / 48;
+  const s = size / 40; // base unit scale (40px base height)
 
-  const bodyColor = (() => {
-    switch (variant) {
-      case "chef":
-      case "lab":
-        return "#FFFFFF";
-      case "hacker":
-        return "#1E293B";
-      case "hero":
-        return "#EAB308";
-      default:
-        return "#3B82F6";
-    }
-  })();
-
-  const headAccessory = (() => {
-    switch (variant) {
-      case "chef":
-        return (
-          <div
-            className="absolute rounded-t-full bg-white"
-            style={{
-              width: `${14 * scale}px`,
-              height: `${10 * scale}px`,
-              top: `${-8 * scale}px`,
-              left: `${1 * scale}px`,
-              boxShadow: "0 -2px 4px rgba(0,0,0,0.1)",
-            }}
-          />
-        );
-      case "hacker":
-        return (
-          <div
-            className="absolute"
-            style={{
-              width: `${14 * scale}px`,
-              height: `${4 * scale}px`,
-              top: `${4 * scale}px`,
-              left: `${1 * scale}px`,
-              backgroundColor: "#06B6D4",
-              opacity: 0.8,
-              borderRadius: `${2 * scale}px`,
-            }}
-          />
-        );
-      case "hero":
-        return (
-          <div
-            className="absolute"
-            style={{
-              width: `${20 * scale}px`,
-              height: `${12 * scale}px`,
-              top: `${14 * scale}px`,
-              left: `${-2 * scale}px`,
-              background:
-                "linear-gradient(135deg, #EAB308, #F59E0B)",
-              clipPath: "polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%)",
-              transformOrigin: "top left",
-              animation: walking
-                ? "capeFlutter 1.5s ease-in-out infinite"
-                : undefined,
-            }}
-          />
-        );
-      default:
-        return null;
-    }
-  })();
+  const shirtColor = SHIRT_COLORS[variant] || "#3B82F6";
+  const skinColor = "#F5C78A";
+  const hairColor = "#3B2507";
+  const pantsColor = "#1E293B";
+  const shoeColor = "#4A3728";
+  const eyeWhite = "#FFFFFF";
+  const pupilColor = "#1E1B4B";
 
   const isSitting = variant === "sitting";
+  const isClimbing = variant === "climbing";
+  const isHero = variant === "hero";
+  const isChef = variant === "chef";
+  const isHacker = variant === "hacker";
+  const isLab = variant === "lab";
+
+  // Idle animations (only when not walking)
+  const idleBody =
+    !walking && !isSitting
+      ? "pixelBreathe 3s ease-in-out infinite"
+      : undefined;
+  const idleEyes = !walking
+    ? "pixelBlink 4s step-end infinite"
+    : undefined;
+  const idlePupils =
+    !walking && !isSitting
+      ? "pixelLookAround 5s ease-in-out infinite"
+      : undefined;
+  const idleHair = walking
+    ? "pixelHairBounce 0.35s ease-in-out infinite"
+    : undefined;
+  const walkBob = walking
+    ? "pixelWalkBob 0.35s ease-in-out infinite"
+    : undefined;
 
   return (
     <div
       className="relative"
       style={{
-        width: `${16 * scale}px`,
-        height: `${size}px`,
+        width: `${20 * s}px`,
+        height: `${40 * s}px`,
         transform: flipped ? "scaleX(-1)" : undefined,
+        animation: walkBob,
+        willChange: "transform",
       }}
     >
-      {/* Hair */}
+      {/* ========= HAIR ========= */}
       <div
-        className="absolute rounded-t-lg"
+        className="absolute"
         style={{
-          width: `${14 * scale}px`,
-          height: `${6 * scale}px`,
+          width: `${14 * s}px`,
+          height: `${5 * s}px`,
           top: 0,
-          left: `${1 * scale}px`,
-          backgroundColor: "#1E1B4B",
+          left: `${3 * s}px`,
+          backgroundColor: hairColor,
+          animation: idleHair,
         }}
       />
-      {/* Head */}
+      {/* Hair side tufts */}
       <div
-        className="absolute rounded-lg"
+        className="absolute"
         style={{
-          width: `${14 * scale}px`,
-          height: `${14 * scale}px`,
-          top: `${2 * scale}px`,
-          left: `${1 * scale}px`,
-          backgroundColor: "#FBBF24",
+          width: `${2 * s}px`,
+          height: `${4 * s}px`,
+          top: `${2 * s}px`,
+          left: `${2 * s}px`,
+          backgroundColor: hairColor,
+        }}
+      />
+      <div
+        className="absolute"
+        style={{
+          width: `${2 * s}px`,
+          height: `${4 * s}px`,
+          top: `${2 * s}px`,
+          right: `${2 * s}px`,
+          backgroundColor: hairColor,
+        }}
+      />
+
+      {/* ========= HEAD / FACE ========= */}
+      <div
+        className="absolute"
+        style={{
+          width: `${12 * s}px`,
+          height: `${10 * s}px`,
+          top: `${3 * s}px`,
+          left: `${4 * s}px`,
+          backgroundColor: skinColor,
         }}
       >
-        {/* Eyes */}
-        <div
-          className="absolute rounded-full bg-[#1E1B4B]"
-          style={{
-            width: `${2 * scale}px`,
-            height: `${2 * scale}px`,
-            top: `${5 * scale}px`,
-            left: `${3 * scale}px`,
-          }}
-        />
-        <div
-          className="absolute rounded-full bg-[#1E1B4B]"
-          style={{
-            width: `${2 * scale}px`,
-            height: `${2 * scale}px`,
-            top: `${5 * scale}px`,
-            right: `${3 * scale}px`,
-          }}
-        />
-        {/* Smile */}
+        {/* Left eye */}
         <div
           className="absolute"
           style={{
-            width: `${6 * scale}px`,
-            height: `${3 * scale}px`,
-            bottom: `${2 * scale}px`,
-            left: `${4 * scale}px`,
-            borderBottom: `${1.5 * scale}px solid #92400E`,
-            borderRadius: `0 0 ${3 * scale}px ${3 * scale}px`,
+            width: `${3 * s}px`,
+            height: `${3 * s}px`,
+            top: `${3 * s}px`,
+            left: `${1 * s}px`,
+            backgroundColor: eyeWhite,
+            animation: idleEyes,
+          }}
+        >
+          <div
+            className="absolute"
+            style={{
+              width: `${1.5 * s}px`,
+              height: `${1.5 * s}px`,
+              top: `${0.75 * s}px`,
+              left: `${0.75 * s}px`,
+              backgroundColor: pupilColor,
+              animation: idlePupils,
+            }}
+          />
+        </div>
+        {/* Right eye */}
+        <div
+          className="absolute"
+          style={{
+            width: `${3 * s}px`,
+            height: `${3 * s}px`,
+            top: `${3 * s}px`,
+            right: `${1 * s}px`,
+            backgroundColor: eyeWhite,
+            animation: idleEyes,
+          }}
+        >
+          <div
+            className="absolute"
+            style={{
+              width: `${1.5 * s}px`,
+              height: `${1.5 * s}px`,
+              top: `${0.75 * s}px`,
+              left: `${0.75 * s}px`,
+              backgroundColor: pupilColor,
+              animation: idlePupils,
+            }}
+          />
+        </div>
+        {/* Mouth */}
+        <div
+          className="absolute"
+          style={{
+            width: `${4 * s}px`,
+            height: `${1 * s}px`,
+            bottom: `${1 * s}px`,
+            left: `${4 * s}px`,
+            backgroundColor: "#92400E",
           }}
         />
       </div>
-      {headAccessory}
-      {/* Body */}
-      <div
-        className="absolute rounded"
-        style={{
-          width: `${14 * scale}px`,
-          height: `${14 * scale}px`,
-          top: `${17 * scale}px`,
-          left: `${1 * scale}px`,
-          backgroundColor: bodyColor,
-          border:
-            variant === "chef" || variant === "lab"
-              ? "1px solid #E5E7EB"
-              : "none",
-        }}
-      />
-      {/* Arms */}
-      {isSitting ? (
+
+      {/* ========= ACCESSORIES (HEAD) ========= */}
+      {/* Chef hat */}
+      {isChef && (
         <>
           <div
-            className="absolute rounded"
+            className="absolute"
             style={{
-              width: `${4 * scale}px`,
-              height: `${8 * scale}px`,
-              top: `${19 * scale}px`,
-              left: `${-2 * scale}px`,
-              backgroundColor: bodyColor,
-              transform: "rotate(30deg)",
-              animation: "typing 0.4s ease-in-out infinite alternate",
+              width: `${10 * s}px`,
+              height: `${4 * s}px`,
+              top: `${-4 * s}px`,
+              left: `${5 * s}px`,
+              backgroundColor: "#FFFFFF",
+              boxShadow: `0 ${-1 * s}px 0 #F3F4F6`,
             }}
           />
           <div
-            className="absolute rounded"
+            className="absolute"
             style={{
-              width: `${4 * scale}px`,
-              height: `${8 * scale}px`,
-              top: `${19 * scale}px`,
-              right: `${-2 * scale}px`,
-              backgroundColor: bodyColor,
-              transform: "rotate(-30deg)",
+              width: `${14 * s}px`,
+              height: `${2 * s}px`,
+              top: `${-1 * s}px`,
+              left: `${3 * s}px`,
+              backgroundColor: "#FFFFFF",
+            }}
+          />
+        </>
+      )}
+      {/* Hacker VR visor */}
+      {isHacker && (
+        <div
+          className="absolute"
+          style={{
+            width: `${14 * s}px`,
+            height: `${3 * s}px`,
+            top: `${6 * s}px`,
+            left: `${3 * s}px`,
+            backgroundColor: "#06B6D4",
+            opacity: 0.85,
+            animation: "pixelVisorGlow 2s ease-in-out infinite",
+          }}
+        />
+      )}
+      {/* Lab stethoscope */}
+      {isLab && (
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${6 * s}px`,
+              top: `${12 * s}px`,
+              left: `${2 * s}px`,
+              backgroundColor: "#10B981",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${6 * s}px`,
+              height: `${2 * s}px`,
+              top: `${16 * s}px`,
+              left: `${2 * s}px`,
+              backgroundColor: "#10B981",
+            }}
+          />
+          {/* Stethoscope disc */}
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${3 * s}px`,
+              top: `${17 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: "#D1D5DB",
+            }}
+          />
+        </>
+      )}
+      {/* Hero cape */}
+      {isHero && (
+        <div
+          className="absolute"
+          style={{
+            width: `${6 * s}px`,
+            height: `${16 * s}px`,
+            top: `${14 * s}px`,
+            left: `${-3 * s}px`,
+            backgroundColor: "#DC2626",
+            transformOrigin: "top center",
+            animation: walking
+              ? "pixelCapeFlow 0.8s ease-in-out infinite"
+              : "pixelCapeIdle 3s ease-in-out infinite",
+          }}
+        >
+          <div
+            className="absolute"
+            style={{
+              width: `${8 * s}px`,
+              height: `${3 * s}px`,
+              bottom: 0,
+              left: `${-1 * s}px`,
+              backgroundColor: "#B91C1C",
+              animation: walking
+                ? "pixelCapeFlutter 0.6s ease-in-out infinite"
+                : undefined,
+            }}
+          />
+        </div>
+      )}
+
+      {/* ========= BODY / SHIRT ========= */}
+      <div
+        className="absolute"
+        style={{
+          width: `${12 * s}px`,
+          height: `${10 * s}px`,
+          top: `${13 * s}px`,
+          left: `${4 * s}px`,
+          backgroundColor: shirtColor,
+          border:
+            isChef || isLab ? `${1 * s}px solid #E5E7EB` : "none",
+          animation: idleBody,
+          transformOrigin: "bottom center",
+        }}
+      />
+
+      {/* Backpack (normal / sitting) */}
+      {(variant === "normal" || variant === "sitting") && (
+        <div
+          className="absolute"
+          style={{
+            width: `${5 * s}px`,
+            height: `${7 * s}px`,
+            top: `${14 * s}px`,
+            left: `${-2 * s}px`,
+            backgroundColor: "#92400E",
+          }}
+        >
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${1 * s}px`,
+              top: `${1 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: "#78350F",
+            }}
+          />
+        </div>
+      )}
+
+      {/* Chef apron */}
+      {isChef && (
+        <div
+          className="absolute"
+          style={{
+            width: `${10 * s}px`,
+            height: `${8 * s}px`,
+            top: `${15 * s}px`,
+            left: `${5 * s}px`,
+            backgroundColor: "#FAFAFA",
+            borderTop: `${1 * s}px solid #E5E7EB`,
+          }}
+        />
+      )}
+
+      {/* Climbing rope coil */}
+      {isClimbing && (
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${12 * s}px`,
+              top: `${14 * s}px`,
+              left: `${-2 * s}px`,
+              backgroundColor: "#D97706",
+              animation: "pixelRopeTrail 1s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${4 * s}px`,
+              height: `${4 * s}px`,
+              top: `${13 * s}px`,
+              left: `${-3 * s}px`,
+              backgroundColor: "#B45309",
+              border: `${1 * s}px solid #92400E`,
+            }}
+          />
+        </>
+      )}
+
+      {/* ========= ARMS ========= */}
+      {isSitting ? (
+        /* Typing arms — hands move on imaginary keyboard */
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${7 * s}px`,
+              top: `${15 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transformOrigin: "top center",
               animation:
-                "typing 0.4s ease-in-out 0.2s infinite alternate",
+                "pixelTypingL 0.3s ease-in-out infinite alternate",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${22 * s}px`,
+              left: 0,
+              backgroundColor: skinColor,
+              animation:
+                "pixelTypingHandL 0.3s ease-in-out infinite alternate",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${7 * s}px`,
+              top: `${15 * s}px`,
+              right: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transformOrigin: "top center",
+              animation:
+                "pixelTypingR 0.3s ease-in-out 0.15s infinite alternate",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${22 * s}px`,
+              right: 0,
+              backgroundColor: skinColor,
+              animation:
+                "pixelTypingHandR 0.3s ease-in-out 0.15s infinite alternate",
+            }}
+          />
+        </>
+      ) : isClimbing ? (
+        /* Climbing arms — reach up alternately */
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${8 * s}px`,
+              top: `${13 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transformOrigin: "bottom center",
+              animation:
+                "pixelClimbArmL 0.8s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${11 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: skinColor,
+              animation:
+                "pixelClimbHandL 0.8s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${8 * s}px`,
+              top: `${13 * s}px`,
+              right: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transformOrigin: "bottom center",
+              animation:
+                "pixelClimbArmR 0.8s ease-in-out 0.4s infinite",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${11 * s}px`,
+              right: `${1 * s}px`,
+              backgroundColor: skinColor,
+              animation:
+                "pixelClimbHandR 0.8s ease-in-out 0.4s infinite",
+            }}
+          />
+        </>
+      ) : isHero && !walking ? (
+        /* Hero pose — arms on hips */
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${7 * s}px`,
+              top: `${14 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transform: "rotate(25deg)",
+              transformOrigin: "top center",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${20 * s}px`,
+              left: `${3 * s}px`,
+              backgroundColor: skinColor,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${7 * s}px`,
+              top: `${14 * s}px`,
+              right: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transform: "rotate(-25deg)",
+              transformOrigin: "top center",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${20 * s}px`,
+              right: `${3 * s}px`,
+              backgroundColor: skinColor,
+            }}
+          />
+        </>
+      ) : (
+        /* Normal / walking arms with hands */
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${8 * s}px`,
+              top: `${14 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transformOrigin: "top center",
+              animation: walking
+                ? "pixelArmSwing 0.35s ease-in-out infinite alternate"
+                : undefined,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${22 * s}px`,
+              left: `${1 * s}px`,
+              backgroundColor: skinColor,
+              animation: walking
+                ? "pixelArmSwing 0.35s ease-in-out infinite alternate"
+                : undefined,
+              transformOrigin: `0px ${-6 * s}px`,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${3 * s}px`,
+              height: `${8 * s}px`,
+              top: `${14 * s}px`,
+              right: `${1 * s}px`,
+              backgroundColor: shirtColor,
+              transformOrigin: "top center",
+              animation: walking
+                ? "pixelArmSwing 0.35s ease-in-out 0.175s infinite alternate"
+                : undefined,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${2 * s}px`,
+              height: `${2 * s}px`,
+              top: `${22 * s}px`,
+              right: `${1 * s}px`,
+              backgroundColor: skinColor,
+              animation: walking
+                ? "pixelArmSwing 0.35s ease-in-out 0.175s infinite alternate"
+                : undefined,
+              transformOrigin: `0px ${-6 * s}px`,
+            }}
+          />
+        </>
+      )}
+
+      {/* ========= LEGS ========= */}
+      {isSitting ? (
+        <>
+          {/* Thigh section horizontal */}
+          <div
+            className="absolute"
+            style={{
+              width: `${10 * s}px`,
+              height: `${3 * s}px`,
+              top: `${23 * s}px`,
+              left: `${5 * s}px`,
+              backgroundColor: pantsColor,
+            }}
+          />
+          {/* Calves */}
+          <div
+            className="absolute"
+            style={{
+              width: `${4 * s}px`,
+              height: `${5 * s}px`,
+              top: `${26 * s}px`,
+              left: `${5 * s}px`,
+              backgroundColor: pantsColor,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${4 * s}px`,
+              height: `${5 * s}px`,
+              top: `${26 * s}px`,
+              right: `${5 * s}px`,
+              backgroundColor: pantsColor,
+            }}
+          />
+          {/* Shoes */}
+          <div
+            className="absolute"
+            style={{
+              width: `${5 * s}px`,
+              height: `${2 * s}px`,
+              top: `${31 * s}px`,
+              left: `${4 * s}px`,
+              backgroundColor: shoeColor,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${5 * s}px`,
+              height: `${2 * s}px`,
+              top: `${31 * s}px`,
+              right: `${4 * s}px`,
+              backgroundColor: shoeColor,
+            }}
+          />
+        </>
+      ) : isClimbing ? (
+        <>
+          <div
+            className="absolute"
+            style={{
+              width: `${4 * s}px`,
+              height: `${10 * s}px`,
+              top: `${23 * s}px`,
+              left: `${5 * s}px`,
+              backgroundColor: pantsColor,
+              transformOrigin: "top center",
+              animation:
+                "pixelClimbLegL 0.8s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${4 * s}px`,
+              height: `${10 * s}px`,
+              top: `${23 * s}px`,
+              right: `${5 * s}px`,
+              backgroundColor: pantsColor,
+              transformOrigin: "top center",
+              animation:
+                "pixelClimbLegR 0.8s ease-in-out 0.4s infinite",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${5 * s}px`,
+              height: `${2 * s}px`,
+              top: `${33 * s}px`,
+              left: `${4 * s}px`,
+              backgroundColor: shoeColor,
+              animation:
+                "pixelClimbLegL 0.8s ease-in-out infinite",
+              transformOrigin: `0px ${-8 * s}px`,
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              width: `${5 * s}px`,
+              height: `${2 * s}px`,
+              top: `${33 * s}px`,
+              right: `${4 * s}px`,
+              backgroundColor: shoeColor,
+              animation:
+                "pixelClimbLegR 0.8s ease-in-out 0.4s infinite",
+              transformOrigin: `0px ${-8 * s}px`,
             }}
           />
         </>
       ) : (
         <>
+          {/* Left leg */}
           <div
-            className="absolute rounded"
+            className="absolute"
             style={{
-              width: `${3 * scale}px`,
-              height: `${10 * scale}px`,
-              top: `${18 * scale}px`,
-              left: `${-2 * scale}px`,
-              backgroundColor: bodyColor,
+              width: `${4 * s}px`,
+              height: `${10 * s}px`,
+              top: `${23 * s}px`,
+              left: `${5 * s}px`,
+              backgroundColor: pantsColor,
+              transformOrigin: "top center",
               animation: walking
-                ? "armSwing 0.4s ease-in-out infinite alternate"
+                ? "pixelLegWalk 0.35s ease-in-out infinite alternate"
                 : undefined,
-              transformOrigin: "top",
             }}
           />
+          {/* Right leg */}
           <div
-            className="absolute rounded"
+            className="absolute"
             style={{
-              width: `${3 * scale}px`,
-              height: `${10 * scale}px`,
-              top: `${18 * scale}px`,
-              right: `${-2 * scale}px`,
-              backgroundColor: bodyColor,
+              width: `${4 * s}px`,
+              height: `${10 * s}px`,
+              top: `${23 * s}px`,
+              right: `${5 * s}px`,
+              backgroundColor: pantsColor,
+              transformOrigin: "top center",
               animation: walking
-                ? "armSwing 0.4s ease-in-out 0.2s infinite alternate"
+                ? "pixelLegWalk 0.35s ease-in-out 0.175s infinite alternate"
                 : undefined,
-              transformOrigin: "top",
+            }}
+          />
+          {/* Left shoe */}
+          <div
+            className="absolute"
+            style={{
+              width: `${5 * s}px`,
+              height: `${2 * s}px`,
+              top: `${33 * s}px`,
+              left: `${4 * s}px`,
+              backgroundColor: shoeColor,
+              animation: walking
+                ? "pixelLegWalk 0.35s ease-in-out infinite alternate"
+                : undefined,
+              transformOrigin: `0px ${-8 * s}px`,
+            }}
+          />
+          {/* Right shoe */}
+          <div
+            className="absolute"
+            style={{
+              width: `${5 * s}px`,
+              height: `${2 * s}px`,
+              top: `${33 * s}px`,
+              right: `${4 * s}px`,
+              backgroundColor: shoeColor,
+              animation: walking
+                ? "pixelLegWalk 0.35s ease-in-out 0.175s infinite alternate"
+                : undefined,
+              transformOrigin: `0px ${-8 * s}px`,
             }}
           />
         </>
       )}
-      {/* Legs */}
-      {!isSitting && (
-        <>
-          <div
-            className="absolute rounded"
-            style={{
-              width: `${4 * scale}px`,
-              height: `${12 * scale}px`,
-              top: `${31 * scale}px`,
-              left: `${2 * scale}px`,
-              backgroundColor: "#1E293B",
-              animation: walking
-                ? "legWalk 0.4s ease-in-out infinite alternate"
-                : undefined,
-              transformOrigin: "top",
-            }}
-          />
-          <div
-            className="absolute rounded"
-            style={{
-              width: `${4 * scale}px`,
-              height: `${12 * scale}px`,
-              top: `${31 * scale}px`,
-              right: `${2 * scale}px`,
-              backgroundColor: "#1E293B",
-              animation: walking
-                ? "legWalk 0.4s ease-in-out 0.2s infinite alternate"
-                : undefined,
-              transformOrigin: "top",
-            }}
-          />
-        </>
-      )}
-      {/* Feet for sitting */}
-      {isSitting && (
+
+      {/* ========= CHAPTER-SPECIFIC HELD ITEMS ========= */}
+
+      {/* Chef pan with tossing */}
+      {isChef && (
         <div
-          className="absolute rounded"
+          className="absolute"
           style={{
-            width: `${14 * scale}px`,
-            height: `${4 * scale}px`,
-            top: `${31 * scale}px`,
-            left: `${1 * scale}px`,
-            backgroundColor: "#1E293B",
+            top: `${10 * s}px`,
+            right: `${-6 * s}px`,
+            animation: "pixelPanToss 1.2s ease-in-out infinite",
+          }}
+        >
+          <div
+            style={{
+              width: `${6 * s}px`,
+              height: `${2 * s}px`,
+              backgroundColor: "#78716C",
+            }}
+          />
+          <div
+            style={{
+              width: `${5 * s}px`,
+              height: `${3 * s}px`,
+              backgroundColor: "#57534E",
+              marginTop: `${-1 * s}px`,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Lab clipboard */}
+      {isLab && (
+        <div
+          className="absolute"
+          style={{
+            top: `${16 * s}px`,
+            right: `${-5 * s}px`,
+            animation: "pixelClipboardNod 2s ease-in-out infinite",
+          }}
+        >
+          <div
+            style={{
+              width: `${5 * s}px`,
+              height: `${7 * s}px`,
+              backgroundColor: "#FDE68A",
+              border: `${0.5 * s}px solid #D97706`,
+            }}
+          />
+          <div
+            style={{
+              width: `${3 * s}px`,
+              height: `${1 * s}px`,
+              backgroundColor: "#9CA3AF",
+              marginLeft: `${1 * s}px`,
+              marginTop: `${-7.5 * s}px`,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Hacker fist pump */}
+      {isHacker && (
+        <div
+          className="absolute"
+          style={{
+            width: `${2 * s}px`,
+            height: `${2 * s}px`,
+            top: `${8 * s}px`,
+            right: `${-1 * s}px`,
+            backgroundColor: skinColor,
+            opacity: 0,
+            animation: "pixelFistPump 4s ease-in-out infinite",
+          }}
+        />
+      )}
+
+      {/* Chef steam particles */}
+      {isChef &&
+        [0, 1, 2].map((i) => (
+          <div
+            key={`steam-${i}`}
+            className="absolute"
+            style={{
+              width: `${1.5 * s}px`,
+              height: `${1.5 * s}px`,
+              top: `${6 * s}px`,
+              right: `${(-4 + i * 2) * s}px`,
+              backgroundColor: "rgba(255,255,255,0.5)",
+              animation: `pixelSteam 1.5s ease-out ${i * 0.4}s infinite`,
+            }}
+          />
+        ))}
+
+      {/* Hero wind hair */}
+      {isHero && (
+        <div
+          className="absolute"
+          style={{
+            width: `${3 * s}px`,
+            height: `${2 * s}px`,
+            top: `${1 * s}px`,
+            left: `${1 * s}px`,
+            backgroundColor: hairColor,
+            animation:
+              "pixelHeroHairWind 2s ease-in-out infinite",
           }}
         />
       )}
     </div>
   );
 });
-
 /* =============================================================================
    SPEECH BUBBLE
    ============================================================================= */
@@ -2132,6 +3480,317 @@ const FloatingCard = memo(function FloatingCard({
 });
 
 /* =============================================================================
+   MINI-GAME: RECIPE MEMORY (Ch3 - Vila dos Sabores)
+   ============================================================================= */
+
+const MEMORY_DISHES: { emoji: string; name: string }[] = [
+  { emoji: "\u{1F356}", name: "Carne" },
+  { emoji: "\u{1F41F}", name: "Peixe" },
+  { emoji: "\u{1F372}", name: "Cozido" },
+  { emoji: "\u{1F9C1}", name: "Bolo" },
+  { emoji: "\u{1F377}", name: "Vinho" },
+  { emoji: "\u{1F957}", name: "Salada" },
+];
+
+interface MemoryCard {
+  id: number;
+  pairId: number;
+  emoji: string;
+  name: string;
+  flipped: boolean;
+  matched: boolean;
+}
+
+const MiniGameMemory = memo(function MiniGameMemory() {
+  const [started, setStarted] = useState(false);
+  const [cards, setCards] = useState<MemoryCard[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
+  const [moves, setMoves] = useState(0);
+  const [matchedCount, setMatchedCount] = useState(0);
+  const [timer, setTimer] = useState(0);
+  const [completed, setCompleted] = useState(false);
+  const [badgeEarned, setBadgeEarned] = useState(false);
+  const memTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("rpg-chronicle-minigames");
+      if (saved) { const data = JSON.parse(saved); if (data.memory) setBadgeEarned(true); }
+    } catch { /* noop */ }
+  }, []);
+
+  const initGame = useCallback(() => {
+    const pairs: MemoryCard[] = [];
+    MEMORY_DISHES.forEach((dish, i) => {
+      pairs.push({ id: i * 2, pairId: i, emoji: dish.emoji, name: dish.name, flipped: false, matched: false });
+      pairs.push({ id: i * 2 + 1, pairId: i, emoji: dish.emoji, name: dish.name, flipped: false, matched: false });
+    });
+    for (let k = pairs.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [pairs[k], pairs[j]] = [pairs[j], pairs[k]]; }
+    setCards(pairs); setSelected([]); setMoves(0); setMatchedCount(0); setTimer(0); setCompleted(false); setStarted(true);
+    if (memTimerRef.current) clearInterval(memTimerRef.current);
+    memTimerRef.current = setInterval(() => setTimer((t) => t + 1), 1000);
+  }, []);
+
+  useEffect(() => { return () => { if (memTimerRef.current) clearInterval(memTimerRef.current); }; }, []);
+
+  const handleCardClick = useCallback((idx: number) => {
+    if (completed) return;
+    setCards((prev) => { const c = [...prev]; if (c[idx].flipped || c[idx].matched) return c; c[idx] = { ...c[idx], flipped: true }; return c; });
+    setSelected((prev) => {
+      const next = [...prev, idx];
+      if (next.length === 2) {
+        setMoves((m) => m + 1);
+        const [a, b] = next;
+        setTimeout(() => {
+          setCards((prev2) => {
+            const c2 = [...prev2];
+            if (c2[a].pairId === c2[b].pairId) {
+              c2[a] = { ...c2[a], matched: true }; c2[b] = { ...c2[b], matched: true };
+              setMatchedCount((mc) => {
+                const newMc = mc + 1;
+                if (newMc === 6) { setCompleted(true); if (memTimerRef.current) clearInterval(memTimerRef.current);
+                  try { const saved = localStorage.getItem("rpg-chronicle-minigames"); const data = saved ? JSON.parse(saved) : {}; data.memory = true; localStorage.setItem("rpg-chronicle-minigames", JSON.stringify(data)); setBadgeEarned(true); } catch { /* noop */ }
+                } return newMc;
+              });
+            } else { c2[a] = { ...c2[a], flipped: false }; c2[b] = { ...c2[b], flipped: false }; }
+            return c2;
+          });
+        }, 700);
+        return [];
+      }
+      return next;
+    });
+  }, [completed]);
+
+  return (
+    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Memoria de receitas">
+      <div className="rounded-2xl overflow-hidden border-2 shadow-lg" style={{ borderColor: "#D97706", background: "linear-gradient(135deg, #FFFBEB, #FEF3C7)" }}>
+        <div className="px-4 py-2 flex items-center justify-between" style={{ background: "linear-gradient(90deg, #D97706, #B45309)" }}>
+          <span className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">{"\u{1F9E0}"} Memoria de Sabores{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
+          <span className="text-white/70 text-[10px]">Mini-jogo</span>
+        </div>
+        <div className="p-4" style={{ minHeight: "280px" }}>
+          {!started ? (
+            <div className="flex flex-col items-center justify-center h-[260px] gap-3">
+              <p className="text-gray-600 text-sm text-center">Encontra os pares de pratos portugueses!</p>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #D97706, #B45309)" }} aria-label="Comecar jogo de memoria">Jogar</motion.button>
+            </div>
+          ) : completed ? (
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
+              <span className="text-4xl">{"\u{1F389}"}</span>
+              <p className="text-gray-800 font-bold text-lg" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Parabens!</p>
+              <div className="flex gap-4 text-sm text-gray-600"><span>{moves} jogadas</span><span>{timer}s</span></div>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-4 py-1.5 rounded-full text-white text-xs font-medium mt-2" style={{ background: "#D97706" }}>Jogar outra vez</motion.button>
+            </motion.div>
+          ) : (
+            <>
+              <div className="flex justify-between items-center mb-3 text-xs text-gray-500"><span>Jogadas: {moves}</span><span>Pares: {matchedCount}/6</span><span>Tempo: {timer}s</span></div>
+              <div className="grid grid-cols-4 gap-2">
+                {cards.map((card, idx) => (
+                  <motion.button key={card.id} onClick={() => handleCardClick(idx)} whileTap={{ scale: 0.95 }} className="relative aspect-square rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400" style={{ perspective: "600px" }} aria-label={card.flipped || card.matched ? card.name : "Carta virada"}>
+                    <motion.div className="absolute inset-0 rounded-lg" animate={{ rotateY: card.flipped || card.matched ? 180 : 0 }} transition={{ duration: 0.4, type: "spring", stiffness: 300 }} style={{ transformStyle: "preserve-3d" }}>
+                      <div className="absolute inset-0 rounded-lg flex items-center justify-center border-2" style={{ backfaceVisibility: "hidden", backgroundColor: "#F59E0B", borderColor: "#D97706" }}><span className="text-white/60 text-lg">?</span></div>
+                      <div className="absolute inset-0 rounded-lg flex items-center justify-center border-2" style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", backgroundColor: card.matched ? "#D1FAE5" : "#FFFBEB", borderColor: card.matched ? "#10B981" : "#D97706", boxShadow: card.matched ? "0 0 12px rgba(16,185,129,0.3)" : "none" }}><span className="text-2xl sm:text-3xl">{card.emoji}</span></div>
+                    </motion.div>
+                  </motion.button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+/* =============================================================================
+   MINI-GAME: DIAGNOSIS PUZZLE (Ch4 - Distrito da Saude)
+   ============================================================================= */
+
+const DIAGNOSIS_PAIRS = [
+  { symptom: "Site Lento", solution: "Otimizar Imagens", id: 0 },
+  { symptom: "Sem Clientes", solution: "SEO + Google Ads", id: 1 },
+  { symptom: "Design Feio", solution: "Redesign UI/UX", id: 2 },
+  { symptom: "Sem Mobile", solution: "Design Responsivo", id: 3 },
+];
+
+const MiniGameDiagnosis = memo(function MiniGameDiagnosis() {
+  const [started, setStarted] = useState(false);
+  const [selectedSymptom, setSelectedSymptom] = useState<number | null>(null);
+  const [matches, setMatches] = useState<Record<number, boolean>>({});
+  const [shaking, setShaking] = useState<number | null>(null);
+  const [completed, setCompleted] = useState(false);
+  const [badgeEarned, setBadgeEarned] = useState(false);
+  const [shuffledSolutions, setShuffledSolutions] = useState<typeof DIAGNOSIS_PAIRS>([]);
+
+  useEffect(() => {
+    try { const saved = localStorage.getItem("rpg-chronicle-minigames"); if (saved) { const data = JSON.parse(saved); if (data.diagnosis) setBadgeEarned(true); } } catch { /* noop */ }
+  }, []);
+
+  const initGame = useCallback(() => {
+    const shuffled = [...DIAGNOSIS_PAIRS];
+    for (let k = shuffled.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [shuffled[k], shuffled[j]] = [shuffled[j], shuffled[k]]; }
+    setShuffledSolutions(shuffled); setSelectedSymptom(null); setMatches({}); setCompleted(false); setShaking(null); setStarted(true);
+  }, []);
+
+  const handleSymptomClick = useCallback((id: number) => { if (matches[id]) return; setSelectedSymptom(id); }, [matches]);
+
+  const handleSolutionClick = useCallback((solutionId: number) => {
+    if (selectedSymptom === null) return;
+    if (selectedSymptom === solutionId) {
+      setMatches((prev) => {
+        const next = { ...prev, [solutionId]: true };
+        if (Object.keys(next).length === 4) { setCompleted(true);
+          try { const saved = localStorage.getItem("rpg-chronicle-minigames"); const data = saved ? JSON.parse(saved) : {}; data.diagnosis = true; localStorage.setItem("rpg-chronicle-minigames", JSON.stringify(data)); setBadgeEarned(true); } catch { /* noop */ }
+        } return next;
+      }); setSelectedSymptom(null);
+    } else { setShaking(solutionId); setTimeout(() => setShaking(null), 500); }
+  }, [selectedSymptom]);
+
+  return (
+    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Diagnostico de problemas">
+      <div className="rounded-2xl overflow-hidden border-2 shadow-lg" style={{ borderColor: "#93C5FD", background: "linear-gradient(135deg, #EFF6FF, #DBEAFE)" }}>
+        <div className="px-4 py-2 flex items-center justify-between" style={{ background: "linear-gradient(90deg, #3B82F6, #2563EB)" }}>
+          <span className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">{"\u{1FA7A}"} Diagnostico Digital{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
+          <span className="text-white/70 text-[10px]">Mini-jogo</span>
+        </div>
+        <div className="p-4" style={{ minHeight: "280px" }}>
+          {!started ? (
+            <div className="flex flex-col items-center justify-center h-[260px] gap-3">
+              <p className="text-gray-600 text-sm text-center">Liga o sintoma a solucao correta!</p>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #3B82F6, #2563EB)" }} aria-label="Comecar jogo de diagnostico">Jogar</motion.button>
+            </div>
+          ) : completed ? (
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
+              <span className="text-4xl">{"\u{1F389}"}</span>
+              <p className="text-gray-800 font-bold text-lg" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Diagnostico completo!</p>
+              <p className="text-gray-500 text-sm">Todos os problemas resolvidos</p>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-4 py-1.5 rounded-full text-white text-xs font-medium mt-2" style={{ background: "#3B82F6" }}>Jogar outra vez</motion.button>
+            </motion.div>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-xs text-gray-400 text-center mb-2">Seleciona um sintoma, depois clica na solucao</p>
+              {DIAGNOSIS_PAIRS.map((pair) => (
+                <div key={pair.id} className="flex items-center gap-2">
+                  <motion.button whileTap={{ scale: 0.97 }} onClick={() => handleSymptomClick(pair.id)} className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border-2 ${matches[pair.id] ? "bg-green-50 border-green-400 text-green-700" : selectedSymptom === pair.id ? "bg-blue-50 border-blue-400 text-blue-700 ring-2 ring-blue-300" : "bg-white border-gray-200 text-gray-700 hover:border-blue-300"}`} disabled={!!matches[pair.id]} aria-label={`Sintoma: ${pair.symptom}`}>{pair.symptom}</motion.button>
+                  <span className={`text-xs ${matches[pair.id] ? "text-green-500" : "text-gray-300"}`}>{matches[pair.id] ? "\u2713" : "\u2192"}</span>
+                  <motion.button whileTap={{ scale: 0.97 }} animate={shaking === shuffledSolutions[pair.id]?.id ? { x: [0, -4, 4, -4, 4, 0] } : {}} transition={{ duration: 0.4 }} onClick={() => handleSolutionClick(shuffledSolutions[pair.id]?.id ?? -1)} className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border-2 ${matches[shuffledSolutions[pair.id]?.id] ? "bg-green-50 border-green-400 text-green-700" : "bg-white border-gray-200 text-gray-700 hover:border-blue-300"}`} disabled={!!matches[shuffledSolutions[pair.id]?.id]} aria-label={`Solucao: ${shuffledSolutions[pair.id]?.solution}`}>{shuffledSolutions[pair.id]?.solution}</motion.button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+/* =============================================================================
+   MINI-GAME: CODE CHALLENGE (Ch5 - Laboratorio)
+   ============================================================================= */
+
+const CODE_SNIPPETS = [
+  `const x = "Ola";`,
+  "let total = a + b;",
+  "return <App />;",
+  `import React from "react";`,
+  "console.log(42);",
+];
+
+const MiniGameCode = memo(function MiniGameCode() {
+  const [started, setStarted] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [errors, setErrors] = useState(0);
+  const [totalChars, setTotalChars] = useState(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [completed, setCompleted] = useState(false);
+  const [badgeEarned, setBadgeEarned] = useState(false);
+  const [wpm, setWpm] = useState(0);
+  const [accuracy, setAccuracy] = useState(100);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const codeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => { try { const saved = localStorage.getItem("rpg-chronicle-minigames"); if (saved) { const data = JSON.parse(saved); if (data.code) setBadgeEarned(true); } } catch { /* noop */ } }, []);
+
+  const currentSnippet = CODE_SNIPPETS[currentIdx] || "";
+
+  const initGame = useCallback(() => {
+    setCurrentIdx(0); setTyped(""); setErrors(0); setTotalChars(0); setElapsed(0); setCompleted(false); setWpm(0); setAccuracy(100); setStarted(true); setStartTime(Date.now());
+    if (codeTimerRef.current) clearInterval(codeTimerRef.current);
+    codeTimerRef.current = setInterval(() => { setElapsed((e) => e + 0.1); }, 100);
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, []);
+
+  useEffect(() => { return () => { if (codeTimerRef.current) clearInterval(codeTimerRef.current); }; }, []);
+
+  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value; const snippet = CODE_SNIPPETS[currentIdx]; if (!snippet) return;
+    setTyped(val);
+    let errCount = 0; for (let i = 0; i < val.length; i++) { if (val[i] !== snippet[i]) errCount++; }
+    if (val.length === snippet.length) {
+      const newTotalChars = totalChars + snippet.length; const newErrors = errors + errCount;
+      setTotalChars(newTotalChars); setErrors(newErrors);
+      const nextIdx = currentIdx + 1;
+      if (nextIdx >= CODE_SNIPPETS.length) {
+        if (codeTimerRef.current) clearInterval(codeTimerRef.current);
+        const totalTime = startTime ? (Date.now() - startTime) / 1000 : 1;
+        setWpm(Math.round((newTotalChars / 5) / (totalTime / 60)));
+        setAccuracy(Math.round(((newTotalChars - newErrors) / newTotalChars) * 100));
+        setElapsed(Math.round(totalTime * 10) / 10); setCompleted(true);
+        try { const saved = localStorage.getItem("rpg-chronicle-minigames"); const data = saved ? JSON.parse(saved) : {}; data.code = true; localStorage.setItem("rpg-chronicle-minigames", JSON.stringify(data)); setBadgeEarned(true); } catch { /* noop */ }
+      } else { setCurrentIdx(nextIdx); setTyped(""); setTimeout(() => inputRef.current?.focus(), 50); }
+    }
+  }, [currentIdx, totalChars, errors, startTime]);
+
+  const progressPct = ((currentIdx + (typed.length / (currentSnippet.length || 1))) / CODE_SNIPPETS.length) * 100;
+
+  return (
+    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Desafio de codigo">
+      <div className="rounded-2xl overflow-hidden border shadow-lg" style={{ borderColor: "#06B6D4", background: "#0F172A" }}>
+        <div className="px-4 py-2 flex items-center justify-between bg-[#1E293B] border-b border-white/10">
+          <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500" /><div className="w-2.5 h-2.5 rounded-full bg-yellow-500" /><div className="w-2.5 h-2.5 rounded-full bg-green-500" /></div>
+          <span className="text-cyan-400 text-xs font-mono flex items-center gap-1.5">code-challenge.ts{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
+          <span className="text-gray-500 text-[10px]">Mini-jogo</span>
+        </div>
+        <div className="p-4 font-mono" style={{ minHeight: "280px" }}>
+          {!started ? (
+            <div className="flex flex-col items-center justify-center h-[260px] gap-3">
+              <p className="text-gray-400 text-sm text-center font-sans">Escreve o codigo o mais rapido possivel!</p>
+              <p className="text-gray-600 text-xs text-center font-sans">5 snippets curtos</p>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md font-sans" style={{ background: "linear-gradient(135deg, #06B6D4, #0891B2)" }} aria-label="Comecar desafio de codigo">Jogar</motion.button>
+            </div>
+          ) : completed ? (
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
+              <span className="text-4xl">{"\u{1F389}"}</span>
+              <p className="text-cyan-300 font-bold text-lg font-sans" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Concluido!</p>
+              <div className="flex gap-4 text-sm text-gray-400 font-sans"><span>WPM: {wpm}</span><span>Precisao: {accuracy}%</span><span>Tempo: {elapsed}s</span></div>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-4 py-1.5 rounded-full text-white text-xs font-medium mt-2 font-sans" style={{ background: "#06B6D4" }}>Jogar outra vez</motion.button>
+            </motion.div>
+          ) : (
+            <>
+              <div className="text-gray-500 text-xs mb-2">{">"} Escreve este codigo: ({currentIdx + 1}/{CODE_SNIPPETS.length})</div>
+              <div className="bg-black/40 rounded-lg p-3 mb-3 text-sm overflow-x-auto">
+                {currentSnippet.split("").map((ch, i) => {
+                  let color = "text-gray-500"; if (i < typed.length) { color = typed[i] === ch ? "text-green-400" : "text-red-400"; }
+                  return <span key={i} className={color}>{ch}</span>;
+                })}
+                <span className="animate-pulse text-cyan-400">|</span>
+              </div>
+              <input ref={inputRef} type="text" value={typed} onChange={handleInput} className="sr-only" aria-label="Escreve o codigo aqui" autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
+              <button onClick={() => inputRef.current?.focus()} className="text-xs text-gray-600 mb-3 cursor-pointer hover:text-cyan-400 transition-colors font-sans w-full text-left">Clica aqui para escrever...</button>
+              <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden mb-2"><motion.div className="h-full rounded-full" style={{ background: "linear-gradient(90deg, #06B6D4, #22D3EE)" }} animate={{ width: `${progressPct}%` }} transition={{ duration: 0.3 }} /></div>
+              <div className="flex justify-between text-[10px] text-gray-500 font-sans"><span>Progresso: {Math.round(progressPct)}%</span><span>Tempo: {elapsed.toFixed(1)}s</span></div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+/* =============================================================================
    PORTFOLIO PROJECT LINK CARD (reusable)
    ============================================================================= */
 
@@ -2427,6 +4086,620 @@ const LetterReveal = memo(function LetterReveal({
 });
 
 /* =============================================================================
+   EASTER EGG COMPONENT
+   ============================================================================= */
+
+const EasterEgg = memo(function EasterEgg({
+  children,
+  message,
+  className = "",
+  style,
+}: {
+  children: React.ReactNode;
+  message: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const [revealed, setRevealed] = useState(false);
+  return (
+    <div className={`relative ${className}`} style={style}>
+      <motion.button
+        onClick={() => setRevealed(!revealed)}
+        className="cursor-pointer select-none"
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        aria-label="Easter egg"
+      >
+        {children}
+      </motion.button>
+      <AnimatePresence>
+        {revealed && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 10 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-xl bg-white text-gray-800 text-xs font-medium shadow-xl whitespace-nowrap z-50 max-w-[250px] text-center"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
+            {message}
+            <div
+              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0"
+              style={{
+                borderLeft: "6px solid transparent",
+                borderRight: "6px solid transparent",
+                borderTop: "6px solid white",
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+});
+
+/* =============================================================================
+   MINI FAKE TERMINAL (Ch5 easter egg)
+   ============================================================================= */
+
+const MiniTerminal = memo(function MiniTerminal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [input, setInput] = useState("");
+  const [lines, setLines] = useState<string[]>([
+    "Descomplicai Terminal v1.0",
+    'Escreve "help" para ver os comandos.',
+    "",
+  ]);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open && inputRef.current) inputRef.current.focus();
+  }, [open]);
+
+  const handleCommand = useCallback(
+    (cmd: string) => {
+      const trimmed = cmd.trim().toLowerCase();
+      let response = "";
+      switch (trimmed) {
+        case "ls":
+          response = "projetos/  ferramentas/  musica/  jogos/  README.md";
+          break;
+        case "whoami":
+          response = "jaime@descomplicai ~ explorer of code";
+          break;
+        case "help":
+          response = "Comandos: ls, whoami, help, clear, exit, date, motto";
+          break;
+        case "clear":
+          setLines([]);
+          setInput("");
+          return;
+        case "exit":
+          onClose();
+          return;
+        case "date":
+          response = new Date().toLocaleString("pt-PT");
+          break;
+        case "motto":
+          response = "O futuro e humano. Keep building. Share love.";
+          break;
+        default:
+          response = "comando nao encontrado: " + trimmed;
+      }
+      setLines((prev) => [...prev, "$ " + cmd, response, ""]);
+      setInput("");
+    },
+    [onClose]
+  );
+
+  if (!open) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="bg-gray-900 rounded-xl border border-green-500/30 shadow-2xl w-[90%] max-w-md overflow-hidden"
+        style={{ boxShadow: "0 0 40px rgba(34,197,94,0.15)" }}
+      >
+        <div className="flex items-center gap-2 px-3 py-2 bg-gray-800 border-b border-gray-700">
+          <button
+            onClick={onClose}
+            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
+          />
+          <div className="w-3 h-3 rounded-full bg-yellow-500" />
+          <div className="w-3 h-3 rounded-full bg-green-500" />
+          <span className="text-[10px] text-gray-400 ml-2 font-mono">
+            descomplicai@terminal
+          </span>
+        </div>
+        <div className="p-3 h-48 overflow-y-auto font-mono text-xs text-green-400">
+          {lines.map((line, i) => (
+            <div key={i}>{line || "\u00A0"}</div>
+          ))}
+          <div className="flex items-center">
+            <span className="text-green-500 mr-1">$</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && input.trim()) handleCommand(input);
+              }}
+              className="flex-1 bg-transparent text-green-400 outline-none font-mono text-xs"
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
+
+/* =============================================================================
+   INTERACTIVE PIXEL CHARACTER (click reactions + quotes)
+   ============================================================================= */
+
+const PORTUGUESE_QUOTES = [
+  "Quem nao arrisca, nao petisca!",
+  "A pressa e inimiga da perfeicao.",
+  "Agua mole em pedra dura, tanto bate ate que fura.",
+  "De grao em grao, enche a galinha o papo.",
+  "Mais vale um passaro na mao do que dois a voar.",
+  "O saber nao ocupa lugar.",
+  "Cada cabeca, sua sentenca.",
+  "Devagar se vai ao longe.",
+];
+
+const InteractivePixelCharacter = memo(function InteractivePixelCharacter({
+  variant = "normal",
+  walking = false,
+  flipped = false,
+  size = 48,
+}: {
+  variant?: "normal" | "sitting" | "chef" | "lab" | "hacker" | "hero" | "climbing";
+  walking?: boolean;
+  flipped?: boolean;
+  size?: number;
+}) {
+  const [jumped, setJumped] = useState(false);
+  const [quote, setQuote] = useState<string | null>(null);
+
+  const handleClick = useCallback(() => {
+    setJumped(true);
+    setQuote(
+      PORTUGUESE_QUOTES[
+        Math.floor(Math.random() * PORTUGUESE_QUOTES.length)
+      ]
+    );
+    setTimeout(() => setJumped(false), 600);
+    setTimeout(() => setQuote(null), 3000);
+  }, []);
+
+  return (
+    <div className="relative cursor-pointer" onClick={handleClick}>
+      <AnimatePresence>
+        {quote && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.8 }}
+            className="absolute -top-16 left-1/2 -translate-x-1/2 z-50"
+          >
+            <SpeechBubble text={quote} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        animate={jumped ? { y: [0, -20, 0] } : {}}
+        transition={jumped ? { duration: 0.4, ease: "easeOut" } : {}}
+      >
+        <PixelCharacter
+          variant={variant}
+          walking={walking}
+          flipped={flipped}
+          size={size}
+        />
+      </motion.div>
+    </div>
+  );
+});
+
+/* =============================================================================
+   TILT CARD (3D perspective on hover)
+   ============================================================================= */
+
+const TiltCard = memo(function TiltCard({
+  children,
+  className = "",
+  glowColor = "#06B6D4",
+  style,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  glowColor?: string;
+  style?: React.CSSProperties;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tiltStyle, setTiltStyle] = useState<React.CSSProperties>({});
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const card = cardRef.current;
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
+      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
+      setTiltStyle({
+        transform: `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+        boxShadow: `0 0 20px ${glowColor}30, 0 0 40px ${glowColor}15`,
+      });
+    },
+    [glowColor]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setTiltStyle({
+      transform: "perspective(600px) rotateX(0deg) rotateY(0deg)",
+      boxShadow: "none",
+    });
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className={`transition-all duration-200 ease-out ${className}`}
+      style={{ ...tiltStyle, ...style }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {children}
+    </div>
+  );
+});
+
+/* =============================================================================
+   EXPAND MODAL (card click-to-expand)
+   ============================================================================= */
+
+const ExpandModal = memo(function ExpandModal({
+  open,
+  onClose,
+  title,
+  emoji,
+  desc,
+  slug,
+  color,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  emoji: string;
+  desc: string;
+  slug: string;
+  color: string;
+}) {
+  if (!open) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <motion.div
+        initial={{ scale: 0.8, y: 30 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.8, y: 30 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="bg-white rounded-2xl p-6 max-w-sm w-[90%] shadow-2xl relative"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors"
+        >
+          {"\u2715"}
+        </button>
+        <div
+          className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl mb-4"
+          style={{ backgroundColor: `${color}20` }}
+        >
+          {emoji}
+        </div>
+        <h3
+          className="text-xl font-bold text-gray-900 mb-2"
+          style={{ fontFamily: "var(--font-sora), sans-serif" }}
+        >
+          {title}
+        </h3>
+        <p className="text-sm text-gray-600 mb-4">{desc}</p>
+        <Link
+          href={`/projetos/${slug}`}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors"
+          style={{ backgroundColor: color }}
+        >
+          Ver projeto {"\u2192"}
+        </Link>
+      </motion.div>
+    </motion.div>
+  );
+});
+
+/* =============================================================================
+   SOUND TOGGLE BUTTON
+   ============================================================================= */
+
+const SoundToggle = memo(function SoundToggle() {
+  const [showTooltip, setShowTooltip] = useState(false);
+  return (
+    <div className="fixed top-4 left-4 z-50">
+      <button
+        className="w-10 h-10 rounded-full bg-gray-900/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-gray-800/80 transition-all"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+        onClick={() => setShowTooltip((v) => !v)}
+        aria-label="Toggle som"
+      >
+        {"\uD83D\uDD07"}
+      </button>
+      <AnimatePresence>
+        {showTooltip && (
+          <motion.div
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -5 }}
+            className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-2 rounded-lg bg-gray-900/90 backdrop-blur-sm text-white text-xs whitespace-nowrap border border-white/10"
+          >
+            Em breve: Experiencia com som {"\uD83C\uDFB5"}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+});
+
+/* =============================================================================
+   COMPLETION BADGE
+   ============================================================================= */
+
+const CompletionBadge = memo(function CompletionBadge({
+  allCompleted,
+}: {
+  allCompleted: boolean;
+}) {
+  if (!allCompleted) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.8 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: "spring", stiffness: 200 }}
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50"
+    >
+      <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-md rounded-full px-6 py-3 border border-amber-500/30 flex items-center gap-2">
+        <span className="text-lg">{"\uD83C\uDFC6"}</span>
+        <span
+          className="text-sm font-bold text-amber-300"
+          style={{ fontFamily: "var(--font-sora), sans-serif" }}
+        >
+          Exploracao Completa!
+        </span>
+      </div>
+    </motion.div>
+  );
+});
+
+/* =============================================================================
+   KEYBOARD SHORTCUTS OVERLAY
+   ============================================================================= */
+
+const KeyboardShortcuts = memo(function KeyboardShortcuts({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  if (!open) return null;
+  const shortcuts = [
+    { key: "1-8", desc: "Saltar para o capitulo" },
+    { key: "\u2191 / \u2193", desc: "Scroll 200px" },
+    { key: "Home", desc: "Ir para o topo" },
+    { key: "End", desc: "Ir para o fim" },
+    { key: "?", desc: "Mostrar atalhos" },
+    { key: "Esc", desc: "Fechar dialogo" },
+  ];
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        className="bg-gray-900 rounded-2xl p-6 max-w-sm w-[90%] border border-white/10 shadow-2xl"
+      >
+        <h3
+          className="text-lg font-bold text-white mb-4 text-center"
+          style={{ fontFamily: "var(--font-sora), sans-serif" }}
+        >
+          {"\u2328\uFE0F"} Atalhos de Teclado
+        </h3>
+        <div className="flex flex-col gap-2">
+          {shortcuts.map((s, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between py-1.5 border-b border-white/5 last:border-0"
+            >
+              <kbd className="px-2 py-1 rounded bg-white/10 text-white text-xs font-mono">
+                {s.key}
+              </kbd>
+              <span className="text-sm text-white/60">{s.desc}</span>
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={onClose}
+          className="mt-4 w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm transition-colors"
+        >
+          Fechar
+        </button>
+      </motion.div>
+    </motion.div>
+  );
+});
+
+/* =============================================================================
+   ENHANCED NAVIGATION DOTS (with completion)
+   ============================================================================= */
+
+const EnhancedNavigationDots = memo(function EnhancedNavigationDots({
+  activeChapter,
+  completedChapters,
+}: {
+  activeChapter: number;
+  completedChapters: Set<number>;
+}) {
+  const scrollToChapter = useCallback((index: number) => {
+    const range = CHAPTER_RANGES[index];
+    const targetY = range.start + (range.end - range.start) * 0.1;
+    window.scrollTo({ top: targetY, behavior: "smooth" });
+  }, []);
+
+  return (
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center gap-0">
+      <div className="absolute top-0 bottom-0 w-px bg-white/10" />
+      {CHAPTER_RANGES.map((ch, i) => {
+        const isCompleted = completedChapters.has(i);
+        const isActive = activeChapter === i;
+        return (
+          <div key={i} className="relative group">
+            <button
+              onClick={() => scrollToChapter(i)}
+              className="relative z-10 p-2 transition-all duration-300"
+              aria-label={`Ir para ${ch.label}`}
+            >
+              <div
+                className="rounded-full transition-all duration-300 relative"
+                style={{
+                  width: isActive ? "14px" : "8px",
+                  height: isActive ? "14px" : "8px",
+                  backgroundColor: isActive
+                    ? "#06B6D4"
+                    : isCompleted
+                      ? "#10B981"
+                      : "rgba(255,255,255,0.3)",
+                  boxShadow: isActive
+                    ? "0 0 12px rgba(6,182,212,0.5)"
+                    : isCompleted
+                      ? "0 0 8px rgba(16,185,129,0.3)"
+                      : "none",
+                }}
+              >
+                {isCompleted && !isActive && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute inset-0 rounded-full border border-emerald-400/50"
+                  />
+                )}
+              </div>
+            </button>
+            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap px-3 py-1 rounded-lg bg-gray-900/90 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center gap-1.5">
+              {isCompleted && (
+                <span className="text-emerald-400">{"\u2713"}</span>
+              )}
+              {ch.label}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+});
+
+/* =============================================================================
+   HEARTBEAT EASTER EGG (Ch4)
+   ============================================================================= */
+
+const HeartbeatEasterEgg = memo(function HeartbeatEasterEgg() {
+  const [active, setActive] = useState(false);
+  return (
+    <div className="relative">
+      <motion.button
+        onClick={() => setActive(!active)}
+        className="cursor-pointer select-none opacity-30 hover:opacity-60 transition-opacity"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <svg width="30" height="20" viewBox="0 0 60 20">
+          <path
+            d="M0,10 L15,10 L18,3 L22,17 L26,3 L30,17 L33,10 L60,10"
+            fill="none"
+            stroke="#EC4899"
+            strokeWidth="2"
+          />
+        </svg>
+      </motion.button>
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 10 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50"
+          >
+            <div className="bg-white rounded-xl px-3 py-2 shadow-xl text-xs text-gray-800 font-medium whitespace-nowrap">
+              <motion.span
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 0.6, repeat: Infinity }}
+                className="inline-block mr-1"
+              >
+                {"\uD83D\uDC93"}
+              </motion.span>
+              O codigo esta vivo!
+              <div
+                className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0"
+                style={{
+                  borderLeft: "6px solid transparent",
+                  borderRight: "6px solid transparent",
+                  borderTop: "6px solid white",
+                }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+});
+
+
+/* =============================================================================
    CHAPTER 0: PORTAL
    ============================================================================= */
 
@@ -2437,6 +4710,8 @@ const ChapterPortal = memo(function ChapterPortal({
   chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
+  const { layer2X, layer2Y, layer3X, layer3Y } = useMouseParallax();
+
   const titleOpacity = useTransform(
     chapterProgress,
     [0.1, 0.2, 0.85, 0.95],
@@ -2463,22 +4738,16 @@ const ChapterPortal = memo(function ChapterPortal({
     [1, 1, 0]
   );
 
-  const starsY = useTransform(chapterProgress, [0, 1], ["0%", "-5%"]);
-  const nebulaY = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-15%"]
-  );
-  const textY = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-50%"]
-  );
-  const portalY = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-30%"]
-  );
+  // 5-layer parallax speeds
+  const starsY = useTransform(chapterProgress, [0, 1], ["0%", "-3%"]); // Layer 1: 0.05x
+  const nebulaY = useTransform(chapterProgress, [0, 1], ["0%", "-12%"]); // Layer 2: 0.2x
+  const orbsY = useTransform(chapterProgress, [0, 1], ["0%", "-25%"]); // Layer 3: 0.4x
+  const dustY = useTransform(chapterProgress, [0, 1], ["0%", "-45%"]); // Layer 4: 0.7x
+  const textY = useTransform(chapterProgress, [0, 1], ["0%", "-50%"]); // Layer 5: 1.0x
+  const portalY = useTransform(chapterProgress, [0, 1], ["0%", "-30%"]);
+
+  // 3D perspective rotation for stars
+  const starsRotateX = useTransform(chapterProgress, [0, 1], [0, 3]);
 
   const [titleActive, setTitleActive] = useState(false);
   const [subtitleActive, setSubtitleActive] = useState(false);
@@ -2509,35 +4778,109 @@ const ChapterPortal = memo(function ChapterPortal({
           style={{ backgroundColor: "#030014" }}
         />
 
-        {/* Stars layer */}
+        {/* Layer 1 (0.05x): Far stars with 3D perspective */}
         <motion.div
           className="absolute inset-0"
           style={{
             y: reducedMotion ? 0 : starsY,
+            rotateX: reducedMotion ? 0 : starsRotateX,
+            perspective: "1000px",
             willChange: "transform",
           }}
         >
           <StarField />
         </motion.div>
 
-        {/* Nebulae layer */}
+        {/* Layer 2 (0.2x): Nebulae with mouse parallax */}
         <motion.div
           className="absolute inset-0"
           style={{
             y: reducedMotion ? 0 : nebulaY,
+            x: reducedMotion ? 0 : layer2X,
             willChange: "transform",
           }}
         >
           <NebulaBlobs />
         </motion.div>
 
-        {/* Floating orbs */}
+        {/* Layer 3 (0.4x): Floating orbs with mouse parallax */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            y: reducedMotion ? 0 : orbsY,
+            x: reducedMotion ? 0 : layer3X,
+            willChange: "transform",
+          }}
+        >
+          {!reducedMotion && (
+            <FloatingOrbs count={4} baseColor="#8B5CF6" sizeRange={[80, 200]} />
+          )}
+        </motion.div>
+
+        {/* Layer 4 (0.7x): Stardust ambient particles */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            y: reducedMotion ? 0 : dustY,
+            willChange: "transform",
+          }}
+        >
+          {!reducedMotion && <AmbientParticles type="stars" count={35} />}
+        </motion.div>
+
+        {/* 3 Shooting stars at different positions */}
+        {!reducedMotion && <ShootingStar />}
+
+        {/* Easter Egg: Clickable star */}
+        <EasterEgg
+          message="Esta estrela foi nomeada por ti &#x1F31F;"
+          className="absolute z-20"
+          style={{ top: "25%", right: "20%" }}
+        >
+          <div className="w-3 h-3 bg-white rounded-full opacity-40 hover:opacity-90 transition-opacity" style={{ boxShadow: "0 0 8px rgba(255,255,255,0.5)" }} />
+        </EasterEgg>
         {!reducedMotion && (
-          <FloatingOrbs count={4} baseColor="#8B5CF6" sizeRange={[80, 200]} />
+          <>
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div
+                className="absolute"
+                style={{
+                  width: "80px",
+                  height: "1.5px",
+                  background: "linear-gradient(90deg, transparent, rgba(139,92,246,0.8), transparent)",
+                  top: "35%",
+                  left: "-80px",
+                  transform: "rotate(-25deg)",
+                  animation: "shootingStar2 11s linear 3s infinite",
+                  willChange: "transform",
+                }}
+              />
+            </div>
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div
+                className="absolute"
+                style={{
+                  width: "60px",
+                  height: "1px",
+                  background: "linear-gradient(90deg, transparent, rgba(236,72,153,0.7), transparent)",
+                  top: "55%",
+                  left: "-60px",
+                  transform: "rotate(-10deg)",
+                  animation: "shootingStar3 15s linear 7s infinite",
+                  willChange: "transform",
+                }}
+              />
+            </div>
+          </>
         )}
 
-        {/* Shooting star */}
-        {!reducedMotion && <ShootingStar />}
+        {/* Chapter transition to next */}
+        <ChapterTransition
+          fromColor="#030014"
+          toColor="#1e1b4b"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
 
         {/* Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
@@ -2670,6 +5013,8 @@ const ChapterInicio = memo(function ChapterInicio({
   chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
+  const { layer2X, layer2Y, layer3X, layer3Y } = useMouseParallax();
+
   const bgGradient = useTransform(
     chapterProgress,
     [0, 0.3, 0.7, 1],
@@ -2681,26 +5026,17 @@ const ChapterInicio = memo(function ChapterInicio({
     ]
   );
 
-  const mountainsY1 = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-10%"]
-  );
-  const mountainsY2 = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-25%"]
-  );
-  const hillsY = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-50%"]
-  );
-  const groundY = useTransform(
-    chapterProgress,
-    [0, 1],
-    ["0%", "-80%"]
-  );
+  // 5-layer parallax
+  const skyY = useTransform(chapterProgress, [0, 1], ["0%", "-3%"]); // Layer 1: far sky
+  const mountainsY1 = useTransform(chapterProgress, [0, 1], ["0%", "-10%"]); // Layer 2: distant mountains
+  const mountainsY2 = useTransform(chapterProgress, [0, 1], ["0%", "-25%"]); // Layer 3: mid mountains
+  const hillsY = useTransform(chapterProgress, [0, 1], ["0%", "-50%"]); // Layer 4: hills/near
+  const groundY = useTransform(chapterProgress, [0, 1], ["0%", "-80%"]); // Layer 5: ground
+
+  // Sun rise effect (linked to scroll)
+  const sunY = useTransform(chapterProgress, [0, 0.5, 1], ["120%", "60%", "30%"]);
+  const sunScale = useTransform(chapterProgress, [0, 0.5, 1], [0.5, 1, 1.3]);
+  const sunOpacity = useTransform(chapterProgress, [0, 0.2, 0.8, 1], [0, 0.8, 1, 0.6]);
 
   const charX = useTransform(
     chapterProgress,
@@ -2754,17 +5090,65 @@ const ChapterInicio = memo(function ChapterInicio({
   return (
     <section className="relative" style={{ height: "1600px" }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Sky gradient */}
+        {/* Layer 1 (0.05x): Sky gradient */}
         <motion.div
           className="absolute inset-0"
-          style={{ background: bgGradient }}
+          style={{
+            background: bgGradient,
+            y: reducedMotion ? 0 : skyY,
+            willChange: "transform",
+          }}
         />
 
-        {/* Mountain layer 1 - distant */}
+        {/* Rising sun (scroll-linked) */}
+        <motion.div
+          className="absolute left-1/2 -translate-x-1/2 z-[1]"
+          style={{
+            width: "200px",
+            height: "200px",
+            y: reducedMotion ? "60%" : sunY,
+            scale: reducedMotion ? 1 : sunScale,
+            opacity: reducedMotion ? 0.8 : sunOpacity,
+            willChange: "transform, opacity",
+          }}
+        >
+          <div
+            className="w-full h-full rounded-full"
+            style={{
+              background: "radial-gradient(circle, #FBBF24 0%, #F59E0B 30%, rgba(249,115,22,0.4) 60%, transparent 80%)",
+              boxShadow: "0 0 80px rgba(251,191,36,0.5), 0 0 160px rgba(245,158,11,0.3)",
+            }}
+          />
+        </motion.div>
+
+        {/* Animated clouds drifting left-to-right */}
+        {!reducedMotion && (
+          <div className="absolute top-[10%] w-full h-[20%] pointer-events-none">
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: `${120 + i * 50}px`,
+                  height: `${35 + i * 10}px`,
+                  left: `${-10 + i * 28}%`,
+                  top: `${i * 25}%`,
+                  background: "rgba(255,255,255,0.25)",
+                  filter: "blur(8px)",
+                  animation: `cloudDriftLR ${25 + i * 8}s linear infinite`,
+                  willChange: "transform",
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Layer 2 (0.2x): Mountain layer 1 - distant with mouse parallax */}
         <motion.div
           className="absolute bottom-0 left-0 w-full h-[60%]"
           style={{
             y: reducedMotion ? 0 : mountainsY1,
+            x: reducedMotion ? 0 : layer2X,
             willChange: "transform",
           }}
         >
@@ -2774,11 +5158,12 @@ const ChapterInicio = memo(function ChapterInicio({
           />
         </motion.div>
 
-        {/* Mountain layer 2 - mid */}
+        {/* Layer 3 (0.4x): Mountain layer 2 - mid with mouse parallax */}
         <motion.div
           className="absolute bottom-0 left-0 w-full h-[50%]"
           style={{
             y: reducedMotion ? 0 : mountainsY2,
+            x: reducedMotion ? 0 : layer3X,
             willChange: "transform",
           }}
         >
@@ -2788,7 +5173,7 @@ const ChapterInicio = memo(function ChapterInicio({
           />
         </motion.div>
 
-        {/* Hills layer */}
+        {/* Layer 4 (0.7x): Hills layer */}
         <motion.div
           className="absolute bottom-0 left-0 w-full h-[40%]"
           style={{
@@ -2802,7 +5187,7 @@ const ChapterInicio = memo(function ChapterInicio({
           />
         </motion.div>
 
-        {/* Ground + leaves */}
+        {/* Layer 5 (1.0x): Ground with waving grass blades */}
         <motion.div
           className="absolute bottom-0 left-0 w-full h-[20%]"
           style={{
@@ -2811,12 +5196,48 @@ const ChapterInicio = memo(function ChapterInicio({
           }}
         >
           <div className="absolute inset-0 bg-[#15803d]" />
+          {!reducedMotion && (
+            <div className="absolute top-0 left-0 w-full h-6 overflow-hidden">
+              {Array.from({ length: 40 }, (_, i) => (
+                <div
+                  key={i}
+                  className="absolute bottom-0"
+                  style={{
+                    left: `${i * 2.5}%`,
+                    width: "3px",
+                    height: `${12 + seededRandom(i * 71) * 12}px`,
+                    backgroundColor: `hsl(${130 + seededRandom(i * 71 + 1) * 20}, 70%, ${30 + seededRandom(i * 71 + 2) * 15}%)`,
+                    transformOrigin: "bottom center",
+                    animation: `grassWave ${1.5 + seededRandom(i * 71 + 3) * 1.5}s ease-in-out ${seededRandom(i * 71 + 4) * 1}s infinite`,
+                    borderRadius: "2px 2px 0 0",
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </motion.div>
 
-        {/* Ambient particles */}
+        {/* Ambient leaves particles */}
         {!reducedMotion && (
-          <AmbientParticles type="leaves" count={20} />
+          <AmbientParticles type="leaves" count={25} />
         )}
+
+        {/* Easter Egg: Clickable tree */}
+        <EasterEgg
+          message="Esta arvore plantada representa cada projeto concluido &#x1F333;"
+          className="absolute z-20"
+          style={{ bottom: "22%", left: "15%" }}
+        >
+          <div className="text-2xl opacity-40 hover:opacity-80 transition-opacity">{"\uD83C\uDF33"}</div>
+        </EasterEgg>
+
+        {/* Chapter transition to Oficina */}
+        <ChapterTransition
+          fromColor="#60a5fa"
+          toColor="#fef3c7"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
 
         {/* Content layer */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
@@ -2839,7 +5260,7 @@ const ChapterInicio = memo(function ChapterInicio({
                 />
               </div>
             )}
-            <PixelCharacter
+            <InteractivePixelCharacter
               variant="normal"
               walking={scrolling}
               size={56}
@@ -3014,16 +5435,36 @@ const ChapterOficina = memo(function ChapterOficina({
           style={{ backgroundColor: "#fef3c7" }}
         />
 
+        {/* Easter Egg: Book on shelf */}
+        <EasterEgg
+          message="Manual secreto: Ctrl+C, Ctrl+V salvou o mundo \uD83D\uDCDA"
+          className="absolute z-20"
+          style={{ top: "8%", left: "30%" }}
+        >
+          <div className="text-xl opacity-30 hover:opacity-70 transition-opacity">{"\uD83D\uDCDA"}</div>
+        </EasterEgg>
+
         {/* Back wall with shelves */}
         <div
           className="absolute top-0 left-0 w-full h-[30%]"
           style={{ backgroundColor: "#92400E", opacity: 0.15 }}
         />
 
-        {/* Ambient particles */}
+        {/* Floating tool icons orbiting */}
+        {!reducedMotion && <FloatingToolIcons />}
+
+        {/* Ambient sparks/embers floating upward */}
         {!reducedMotion && (
-          <AmbientParticles type="sparks" count={15} />
+          <AmbientParticles type="sparks" count={20} />
         )}
+
+        {/* Chapter transition to Vila */}
+        <ChapterTransition
+          fromColor="#fef3c7"
+          toColor="#7DD3FC"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
 
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col lg:flex-row items-start justify-center px-4 sm:px-8 lg:px-16 gap-8 pt-12 overflow-y-auto">
@@ -3472,10 +5913,36 @@ const ChapterVila = memo(function ChapterVila({
           )}
         </motion.div>
 
+        {/* Steam rising from chimneys */}
+        {!reducedMotion && <SteamChimneys />}
+
+        {/* Street lamps with warm glow */}
+        {!reducedMotion && <StreetLamps />}
+
+        {/* Fireflies (warm yellow blink) */}
+        {!reducedMotion && <Fireflies count={12} />}
+
         {/* Steam particles */}
         {!reducedMotion && (
           <AmbientParticles type="steam" count={20} />
         )}
+
+        {/* Easter Egg: Restaurant sign */}
+        <EasterEgg
+          message="O melhor restaurante e aquele que ainda nao foi criado &#x1F37D;&#xFE0F;"
+          className="absolute z-20"
+          style={{ top: "12%", right: "12%" }}
+        >
+          <div className="text-xl opacity-30 hover:opacity-70 transition-opacity">{"\uD83C\uDF7D\uFE0F"}</div>
+        </EasterEgg>
+
+        {/* Chapter transition to Saude */}
+        <ChapterTransition
+          fromColor="#E0F2FE"
+          toColor="#DBEAFE"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
 
         {/* Character walking */}
         <motion.div
@@ -3491,7 +5958,7 @@ const ChapterVila = memo(function ChapterVila({
               <SpeechBubble text="17 restaurantes. Cada um com a sua personalidade." />
             </div>
           )}
-          <PixelCharacter
+          <InteractivePixelCharacter
             variant="chef"
             walking={scrolling}
             size={48}
@@ -3625,6 +6092,10 @@ const ChapterVila = memo(function ChapterVila({
             ))}
           </div>
 
+          
+          {/* Mini-game: Memoria de Sabores */}
+          <MiniGameMemory />
+
           {/* Restaurant count badge */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -3696,17 +6167,48 @@ const ChapterSaude = memo(function ChapterSaude({
           </div>
         </div>
 
+        {/* Medical equipment silhouettes */}
+        <div className="absolute bottom-[30%] left-0 w-full h-[20%] pointer-events-none opacity-[0.04]">
+          <svg viewBox="0 0 1440 200" className="w-full h-full" preserveAspectRatio="none">
+            {/* Stethoscope silhouette */}
+            <circle cx="200" cy="100" r="30" fill="#1E40AF" />
+            <path d="M200,130 L200,180 Q200,200 220,200 L260,200" stroke="#1E40AF" strokeWidth="4" fill="none" />
+            {/* Syringe */}
+            <rect x="500" y="80" width="8" height="100" fill="#1E40AF" rx="2" />
+            <rect x="494" y="70" width="20" height="15" fill="#1E40AF" rx="2" />
+            {/* Heart monitor */}
+            <rect x="900" y="60" width="120" height="90" rx="8" fill="#1E40AF" />
+            <rect x="1200" y="90" width="80" height="60" rx="4" fill="#1E40AF" />
+          </svg>
+        </div>
+
         {/* ECG line */}
         {!reducedMotion && <ECGLine />}
 
-        {/* Heartbeat particles */}
+        {/* Clean clinical floating crosses */}
+        {!reducedMotion && <MedicalCrosses count={15} />}
+
+        {/* Heartbeat particles (bubbles float up) */}
         {!reducedMotion && (
-          <AmbientParticles type="heartbeat" count={10} />
+          <AmbientParticles type="heartbeat" count={12} />
         )}
+
+        {/* Chapter transition to Lab */}
+        <ChapterTransition
+          fromColor="#F0F9FF"
+          toColor="#0f172a"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
+
+        {/* Easter Egg: Heart monitor */}
+        <div className="absolute bottom-[35%] right-[8%] z-20">
+          <HeartbeatEasterEgg />
+        </div>
 
         {/* Character */}
         <div className="absolute bottom-[25%] left-[10%] z-20">
-          <PixelCharacter variant="lab" size={48} />
+          <InteractivePixelCharacter variant="lab" size={48} />
         </div>
 
         {/* Content */}
@@ -3771,6 +6273,9 @@ const ChapterSaude = memo(function ChapterSaude({
                 </Link>
               </motion.div>
             ))}
+
+          {/* Mini-game: Diagnostico Digital */}
+          <MiniGameDiagnosis />
           </div>
         </div>
       </motion.div>
@@ -3792,6 +6297,7 @@ const ChapterLab = memo(function ChapterLab({
   const bgOpacity = useTransform(chapterProgress, [0, 0.05], [0, 1]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [visibleCards, setVisibleCards] = useState(0);
+  const [terminalOpen, setTerminalOpen] = useState(false);
 
   useMotionValueEvent(chapterProgress, "change", (v) => {
     setVisibleCards(Math.floor(v * 50));
@@ -3834,15 +6340,53 @@ const ChapterLab = memo(function ChapterLab({
           }}
         />
 
-        {/* Binary particles */}
+        {/* Glowing circuit grid lines */}
+        {!reducedMotion && <CircuitGrid />}
+
+        {/* Code rain (Matrix-style) */}
+        {!reducedMotion && <CodeRain count={15} />}
+
+        {/* Terminal cursor blink overlay */}
+        {!reducedMotion && (
+          <div className="absolute top-4 left-4 pointer-events-none z-[2] opacity-20">
+            <span className="font-mono text-xs text-green-400">$ descomplicai --build</span>
+            <span
+              className="inline-block w-2 h-4 ml-1 bg-green-400"
+              style={{ animation: "cursorBlink 1s step-end infinite" }}
+            />
+          </div>
+        )}
+
+        {/* Data bits (cyan falling) */}
         {!reducedMotion && (
           <AmbientParticles type="binary" count={25} />
         )}
 
+        {/* Chapter transition to Jornada */}
+        <ChapterTransition
+          fromColor="#0f172a"
+          toColor="#F59E0B"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
+
         {/* Character with visor */}
         <div className="absolute bottom-8 left-8 z-30">
-          <PixelCharacter variant="hacker" size={48} />
+          <InteractivePixelCharacter variant="hacker" size={48} />
         </div>
+
+        {/* Easter Egg: Terminal */}
+        <motion.button
+          onClick={() => setTerminalOpen(true)}
+          className="absolute bottom-10 left-24 z-30 text-xl opacity-30 hover:opacity-70 transition-opacity cursor-pointer"
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          {"\uD83D\uDCBB"}
+        </motion.button>
+        <AnimatePresence>
+          <MiniTerminal open={terminalOpen} onClose={() => setTerminalOpen(false)} />
+        </AnimatePresence>
 
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col pt-6 px-4 sm:px-8 overflow-y-auto">
@@ -3907,20 +6451,14 @@ const ChapterLab = memo(function ChapterLab({
                       boxShadow: `0 0 0 0 ${tool.color}00`,
                     }}
                     onMouseEnter={(e) => {
-                      (
-                        e.currentTarget as HTMLDivElement
-                      ).style.boxShadow = `0 0 20px ${tool.color}30`;
-                      (
-                        e.currentTarget as HTMLDivElement
-                      ).style.borderColor = `${tool.color}50`;
+                      const el = e.currentTarget as HTMLDivElement;
+                      el.style.boxShadow = `0 0 25px ${tool.color}40, 0 0 50px ${tool.color}15, inset 0 0 15px ${tool.color}10`;
+                      el.style.borderColor = `${tool.color}60`;
                     }}
                     onMouseLeave={(e) => {
-                      (
-                        e.currentTarget as HTMLDivElement
-                      ).style.boxShadow = `0 0 0 0 ${tool.color}00`;
-                      (
-                        e.currentTarget as HTMLDivElement
-                      ).style.borderColor = `${tool.color}20`;
+                      const el = e.currentTarget as HTMLDivElement;
+                      el.style.boxShadow = `0 0 0 0 ${tool.color}00`;
+                      el.style.borderColor = `${tool.color}20`;
                     }}
                   >
                     {/* Mini preview */}
@@ -3952,6 +6490,12 @@ const ChapterLab = memo(function ChapterLab({
                 </Link>
               </motion.div>
             ))}
+          </div>
+
+          
+          {/* Mini-game: Code Challenge */}
+          <div className="flex justify-center">
+            <MiniGameCode />
           </div>
 
           {/* Featured portfolio experiences */}
@@ -4093,10 +6637,27 @@ const ChapterJornada = memo(function ChapterJornada({
           />
         ))}
 
-        {/* Golden dust */}
+        {/* Golden dust (amber swirl) */}
         {!reducedMotion && (
-          <AmbientParticles type="dust" count={25} />
+          <AmbientParticles type="dust" count={30} />
         )}
+
+        {/* Easter Egg: Timeline dot */}
+        <EasterEgg
+          message="Cada ponto e uma historia. Esta jornada e so o comeco."
+          className="absolute z-20"
+          style={{ top: "15%", right: "15%" }}
+        >
+          <div className="w-4 h-4 rounded-full bg-amber-400 opacity-30 hover:opacity-80 transition-opacity" style={{ boxShadow: "0 0 12px rgba(245,158,11,0.4)" }} />
+        </EasterEgg>
+
+        {/* Chapter transition to Topo */}
+        <ChapterTransition
+          fromColor="#312e81"
+          toColor="#030014"
+          progress={chapterProgress}
+          reducedMotion={reducedMotion}
+        />
 
         {/* Road/path */}
         <div
@@ -4115,7 +6676,7 @@ const ChapterJornada = memo(function ChapterJornada({
             willChange: "transform",
           }}
         >
-          <PixelCharacter
+          <InteractivePixelCharacter
             variant="normal"
             walking={scrolling}
             size={40}
@@ -4188,28 +6749,32 @@ const ChapterJornada = memo(function ChapterJornada({
                     </div>
                   </div>
 
-                  {/* Center dot */}
+                  {/* Center dot with golden particles */}
                   <div className="absolute left-1/2 -translate-x-1/2 z-10">
-                    <motion.div
-                      className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-lg shadow-lg"
-                      initial={{ scale: 0 }}
-                      animate={
-                        visibleMilestones > i
-                          ? { scale: 1 }
-                          : {}
-                      }
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        delay: 0.05,
-                      }}
-                      style={{
-                        boxShadow:
-                          "0 0 20px rgba(245,158,11,0.4)",
-                      }}
-                    >
-                      {milestone.emoji}
-                    </motion.div>
+                    <div className="relative">
+                      <motion.div
+                        className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-lg shadow-lg"
+                        initial={{ scale: 0 }}
+                        animate={
+                          visibleMilestones > i
+                            ? { scale: 1 }
+                            : {}
+                        }
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          delay: 0.05,
+                        }}
+                        style={{
+                          boxShadow:
+                            "0 0 20px rgba(245,158,11,0.4)",
+                        }}
+                      >
+                        {milestone.emoji}
+                      </motion.div>
+                      {/* Golden particles burst */}
+                      <GoldenParticles active={visibleMilestones > i} count={12} />
+                    </div>
                   </div>
 
                   {/* Spacer for the other side */}
@@ -4362,10 +6927,25 @@ const ChapterTopo = memo(function ChapterTopo({
             />
           </svg>
 
-          {/* Snowflakes */}
+          {/* Light rays from top */}
+          {!reducedMotion && <LightRays />}
+
+          {/* Snowflakes / Confetti particles (multicolor fall from top) */}
           {!reducedMotion && (
-            <AmbientParticles type="snow" count={30} />
+            <AmbientParticles type="snow" count={35} />
           )}
+
+          {/* Easter Egg: Crown triggers confetti */}
+          <div className="absolute z-20" style={{ top: "8%", left: "50%", transform: "translateX(-50%)" }}>
+            <motion.button
+              onClick={() => setShowConfetti(true)}
+              className="cursor-pointer select-none opacity-20 hover:opacity-60 transition-opacity text-3xl"
+              whileHover={{ scale: 1.2, rotate: 10 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {"\uD83D\uDC51"}
+            </motion.button>
+          </div>
 
           {/* Character at the peak */}
           <div className="absolute bottom-[14%] left-1/2 -translate-x-1/2 z-20">
@@ -4374,7 +6954,7 @@ const ChapterTopo = memo(function ChapterTopo({
                 <SpeechBubble text="Obrigado por fazeres esta jornada comigo." />
               </div>
             )}
-            <PixelCharacter
+            <InteractivePixelCharacter
               variant="hero"
               flipped={showFlip}
               size={56}
@@ -4755,6 +7335,149 @@ const ChapterTopo = memo(function ChapterTopo({
 });
 
 /* =============================================================================
+   ACHIEVEMENT TOAST NOTIFICATION
+   ============================================================================= */
+
+const AchievementToast = memo(function AchievementToast({ achievementId, onDismiss }: { achievementId: string; onDismiss: () => void }) {
+  const achievement = ACHIEVEMENTS.find((a) => a.id === achievementId);
+  useEffect(() => { const timer = setTimeout(onDismiss, 3000); return () => clearTimeout(timer); }, [onDismiss]);
+  if (!achievement) return null;
+  return (
+    <motion.div initial={{ opacity: 0, y: 80, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 80, scale: 0.9 }} transition={{ type: "spring", stiffness: 300, damping: 25 }} className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] pointer-events-auto">
+      <div className="px-5 py-3 rounded-xl flex items-center gap-3 shadow-2xl border" style={{ background: "linear-gradient(135deg, rgba(30,27,75,0.95), rgba(59,7,100,0.95))", borderColor: "rgba(234,179,8,0.4)", boxShadow: "0 0 30px rgba(234,179,8,0.3), 0 0 60px rgba(234,179,8,0.1)" }}>
+        <span className="text-2xl">{achievement.icon}</span>
+        <div>
+          <div className="text-xs font-bold text-amber-400 uppercase tracking-wider" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Conquista Desbloqueada!</div>
+          <div className="text-sm text-white font-medium">{achievement.name}</div>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
+
+/* =============================================================================
+   ACHIEVEMENT PANEL (with Stats tab)
+   ============================================================================= */
+
+const AchievementPanel = memo(function AchievementPanel({ isOpen, onClose, achievements, activeTab, onTabChange, getLiveStats }: { isOpen: boolean; onClose: () => void; achievements: AchievementState; activeTab: "achievements" | "stats"; onTabChange: (tab: "achievements" | "stats") => void; getLiveStats: () => StatsState }) {
+  const [liveStats, setLiveStats] = useState<StatsState>(DEFAULT_STATS_STATE);
+  useEffect(() => { if (isOpen) setLiveStats(getLiveStats()); }, [isOpen, activeTab, getLiveStats]);
+  const unlockedCount = Object.values(achievements.unlocked).filter(Boolean).length;
+  const fmtTime = (seconds: number) => `${Math.floor(seconds / 60)}m ${Math.floor(seconds % 60)}s`;
+  const chCompCount = Object.values(liveStats.chaptersCompleted).filter(Boolean).length;
+  const favIdx = Object.entries(liveStats.chapterTimes).reduce((best, [ch, time]) => (time > (best.time || 0) ? { ch: Number(ch), time } : best), { ch: -1, time: 0 }).ch;
+  const favName = favIdx >= 0 && favIdx < CHAPTER_RANGES.length ? CHAPTER_RANGES[favIdx].label : "---";
+  const sComp = () => { const e = (liveStats.totalScroll / 324000).toFixed(1); return Number(e) >= 1 ? `Equivalente a ${e} Torres Eiffel! \u{1F5FC}` : `${(liveStats.totalScroll / 1000).toFixed(0)} metros scrollados! \u{1F4CF}`; };
+  const tComp = () => { const c = Math.floor(liveStats.timeSpent / 180); return c >= 1 ? `Nesse tempo podias ter feito ${c} cafe${c > 1 ? "s" : ""} \u2615` : `Recem chegaste! \u{1F44B}`; };
+  const vComp = () => { if (liveStats.returnVisits > 5) return `Voltaste ${liveStats.returnVisits} vezes \u2014 ja somos amigos! \u{1F91D}`; return liveStats.returnVisits > 1 ? `Bem-vindo de volta! \u{1F44B}` : `Primeira visita! \u{1F31F}`; };
+  const sCards = [
+    { icon: "\u{1F4CF}", name: "Distancia Scrollada", value: `${Math.floor(liveStats.totalScroll).toLocaleString("pt-PT")}px`, comp: sComp() },
+    { icon: "\u23F1\u{FE0F}", name: "Tempo de Exploracao", value: fmtTime(liveStats.timeSpent), comp: tComp() },
+    { icon: "\u{1F4D6}", name: "Capitulos Explorados", value: `${chCompCount}/8`, comp: chCompCount === 8 ? "Todos explorados! \u{1F389}" : "Continua a explorar!" },
+    { icon: "\u{1F50D}", name: "Cliques Interativos", value: `${liveStats.interactiveClicks}`, comp: liveStats.interactiveClicks > 10 ? "Explorador nato! \u{1F9ED}" : "Clica em mais coisas!" },
+    { icon: "\u{1F3AE}", name: "Personagem Clicado", value: `${liveStats.characterClicks}x`, comp: liveStats.characterClicks > 5 ? "O Jaime agradece! \u{1F60A}" : "Tenta clicar no Jaime!" },
+    { icon: "\u{1F504}", name: "Visitas", value: `${liveStats.returnVisits}`, comp: vComp() },
+    { icon: "\u2764\u{FE0F}", name: "Capitulo Favorito", value: favName, comp: "Onde passaste mais tempo!" },
+    { icon: "\u{1F3C6}", name: "Conquistas", value: `${unlockedCount}/10`, comp: unlockedCount === 10 ? "100% Completista! \u{1F451}" : `Faltam ${10 - unlockedCount}!` },
+  ];
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[55] flex items-center justify-center p-4" onClick={onClose}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 30 }} transition={{ type: "spring", stiffness: 300, damping: 25 }} className="relative w-full max-w-lg max-h-[80vh] overflow-hidden rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(15,10,40,0.97), rgba(30,15,60,0.97))", border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 0 60px rgba(139,92,246,0.15)" }} onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <h3 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-sora), sans-serif" }}>{"\u{1F3C6}"} Conquistas & Stats</h3>
+              <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white transition-colors text-sm">{"\u2715"}</button>
+            </div>
+            <div className="flex gap-1 mx-5 mb-4 p-1 rounded-lg bg-white/5">
+              <button onClick={() => onTabChange("achievements")} className={`flex-1 py-2 px-3 rounded-md text-xs font-medium transition-colors ${activeTab === "achievements" ? "bg-amber-500/20 text-amber-300" : "text-white/50 hover:text-white/70"}`}>{"\u{1F3C6}"} Conquistas ({unlockedCount}/10)</button>
+              <button onClick={() => onTabChange("stats")} className={`flex-1 py-2 px-3 rounded-md text-xs font-medium transition-colors ${activeTab === "stats" ? "bg-cyan-500/20 text-cyan-300" : "text-white/50 hover:text-white/70"}`}>{"\u{1F4CA}"} Estatisticas</button>
+            </div>
+            <div className="px-5 pb-5 overflow-y-auto max-h-[55vh]">
+              {activeTab === "achievements" ? (
+                <div className="grid grid-cols-1 gap-2">
+                  {ACHIEVEMENTS.map((ach, i) => { const isUnlocked = achievements.unlocked[ach.id]; return (
+                    <motion.div key={ach.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="flex items-center gap-3 p-3 rounded-xl border" style={{ background: isUnlocked ? "rgba(234,179,8,0.08)" : "rgba(255,255,255,0.02)", borderColor: isUnlocked ? "rgba(234,179,8,0.3)" : "rgba(255,255,255,0.05)", boxShadow: isUnlocked ? "0 0 15px rgba(234,179,8,0.1)" : "none" }}>
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0" style={{ background: isUnlocked ? "rgba(234,179,8,0.15)" : "rgba(255,255,255,0.05)", filter: isUnlocked ? "none" : "grayscale(1)", opacity: isUnlocked ? 1 : 0.4 }}>{isUnlocked ? ach.icon : "\u{1F512}"}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium" style={{ color: isUnlocked ? "#EAB308" : "rgba(255,255,255,0.3)", fontFamily: "var(--font-sora), sans-serif" }}>{isUnlocked ? ach.name : "???"}</div>
+                        <div className="text-xs text-white/40 mt-0.5">{isUnlocked ? ach.description : ach.hiddenDescription}</div>
+                      </div>
+                      {isUnlocked && <div className="text-xs text-amber-500/60">{"\u2713"}</div>}
+                    </motion.div>
+                  ); })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {sCards.map((card, i) => (
+                    <motion.div key={card.name} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className="p-3 rounded-xl border border-white/5 bg-white/[0.03]">
+                      <div className="flex items-center gap-2 mb-1"><span className="text-lg">{card.icon}</span><span className="text-xs text-white/50">{card.name}</span></div>
+                      <div className="text-lg font-bold text-cyan-300 mb-1" style={{ fontFamily: "var(--font-sora), sans-serif" }}>{card.value}</div>
+                      <div className="text-[10px] text-white/30">{card.comp}</div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+});
+
+/* =============================================================================
+   ACHIEVEMENT BUTTON (FIXED BOTTOM-LEFT)
+   ============================================================================= */
+
+const AchievementButton = memo(function AchievementButton({ unlockedCount, onClick }: { unlockedCount: number; onClick: () => void }) {
+  return (
+    <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1, type: "spring" }} onClick={onClick} className="fixed left-4 bottom-20 z-[52] lg:bottom-20 px-3 py-2 rounded-full border transition-colors hover:bg-white/10" style={{ background: "rgba(15,10,40,0.85)", backdropFilter: "blur(8px)", borderColor: unlockedCount > 0 ? "rgba(234,179,8,0.3)" : "rgba(255,255,255,0.1)", boxShadow: unlockedCount > 0 ? "0 0 15px rgba(234,179,8,0.15)" : "none" }} aria-label={`Conquistas: ${unlockedCount} de 10`}>
+      <span className="text-sm font-medium" style={{ fontFamily: "var(--font-sora), sans-serif" }}>{"\u{1F3C6}"}{" "}<span style={{ color: unlockedCount > 0 ? "#EAB308" : "rgba(255,255,255,0.5)" }}>{unlockedCount}/10</span></span>
+    </motion.button>
+  );
+});
+
+/* =============================================================================
+   END-OF-PAGE JOURNEY SUMMARY
+   ============================================================================= */
+
+const JourneySummary = memo(function JourneySummary({ visible, getLiveStats, unlockedCount, onShare, onRestart }: { visible: boolean; getLiveStats: () => StatsState; unlockedCount: number; onShare: () => void; onRestart: () => void }) {
+  const [jStats, setJStats] = useState<StatsState | null>(null);
+  const [showCard, setShowCard] = useState(false);
+  useEffect(() => { if (visible && !showCard) { setJStats(getLiveStats()); const t = setTimeout(() => setShowCard(true), 300); return () => clearTimeout(t); } if (!visible) setShowCard(false); }, [visible, getLiveStats, showCard]);
+  if (!jStats) return null;
+  const fTime = (s: number) => `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`;
+  const chDone = Object.values(jStats.chaptersCompleted).filter(Boolean).length;
+  const fIdx = Object.entries(jStats.chapterTimes).reduce((b, [c, t]) => (t > (b.time || 0) ? { ch: Number(c), time: t } : b), { ch: -1, time: 0 }).ch;
+  const fName = fIdx >= 0 && fIdx < CHAPTER_RANGES.length ? CHAPTER_RANGES[fIdx].label : "---";
+  const sLines = [
+    { icon: "\u{1F4DC}", text: `${chDone}/8 Capitulos explorados` },
+    { icon: "\u23F1\u{FE0F}", text: `${fTime(jStats.timeSpent)} de exploracao` },
+    { icon: "\u{1F4CF}", text: `${Math.floor(jStats.totalScroll).toLocaleString("pt-PT")}px scrollados` },
+    { icon: "\u{1F3C5}", text: `${unlockedCount}/10 conquistas` },
+    { icon: "\u2764\u{FE0F}", text: `Capitulo favorito: ${fName}` },
+  ];
+  return (
+    <AnimatePresence>
+      {showCard && (
+        <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 200, damping: 20 }} className="w-full max-w-sm mx-auto mt-6 mb-4">
+          <div className="rounded-2xl overflow-hidden border" style={{ background: "linear-gradient(135deg, rgba(15,10,40,0.95), rgba(30,15,60,0.95))", borderColor: "rgba(234,179,8,0.3)", boxShadow: "0 0 40px rgba(234,179,8,0.15), 0 0 80px rgba(139,92,246,0.1)" }}>
+            <div className="text-center pt-5 pb-3 border-b border-white/10"><h4 className="text-base font-bold text-amber-300" style={{ fontFamily: "var(--font-sora), sans-serif" }}>{"\u{1F3C6}"} A TUA JORNADA EM NUMEROS</h4></div>
+            <div className="px-5 py-4 space-y-2">{sLines.map((l, i) => (<motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.2, type: "spring" }} className="flex items-center gap-3 text-sm text-white/80"><span className="text-base w-6 text-center">{l.icon}</span><span>{l.text}</span></motion.div>))}</div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="flex gap-2 px-5 pb-5">
+              <button onClick={onShare} className="flex-1 py-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-medium transition-colors border border-amber-500/20">Partilhar {"\u{1F4E4}"}</button>
+              <button onClick={onRestart} className="flex-1 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 text-xs font-medium transition-colors border border-white/5">Recomecar {"\u{1F504}"}</button>
+            </motion.div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+});
+
+/* =============================================================================
    MAIN PAGE COMPONENT
    ============================================================================= */
 
@@ -4766,6 +7489,178 @@ export default function ChronicleRPGPage() {
 
   const [progress, setProgress] = useState(0);
   const [activeChapter, setActiveChapter] = useState(0);
+  const [completedChapters, setCompletedChapters] = useState<Set<number>>(new Set());
+  const [showShortcuts, setShowShortcuts] = useState(false);
+
+  // Achievement & Statistics system
+  const achSystem = useAchievements();
+  const [showJourneySummary, setShowJourneySummary] = useState(false);
+
+  // Achievement checks
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+
+    // Noctambulo: visit between 22:00 and 06:00
+    const hour = new Date().getHours();
+    if (hour >= 22 || hour < 6) achSystem.unlock("noctambulo");
+
+    // Mobile Explorer: viewport width < 768
+    if (typeof window !== "undefined" && window.innerWidth < 768) achSystem.unlock("mobile-explorer");
+  }, [achSystem.mounted, achSystem.unlock]);
+
+  // Track chapter-based achievements
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+
+    // Primeiro Capitulo: scroll past chapter 0
+    if (activeChapter >= 1) achSystem.unlock("primeiro-capitulo");
+
+    // Leitor Avido: visit all 8 chapters
+    const visited = achSystem.scrollTracker.chaptersVisited.current;
+    const allVisited = CHAPTER_RANGES.every((_, i) => visited[i]);
+    if (allVisited) achSystem.unlock("leitor-avido");
+
+    // Speed Reader: all chapters in under 2 minutes
+    if (allVisited) {
+      const elapsed = (Date.now() - achSystem.startTimeRef.current) / 1000;
+      if (elapsed < 120) achSystem.unlock("speed-reader");
+    }
+
+    // Show journey summary at the end
+    if (progress > 0.95) setShowJourneySummary(true);
+    else setShowJourneySummary(false);
+  }, [activeChapter, progress, achSystem]);
+
+  // Apreciador: 10+ minutes
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+    const interval = setInterval(() => {
+      const elapsed = (Date.now() - achSystem.startTimeRef.current) / 1000;
+      if (achSystem.stats.timeSpent + elapsed > 600) {
+        achSystem.unlock("apreciador");
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [achSystem]);
+
+  // Observador: 5+ interactive clicks
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const handler = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button, [role=button]")) {
+        achSystem.registerInteractiveClick();
+      }
+    };
+    container.addEventListener("click", handler, { passive: true });
+    return () => container.removeEventListener("click", handler);
+  }, [achSystem]);
+
+  // Check interactive clicks threshold
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+    const ls = achSystem.getLiveStats();
+    if (ls.interactiveClicks >= 5) achSystem.unlock("observador");
+  }, [achSystem]);
+
+  // Completista: check if all other 9 are unlocked
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+    const otherIds = ACHIEVEMENTS.filter((a) => a.id !== "completista").map((a) => a.id);
+    const allUnlocked = otherIds.every((id) => achSystem.achievements.unlocked[id]);
+    if (allUnlocked) achSystem.unlock("completista");
+  }, [achSystem]);
+
+  // Share handler for journey summary
+  const handleShareJourney = useCallback(() => {
+    const ls = achSystem.getLiveStats();
+    const chapsDone = Object.values(ls.chaptersCompleted).filter(Boolean).length;
+    const fmtT = (s: number) => `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`;
+    const text = `A minha jornada no RPG Chronicle da Descomplicai:\n${chapsDone}/8 capitulos\n${fmtT(ls.timeSpent)} de exploracao\n${Math.floor(ls.totalScroll).toLocaleString("pt-PT")}px scrollados\n${achSystem.unlockedCount}/10 conquistas\n\nDescobre em descomplicai.pt`;
+    navigator.clipboard.writeText(text).catch(() => {});
+  }, [achSystem]);
+
+  // Volta ao inicio achievement: detect when user scrolls back to top after reaching far
+  useEffect(() => {
+    if (!achSystem.mounted) return;
+    let wasDeep = false;
+    const handler = () => {
+      if (window.scrollY > TOTAL_HEIGHT * 0.7) wasDeep = true;
+      if (wasDeep && window.scrollY < 100) {
+        achSystem.unlock("volta-ao-inicio");
+        achSystem.markBackToTop();
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, [achSystem]);
+
+  // Restart handler
+  const handleRestart = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Chapter completion tracking
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPx = window.scrollY;
+      const newCompleted = new Set(completedChapters);
+      for (let i = 0; i < CHAPTER_RANGES.length; i++) {
+        if (scrollPx >= CHAPTER_RANGES[i].end - 100) {
+          newCompleted.add(i);
+        }
+      }
+      if (newCompleted.size !== completedChapters.size) {
+        setCompletedChapters(newCompleted);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [completedChapters]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      switch (e.key) {
+        case "1": case "2": case "3": case "4":
+        case "5": case "6": case "7": case "8": {
+          const idx = parseInt(e.key) - 1;
+          if (idx >= 0 && idx < CHAPTER_RANGES.length) {
+            const range = CHAPTER_RANGES[idx];
+            window.scrollTo({ top: range.start + (range.end - range.start) * 0.1, behavior: "smooth" });
+          }
+          break;
+        }
+        case "ArrowUp":
+          e.preventDefault();
+          window.scrollBy({ top: -200, behavior: "smooth" });
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          window.scrollBy({ top: 200, behavior: "smooth" });
+          break;
+        case "Home":
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          break;
+        case "End":
+          e.preventDefault();
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+          break;
+        case "?":
+          setShowShortcuts((v) => !v);
+          break;
+        case "Escape":
+          setShowShortcuts(false);
+          break;
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     setProgress(v);
@@ -4907,24 +7802,250 @@ export default function ChronicleRPGPage() {
           100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        @keyframes legWalk {
-          0% { transform: rotate(-15deg); }
-          100% { transform: rotate(15deg); }
+        /* === PIXEL CHARACTER ANIMATIONS === */
+
+        /* Walking */
+        @keyframes pixelLegWalk {
+          0% { transform: rotate(-18deg); }
+          100% { transform: rotate(18deg); }
+        }
+        @keyframes pixelArmSwing {
+          0% { transform: rotate(-12deg); }
+          100% { transform: rotate(12deg); }
+        }
+        @keyframes pixelWalkBob {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-2px); }
+        }
+        @keyframes pixelHairBounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-1px); }
         }
 
-        @keyframes armSwing {
-          0% { transform: rotate(-10deg); }
-          100% { transform: rotate(10deg); }
+        /* Idle */
+        @keyframes pixelBreathe {
+          0%, 100% { transform: scaleY(1); }
+          50% { transform: scaleY(1.02); }
+        }
+        @keyframes pixelBlink {
+          0%, 92% { transform: scaleY(1); }
+          95% { transform: scaleY(0.1); }
+          97% { transform: scaleY(1); }
+        }
+        @keyframes pixelLookAround {
+          0%, 40% { transform: translateX(0); }
+          45%, 55% { transform: translateX(-1px); }
+          60%, 80% { transform: translateX(1px); }
+          85%, 100% { transform: translateX(0); }
         }
 
-        @keyframes typing {
+        /* Typing (sitting) */
+        @keyframes pixelTypingL {
           0% { transform: rotate(25deg) translateY(0); }
-          100% { transform: rotate(35deg) translateY(-2px); }
+          100% { transform: rotate(30deg) translateY(-1px); }
+        }
+        @keyframes pixelTypingR {
+          0% { transform: rotate(-25deg) translateY(0); }
+          100% { transform: rotate(-30deg) translateY(-1px); }
+        }
+        @keyframes pixelTypingHandL {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-2px); }
+        }
+        @keyframes pixelTypingHandR {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-2px); }
         }
 
-        @keyframes capeFlutter {
+        /* Chef cooking */
+        @keyframes pixelPanToss {
+          0%, 100% { transform: rotate(0deg) translateY(0); }
+          30% { transform: rotate(-5deg) translateY(-4px); }
+          50% { transform: rotate(5deg) translateY(-8px); }
+          70% { transform: rotate(-3deg) translateY(-3px); }
+        }
+        @keyframes pixelSteam {
+          0% { transform: translateY(0); opacity: 0.5; }
+          100% { transform: translateY(-12px); opacity: 0; }
+        }
+
+        /* Lab examining */
+        @keyframes pixelClipboardNod {
+          0%, 100% { transform: rotate(0deg); }
+          30% { transform: rotate(3deg); }
+          60% { transform: rotate(-2deg); }
+        }
+
+        /* Hacker */
+        @keyframes pixelVisorGlow {
+          0%, 100% { opacity: 0.85; box-shadow: 0 0 4px rgba(6,182,212,0.3); }
+          50% { opacity: 1; box-shadow: 0 0 8px rgba(6,182,212,0.6); }
+        }
+        @keyframes pixelFistPump {
+          0%, 85%, 100% { opacity: 0; transform: translateY(0); }
+          88% { opacity: 1; transform: translateY(-6px); }
+          92% { opacity: 1; transform: translateY(-2px); }
+          95% { opacity: 0; transform: translateY(-4px); }
+        }
+
+        /* Climbing */
+        @keyframes pixelClimbArmL {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes pixelClimbArmR {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes pixelClimbHandL {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes pixelClimbHandR {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes pixelClimbLegL {
+          0%, 100% { transform: rotate(0deg); }
+          50% { transform: rotate(-20deg); }
+        }
+        @keyframes pixelClimbLegR {
+          0%, 100% { transform: rotate(0deg); }
+          50% { transform: rotate(-20deg); }
+        }
+        @keyframes pixelRopeTrail {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(2px) rotate(3deg); }
+        }
+
+        /* Hero */
+        @keyframes pixelCapeFlow {
           0%, 100% { transform: rotate(0deg) skewX(0deg); }
-          50% { transform: rotate(5deg) skewX(5deg); }
+          25% { transform: rotate(8deg) skewX(5deg); }
+          75% { transform: rotate(-4deg) skewX(-3deg); }
+        }
+        @keyframes pixelCapeIdle {
+          0%, 100% { transform: rotate(0deg); }
+          50% { transform: rotate(3deg); }
+        }
+        @keyframes pixelCapeFlutter {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(3px); }
+        }
+        @keyframes pixelHeroHairWind {
+          0%, 100% { transform: translateX(0) scaleX(1); }
+          50% { transform: translateX(-2px) scaleX(1.3); }
+        }
+
+        /* === ENHANCED PARALLAX KEYFRAMES === */
+
+        @keyframes nebulaPulse {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.8; }
+        }
+
+        @keyframes shootingStar2 {
+          0% { transform: translateX(-80px) rotate(-25deg); opacity: 0; }
+          3% { opacity: 1; }
+          12% { transform: translateX(120vw) rotate(-25deg); opacity: 0; }
+          100% { transform: translateX(120vw) rotate(-25deg); opacity: 0; }
+        }
+
+        @keyframes shootingStar3 {
+          0% { transform: translateX(-60px) rotate(-10deg); opacity: 0; }
+          4% { opacity: 0.8; }
+          14% { transform: translateX(120vw) rotate(-10deg); opacity: 0; }
+          100% { transform: translateX(120vw) rotate(-10deg); opacity: 0; }
+        }
+
+        @keyframes cloudDriftLR {
+          0% { transform: translateX(-120%); }
+          100% { transform: translateX(120vw); }
+        }
+
+        @keyframes grassWave {
+          0%, 100% { transform: rotate(-5deg); }
+          50% { transform: rotate(5deg); }
+        }
+
+        @keyframes orbitFloat {
+          0% { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+          100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+        }
+
+        @keyframes steamRise {
+          0% { transform: translateY(0) scale(0.5); opacity: 0; }
+          20% { opacity: 0.3; }
+          80% { opacity: 0.1; }
+          100% { transform: translateY(-80px) scale(2); opacity: 0; }
+        }
+
+        @keyframes lampGlow {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes fireflyBlink {
+          0%, 100% { opacity: 0; }
+          20% { opacity: 1; }
+          40% { opacity: 0.3; }
+          60% { opacity: 0.9; }
+          80% { opacity: 0.1; }
+        }
+
+        @keyframes fireflyDrift {
+          0% { transform: translate(0, 0); }
+          25% { transform: translate(15px, -20px); }
+          50% { transform: translate(-10px, -10px); }
+          75% { transform: translate(20px, 10px); }
+          100% { transform: translate(0, 0); }
+        }
+
+        @keyframes medicalFloat {
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.04; }
+          25% { transform: translateY(-15px) rotate(10deg); opacity: 0.08; }
+          50% { transform: translateY(-5px) rotate(-5deg); opacity: 0.04; }
+          75% { transform: translateY(-20px) rotate(5deg); opacity: 0.06; }
+        }
+
+        @keyframes codeRainFall {
+          0% { transform: translateY(-20%); opacity: 0; }
+          5% { opacity: 1; }
+          95% { opacity: 1; }
+          100% { transform: translateY(120vh); opacity: 0; }
+        }
+
+        @keyframes circuitDraw {
+          0% { stroke-dashoffset: 200; opacity: 0; }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+
+        @keyframes goldenBurst {
+          0% { transform: translate(0,0) scale(1); opacity: 1; }
+          100% { transform: translate(var(--tx, 20px), var(--ty, -20px)) scale(0); opacity: 0; }
+        }
+
+        @keyframes lightRayPulse {
+          0%, 100% { opacity: 0.08; }
+          50% { opacity: 0.2; }
+        }
+
+        @keyframes pendulumSwing {
+          0%, 100% { transform: rotate(-3deg); }
+          50% { transform: rotate(3deg); }
+        }
+
+        @keyframes waveHand {
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(20deg); }
+          75% { transform: rotate(-10deg); }
+        }
+
+        @keyframes easterEggPulse {
+          0%, 100% { transform: scale(1); opacity: 0.3; }
+          50% { transform: scale(1.1); opacity: 0.6; }
         }
 
         /* Reduced motion overrides */
@@ -4967,11 +8088,29 @@ export default function ChronicleRPGPage() {
           color: "white",
         }}
       >
+        {/* Achievement System UI */}
+        {achSystem.mounted && (
+          <>
+            <AchievementButton unlockedCount={achSystem.unlockedCount} onClick={() => achSystem.setPanelOpen(true)} />
+            <AchievementPanel isOpen={achSystem.panelOpen} onClose={() => achSystem.setPanelOpen(false)} achievements={achSystem.achievements} activeTab={achSystem.panelTab} onTabChange={achSystem.setPanelTab} getLiveStats={achSystem.getLiveStats} />
+            <AnimatePresence>
+              {achSystem.toastQueue.length > 0 && (
+                <AchievementToast achievementId={achSystem.toastQueue[0]} onDismiss={achSystem.dismissToast} />
+              )}
+            </AnimatePresence>
+          </>
+        )}
+
         {/* Persistent UI */}
+        <SoundToggle />
         <ProgressBar progress={progress} />
-        <NavigationDots activeChapter={activeChapter} />
+        <EnhancedNavigationDots activeChapter={activeChapter} completedChapters={completedChapters} />
         <MiniMap activeChapter={activeChapter} progress={progress} />
         <ScrollIndicator visible={progress < 0.05} />
+        <CompletionBadge allCompleted={completedChapters.size >= CHAPTER_RANGES.length} />
+        <AnimatePresence>
+          <KeyboardShortcuts open={showShortcuts} onClose={() => setShowShortcuts(false)} />
+        </AnimatePresence>
         <ChapterTitle
           number={activeChapter}
           title={CHAPTER_RANGES[activeChapter].label}
@@ -5011,6 +8150,13 @@ export default function ChronicleRPGPage() {
           chapterProgress={ch7Progress}
           reducedMotion={reducedMotion}
         />
+
+        {/* End-of-page Journey Summary */}
+        {achSystem.mounted && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[51] w-full max-w-sm px-4">
+            <JourneySummary visible={showJourneySummary} getLiveStats={achSystem.getLiveStats} unlockedCount={achSystem.unlockedCount} onShare={handleShareJourney} onRestart={handleRestart} />
+          </div>
+        )}
       </div>
     </>
   );

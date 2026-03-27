@@ -23,9 +23,12 @@ const CANVAS_W = MAP_COLS * TILE_SIZE; // 1000
 const CANVAS_H = MAP_ROWS * TILE_SIZE; // 800
 
 const PLAYER_SPEED = 2.5;
+const PLAYER_SPRINT_MULT = 1.5;
 const CAMERA_LERP = 0.08;
 const INTERACT_DIST = 24;
 const TYPEWRITER_SPEED = 25;
+const NPC_PATROL_SPEED = 0.8;
+const NPC_FACE_PLAYER_DIST = 3 * TILE_SIZE;
 
 // Directions
 const DIR_DOWN = 0;
@@ -79,6 +82,17 @@ interface NPC {
   headColor: string;
   dialogue: string[];
   questId?: string;
+}
+
+type NPCIdleAnim = "bounce" | "look_around" | "wave";
+type NPCState = "idle" | "walking" | "talking";
+
+interface NPCRuntime {
+  id: string; x: number; y: number; originX: number; originY: number;
+  direction: Direction; walkFrame: number; walkTimer: number;
+  state: NPCState; idleAnimation: NPCIdleAnim;
+  patrolTimer: number; patrolTarget: { x: number; y: number } | null;
+  patrolCooldown: number;
 }
 
 interface Chest {
@@ -548,30 +562,31 @@ function drawTile(
     const newB = Math.min(255, Math.max(0, Math.round(b + wave * 20)));
     ctx.fillStyle = `rgb(${newR},${newG},${newB})`;
     ctx.fillRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
-    // Water ripple lines
-    ctx.strokeStyle = `rgba(255,255,255,${0.15 + wave * 0.1})`;
-    ctx.lineWidth = 0.5;
-    const offset = (animFrame * 0.5) % TILE_SIZE;
-    ctx.beginPath();
-    ctx.moveTo(screenX, screenY + offset);
-    ctx.lineTo(screenX + TILE_SIZE, screenY + offset);
-    ctx.stroke();
+    // Multiple sine wave lines
+    ctx.strokeStyle = `rgba(255,255,255,${0.15 + wave * 0.1})`; ctx.lineWidth = 0.5;
+    for (let wl = 0; wl < 3; wl++) { const yBase = screenY + 4 + wl * 6 + ((animFrame * 0.3 + wl * 3) % 4); ctx.beginPath(); for (let wx = 0; wx <= TILE_SIZE; wx += 2) { const wy = yBase + Math.sin((wx + screenX + animFrame * 0.8 + wl * 20) * 0.3) * 1.5; if (wx === 0) ctx.moveTo(screenX + wx, wy); else ctx.lineTo(screenX + wx, wy); } ctx.stroke(); }
     return;
   }
 
   ctx.fillStyle = color;
   ctx.fillRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
 
-  // Tree decoration: darker trunk + canopy
+  // Grass blades
+  if (tileType === GRASS) {
+    ctx.strokeStyle = "#22c55e"; ctx.lineWidth = 0.5;
+    const seed = (screenX * 7 + screenY * 13) % 100;
+    for (let i = 0; i < 4; i++) { const gx = screenX + ((seed + i * 5) % 16) + 2, gy = screenY + ((seed + i * 7) % 14) + 3; ctx.beginPath(); ctx.moveTo(gx, gy + 4); ctx.lineTo(gx + Math.sin(animFrame * 0.02 + i) * 0.5, gy); ctx.stroke(); }
+    return;
+  }
+
+  // Tree decoration: trunk + canopy circle
   if (tileType === TREE) {
-    // Trunk
-    ctx.fillStyle = "#78350f";
-    ctx.fillRect(screenX + 7, screenY + 12, 6, 8);
-    // Canopy layers
-    ctx.fillStyle = "#15803d";
-    ctx.fillRect(screenX + 3, screenY + 2, 14, 12);
-    ctx.fillStyle = "#166534";
-    ctx.fillRect(screenX + 5, screenY + 0, 10, 8);
+    ctx.fillStyle = "#78350f"; ctx.fillRect(screenX + 7, screenY + 12, 6, 8);
+    ctx.fillStyle = "#92400e"; ctx.fillRect(screenX + 8, screenY + 13, 4, 7);
+    const cx = screenX + 10, cy = screenY + 7;
+    ctx.fillStyle = "#166534"; ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#15803d"; ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(cx - 1, cy - 1, 3, 0, Math.PI * 2); ctx.fill();
     return;
   }
 
@@ -731,53 +746,59 @@ function drawPlayer(
   }
 }
 
-/** Draw an NPC */
-function drawNPC(
-  ctx: CanvasRenderingContext2D,
-  npc: NPC,
-  cameraX: number,
-  cameraY: number,
-  animFrame: number
-) {
-  const sx = npc.x - cameraX;
-  const sy = npc.y - cameraY;
-
-  // Slight bobbing animation
-  const bob = Math.sin(animFrame * 0.03 + npc.x) * 1;
-
+/** Draw an NPC with AI state and animations */
+function drawNPC(ctx: CanvasRenderingContext2D, npc: NPC, nrt: NPCRuntime, cameraX: number, cameraY: number, animFrame: number, playerX: number, playerY: number, npcsSpoken: Set<string>, questsCompleted: Set<string>) {
+  const sx = nrt.x - cameraX;
+  const sy = nrt.y - cameraY;
+  const distP = Math.sqrt((playerX - nrt.x) ** 2 + (playerY - nrt.y) ** 2);
+  let bob = 0, headShift = 0, showWave = false;
+  if (nrt.state === "idle") {
+    if (nrt.idleAnimation === "bounce") bob = Math.sin(animFrame * 0.05 + nrt.originX) * 2;
+    else if (nrt.idleAnimation === "look_around") { bob = Math.sin(animFrame * 0.03 + nrt.originX) * 0.5; headShift = Math.sin(animFrame * 0.02 + nrt.originY) * 2; }
+    else if (nrt.idleAnimation === "wave") { bob = Math.sin(animFrame * 0.04 + nrt.originX) * 1; if (distP < NPC_FACE_PLAYER_DIST && Math.sin(animFrame * 0.06) > 0.3) showWave = true; }
+  } else if (nrt.state === "talking") bob = Math.sin(animFrame * 0.1) * 1;
   // Shadow
-  ctx.fillStyle = "rgba(0,0,0,0.15)";
-  ctx.beginPath();
-  ctx.ellipse(sx + 6, sy + 19, 5, 2, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Body
-  ctx.fillStyle = npc.bodyColor;
-  ctx.fillRect(sx + 2, sy + 8 + bob, 10, 8);
-
-  // Head
-  ctx.fillStyle = npc.headColor;
-  ctx.fillRect(sx + 3, sy + bob, 8, 8);
-
-  // Eyes
-  ctx.fillStyle = "#1e293b";
-  ctx.fillRect(sx + 4, sy + 4 + bob, 2, 2);
-  ctx.fillRect(sx + 8, sy + 4 + bob, 2, 2);
-
-  // Legs
+  ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.beginPath(); ctx.ellipse(sx + 6, sy + 19, 6, 3, 0, 0, Math.PI * 2); ctx.fill();
+  // Legs (walking animation)
   ctx.fillStyle = "#374151";
-  ctx.fillRect(sx + 3, sy + 16 + bob, 3, 3);
-  ctx.fillRect(sx + 8, sy + 16 + bob, 3, 3);
-
+  if (nrt.state === "walking") { if (nrt.walkFrame % 4 < 2) { ctx.fillRect(sx + 3, sy + 16, 3, 4); ctx.fillRect(sx + 8, sy + 16, 3, 3); } else { ctx.fillRect(sx + 3, sy + 16, 3, 3); ctx.fillRect(sx + 8, sy + 16, 3, 4); } }
+  else { ctx.fillRect(sx + 3, sy + 16 + bob, 3, 3); ctx.fillRect(sx + 8, sy + 16 + bob, 3, 3); }
+  // Body
+  ctx.fillStyle = npc.bodyColor; ctx.fillRect(sx + 2, sy + 8 + bob, 10, 8);
+  // Arms
+  ctx.fillStyle = npc.bodyColor;
+  if (nrt.state === "walking" && nrt.walkFrame % 2 === 0) { ctx.fillRect(sx, sy + 9 + bob, 2, 5); ctx.fillRect(sx + 12, sy + 10 + bob, 2, 5); }
+  else { ctx.fillRect(sx, sy + 9 + bob, 2, 6); ctx.fillRect(sx + 12, sy + 9 + bob, 2, 6); }
+  // Wave arm
+  if (showWave) { ctx.fillStyle = npc.headColor; ctx.fillRect(sx + 13, sy + 6 + bob, 4, 2); ctx.fillRect(sx + 15, sy + 4 + bob, 2, 3); }
+  // Head
+  ctx.fillStyle = npc.headColor; ctx.fillRect(sx + 3 + headShift, sy + bob, 8, 8);
+  // Eyes based on direction
+  ctx.fillStyle = "#1e293b";
+  if (nrt.direction === DIR_DOWN) { ctx.fillRect(sx + 4 + headShift, sy + 4 + bob, 2, 2); ctx.fillRect(sx + 8 + headShift, sy + 4 + bob, 2, 2); }
+  else if (nrt.direction === DIR_UP) ctx.fillRect(sx + 3 + headShift, sy + bob, 8, 5);
+  else if (nrt.direction === DIR_LEFT) ctx.fillRect(sx + 3 + headShift, sy + 4 + bob, 2, 2);
+  else ctx.fillRect(sx + 9 + headShift, sy + 4 + bob, 2, 2);
   // Name tag
-  ctx.fillStyle = "rgba(0,0,0,0.7)";
-  const nameWidth = ctx.measureText(npc.name).width;
-  ctx.fillRect(sx + 6 - nameWidth / 2 - 3, sy - 12 + bob, nameWidth + 6, 12);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "8px monospace";
-  ctx.textAlign = "center";
-  ctx.fillText(npc.name, sx + 6, sy - 3 + bob);
-  ctx.textAlign = "start";
+  ctx.fillStyle = "rgba(0,0,0,0.7)"; ctx.font = "8px monospace"; const nw = ctx.measureText(npc.name).width;
+  ctx.fillRect(sx + 6 - nw / 2 - 3, sy - 14 + bob, nw + 6, 12);
+  ctx.fillStyle = "#ffffff"; ctx.textAlign = "center"; ctx.fillText(npc.name, sx + 6, sy - 5 + bob); ctx.textAlign = "start";
+  // Quest indicator
+  if (npc.questId) { ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+    if (questsCompleted.has(npc.questId)) { ctx.fillStyle = "#4ade80"; ctx.fillText("\u2714", sx + 6, sy - 18 + bob); }
+    else if (npcsSpoken.has(npc.id)) { ctx.fillStyle = "#3b82f6"; ctx.fillText("?", sx + 6, sy - 18 + bob); }
+    else { ctx.fillStyle = "#fbbf24"; ctx.fillText("!", sx + 6, sy - 18 + bob); }
+    ctx.textAlign = "start"; }
+  // Talk bubble when player is near
+  if (distP < INTERACT_DIST * 1.5 && nrt.state !== "talking") {
+    const bx = sx + 14, by = sy - 8 + bob;
+    ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + 18, by); ctx.lineTo(bx + 18, by - 10); ctx.lineTo(bx, by - 10); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(bx + 2, by); ctx.lineTo(bx - 2, by + 4); ctx.lineTo(bx + 6, by); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#374151"; const db = Math.sin(animFrame * 0.1) * 1;
+    ctx.beginPath(); ctx.arc(bx + 5, by - 5 + db, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx + 9, by - 5 + db * 0.7, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx + 13, by - 5 + db * 0.4, 1.5, 0, Math.PI * 2); ctx.fill();
+  }
 }
 
 /** Draw a treasure chest */
@@ -932,53 +953,81 @@ function canWalk(px: number, py: number): boolean {
 // SECTION 10: PARTICLE SYSTEM
 // ================================================================
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-  maxLife: number;
-  color: string;
-  size: number;
-}
+type ParticleType = "dust" | "sparkle" | "confetti" | "bubble" | "leaf";
+interface Particle { x: number; y: number; vx: number; vy: number; life: number; maxLife: number; color: string; size: number; type: ParticleType; }
+interface WindState { dirX: number; dirY: number; strength: number; timer: number; changeCooldown: number; }
 
 function createConfettiParticles(cx: number, cy: number, count: number): Particle[] {
   const particles: Particle[] = [];
   const colors = ["#f472b6", "#fbbf24", "#4ade80", "#3b82f6", "#a855f7", "#ef4444"];
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x: cx,
-      y: cy,
-      vx: (Math.random() - 0.5) * 6,
-      vy: -Math.random() * 5 - 2,
-      life: 60 + Math.random() * 60,
-      maxLife: 120,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      size: 2 + Math.random() * 4,
-    });
-  }
+  for (let i = 0; i < count; i++) { particles.push({ x: cx, y: cy, vx: (Math.random() - 0.5) * 6, vy: -Math.random() * 5 - 2, life: 60 + Math.random() * 60, maxLife: 120, color: colors[Math.floor(Math.random() * colors.length)], size: 2 + Math.random() * 4, type: "confetti" }); }
   return particles;
 }
+function createDustParticles(cx: number, cy: number, n: number): Particle[] {
+  const p: Particle[] = [];
+  for (let i = 0; i < n; i++) p.push({ x: cx + (Math.random() - 0.5) * 6, y: cy + Math.random() * 4, vx: (Math.random() - 0.5) * 1.5, vy: -Math.random() * 0.8 - 0.3, life: 15 + Math.random() * 15, maxLife: 30, color: "#a3836a", size: 1.5 + Math.random() * 2, type: "dust" });
+  return p;
+}
+function createSparkleParticles(cx: number, cy: number, n: number): Particle[] {
+  const p: Particle[] = [];
+  for (let i = 0; i < n; i++) p.push({ x: cx + (Math.random() - 0.5) * 14, y: cy + Math.random() * 6, vx: (Math.random() - 0.5) * 0.3, vy: -Math.random() * 0.6 - 0.2, life: 30 + Math.random() * 40, maxLife: 70, color: "#fbbf24", size: 1 + Math.random() * 2, type: "sparkle" });
+  return p;
+}
+function createBubbleParticle(cx: number, cy: number): Particle {
+  return { x: cx + (Math.random() - 0.5) * TILE_SIZE, y: cy, vx: (Math.random() - 0.5) * 0.3, vy: -Math.random() * 0.4 - 0.2, life: 60 + Math.random() * 80, maxLife: 140, color: "#93c5fd", size: 1.5 + Math.random() * 2.5, type: "bubble" };
+}
+function createLeafParticle(cx: number, cy: number, wind: WindState): Particle {
+  return { x: cx + (Math.random() - 0.5) * TILE_SIZE * 2, y: cy + (Math.random() - 0.5) * TILE_SIZE, vx: wind.dirX * wind.strength * 0.3 + (Math.random() - 0.5) * 0.2, vy: Math.random() * 0.3 + 0.1, life: 120 + Math.random() * 180, maxLife: 300, color: ["#4ade80", "#22c55e", "#16a34a", "#15803d"][Math.floor(Math.random() * 4)], size: 2 + Math.random() * 2, type: "leaf" };
+}
+function updateWind(wind: WindState): void { wind.timer++; if (wind.timer >= wind.changeCooldown) { wind.timer = 0; wind.changeCooldown = 1800 + Math.random() * 1800; const a = Math.random() * Math.PI * 2; wind.dirX = Math.cos(a); wind.dirY = Math.sin(a) * 0.3; wind.strength = 0.3 + Math.random() * 0.7; } }
 
-function updateParticles(particles: Particle[]): Particle[] {
-  return particles
-    .map((p) => ({
-      ...p,
-      x: p.x + p.vx,
-      y: p.y + p.vy,
-      vy: p.vy + 0.1,
-      life: p.life - 1,
-    }))
-    .filter((p) => p.life > 0);
+function updateNPCRuntime(npcRts: NPCRuntime[], px: number, py: number, dActive: boolean): void {
+  for (const n of npcRts) {
+    const dx = px - n.x, dy = py - n.y, d = Math.sqrt(dx * dx + dy * dy);
+    if (dActive && d < INTERACT_DIST) { n.state = "talking"; if (Math.abs(dx) > Math.abs(dy)) n.direction = dx < 0 ? DIR_LEFT : DIR_RIGHT; else n.direction = dy < 0 ? DIR_UP : DIR_DOWN; n.patrolTarget = null; continue; }
+    if (d < NPC_FACE_PLAYER_DIST) { n.state = "idle"; if (Math.abs(dx) > Math.abs(dy)) n.direction = dx < 0 ? DIR_LEFT : DIR_RIGHT; else n.direction = dy < 0 ? DIR_UP : DIR_DOWN; n.patrolTarget = null; n.patrolCooldown = 60; continue; }
+    if (n.patrolCooldown > 0) { n.patrolCooldown--; n.state = "idle"; continue; }
+    n.patrolTimer--;
+    if (n.patrolTimer <= 0 && !n.patrolTarget) {
+      const dd = (2 + Math.random() * 2) * TILE_SIZE, a = Math.random() * Math.PI * 2, mr = 4 * TILE_SIZE;
+      const tx = Math.max(n.originX - mr, Math.min(n.originX + mr, n.originX + Math.cos(a) * dd));
+      const ty = Math.max(n.originY - mr, Math.min(n.originY + mr, n.originY + Math.sin(a) * dd));
+      const tc = Math.floor(tx / TILE_SIZE), tr = Math.floor(ty / TILE_SIZE);
+      if (tc >= 0 && tc < MAP_COLS && tr >= 0 && tr < MAP_ROWS) { const t = GAME_MAP[tr]?.[tc]; if (t !== undefined && WALKABLE.has(t)) n.patrolTarget = { x: tx, y: ty }; }
+      n.patrolTimer = 180 + Math.random() * 120;
+    }
+    if (n.patrolTarget) {
+      const tdx = n.patrolTarget.x - n.x, tdy = n.patrolTarget.y - n.y, td = Math.sqrt(tdx * tdx + tdy * tdy);
+      if (td < 2) { n.patrolTarget = null; n.patrolCooldown = 60 + Math.random() * 120; n.state = "idle"; }
+      else {
+        const mx = (tdx / td) * NPC_PATROL_SPEED, my = (tdy / td) * NPC_PATROL_SPEED;
+        const nc = Math.floor((n.x + mx + 6) / TILE_SIZE), nr = Math.floor((n.y + my + 10) / TILE_SIZE);
+        if (nc >= 0 && nc < MAP_COLS && nr >= 0 && nr < MAP_ROWS) {
+          const nt = GAME_MAP[nr]?.[nc];
+          if (nt !== undefined && WALKABLE.has(nt)) { n.x += mx; n.y += my; n.state = "walking"; if (Math.abs(mx) > Math.abs(my)) n.direction = mx < 0 ? DIR_LEFT : DIR_RIGHT; else n.direction = my < 0 ? DIR_UP : DIR_DOWN; n.walkTimer++; if (n.walkTimer >= 10) { n.walkTimer = 0; n.walkFrame++; } }
+          else { n.patrolTarget = null; n.patrolCooldown = 60; n.state = "idle"; }
+        } else { n.patrolTarget = null; n.state = "idle"; }
+      }
+    } else { n.state = "idle"; }
+  }
+}
+
+function updateParticles(particles: Particle[], wind: WindState): Particle[] {
+  return particles.map((p) => { let vx = p.vx, vy = p.vy;
+    if (p.type === "confetti") vy += 0.1; else if (p.type === "dust") { vy -= 0.01; vx *= 0.95; } else if (p.type === "sparkle") vx = Math.sin(p.life * 0.2) * 0.2; else if (p.type === "bubble") { vx = Math.sin(p.life * 0.08) * 0.3; vy = Math.min(vy, -0.15); } else if (p.type === "leaf") { vx += wind.dirX * wind.strength * 0.01; vy += 0.005; vx += Math.sin(p.life * 0.04) * 0.05; }
+    return { ...p, x: p.x + vx, y: p.y + vy, vx, vy, life: p.life - 1 };
+  }).filter((p) => p.life > 0);
 }
 
 function drawParticles(ctx: CanvasRenderingContext2D, particles: Particle[]) {
   for (const p of particles) {
-    const alpha = p.life / p.maxLife;
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, p.size, p.size);
+    const alpha = Math.min(1, p.life / (p.maxLife * 0.3));
+    ctx.globalAlpha = alpha; ctx.fillStyle = p.color;
+    if (p.type === "bubble") { ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = alpha * 0.6; ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(p.x - p.size * 0.3, p.y - p.size * 0.3, p.size * 0.3, 0, Math.PI * 2); ctx.fill(); }
+    else if (p.type === "sparkle") { const tw = Math.sin(p.life * 0.3) * 0.5 + 0.5, s = p.size * tw; ctx.beginPath(); ctx.moveTo(p.x, p.y - s); ctx.lineTo(p.x + s * 0.3, p.y); ctx.lineTo(p.x, p.y + s); ctx.lineTo(p.x - s * 0.3, p.y); ctx.closePath(); ctx.fill(); }
+    else if (p.type === "leaf") { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.life * 0.03); ctx.beginPath(); ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+    else if (p.type === "dust") { ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); }
+    else { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.life * 0.05); ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size * 0.5); ctx.restore(); }
   }
   ctx.globalAlpha = 1;
 }
@@ -1114,6 +1163,14 @@ export default function RPGQuestPage() {
   const typewriterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const zoneBannerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const interactCooldownRef = useRef<boolean>(false);
+
+  // NPC AI runtime state
+  const npcRuntimeRef = useRef<NPCRuntime[]>(
+    NPCS.map((npc) => ({ id: npc.id, x: npc.x, y: npc.y, originX: npc.x, originY: npc.y, direction: DIR_DOWN as Direction, walkFrame: 0, walkTimer: 0, state: "idle" as NPCState, idleAnimation: (["bounce", "look_around", "wave"] as NPCIdleAnim[])[Math.floor(Math.random() * 3)], patrolTimer: Math.random() * 180 + 60, patrolTarget: null, patrolCooldown: 0 }))
+  );
+  const windRef = useRef<WindState>({ dirX: 1, dirY: 0.2, strength: 0.5, timer: 0, changeCooldown: 1800 + Math.random() * 1800 });
+  const sprintingRef = useRef<boolean>(false);
+  const interactFlashRef = useRef<number>(0);
 
   // Touch state for mobile d-pad
   const touchDirRef = useRef<{ up: boolean; down: boolean; left: boolean; right: boolean }>({
@@ -1270,6 +1327,7 @@ export default function RPGQuestPage() {
       return;
     }
 
+    interactFlashRef.current = 20;
     const gs = gameStateRef.current;
     const px = gs.player.x;
     const py = gs.player.y;
@@ -1512,19 +1570,22 @@ export default function RPGQuestPage() {
       if (overlay === "none" || overlay === "zone_banner") {
         const keys = keysRef.current;
         const touch = touchDirRef.current;
+        const isSprinting = keys.has("shift");
+        sprintingRef.current = isSprinting;
+        const currentSpeed = PLAYER_SPEED * (isSprinting ? PLAYER_SPRINT_MULT : 1);
         let dx = 0;
         let dy = 0;
 
-        if (keys.has("w") || keys.has("arrowup") || touch.up) dy -= PLAYER_SPEED;
-        if (keys.has("s") || keys.has("arrowdown") || touch.down) dy += PLAYER_SPEED;
-        if (keys.has("a") || keys.has("arrowleft") || touch.left) dx -= PLAYER_SPEED;
-        if (keys.has("d") || keys.has("arrowright") || touch.right) dx += PLAYER_SPEED;
+        if (keys.has("w") || keys.has("arrowup") || touch.up) dy -= currentSpeed;
+        if (keys.has("s") || keys.has("arrowdown") || touch.down) dy += currentSpeed;
+        if (keys.has("a") || keys.has("arrowleft") || touch.left) dx -= currentSpeed;
+        if (keys.has("d") || keys.has("arrowright") || touch.right) dx += currentSpeed;
 
         // Diagonal normalization
         if (dx !== 0 && dy !== 0) {
           const norm = Math.sqrt(dx * dx + dy * dy);
-          dx = (dx / norm) * PLAYER_SPEED;
-          dy = (dy / norm) * PLAYER_SPEED;
+          dx = (dx / norm) * currentSpeed;
+          dy = (dy / norm) * currentSpeed;
         }
 
         const isMoving = dx !== 0 || dy !== 0;
@@ -1550,11 +1611,13 @@ export default function RPGQuestPage() {
           }
 
           // Walk animation
+          const walkSpeed = isSprinting ? 4 : 8;
           gs.player.walkTimer++;
-          if (gs.player.walkTimer >= 8) {
+          if (gs.player.walkTimer >= walkSpeed) {
             gs.player.walkTimer = 0;
             gs.player.walkFrame++;
           }
+          if (frame % (isSprinting ? 3 : 6) === 0) { const dustX = gs.player.x - gs.camera.x + 8, dustY = gs.player.y - gs.camera.y + 18; particlesRef.current.push(...createDustParticles(dustX, dustY, isSprinting ? 3 : 1)); }
         } else {
           gs.player.walkTimer = 0;
         }
@@ -1638,8 +1701,16 @@ export default function RPGQuestPage() {
         updateQuests();
       }
 
-      // 7. Update particles
-      particlesRef.current = updateParticles(particlesRef.current);
+      // 7. Update NPC AI
+      updateNPCRuntime(npcRuntimeRef.current, gs.player.x, gs.player.y, dialogueActiveRef.current);
+      for (const nrt of npcRuntimeRef.current) { const npc = NPCS.find(n => n.id === nrt.id); if (npc) { npc.x = nrt.x; npc.y = nrt.y; } }
+      updateWind(windRef.current);
+      particlesRef.current = updateParticles(particlesRef.current, windRef.current);
+      // Ambient particles
+      if (frame % 40 === 0) { for (const ch of chestsRef.current) { if (ch.opened) continue; const chsx = ch.x - gs.camera.x + 10, chsy = ch.y - gs.camera.y; if (chsx > -20 && chsx < canvas.width + 20 && chsy > -20 && chsy < canvas.height + 20) particlesRef.current.push(...createSparkleParticles(chsx, chsy, 1)); } }
+      if (frame % 60 === 0) { const rc = playerCol + Math.floor((Math.random() - 0.5) * 12), rr = playerRow + Math.floor((Math.random() - 0.5) * 10); if (rc >= 0 && rc < MAP_COLS && rr >= 0 && rr < MAP_ROWS && GAME_MAP[rr]?.[rc] === WATER) particlesRef.current.push(createBubbleParticle(rc * TILE_SIZE - gs.camera.x + TILE_SIZE / 2, rr * TILE_SIZE - gs.camera.y + TILE_SIZE)); }
+      if (frame % 90 === 0) { const rc2 = playerCol + Math.floor((Math.random() - 0.5) * 14), rr2 = playerRow + Math.floor((Math.random() - 0.5) * 10); if (rc2 >= 0 && rc2 < MAP_COLS && rr2 >= 0 && rr2 < MAP_ROWS && GAME_MAP[rr2]?.[rc2] === TREE) particlesRef.current.push(createLeafParticle(rc2 * TILE_SIZE - gs.camera.x + TILE_SIZE / 2, rr2 * TILE_SIZE - gs.camera.y, windRef.current)); }
+      if (interactFlashRef.current > 0) interactFlashRef.current--;
 
       // ============ RENDER ============
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1686,12 +1757,12 @@ export default function RPGQuestPage() {
         }
       }
 
-      // Draw NPCs
-      for (const npc of NPCS) {
-        const nc = Math.floor(npc.x / TILE_SIZE);
-        const nr = Math.floor(npc.y / TILE_SIZE);
+      // Draw NPCs with AI state
+      for (let ni = 0; ni < NPCS.length; ni++) {
+        const npc = NPCS[ni]; const nrt = npcRuntimeRef.current[ni];
+        const nc = Math.floor(nrt.x / TILE_SIZE); const nr = Math.floor(nrt.y / TILE_SIZE);
         if (nc >= startCol - 1 && nc < endCol + 1 && nr >= startRow - 1 && nr < endRow + 1) {
-          drawNPC(ctx, npc, gs.camera.x, gs.camera.y, frame);
+          drawNPC(ctx, npc, nrt, gs.camera.x, gs.camera.y, frame, gs.player.x, gs.player.y, gs.npcsSpoken, gs.questsCompleted);
         }
       }
 
@@ -1707,6 +1778,9 @@ export default function RPGQuestPage() {
         gs.player.moving
       );
 
+      // Interaction flash
+      if (interactFlashRef.current > 0) { const fa = interactFlashRef.current / 20; ctx.globalAlpha = fa; ctx.fillStyle = "#fbbf24"; ctx.font = "bold 14px monospace"; ctx.textAlign = "center"; ctx.fillText("!", playerScreenX + 8, playerScreenY - 8); ctx.textAlign = "start"; ctx.globalAlpha = 1; }
+      if (sprintingRef.current && gs.player.moving) { ctx.strokeStyle = "rgba(255,255,255,0.15)"; ctx.lineWidth = 1; for (let sl = 0; sl < 3; sl++) { const slx = playerScreenX + 8 + (Math.random() - 0.5) * 10, sly = playerScreenY + 5 + sl * 6; const dir = gs.player.direction; const lx = dir === DIR_LEFT ? 8 : dir === DIR_RIGHT ? -8 : 0, ly = dir === DIR_UP ? 8 : dir === DIR_DOWN ? -8 : 0; ctx.beginPath(); ctx.moveTo(slx, sly); ctx.lineTo(slx + lx, sly + ly); ctx.stroke(); } }
       // Draw particles
       drawParticles(ctx, particlesRef.current);
 
@@ -1912,6 +1986,9 @@ export default function RPGQuestPage() {
     particlesRef.current = [];
     lastZoneRef.current = null;
     dialogueActiveRef.current = false;
+    npcRuntimeRef.current = NPCS.map((npc) => ({ id: npc.id, x: npc.x, y: npc.y, originX: npc.x, originY: npc.y, direction: DIR_DOWN as Direction, walkFrame: 0, walkTimer: 0, state: "idle" as NPCState, idleAnimation: (["bounce", "look_around", "wave"] as NPCIdleAnim[])[Math.floor(Math.random() * 3)], patrolTimer: Math.random() * 180 + 60, patrolTarget: null, patrolCooldown: 0 }));
+    windRef.current = { dirX: 1, dirY: 0.2, strength: 0.5, timer: 0, changeCooldown: 1800 + Math.random() * 1800 };
+    interactFlashRef.current = 0; sprintingRef.current = false;
     setQuests(createQuests());
     setBadges([]);
     setBadgeEmojis({});
