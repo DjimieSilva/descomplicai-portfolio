@@ -1769,12 +1769,10 @@ const skipTypewriter = useCallback(() => {
         const touch = touchDirRef.current;
         const isSprinting = keys.has("shift");
         sprintingRef.current = isSprinting;
-        const currentSpeed = PLAYER_SPEED * (isSprinting ? PLAYER_SPRINT_MULT : 1);
+        const crystalMult = (gs.crystalSpeedEndTime > Date.now()) ? 2 : 1;
+        const currentSpeed = PLAYER_SPEED * (isSprinting ? PLAYER_SPRINT_MULT : 1) * crystalMult;
         let dx = 0;
         let dy = 0;
-
-        const speedMult = (gs.crystalSpeedEndTime > Date.now()) ? 2 : 1;
-        const currentSpeed = PLAYER_SPEED * speedMult;
 
         if (keys.has("w") || keys.has("arrowup") || touch.up) dy -= currentSpeed;
         if (keys.has("s") || keys.has("arrowdown") || touch.down) dy += currentSpeed;
