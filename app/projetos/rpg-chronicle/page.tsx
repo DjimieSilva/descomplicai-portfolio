@@ -27,11 +27,11 @@ import {
 const TOTAL_HEIGHT = 12000;
 const CHAPTER_RANGES = [
   { start: 0, end: 1200, label: "Portal" },
-  { start: 1200, end: 2800, label: "O Inicio" },
+  { start: 1200, end: 2800, label: "O Início" },
   { start: 2800, end: 4200, label: "A Oficina" },
   { start: 4200, end: 5800, label: "Vila dos Sabores" },
-  { start: 5800, end: 7200, label: "Distrito da Saude" },
-  { start: 7200, end: 9000, label: "Laboratorio" },
+  { start: 5800, end: 7200, label: "Distrito da Saúde" },
+  { start: 7200, end: 9000, label: "Laboratório" },
   { start: 9000, end: 10200, label: "A Jornada" },
   { start: 10200, end: 12000, label: "O Topo" },
 ] as const;
@@ -39,7 +39,7 @@ const CHAPTER_RANGES = [
 const RESTAURANT_DATA = [
   {
     emoji: "\u{1F372}",
-    name: "Cacarola",
+    name: "Caçarola",
     desc: "Cozinha tradicional portuguesa com alma",
     slug: "cacarola",
     color: "#D97706",
@@ -60,22 +60,22 @@ const RESTAURANT_DATA = [
   },
   {
     emoji: "\u2615",
-    name: "Cafe Praca 18",
-    desc: "O cafe iconico da praca",
+    name: "Café Praça 18",
+    desc: "O café icónico da praça",
     slug: "cafe-praca-18",
     color: "#92400E",
   },
   {
     emoji: "\u{1F99E}",
     name: "Marisqueira Rosa Amelia",
-    desc: "Marisco fresco ha geracoes",
+    desc: "Marisco fresco há gerações",
     slug: "marisqueira-rosa-amelia",
     color: "#0E7490",
   },
   {
     emoji: "\u{1F3C4}\u200D\u2642\u{FE0F}",
     name: "Nalu Cabedelo",
-    desc: "Surf cafe a beira-mar",
+    desc: "Surf café à beira-mar",
     slug: "nalu-cabedelo",
     color: "#0D9488",
   },
@@ -109,7 +109,7 @@ const RESTAURANT_DATA = [
   },
   {
     emoji: "\u{1F370}",
-    name: "Sabor Abencoado",
+    name: "Sabor Abençoado",
     desc: "Pastelaria artesanal",
     slug: "sabor-abencoado",
     color: "#DB2777",
@@ -117,7 +117,7 @@ const RESTAURANT_DATA = [
   {
     emoji: "\u{1F355}",
     name: "Zeff Pizza",
-    desc: "Pizza napolitana autentica",
+    desc: "Pizza napolitana autêntica",
     slug: "zeff-pizza",
     color: "#DC2626",
   },
@@ -138,13 +138,13 @@ const RESTAURANT_DATA = [
   {
     emoji: "\u{1F3AA}",
     name: "O Picadeiro",
-    desc: "Tapas com espetaculo",
+    desc: "Tapas com espetáculo",
     slug: "o-picadeiro",
     color: "#E11D48",
   },
   {
     emoji: "\u{1F30A}",
-    name: "Pe na Areia",
+    name: "Pé na Areia",
     desc: "Restaurante de praia",
     slug: "pe-na-areia",
     color: "#0891B2",
@@ -152,7 +152,7 @@ const RESTAURANT_DATA = [
   {
     emoji: "\u{1F3F0}",
     name: "Ribeirosanto",
-    desc: "Cozinha de autor historica",
+    desc: "Cozinha de autor histórica",
     slug: "ribeirosanto",
     color: "#4338CA",
   },
@@ -189,15 +189,15 @@ const MORE_RESTAURANT_DATA = [
   },
   {
     emoji: "\u{1F30A}",
-    name: "Maregrafo",
-    desc: "Fine dining a beira-mar",
+    name: "Marégrafo",
+    desc: "Fine dining à beira-mar",
     slug: "maregrafo",
     color: "#1E40AF",
   },
   {
     emoji: "\u{1F377}",
     name: "Rota dos Vinhos",
-    desc: "Enoteca & degustacao",
+    desc: "Enoteca & degustação",
     slug: "rota-dos-vinhos",
     color: "#9F1239",
   },
@@ -221,13 +221,13 @@ const CLINIC_DATA = [
   {
     emoji: "\u{1F9B7}",
     name: "DentalKid",
-    desc: "O dentista das criancas",
+    desc: "O dentista das crianças",
     slug: "dentalkid",
     color: "#06B6D4",
   },
   {
     emoji: "\u{1F451}",
-    name: "Clinica Vasco da Gama",
+    name: "Clínica Vasco da Gama",
     desc: "Premium dental",
     slug: "clinica-vasco-da-gama",
     color: "#8B5CF6",
@@ -249,28 +249,28 @@ const CLINIC_DATA = [
   {
     emoji: "\u{1F33F}",
     name: "Premium Clinica",
-    desc: "Foco em prevencao",
+    desc: "Foco em prevenção",
     slug: "premium-clinica-dentaria",
     color: "#10B981",
   },
   {
     emoji: "\u{1F52C}",
-    name: "Clinica Tamargueira",
+    name: "Clínica Tamargueira",
     desc: "Implantologia",
     slug: "clinica-tamargueira",
     color: "#6366F1",
   },
   {
     emoji: "\u{1F3E5}",
-    name: "Clinica de Quiaios",
-    desc: "Familiar e acessivel",
+    name: "Clínica de Quiaios",
+    desc: "Familiar e acessível",
     slug: "clinica-dentaria-quiaios",
     color: "#EC4899",
   },
   {
     emoji: "\u{1F9B7}",
-    name: "Alba Saude",
-    desc: "Estetica dental moderna",
+    name: "Alba Saúde",
+    desc: "Estética dental moderna",
     slug: "alba-saude-dentaria",
     color: "#14B8A6",
   },
@@ -290,7 +290,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F941}",
     name: "Drum Machine",
-    desc: "Bateria electronica",
+    desc: "Bateria eletrónica",
     slug: "drum-machine",
     category: "musica",
     color: "#06B6D4",
@@ -308,7 +308,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F3B6}",
     name: "Music Box",
-    desc: "Caixinha de musica",
+    desc: "Caixinha de música",
     slug: "music-box",
     category: "musica",
     color: "#06B6D4",
@@ -327,7 +327,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F3A8}",
     name: "Generative Art",
-    desc: "Arte generativa com codigo",
+    desc: "Arte generativa com código",
     slug: "generative-art",
     category: "criativo",
     color: "#D946EF",
@@ -382,7 +382,7 @@ const TOOL_DATA = [
   {
     emoji: "\u265F\u{FE0F}",
     name: "Chess",
-    desc: "Xadrez classico",
+    desc: "Xadrez clássico",
     slug: "chess",
     category: "jogos",
     color: "#22C55E",
@@ -391,7 +391,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F40D}",
     name: "Snake",
-    desc: "O classico jogo da cobra",
+    desc: "O clássico jogo da cobra",
     slug: "snake-game",
     category: "jogos",
     color: "#22C55E",
@@ -400,7 +400,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F9E0}",
     name: "Memory",
-    desc: "Jogo da memoria",
+    desc: "Jogo da memória",
     slug: "memory-game",
     category: "jogos",
     color: "#22C55E",
@@ -409,7 +409,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F1F5}\u{1F1F9}",
     name: "Quiz Portugal",
-    desc: "Quao bem conheces PT?",
+    desc: "Quão bem conheces PT?",
     slug: "quiz-portugal",
     category: "jogos",
     color: "#22C55E",
@@ -427,7 +427,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F92A}",
     name: "Emoji Mixer",
-    desc: "Mistura emojis unicos",
+    desc: "Mistura emojis únicos",
     slug: "emoji-mixer",
     category: "jogos",
     color: "#22C55E",
@@ -446,7 +446,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F50D}",
     name: "Regex Tester",
-    desc: "Testa expressoes regulares",
+    desc: "Testa expressões regulares",
     slug: "regex-tester",
     category: "dev",
     color: "#F59E0B",
@@ -492,7 +492,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F4C8}",
     name: "Habit Tracker",
-    desc: "Rastreador de habitos",
+    desc: "Rastreador de hábitos",
     slug: "habit-tracker",
     category: "produtividade",
     color: "#3B82F6",
@@ -510,7 +510,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F4DA}",
     name: "Flashcards",
-    desc: "Cartoes de memoria",
+    desc: "Cartões de memória",
     slug: "flashcards",
     category: "produtividade",
     color: "#3B82F6",
@@ -528,7 +528,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F3B0}",
     name: "Decision Wheel",
-    desc: "Roda de decisoes",
+    desc: "Roda de decisões",
     slug: "decision-wheel",
     category: "produtividade",
     color: "#3B82F6",
@@ -537,7 +537,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F4DD}",
     name: "Mood Journal",
-    desc: "Diario de humor diario",
+    desc: "Diário de humor",
     slug: "mood-journal",
     category: "produtividade",
     color: "#3B82F6",
@@ -556,7 +556,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F5A5}\u{FE0F}",
     name: "Typing Speed",
-    desc: "Teste de velocidade de digitacao",
+    desc: "Teste de velocidade de digitação",
     slug: "typing-speed-test",
     category: "jogos",
     color: "#22C55E",
@@ -574,7 +574,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F4E1}",
     name: "Morse Code",
-    desc: "Tradutor de codigo Morse",
+    desc: "Tradutor de código Morse",
     slug: "morse-code",
     category: "dev",
     color: "#F59E0B",
@@ -601,7 +601,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F9D8}",
     name: "Breathing Exercise",
-    desc: "Exercicios de respiracao",
+    desc: "Exercícios de respiração",
     slug: "breathing-exercise",
     category: "produtividade",
     color: "#3B82F6",
@@ -612,14 +612,14 @@ const TOOL_DATA = [
     name: "AI Chat Sim",
     desc: "Simulador de chat IA",
     slug: "ai-chat-sim",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "code",
   },
   {
     emoji: "\u{1F9EE}",
     name: "Calculator",
-    desc: "Calculadora cientifica",
+    desc: "Calculadora científica",
     slug: "calculator",
     category: "dev",
     color: "#F59E0B",
@@ -630,7 +630,7 @@ const TOOL_DATA = [
     name: "Recipe Finder",
     desc: "Encontra receitas por ingredientes",
     slug: "recipe-finder",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "code",
   },
@@ -638,7 +638,7 @@ const TOOL_DATA = [
   {
     emoji: "\u269B\u{FE0F}",
     name: "Periodic Table",
-    desc: "Tabela periodica interativa",
+    desc: "Tabela periódica interativa",
     slug: "periodic-table",
     category: "ciencia",
     color: "#A855F7",
@@ -665,7 +665,7 @@ const TOOL_DATA = [
   {
     emoji: "\u2728",
     name: "Particle Sim",
-    desc: "Simulador de particulas",
+    desc: "Simulador de partículas",
     slug: "particle-sim",
     category: "ciencia",
     color: "#A855F7",
@@ -713,7 +713,7 @@ const TOOL_DATA = [
     name: "Aurora Borealis",
     desc: "Aurora boreal interativa",
     slug: "aurora-borealis",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "gradient",
   },
@@ -722,7 +722,7 @@ const TOOL_DATA = [
     name: "Weather Mood",
     desc: "Clima e emocoes",
     slug: "weather-mood",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "gradient",
   },
@@ -731,16 +731,16 @@ const TOOL_DATA = [
     name: "Globe Explorer",
     desc: "Explorador do globo",
     slug: "globe-explorer",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "gradient",
   },
   {
     emoji: "\u{1F570}\u{FE0F}",
     name: "World Clock",
-    desc: "Relogios mundiais",
+    desc: "Relógios mundiais",
     slug: "world-clock",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "code",
   },
@@ -749,7 +749,7 @@ const TOOL_DATA = [
     name: "Mapa Portugal",
     desc: "Mapa interativo de PT",
     slug: "mapa-portugal",
-    category: "experiencias",
+    category: "experiências",
     color: "#EAB308",
     preview: "gradient",
   },
@@ -758,7 +758,7 @@ const TOOL_DATA = [
 const TIMELINE_DATA = [
   {
     year: "2019",
-    title: "IST \u2014 Inicio do caminho",
+    title: "IST \u2014 Início do caminho",
     emoji: "\u{1F393}",
   },
   {
@@ -768,12 +768,12 @@ const TIMELINE_DATA = [
   },
   {
     year: "2021",
-    title: "Fraqtory \u2014 Experiencia em startup",
+    title: "Fraqtory \u2014 Experiência em startup",
     emoji: "\u{1F680}",
   },
   {
     year: "2022",
-    title: "Foco em IA e automacao",
+    title: "Foco em IA e automação",
     emoji: "\u{1F916}",
   },
   {
@@ -783,7 +783,7 @@ const TIMELINE_DATA = [
   },
   {
     year: "2024",
-    title: "MSc concluido + Descomplicai nasceu",
+    title: "MSc concluído + Descomplicai nasceu",
     emoji: "\u{1F331}",
   },
   {
@@ -793,20 +793,20 @@ const TIMELINE_DATA = [
   },
   {
     year: "2026",
-    title: "109 paginas numa noite. O futuro e agora.",
+    title: "109 páginas numa noite. O futuro é agora.",
     emoji: "\u26A1",
   },
 ] as const;
 
 const CATEGORY_LABELS: Record<string, string> = {
   all: "Todos",
-  musica: "\u{1F3B5} Musica",
+  musica: "\u{1F3B5} Música",
   criativo: "\u{1F3A8} Criativo",
   jogos: "\u{1F3AE} Jogos",
   dev: "\u{1F6E0}\u{FE0F} Dev Tools",
   produtividade: "\u{1F4CA} Produtividade",
-  ciencia: "\u{1F52C} Ciencia",
-  experiencias: "\u{1F30D} Experiencias",
+  ciencia: "\u{1F52C} Ciência",
+  experiencias: "\u{1F30D} Experiências",
 };
 
 /* =============================================================================
@@ -844,15 +844,15 @@ const ACHIEVEMENTS: Achievement[] = [
   {
     id: "primeiro-capitulo",
     icon: "\u{1F31F}",
-    name: "Primeiro Capitulo",
-    description: "Scrollar para la do Capitulo 0",
+    name: "Primeiro Capítulo",
+    description: "Scrollar para lá do Capítulo 0",
     hiddenDescription: "???",
   },
   {
     id: "leitor-avido",
     icon: "\u{1F4D6}",
-    name: "Leitor Avido",
-    description: "Explorar todos os 8 capitulos",
+    name: "Leitor Ávido",
+    description: "Explorar todos os 8 capítulos",
     hiddenDescription: "???",
   },
   {
@@ -866,7 +866,7 @@ const ACHIEVEMENTS: Achievement[] = [
     id: "speed-reader",
     icon: "\u26A1",
     name: "Speed Reader",
-    description: "Completar todos os capitulos em menos de 2 minutos",
+    description: "Completar todos os capítulos em menos de 2 minutos",
     hiddenDescription: "???",
   },
   {
@@ -886,7 +886,7 @@ const ACHIEVEMENTS: Achievement[] = [
   {
     id: "noctambulo",
     icon: "\u{1F319}",
-    name: "Noctambulo",
+    name: "Noctâmbulo",
     description: "Visitar o site entre as 22:00 e as 06:00",
     hiddenDescription: "???",
   },
@@ -900,8 +900,8 @@ const ACHIEVEMENTS: Achievement[] = [
   {
     id: "volta-ao-inicio",
     icon: "\u{1F504}",
-    name: "Volta ao Inicio",
-    description: "Usar o botao de voltar ao topo",
+    name: "Volta ao Início",
+    description: "Usar o botão de voltar ao topo",
     hiddenDescription: "???",
   },
   {
@@ -3566,19 +3566,19 @@ const MiniGameMemory = memo(function MiniGameMemory() {
     <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Memoria de receitas">
       <div className="rounded-2xl overflow-hidden border-2 shadow-lg" style={{ borderColor: "#D97706", background: "linear-gradient(135deg, #FFFBEB, #FEF3C7)" }}>
         <div className="px-4 py-2 flex items-center justify-between" style={{ background: "linear-gradient(90deg, #D97706, #B45309)" }}>
-          <span className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">{"\u{1F9E0}"} Memoria de Sabores{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
+          <span className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">{"\u{1F9E0}"} Memória de Sabores{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
           <span className="text-white/70 text-[10px]">Mini-jogo</span>
         </div>
         <div className="p-4" style={{ minHeight: "280px" }}>
           {!started ? (
             <div className="flex flex-col items-center justify-center h-[260px] gap-3">
               <p className="text-gray-600 text-sm text-center">Encontra os pares de pratos portugueses!</p>
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #D97706, #B45309)" }} aria-label="Comecar jogo de memoria">Jogar</motion.button>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #D97706, #B45309)" }} aria-label="Comecar jogo de memória">Jogar</motion.button>
             </div>
           ) : completed ? (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
               <span className="text-4xl">{"\u{1F389}"}</span>
-              <p className="text-gray-800 font-bold text-lg" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Parabens!</p>
+              <p className="text-gray-800 font-bold text-lg" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Parabéns!</p>
               <div className="flex gap-4 text-sm text-gray-600"><span>{moves} jogadas</span><span>{timer}s</span></div>
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-4 py-1.5 rounded-full text-white text-xs font-medium mt-2" style={{ background: "#D97706" }}>Jogar outra vez</motion.button>
             </motion.div>
@@ -3648,7 +3648,7 @@ const MiniGameDiagnosis = memo(function MiniGameDiagnosis() {
   }, [selectedSymptom]);
 
   return (
-    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Diagnostico de problemas">
+    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Diagnóstico de problemas">
       <div className="rounded-2xl overflow-hidden border-2 shadow-lg" style={{ borderColor: "#93C5FD", background: "linear-gradient(135deg, #EFF6FF, #DBEAFE)" }}>
         <div className="px-4 py-2 flex items-center justify-between" style={{ background: "linear-gradient(90deg, #3B82F6, #2563EB)" }}>
           <span className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">{"\u{1FA7A}"} Diagnostico Digital{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
@@ -3657,19 +3657,19 @@ const MiniGameDiagnosis = memo(function MiniGameDiagnosis() {
         <div className="p-4" style={{ minHeight: "280px" }}>
           {!started ? (
             <div className="flex flex-col items-center justify-center h-[260px] gap-3">
-              <p className="text-gray-600 text-sm text-center">Liga o sintoma a solucao correta!</p>
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #3B82F6, #2563EB)" }} aria-label="Comecar jogo de diagnostico">Jogar</motion.button>
+              <p className="text-gray-600 text-sm text-center">Liga o sintoma à solução correta!</p>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #3B82F6, #2563EB)" }} aria-label="Comecar jogo de diagnóstico">Jogar</motion.button>
             </div>
           ) : completed ? (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
               <span className="text-4xl">{"\u{1F389}"}</span>
-              <p className="text-gray-800 font-bold text-lg" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Diagnostico completo!</p>
+              <p className="text-gray-800 font-bold text-lg" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Diagnóstico completo!</p>
               <p className="text-gray-500 text-sm">Todos os problemas resolvidos</p>
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-4 py-1.5 rounded-full text-white text-xs font-medium mt-2" style={{ background: "#3B82F6" }}>Jogar outra vez</motion.button>
             </motion.div>
           ) : (
             <div className="space-y-3">
-              <p className="text-xs text-gray-400 text-center mb-2">Seleciona um sintoma, depois clica na solucao</p>
+              <p className="text-xs text-gray-400 text-center mb-2">Seleciona um sintoma, depois clica na solução</p>
               {DIAGNOSIS_PAIRS.map((pair) => (
                 <div key={pair.id} className="flex items-center gap-2">
                   <motion.button whileTap={{ scale: 0.97 }} onClick={() => handleSymptomClick(pair.id)} className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border-2 ${matches[pair.id] ? "bg-green-50 border-green-400 text-green-700" : selectedSymptom === pair.id ? "bg-blue-50 border-blue-400 text-blue-700 ring-2 ring-blue-300" : "bg-white border-gray-200 text-gray-700 hover:border-blue-300"}`} disabled={!!matches[pair.id]} aria-label={`Sintoma: ${pair.symptom}`}>{pair.symptom}</motion.button>
@@ -3747,7 +3747,7 @@ const MiniGameCode = memo(function MiniGameCode() {
   const progressPct = ((currentIdx + (typed.length / (currentSnippet.length || 1))) / CODE_SNIPPETS.length) * 100;
 
   return (
-    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Desafio de codigo">
+    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Desafio de código">
       <div className="rounded-2xl overflow-hidden border shadow-lg" style={{ borderColor: "#06B6D4", background: "#0F172A" }}>
         <div className="px-4 py-2 flex items-center justify-between bg-[#1E293B] border-b border-white/10">
           <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500" /><div className="w-2.5 h-2.5 rounded-full bg-yellow-500" /><div className="w-2.5 h-2.5 rounded-full bg-green-500" /></div>
@@ -3757,14 +3757,14 @@ const MiniGameCode = memo(function MiniGameCode() {
         <div className="p-4 font-mono" style={{ minHeight: "280px" }}>
           {!started ? (
             <div className="flex flex-col items-center justify-center h-[260px] gap-3">
-              <p className="text-gray-400 text-sm text-center font-sans">Escreve o codigo o mais rapido possivel!</p>
+              <p className="text-gray-400 text-sm text-center font-sans">Escreve o codigo o mais rápido possível!</p>
               <p className="text-gray-600 text-xs text-center font-sans">5 snippets curtos</p>
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md font-sans" style={{ background: "linear-gradient(135deg, #06B6D4, #0891B2)" }} aria-label="Comecar desafio de codigo">Jogar</motion.button>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md font-sans" style={{ background: "linear-gradient(135deg, #06B6D4, #0891B2)" }} aria-label="Comecar desafio de código">Jogar</motion.button>
             </div>
           ) : completed ? (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
               <span className="text-4xl">{"\u{1F389}"}</span>
-              <p className="text-cyan-300 font-bold text-lg font-sans" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Concluido!</p>
+              <p className="text-cyan-300 font-bold text-lg font-sans" style={{ fontFamily: "var(--font-sora), sans-serif" }}>Concluído!</p>
               <div className="flex gap-4 text-sm text-gray-400 font-sans"><span>WPM: {wpm}</span><span>Precisao: {accuracy}%</span><span>Tempo: {elapsed}s</span></div>
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-4 py-1.5 rounded-full text-white text-xs font-medium mt-2 font-sans" style={{ background: "#06B6D4" }}>Jogar outra vez</motion.button>
             </motion.div>
@@ -4186,10 +4186,10 @@ const MiniTerminal = memo(function MiniTerminal({
           response = new Date().toLocaleString("pt-PT");
           break;
         case "motto":
-          response = "O futuro e humano. Keep building. Share love.";
+          response = "O futuro é humano. Keep building. Share love.";
           break;
         default:
-          response = "comando nao encontrado: " + trimmed;
+          response = "comando não encontrado: " + trimmed;
       }
       setLines((prev) => [...prev, "$ " + cmd, response, ""]);
       setInput("");
@@ -4254,13 +4254,13 @@ const MiniTerminal = memo(function MiniTerminal({
    ============================================================================= */
 
 const PORTUGUESE_QUOTES = [
-  "Quem nao arrisca, nao petisca!",
-  "A pressa e inimiga da perfeicao.",
-  "Agua mole em pedra dura, tanto bate ate que fura.",
-  "De grao em grao, enche a galinha o papo.",
-  "Mais vale um passaro na mao do que dois a voar.",
-  "O saber nao ocupa lugar.",
-  "Cada cabeca, sua sentenca.",
+  "Quem não arrisca, não petisca!",
+  "A pressa é inimiga da perfeição.",
+  "Água mole em pedra dura, tanto bate ate que fura.",
+  "De grão em grão, enche a galinha o papo.",
+  "Mais vale um pássaro na mão do que dois a voar.",
+  "O saber não ocupa lugar.",
+  "Cada cabeça, sua sentença.",
   "Devagar se vai ao longe.",
 ];
 
@@ -4468,7 +4468,7 @@ const SoundToggle = memo(function SoundToggle() {
             exit={{ opacity: 0, x: -5 }}
             className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-2 rounded-lg bg-gray-900/90 backdrop-blur-sm text-white text-xs whitespace-nowrap border border-white/10"
           >
-            Em breve: Experiencia com som {"\uD83C\uDFB5"}
+            Em breve: Experiência com som {"\uD83C\uDFB5"}
           </motion.div>
         )}
       </AnimatePresence>
@@ -4499,7 +4499,7 @@ const CompletionBadge = memo(function CompletionBadge({
           className="text-sm font-bold text-amber-300"
           style={{ fontFamily: "var(--font-sora), sans-serif" }}
         >
-          Exploracao Completa!
+          Exploração Completa!
         </span>
       </div>
     </motion.div>
@@ -4519,12 +4519,12 @@ const KeyboardShortcuts = memo(function KeyboardShortcuts({
 }) {
   if (!open) return null;
   const shortcuts = [
-    { key: "1-8", desc: "Saltar para o capitulo" },
+    { key: "1-8", desc: "Saltar para o capítulo" },
     { key: "\u2191 / \u2193", desc: "Scroll 200px" },
     { key: "Home", desc: "Ir para o topo" },
     { key: "End", desc: "Ir para o fim" },
     { key: "?", desc: "Mostrar atalhos" },
-    { key: "Esc", desc: "Fechar dialogo" },
+    { key: "Esc", desc: "Fechar diálogo" },
   ];
   return (
     <motion.div
@@ -4681,7 +4681,7 @@ const HeartbeatEasterEgg = memo(function HeartbeatEasterEgg() {
               >
                 {"\uD83D\uDC93"}
               </motion.span>
-              O codigo esta vivo!
+              O código está vivo!
               <div
                 className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0"
                 style={{
@@ -4758,7 +4758,7 @@ const ChapterPortal = memo(function ChapterPortal({
   });
 
   const portalStats = [
-    { label: "109 Paginas", delay: 0 },
+    { label: "109 Páginas", delay: 0 },
     { label: "55+ Projetos", delay: 0.1 },
     { label: "52K+ Linhas", delay: 0.2 },
   ];
@@ -4928,7 +4928,7 @@ const ChapterPortal = memo(function ChapterPortal({
           >
             <p className="text-base sm:text-lg md:text-xl max-w-xl mx-auto">
               <TypingText
-                text="Uma jornada pelo universo da inteligencia artificial"
+                text="Uma jornada pelo universo da inteligência artificial"
                 active={subtitleActive}
               />
             </p>
@@ -4993,7 +4993,7 @@ const ChapterPortal = memo(function ChapterPortal({
                 ease: "easeInOut",
               }}
             >
-              Desce para comecar \u2193
+              Desce para começar \u2193
             </motion.p>
           </motion.div>
         </div>
@@ -5064,7 +5064,7 @@ const ChapterInicio = memo(function ChapterInicio({
     { emoji: "\u{1F3E0}", text: "Fuzeta, Algarve \u2192 Figueira da Foz" },
     {
       emoji: "\u{1F393}",
-      text: "MSc Engenharia \u2014 Instituto Superior Tecnico",
+      text: "MSc Engenharia \u2014 Instituto Superior Técnico",
     },
     { emoji: "\u{1F4A1}", text: "Fundador da Descomplicai" },
   ];
@@ -5073,17 +5073,17 @@ const ChapterInicio = memo(function ChapterInicio({
     {
       emoji: "\u{1F91D}",
       title: "Humanos Primeiro",
-      desc: "A tecnologia e o meio, nao o fim.",
+      desc: "A tecnologia é o meio, não o fim.",
     },
     {
       emoji: "\u{1F30A}",
-      title: "Vida Autentica",
-      desc: "Surf, natureza, codigo com proposito.",
+      title: "Vida Autêntica",
+      desc: "Surf, natureza, código com propósito.",
     },
     {
       emoji: "\u2764\uFE0F",
-      title: "Amor no Codigo",
-      desc: "Cada linha escrita com intencao.",
+      title: "Amor no Código",
+      desc: "Cada linha escrita com intenção.",
     },
   ];
 
@@ -5254,8 +5254,8 @@ const ChapterInicio = memo(function ChapterInicio({
                 <SpeechBubble
                   text={
                     showMantra
-                      ? "O futuro e humano."
-                      : "Ola! Sou o Jaime."
+                      ? "O futuro é humano."
+                      : "Olá! Sou o Jaime."
                   }
                 />
               </div>
@@ -5410,9 +5410,9 @@ const ChapterOficina = memo(function ChapterOficina({
   ];
 
   const stats = [
-    { value: 109, suffix: "", label: "Paginas criadas" },
+    { value: 109, suffix: "", label: "Páginas criadas" },
     { value: 55, suffix: "+", label: "Projetos completos" },
-    { value: 52, suffix: "K+", label: "Linhas de codigo" },
+    { value: 52, suffix: "K+", label: "Linhas de código" },
     { value: 1, suffix: "", label: "Noite para criar tudo" },
   ];
 
@@ -5580,7 +5580,7 @@ const ChapterOficina = memo(function ChapterOficina({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <SpeechBubble text="Estas sao as ferramentas. Agora vou mostrar-te o que construi com elas." />
+                  <SpeechBubble text="Estas são as ferramentas. Agora vou mostrar-te o que construi com elas." />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -5661,7 +5661,7 @@ const ChapterOficina = memo(function ChapterOficina({
                   className="mt-6"
                 >
                   <h4 className="text-sm font-semibold text-gray-600 mb-3">
-                    Outras competencias
+                    Outras competências
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {[
@@ -5700,13 +5700,13 @@ const ChapterOficina = memo(function ChapterOficina({
                   className="mt-6"
                 >
                   <h4 className="text-sm font-semibold text-gray-600 mb-4">
-                    Satisfacao dos clientes
+                    Satisfação dos clientes
                   </h4>
                   <div className="flex gap-6 justify-center">
                     <ProgressRing
                       percentage={98}
                       color="#10B981"
-                      label="Satisfacao"
+                      label="Satisfação"
                       inView={showProcess}
                       size={70}
                     />
@@ -5720,7 +5720,7 @@ const ChapterOficina = memo(function ChapterOficina({
                     <ProgressRing
                       percentage={95}
                       color="#8B5CF6"
-                      label="Repeticao"
+                      label="Repetição"
                       inView={showProcess}
                       size={70}
                     />
@@ -6093,7 +6093,7 @@ const ChapterVila = memo(function ChapterVila({
           </div>
 
           
-          {/* Mini-game: Memoria de Sabores */}
+          {/* Mini-game: Memória de Sabores */}
           <MiniGameMemory />
 
           {/* Restaurant count badge */}
@@ -6222,7 +6222,7 @@ const ChapterSaude = memo(function ChapterSaude({
             {"\u{1F3E5}"} Distrito da Saude
           </h2>
           <p className="text-sm text-gray-500 mb-6">
-            8 clinicas digitalizadas
+            8 clínicas digitalizadas
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl w-full">
@@ -6399,7 +6399,7 @@ const ChapterLab = memo(function ChapterLab({
             {"\u{1F52C}"} Laboratorio
           </h2>
           <p className="text-sm text-gray-400 mb-4 text-center">
-            30+ ferramentas e experiencias interativas
+            30+ ferramentas e experiências interativas
           </p>
 
           {/* Category filter tabs */}
@@ -6644,7 +6644,7 @@ const ChapterJornada = memo(function ChapterJornada({
 
         {/* Easter Egg: Timeline dot */}
         <EasterEgg
-          message="Cada ponto e uma historia. Esta jornada e so o comeco."
+          message="Cada ponto é uma história. Esta jornada é só o começo."
           className="absolute z-20"
           style={{ top: "15%", right: "15%" }}
         >
@@ -6848,7 +6848,7 @@ const ChapterTopo = memo(function ChapterTopo({
   ];
 
   const constellationStats = [
-    "109 Paginas",
+    "109 Páginas",
     "55+ Projetos",
     "52K Linhas",
     "30+ Tools",
@@ -7006,7 +7006,7 @@ const ChapterTopo = memo(function ChapterTopo({
                       "var(--font-sora), sans-serif",
                   }}
                 >
-                  O futuro e humano.
+                  O futuro é humano.
                 </motion.h3>
               )}
             </AnimatePresence>
@@ -7024,31 +7024,31 @@ const ChapterTopo = memo(function ChapterTopo({
                     {
                       icon: "\u{1F310}",
                       title: "Websites",
-                      desc: "Sites modernos, rapidos e responsivos com Next.js e React",
+                      desc: "Sites modernos, rápidos e responsivos com Next.js e React",
                       gradient: "from-blue-500/20 to-cyan-500/20",
                     },
                     {
                       icon: "\u{1F3A8}",
                       title: "Branding",
-                      desc: "Identidade visual completa para o teu negocio",
+                      desc: "Identidade visual completa para o teu negócio",
                       gradient: "from-purple-500/20 to-pink-500/20",
                     },
                     {
                       icon: "\u{1F4F1}",
                       title: "Apps Web",
-                      desc: "Aplicacoes interativas e ferramentas personalizadas",
+                      desc: "Aplicações interativas e ferramentas personalizadas",
                       gradient: "from-green-500/20 to-emerald-500/20",
                     },
                     {
                       icon: "\u{1F916}",
-                      title: "Automacao",
+                      title: "Automação",
                       desc: "Fluxos automatizados com IA para poupar tempo",
                       gradient: "from-amber-500/20 to-orange-500/20",
                     },
                     {
                       icon: "\u{1F4CA}",
                       title: "Consultoria",
-                      desc: "Estrategia digital e optimizacao de processos",
+                      desc: "Estratégia digital e otimização de processos",
                       gradient: "from-indigo-500/20 to-violet-500/20",
                     },
                     {
@@ -7095,7 +7095,7 @@ const ChapterTopo = memo(function ChapterTopo({
                     <StatBadge
                       icon={"\u{1F4C4}"}
                       value="109"
-                      label="Paginas"
+                      label="Páginas"
                       color="#06B6D4"
                     />
                     <StatBadge
@@ -7113,7 +7113,7 @@ const ChapterTopo = memo(function ChapterTopo({
                     <StatBadge
                       icon={"\u{1F3E5}"}
                       value="8"
-                      label="Clinicas"
+                      label="Clínicas"
                       color="#EC4899"
                     />
                     <StatBadge
@@ -7130,7 +7130,7 @@ const ChapterTopo = memo(function ChapterTopo({
                     />
                   </div>
                   <p className="text-center text-xs text-white/30 italic">
-                    Tudo construido com paixao, uma linha de cada vez.
+                    Tudo construído com paixão, uma linha de cada vez.
                   </p>
                 </motion.div>
               )}
@@ -7316,7 +7316,7 @@ const ChapterTopo = memo(function ChapterTopo({
                     }
                     className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors border border-white/10 mb-4"
                   >
-                    Voltar ao inicio {"\u2191"}
+                    Voltar ao início {"\u2191"}
                   </button>
                   <p className="text-xs text-white/30">
                     {"\u00A9"} 2026 Descomplicai
@@ -7368,12 +7368,12 @@ const AchievementPanel = memo(function AchievementPanel({ isOpen, onClose, achie
   const favIdx = Object.entries(liveStats.chapterTimes).reduce((best, [ch, time]) => (time > (best.time || 0) ? { ch: Number(ch), time } : best), { ch: -1, time: 0 }).ch;
   const favName = favIdx >= 0 && favIdx < CHAPTER_RANGES.length ? CHAPTER_RANGES[favIdx].label : "---";
   const sComp = () => { const e = (liveStats.totalScroll / 324000).toFixed(1); return Number(e) >= 1 ? `Equivalente a ${e} Torres Eiffel! \u{1F5FC}` : `${(liveStats.totalScroll / 1000).toFixed(0)} metros scrollados! \u{1F4CF}`; };
-  const tComp = () => { const c = Math.floor(liveStats.timeSpent / 180); return c >= 1 ? `Nesse tempo podias ter feito ${c} cafe${c > 1 ? "s" : ""} \u2615` : `Recem chegaste! \u{1F44B}`; };
+  const tComp = () => { const c = Math.floor(liveStats.timeSpent / 180); return c >= 1 ? `Nesse tempo podias ter feito ${c} cafe${c > 1 ? "s" : ""} \u2615` : `Recém chegaste! \u{1F44B}`; };
   const vComp = () => { if (liveStats.returnVisits > 5) return `Voltaste ${liveStats.returnVisits} vezes \u2014 ja somos amigos! \u{1F91D}`; return liveStats.returnVisits > 1 ? `Bem-vindo de volta! \u{1F44B}` : `Primeira visita! \u{1F31F}`; };
   const sCards = [
-    { icon: "\u{1F4CF}", name: "Distancia Scrollada", value: `${Math.floor(liveStats.totalScroll).toLocaleString("pt-PT")}px`, comp: sComp() },
-    { icon: "\u23F1\u{FE0F}", name: "Tempo de Exploracao", value: fmtTime(liveStats.timeSpent), comp: tComp() },
-    { icon: "\u{1F4D6}", name: "Capitulos Explorados", value: `${chCompCount}/8`, comp: chCompCount === 8 ? "Todos explorados! \u{1F389}" : "Continua a explorar!" },
+    { icon: "\u{1F4CF}", name: "Distância Scrollada", value: `${Math.floor(liveStats.totalScroll).toLocaleString("pt-PT")}px`, comp: sComp() },
+    { icon: "\u23F1\u{FE0F}", name: "Tempo de Exploração", value: fmtTime(liveStats.timeSpent), comp: tComp() },
+    { icon: "\u{1F4D6}", name: "Capítulos Explorados", value: `${chCompCount}/8`, comp: chCompCount === 8 ? "Todos explorados! \u{1F389}" : "Continua a explorar!" },
     { icon: "\u{1F50D}", name: "Cliques Interativos", value: `${liveStats.interactiveClicks}`, comp: liveStats.interactiveClicks > 10 ? "Explorador nato! \u{1F9ED}" : "Clica em mais coisas!" },
     { icon: "\u{1F3AE}", name: "Personagem Clicado", value: `${liveStats.characterClicks}x`, comp: liveStats.characterClicks > 5 ? "O Jaime agradece! \u{1F60A}" : "Tenta clicar no Jaime!" },
     { icon: "\u{1F504}", name: "Visitas", value: `${liveStats.returnVisits}`, comp: vComp() },
@@ -7453,22 +7453,22 @@ const JourneySummary = memo(function JourneySummary({ visible, getLiveStats, unl
   const fIdx = Object.entries(jStats.chapterTimes).reduce((b, [c, t]) => (t > (b.time || 0) ? { ch: Number(c), time: t } : b), { ch: -1, time: 0 }).ch;
   const fName = fIdx >= 0 && fIdx < CHAPTER_RANGES.length ? CHAPTER_RANGES[fIdx].label : "---";
   const sLines = [
-    { icon: "\u{1F4DC}", text: `${chDone}/8 Capitulos explorados` },
-    { icon: "\u23F1\u{FE0F}", text: `${fTime(jStats.timeSpent)} de exploracao` },
+    { icon: "\u{1F4DC}", text: `${chDone}/8 Capítulos explorados` },
+    { icon: "\u23F1\u{FE0F}", text: `${fTime(jStats.timeSpent)} de exploração` },
     { icon: "\u{1F4CF}", text: `${Math.floor(jStats.totalScroll).toLocaleString("pt-PT")}px scrollados` },
     { icon: "\u{1F3C5}", text: `${unlockedCount}/10 conquistas` },
-    { icon: "\u2764\u{FE0F}", text: `Capitulo favorito: ${fName}` },
+    { icon: "\u2764\u{FE0F}", text: `Capítulo favorito: ${fName}` },
   ];
   return (
     <AnimatePresence>
       {showCard && (
         <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 200, damping: 20 }} className="w-full max-w-sm mx-auto mt-6 mb-4">
           <div className="rounded-2xl overflow-hidden border" style={{ background: "linear-gradient(135deg, rgba(15,10,40,0.95), rgba(30,15,60,0.95))", borderColor: "rgba(234,179,8,0.3)", boxShadow: "0 0 40px rgba(234,179,8,0.15), 0 0 80px rgba(139,92,246,0.1)" }}>
-            <div className="text-center pt-5 pb-3 border-b border-white/10"><h4 className="text-base font-bold text-amber-300" style={{ fontFamily: "var(--font-sora), sans-serif" }}>{"\u{1F3C6}"} A TUA JORNADA EM NUMEROS</h4></div>
+            <div className="text-center pt-5 pb-3 border-b border-white/10"><h4 className="text-base font-bold text-amber-300" style={{ fontFamily: "var(--font-sora), sans-serif" }}>{"\u{1F3C6}"} A TUA JORNADA EM NÚMEROS</h4></div>
             <div className="px-5 py-4 space-y-2">{sLines.map((l, i) => (<motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.2, type: "spring" }} className="flex items-center gap-3 text-sm text-white/80"><span className="text-base w-6 text-center">{l.icon}</span><span>{l.text}</span></motion.div>))}</div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="flex gap-2 px-5 pb-5">
               <button onClick={onShare} className="flex-1 py-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-medium transition-colors border border-amber-500/20">Partilhar {"\u{1F4E4}"}</button>
-              <button onClick={onRestart} className="flex-1 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 text-xs font-medium transition-colors border border-white/5">Recomecar {"\u{1F504}"}</button>
+              <button onClick={onRestart} className="flex-1 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 text-xs font-medium transition-colors border border-white/5">Recomeçar {"\u{1F504}"}</button>
             </motion.div>
           </div>
         </motion.div>
@@ -7578,7 +7578,7 @@ export default function ChronicleRPGPage() {
     const ls = achSystem.getLiveStats();
     const chapsDone = Object.values(ls.chaptersCompleted).filter(Boolean).length;
     const fmtT = (s: number) => `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`;
-    const text = `A minha jornada no RPG Chronicle da Descomplicai:\n${chapsDone}/8 capitulos\n${fmtT(ls.timeSpent)} de exploracao\n${Math.floor(ls.totalScroll).toLocaleString("pt-PT")}px scrollados\n${achSystem.unlockedCount}/10 conquistas\n\nDescobre em descomplicai.pt`;
+    const text = `A minha jornada no RPG Chronicle da Descomplicai:\n${chapsDone}/8 capitulos\n${fmtT(ls.timeSpent)} de exploração\n${Math.floor(ls.totalScroll).toLocaleString("pt-PT")}px scrollados\n${achSystem.unlockedCount}/10 conquistas\n\nDescobre em descomplicai.pt`;
     navigator.clipboard.writeText(text).catch(() => {});
   }, [achSystem]);
 
