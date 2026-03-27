@@ -82,7 +82,7 @@ const RESTAURANT_DATA = [
   {
     emoji: "\u{1F305}",
     name: "Sand Murtinheira",
-    desc: "Beach lounge & sunset",
+    desc: "Lounge de praia & pôr do sol",
     slug: "sand-murtinheira",
     color: "#EA580C",
   },
@@ -169,7 +169,7 @@ const MORE_RESTAURANT_DATA = [
   {
     emoji: "\u{1F3D6}\u{FE0F}",
     name: "Ondas Academy",
-    desc: "Surf school & bar",
+    desc: "Escola de surf & bar",
     slug: "ondas-academy",
     color: "#0284C7",
   },
@@ -204,7 +204,7 @@ const MORE_RESTAURANT_DATA = [
   {
     emoji: "\u{1F3D5}\u{FE0F}",
     name: "Cataventos",
-    desc: "Camping & restaurant",
+    desc: "Campismo & restaurante",
     slug: "cataventos",
     color: "#0D9488",
   },
@@ -464,7 +464,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F4DD}",
     name: "Markdown Editor",
-    desc: "Escreve e pre-visualiza MD",
+    desc: "Escreve e pré-visualiza MD",
     slug: "markdown-editor",
     category: "dev",
     color: "#F59E0B",
@@ -592,7 +592,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F4CA}",
     name: "Music Visualizer",
-    desc: "Visualizador de audio",
+    desc: "Visualizador de áudio",
     slug: "music-visualizer",
     category: "musica",
     color: "#06B6D4",
@@ -720,7 +720,7 @@ const TOOL_DATA = [
   {
     emoji: "\u{1F326}\u{FE0F}",
     name: "Weather Mood",
-    desc: "Clima e emocoes",
+    desc: "Clima e emoções",
     slug: "weather-mood",
     category: "experiências",
     color: "#EAB308",
@@ -865,7 +865,7 @@ const ACHIEVEMENTS: Achievement[] = [
   {
     id: "speed-reader",
     icon: "\u26A1",
-    name: "Speed Reader",
+    name: "Leitor Relâmpago",
     description: "Completar todos os capítulos em menos de 2 minutos",
     hiddenDescription: "???",
   },
@@ -893,8 +893,8 @@ const ACHIEVEMENTS: Achievement[] = [
   {
     id: "mobile-explorer",
     icon: "\u{1F4F1}",
-    name: "Mobile Explorer",
-    description: "Visitar numa tela mobile",
+    name: "Explorador Móvel",
+    description: "Visitar num ecrã mobile",
     hiddenDescription: "???",
   },
   {
@@ -3563,7 +3563,7 @@ const MiniGameMemory = memo(function MiniGameMemory() {
   }, [completed]);
 
   return (
-    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Memoria de receitas">
+    <div className="relative w-full max-w-md mx-auto my-6" aria-label="Mini-jogo: Memória de receitas">
       <div className="rounded-2xl overflow-hidden border-2 shadow-lg" style={{ borderColor: "#D97706", background: "linear-gradient(135deg, #FFFBEB, #FEF3C7)" }}>
         <div className="px-4 py-2 flex items-center justify-between" style={{ background: "linear-gradient(90deg, #D97706, #B45309)" }}>
           <span className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">{"\u{1F9E0}"} Memória de Sabores{badgeEarned && <span title="Concluido">{"\u2B50"}</span>}</span>
@@ -3573,7 +3573,7 @@ const MiniGameMemory = memo(function MiniGameMemory() {
           {!started ? (
             <div className="flex flex-col items-center justify-center h-[260px] gap-3">
               <p className="text-gray-600 text-sm text-center">Encontra os pares de pratos portugueses!</p>
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #D97706, #B45309)" }} aria-label="Comecar jogo de memória">Jogar</motion.button>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #D97706, #B45309)" }} aria-label="Começar jogo de memória">Jogar</motion.button>
             </div>
           ) : completed ? (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
@@ -3658,7 +3658,7 @@ const MiniGameDiagnosis = memo(function MiniGameDiagnosis() {
           {!started ? (
             <div className="flex flex-col items-center justify-center h-[260px] gap-3">
               <p className="text-gray-600 text-sm text-center">Liga o sintoma à solução correta!</p>
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #3B82F6, #2563EB)" }} aria-label="Comecar jogo de diagnóstico">Jogar</motion.button>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md" style={{ background: "linear-gradient(135deg, #3B82F6, #2563EB)" }} aria-label="Começar jogo de diagnóstico">Jogar</motion.button>
             </div>
           ) : completed ? (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
@@ -3757,9 +3757,9 @@ const MiniGameCode = memo(function MiniGameCode() {
         <div className="p-4 font-mono" style={{ minHeight: "280px" }}>
           {!started ? (
             <div className="flex flex-col items-center justify-center h-[260px] gap-3">
-              <p className="text-gray-400 text-sm text-center font-sans">Escreve o codigo o mais rápido possível!</p>
+              <p className="text-gray-400 text-sm text-center font-sans">Escreve o código o mais rápido possível!</p>
               <p className="text-gray-600 text-xs text-center font-sans">5 snippets curtos</p>
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md font-sans" style={{ background: "linear-gradient(135deg, #06B6D4, #0891B2)" }} aria-label="Comecar desafio de código">Jogar</motion.button>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={initGame} className="px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-md font-sans" style={{ background: "linear-gradient(135deg, #06B6D4, #0891B2)" }} aria-label="Começar desafio de código">Jogar</motion.button>
             </div>
           ) : completed ? (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[260px] gap-3">
@@ -3770,7 +3770,7 @@ const MiniGameCode = memo(function MiniGameCode() {
             </motion.div>
           ) : (
             <>
-              <div className="text-gray-500 text-xs mb-2">{">"} Escreve este codigo: ({currentIdx + 1}/{CODE_SNIPPETS.length})</div>
+              <div className="text-gray-500 text-xs mb-2">{">"} Escreve este código: ({currentIdx + 1}/{CODE_SNIPPETS.length})</div>
               <div className="bg-black/40 rounded-lg p-3 mb-3 text-sm overflow-x-auto">
                 {currentSnippet.split("").map((ch, i) => {
                   let color = "text-gray-500"; if (i < typed.length) { color = typed[i] === ch ? "text-green-400" : "text-red-400"; }
@@ -3778,7 +3778,7 @@ const MiniGameCode = memo(function MiniGameCode() {
                 })}
                 <span className="animate-pulse text-cyan-400">|</span>
               </div>
-              <input ref={inputRef} type="text" value={typed} onChange={handleInput} className="sr-only" aria-label="Escreve o codigo aqui" autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
+              <input ref={inputRef} type="text" value={typed} onChange={handleInput} className="sr-only" aria-label="Escreve o código aqui" autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
               <button onClick={() => inputRef.current?.focus()} className="text-xs text-gray-600 mb-3 cursor-pointer hover:text-cyan-400 transition-colors font-sans w-full text-left">Clica aqui para escrever...</button>
               <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden mb-2"><motion.div className="h-full rounded-full" style={{ background: "linear-gradient(90deg, #06B6D4, #22D3EE)" }} animate={{ width: `${progressPct}%` }} transition={{ duration: 0.3 }} /></div>
               <div className="flex justify-between text-[10px] text-gray-500 font-sans"><span>Progresso: {Math.round(progressPct)}%</span><span>Tempo: {elapsed.toFixed(1)}s</span></div>
@@ -4170,7 +4170,7 @@ const MiniTerminal = memo(function MiniTerminal({
           response = "projetos/  ferramentas/  musica/  jogos/  README.md";
           break;
         case "whoami":
-          response = "jaime@descomplicai ~ explorer of code";
+          response = "jaime@descomplicai ~ explorador de código";
           break;
         case "help":
           response = "Comandos: ls, whoami, help, clear, exit, date, motto";
@@ -4256,7 +4256,7 @@ const MiniTerminal = memo(function MiniTerminal({
 const PORTUGUESE_QUOTES = [
   "Quem não arrisca, não petisca!",
   "A pressa é inimiga da perfeição.",
-  "Água mole em pedra dura, tanto bate ate que fura.",
+  "Água mole em pedra dura, tanto bate até que fura.",
   "De grão em grão, enche a galinha o papo.",
   "Mais vale um pássaro na mão do que dois a voar.",
   "O saber não ocupa lugar.",
@@ -4928,7 +4928,7 @@ const ChapterPortal = memo(function ChapterPortal({
           >
             <p className="text-base sm:text-lg md:text-xl max-w-xl mx-auto">
               <TypingText
-                text="Uma jornada pelo universo da inteligência artificial"
+                text="Uma jornada pelo código, pela comida e pelas pessoas"
                 active={subtitleActive}
               />
             </p>
@@ -5224,7 +5224,7 @@ const ChapterInicio = memo(function ChapterInicio({
 
         {/* Easter Egg: Clickable tree */}
         <EasterEgg
-          message="Esta arvore plantada representa cada projeto concluido &#x1F333;"
+          message="Esta árvore plantada representa cada projeto concluído &#x1F333;"
           className="absolute z-20"
           style={{ bottom: "22%", left: "15%" }}
         >
@@ -5420,7 +5420,7 @@ const ChapterOficina = memo(function ChapterOficina({
     { step: 1, label: "Conversa", icon: "\u{1F4AC}" },
     { step: 2, label: "Pesquisa", icon: "\u{1F50D}" },
     { step: 3, label: "Design", icon: "\u{1F3A8}" },
-    { step: 4, label: "Build", icon: "\u{1F528}" },
+    { step: 4, label: "Construir", icon: "\u{1F528}" },
   ];
 
   return (
@@ -5478,7 +5478,7 @@ const ChapterOficina = memo(function ChapterOficina({
                 fontFamily: "var(--font-sora), sans-serif",
               }}
             >
-              {"\u{1F4BB}"} Technical Skills
+              {"\u{1F4BB}"} Competências Técnicas
             </motion.h3>
             {techSkills.map((skill, i) => (
               <SkillBar
@@ -5500,7 +5500,7 @@ const ChapterOficina = memo(function ChapterOficina({
                 fontFamily: "var(--font-sora), sans-serif",
               }}
             >
-              {"\u{1F3A8}"} Creative Skills
+              {"\u{1F3A8}"} Competências Criativas
             </motion.h3>
             {creativeSkills.map((skill, i) => (
               <SkillBar
@@ -5580,7 +5580,7 @@ const ChapterOficina = memo(function ChapterOficina({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <SpeechBubble text="Estas são as ferramentas. Agora vou mostrar-te o que construi com elas." />
+                  <SpeechBubble text="Estas são as ferramentas. Agora vou mostrar-te o que construí com elas." />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -5929,7 +5929,7 @@ const ChapterVila = memo(function ChapterVila({
 
         {/* Easter Egg: Restaurant sign */}
         <EasterEgg
-          message="O melhor restaurante e aquele que ainda nao foi criado &#x1F37D;&#xFE0F;"
+          message="O melhor restaurante é aquele que ainda não foi criado &#x1F37D;&#xFE0F;"
           className="absolute z-20"
           style={{ top: "12%", right: "12%" }}
         >
@@ -7024,37 +7024,37 @@ const ChapterTopo = memo(function ChapterTopo({
                     {
                       icon: "\u{1F310}",
                       title: "Websites",
-                      desc: "Sites modernos, rápidos e responsivos com Next.js e React",
+                      desc: "O site que mereces — rápido, bonito, e funciona no telemóvel da tua avó.",
                       gradient: "from-blue-500/20 to-cyan-500/20",
                     },
                     {
                       icon: "\u{1F3A8}",
                       title: "Branding",
-                      desc: "Identidade visual completa para o teu negócio",
+                      desc: "A tua marca ganha cara, voz e personalidade própria.",
                       gradient: "from-purple-500/20 to-pink-500/20",
                     },
                     {
                       icon: "\u{1F4F1}",
                       title: "Apps Web",
-                      desc: "Aplicações interativas e ferramentas personalizadas",
+                      desc: "Ferramentas que resolvem problemas reais — tipo as 30+ que já construí.",
                       gradient: "from-green-500/20 to-emerald-500/20",
                     },
                     {
                       icon: "\u{1F916}",
                       title: "Automação",
-                      desc: "Fluxos automatizados com IA para poupar tempo",
+                      desc: "A IA trata do chato. Tu tratas do que importa.",
                       gradient: "from-amber-500/20 to-orange-500/20",
                     },
                     {
                       icon: "\u{1F4CA}",
                       title: "Consultoria",
-                      desc: "Estratégia digital e otimização de processos",
+                      desc: "Um café, uma conversa, e um plano que faz sentido.",
                       gradient: "from-indigo-500/20 to-violet-500/20",
                     },
                     {
                       icon: "\u{1F91D}",
                       title: "Mentoria",
-                      desc: "Acompanhamento personalizado para devs e empreendedores",
+                      desc: "Já estive onde tu estás. Vamos encurtar o caminho juntos.",
                       gradient: "from-rose-500/20 to-red-500/20",
                     },
                   ].map((service, i) => (
@@ -7369,7 +7369,7 @@ const AchievementPanel = memo(function AchievementPanel({ isOpen, onClose, achie
   const favName = favIdx >= 0 && favIdx < CHAPTER_RANGES.length ? CHAPTER_RANGES[favIdx].label : "---";
   const sComp = () => { const e = (liveStats.totalScroll / 324000).toFixed(1); return Number(e) >= 1 ? `Equivalente a ${e} Torres Eiffel! \u{1F5FC}` : `${(liveStats.totalScroll / 1000).toFixed(0)} metros scrollados! \u{1F4CF}`; };
   const tComp = () => { const c = Math.floor(liveStats.timeSpent / 180); return c >= 1 ? `Nesse tempo podias ter feito ${c} cafe${c > 1 ? "s" : ""} \u2615` : `Recém chegaste! \u{1F44B}`; };
-  const vComp = () => { if (liveStats.returnVisits > 5) return `Voltaste ${liveStats.returnVisits} vezes \u2014 ja somos amigos! \u{1F91D}`; return liveStats.returnVisits > 1 ? `Bem-vindo de volta! \u{1F44B}` : `Primeira visita! \u{1F31F}`; };
+  const vComp = () => { if (liveStats.returnVisits > 5) return `Voltaste ${liveStats.returnVisits} vezes \u2014 já somos amigos! \u{1F91D}`; return liveStats.returnVisits > 1 ? `Bem-vindo de volta! \u{1F44B}` : `Primeira visita! \u{1F31F}`; };
   const sCards = [
     { icon: "\u{1F4CF}", name: "Distância Scrollada", value: `${Math.floor(liveStats.totalScroll).toLocaleString("pt-PT")}px`, comp: sComp() },
     { icon: "\u23F1\u{FE0F}", name: "Tempo de Exploração", value: fmtTime(liveStats.timeSpent), comp: tComp() },
