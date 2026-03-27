@@ -115,6 +115,11 @@ const PROJECTS: Project[] = [
   { id: "generative-art", title: "Arte Generativa", category: "interactive", type: "Engine Artístico", description: "8 algoritmos: flow field, voronoi, fractal tree, phyllotaxis, galáxia, labirinto, constelação", gradient: "from-rose-600 to-violet-600", emoji: "🎨", status: "live" },
   { id: "jaime-silva", title: "Jaime Silva — Portfolio", category: "creative", type: "Portfolio Pessoal", description: "Portfolio pessoal mega: 7 secções parallax, partículas, typing animation, timeline, glassmorphism", gradient: "from-blue-600 to-purple-600", emoji: "👤", status: "live" },
 
+  // ═══ JARDIM ALGARVIO (3) ═══
+  { id: "jardim-algarvio-premium", title: "JardimAlgarvio Premium", category: "services", type: "Paisagismo Luxo", description: "Site editorial de luxo para paisagismo no Algarve — dark design, dourado, parallax cinematico", gradient: "from-[#1A1A18] to-[#C9A96E]", emoji: "🌿", status: "live" },
+  { id: "jardim-algarvio-local", title: "JardimAlgarvio Local", category: "services", type: "Negócio Local SEO", description: "Site de jardinagem focado em SEO e conversão — planos de manutenção, mapa do Algarve, WhatsApp CTA", gradient: "from-[#F8FAF7] to-[#16A34A]", emoji: "🌱", status: "live" },
+  { id: "jardim-algarvio-organic", title: "JardimAlgarvio Organic", category: "services", type: "Design Botânico", description: "Design orgânico com ilustrações SVG botânicas — cream, olive, terracotta, estilo journal", gradient: "from-[#FDF6EC] to-[#4A5D23]", emoji: "🍃", status: "live" },
+
   // ═══ MEGA OP 3.0 — PREMIUM (10) ═══
   { id: "globe-explorer", title: "Globo Interativo", category: "interactive", type: "Explorador 3D", description: "CSS 3D sphere com 15 cidades, day/night, search, drag to rotate, atmosphere glow", gradient: "from-blue-700 to-teal-400", emoji: "🌍", status: "live" },
   { id: "periodic-table", title: "Tabela Periódica", category: "interactive", type: "Ferramenta Educativa", description: "118 elementos com temperature slider, category filter, electron config, fun facts", gradient: "from-cyan-600 to-blue-600", emoji: "⚗️", status: "live" },
@@ -148,6 +153,7 @@ const CATEGORIES = [
   { id: "food", label: "Vinho & Gastronomia", count: 0 },
   { id: "creative", label: "Criativo & 3D", count: 0 },
   { id: "fitness", label: "Fitness & Desporto", count: 0 },
+  { id: "services", label: "Serviços", count: 0 },
 ];
 
 // Count per category
@@ -159,6 +165,7 @@ CATEGORIES.forEach((c) => {
       if (c.id === "food") return p.category === "food";
       if (c.id === "creative") return p.category === "creative";
       if (c.id === "fitness") return ["fitness", "sports"].includes(p.category);
+      if (c.id === "services") return p.category === "services";
       return p.category === c.id;
     }).length;
   }
