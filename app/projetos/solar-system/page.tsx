@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // --- Types ---
@@ -147,6 +147,16 @@ const STARS = Array.from({ length: 200 }, (_, i) => {
   return { x, y, size, duration, delay };
 });
 
+// --- Asteroid belt generation (deterministic pseudo-random, SSR-safe) ---
+const ASTEROIDS = Array.from({ length: 60 }, (_, i) => {
+  const a = (i * 2654435761 + 2246822519) >>> 0;
+  const angle = ((a % 36000) / 36000) * 360; // degrees
+  const radiusOffset = 290 + ((a >>> 8) % 41); // 290 to 330
+  const size = 2 + (i % 3); // 2-4px
+  const orbitDelay = -((a % 300000) / 1000); // stagger
+  return { angle, radiusOffset, size, orbitDelay };
+});
+
 // --- Orbit path component ---
 function OrbitPath({ radius, scale }: { radius: number; scale: number }) {
   const r = radius * scale;
@@ -172,11 +182,13 @@ interface PlanetProps {
   scale: number;
   onSelect: (planet: PlanetData) => void;
   isSelected: boolean;
+  isMobile: boolean;
 }
 
-function Planet({ planet, speed, paused, scale, onSelect, isSelected }: PlanetProps) {
+function Planet({ planet, speed, paused, scale, onSelect, isSelected, isMobile }: PlanetProps) {
   const orbitR = planet.orbitRadius * scale;
-  const planetSize = planet.size * scale;
+  // On mobile, enforce a minimum size of 14px for better touch targets
+  const planetSize = isMobile ? Math.max(14, planet.size * scale) : planet.size * scale;
   const animDuration = planet.orbitDuration / speed;
 
   return (
@@ -190,6 +202,7 @@ function Planet({ planet, speed, paused, scale, onSelect, isSelected }: PlanetPr
         transform: "translate(-50%, -50%)",
         animation: `orbit ${animDuration}s linear infinite`,
         animationPlayState: paused ? "paused" : "running",
+        pointerEvents: "none",
       }}
     >
       {/* Planet body wrapper — positioned on the orbit path */}
@@ -233,6 +246,7 @@ function Planet({ planet, speed, paused, scale, onSelect, isSelected }: PlanetPr
               width: planetSize,
               height: planetSize,
               borderRadius: "50%",
+              pointerEvents: "auto",
               background: planet.id === "jupiter"
                 ? `radial-gradient(ellipse at 35% 35%, #E8A455, ${planet.color} 40%, #B45309 70%, #7C3A12)`
                 : planet.id === "earth"
@@ -334,23 +348,34 @@ function Planet({ planet, speed, paused, scale, onSelect, isSelected }: PlanetPr
 interface InfoPanelProps {
   planet: PlanetData | null;
   onClose: () => void;
+  isMobile: boolean;
 }
 
-function InfoPanel({ planet, onClose }: InfoPanelProps) {
+function InfoPanel({ planet, onClose, isMobile }: InfoPanelProps) {
   return (
     <AnimatePresence>
       {planet && (
         <motion.div
           key={planet.id}
-          initial={{ opacity: 0, x: 40, scale: 0.95 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          exit={{ opacity: 0, x: 40, scale: 0.95 }}
+          initial={isMobile ? { opacity: 0, y: 100 } : { opacity: 0, x: 40, scale: 0.95 }}
+          animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0, scale: 1 }}
+          exit={isMobile ? { opacity: 0, y: 100 } : { opacity: 0, x: 40, scale: 0.95 }}
           transition={{ type: "spring", stiffness: 280, damping: 28 }}
-          className="absolute top-4 right-4 z-50 w-72 md:w-80"
+          className={
+            isMobile
+              ? "fixed bottom-0 left-0 right-0 z-50"
+              : "absolute top-4 right-4 z-50 w-72 md:w-80"
+          }
+          style={isMobile ? { maxHeight: "40vh" } : undefined}
         >
           <div
-            className="rounded-2xl border border-white/10 backdrop-blur-xl p-5"
-            style={{ background: "rgba(3, 0, 20, 0.88)" }}
+            className={`border border-white/10 backdrop-blur-xl p-5 ${
+              isMobile ? "rounded-t-2xl overflow-y-auto" : "rounded-2xl"
+            }`}
+            style={{
+              background: "rgba(3, 0, 20, 0.92)",
+              ...(isMobile ? { maxHeight: "40vh" } : {}),
+            }}
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
@@ -412,6 +437,13 @@ export default function SolarSystemPage() {
   const [speed, setSpeed] = useState(1);
   const [paused, setPaused] = useState(false);
   const [scale, setScale] = useState(1);
+  const [autoScale, setAutoScale] = useState(1);
+  const [zoomOffset, setZoomOffset] = useState(0); // manual zoom adjustment
+  const [isMobile, setIsMobile] = useState(false);
+  const [tourActive, setTourActive] = useState(false);
+  const [, setTourIndex] = useState(0);
+  const tourIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const preTourPausedRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Responsive scale calculation
@@ -422,8 +454,19 @@ export default function SolarSystemPage() {
     // Neptune orbit at scale=1 reaches 660px from center. Need shortSide/2 >= 660+24
     const needed = (660 + 24) * 2;
     const newScale = Math.min(1, (shortSide / needed) * 0.92);
-    setScale(newScale);
+    setAutoScale(newScale);
+    setIsMobile(width < 768);
   }, []);
+
+  // Combined scale = autoScale + manual zoom offset, clamped
+  const effectiveScale = useMemo(() => {
+    return Math.min(1.5, Math.max(0.3, autoScale + zoomOffset));
+  }, [autoScale, zoomOffset]);
+
+  // Update the scale state used by components
+  useEffect(() => {
+    setScale(effectiveScale);
+  }, [effectiveScale]);
 
   useEffect(() => {
     updateScale();
@@ -432,7 +475,103 @@ export default function SolarSystemPage() {
     return () => observer.disconnect();
   }, [updateScale]);
 
+  // --- Tour Mode ---
+  useEffect(() => {
+    if (tourActive) {
+      preTourPausedRef.current = paused;
+      setPaused(true);
+      setSelectedPlanet(PLANETS[0]);
+      setTourIndex(0);
+      tourIntervalRef.current = setInterval(() => {
+        setTourIndex((prev) => {
+          const next = prev + 1;
+          if (next >= PLANETS.length) {
+            // Tour finished
+            setTourActive(false);
+            return prev;
+          }
+          setSelectedPlanet(PLANETS[next]);
+          return next;
+        });
+      }, 4000);
+    } else {
+      if (tourIntervalRef.current) {
+        clearInterval(tourIntervalRef.current);
+        tourIntervalRef.current = null;
+      }
+      // Restore previous pause state only when ending an active tour
+      if (preTourPausedRef.current !== undefined) {
+        setPaused(preTourPausedRef.current);
+      }
+    }
+    return () => {
+      if (tourIntervalRef.current) clearInterval(tourIntervalRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tourActive]);
+
+  // --- Keyboard Navigation ---
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept if user is typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      switch (e.key) {
+        case "ArrowLeft": {
+          e.preventDefault();
+          setSelectedPlanet((prev) => {
+            if (!prev) return PLANETS[PLANETS.length - 1];
+            const idx = PLANETS.findIndex((p) => p.id === prev.id);
+            return PLANETS[(idx - 1 + PLANETS.length) % PLANETS.length];
+          });
+          if (tourActive) setTourActive(false);
+          break;
+        }
+        case "ArrowRight": {
+          e.preventDefault();
+          setSelectedPlanet((prev) => {
+            if (!prev) return PLANETS[0];
+            const idx = PLANETS.findIndex((p) => p.id === prev.id);
+            return PLANETS[(idx + 1) % PLANETS.length];
+          });
+          if (tourActive) setTourActive(false);
+          break;
+        }
+        case " ": {
+          e.preventDefault();
+          if (tourActive) {
+            setTourActive(false);
+          } else {
+            setPaused((p) => !p);
+          }
+          break;
+        }
+        case "Escape": {
+          e.preventDefault();
+          if (tourActive) setTourActive(false);
+          setSelectedPlanet(null);
+          break;
+        }
+        case "+":
+        case "=": {
+          e.preventDefault();
+          setZoomOffset((z) => Math.min(1.2, z + 0.1));
+          break;
+        }
+        case "-":
+        case "_": {
+          e.preventDefault();
+          setZoomOffset((z) => Math.max(-0.7, z - 0.1));
+          break;
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [tourActive]);
+
   const handlePlanetSelect = (planet: PlanetData) => {
+    if (tourActive) setTourActive(false);
     setSelectedPlanet((prev) => (prev?.id === planet.id ? null : planet));
   };
 
@@ -459,6 +598,14 @@ export default function SolarSystemPage() {
         @keyframes sun-rotate {
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }
+        }
+        @keyframes asteroid-belt-rotate {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to   { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes tour-pulse {
+          0%, 100% { border-color: rgba(250, 204, 21, 0.4); box-shadow: 0 0 4px rgba(250, 204, 21, 0.2); }
+          50%      { border-color: rgba(250, 204, 21, 0.9); box-shadow: 0 0 12px rgba(250, 204, 21, 0.5); }
         }
       `}</style>
 
@@ -492,6 +639,42 @@ export default function SolarSystemPage() {
           <p className="text-white/30 text-xs mt-0.5 hidden sm:block">
             Clique num planeta para saber mais
           </p>
+        </div>
+
+        {/* Planet Quick-Select Bar */}
+        <div className="absolute top-14 md:top-16 left-1/2 -translate-x-1/2 z-30">
+          <div
+            className="flex items-center gap-1.5 md:gap-2 rounded-full border border-white/10 backdrop-blur-xl px-3 py-1.5 md:px-4 md:py-2 overflow-x-auto max-w-[90vw]"
+            style={{ background: "rgba(3, 0, 20, 0.70)", scrollbarWidth: "none" }}
+          >
+            {PLANETS.map((planet) => {
+              const isActive = selectedPlanet?.id === planet.id;
+              return (
+                <button
+                  key={planet.id}
+                  onClick={() => handlePlanetSelect(planet)}
+                  className="flex items-center gap-1.5 rounded-full px-2 py-1 md:px-2.5 md:py-1 transition-all flex-shrink-0 hover:bg-white/5"
+                  style={{
+                    border: isActive ? `1.5px solid ${planet.color}` : "1.5px solid transparent",
+                    boxShadow: isActive ? `0 0 8px ${planet.color}60` : "none",
+                  }}
+                >
+                  <div
+                    className="rounded-full flex-shrink-0"
+                    style={{
+                      width: isMobile ? 8 : 10,
+                      height: isMobile ? 8 : 10,
+                      background: planet.color,
+                      boxShadow: isActive ? `0 0 6px ${planet.color}` : "none",
+                    }}
+                  />
+                  <span className="text-white/60 text-[10px] md:text-xs whitespace-nowrap">
+                    {planet.namePT}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Orbit paths */}
@@ -537,18 +720,56 @@ export default function SolarSystemPage() {
             scale={scale}
             onSelect={handlePlanetSelect}
             isSelected={selectedPlanet?.id === planet.id}
+            isMobile={isMobile}
           />
         ))}
+
+        {/* Asteroid Belt */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: 330 * 2 * scale,
+            height: 330 * 2 * scale,
+            left: "50%",
+            top: "50%",
+            animation: `asteroid-belt-rotate 300s linear infinite`,
+            animationPlayState: paused ? "paused" : "running",
+          }}
+        >
+          {ASTEROIDS.map((asteroid, i) => {
+            const rad = (asteroid.angle * Math.PI) / 180;
+            const r = asteroid.radiusOffset * scale;
+            const x = 330 * scale + Math.cos(rad) * r;
+            const y = 330 * scale + Math.sin(rad) * r;
+            return (
+              <div
+                key={i}
+                className="absolute rounded-full bg-white"
+                style={{
+                  width: asteroid.size,
+                  height: asteroid.size,
+                  left: x,
+                  top: y,
+                  opacity: 0.15,
+                }}
+              />
+            );
+          })}
+        </div>
 
         {/* Controls */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3">
           <div
-            className="flex items-center gap-4 rounded-2xl border border-white/10 backdrop-blur-xl px-5 py-3"
+            className="flex items-center gap-2 md:gap-4 rounded-2xl border border-white/10 backdrop-blur-xl px-3 py-2 md:px-5 md:py-3"
             style={{ background: "rgba(3, 0, 20, 0.80)" }}
           >
             {/* Pause/Play */}
             <button
-              onClick={() => setPaused((p) => !p)}
+              type="button"
+              onClick={() => {
+                if (tourActive) setTourActive(false);
+                setPaused((p) => !p);
+              }}
               className="flex items-center justify-center w-8 h-8 rounded-full border border-white/20 hover:border-white/50 text-white/70 hover:text-white transition-all hover:scale-110 active:scale-95 text-sm"
               aria-label={paused ? "Iniciar" : "Pausar"}
             >
@@ -559,9 +780,9 @@ export default function SolarSystemPage() {
             <div className="w-px h-6 bg-white/10" />
 
             {/* Speed slider */}
-            <div className="flex items-center gap-3">
-              <span className="text-white/40 text-xs w-16 text-right">
-                {speed.toFixed(1)}× velocidade
+            <div className="flex items-center gap-2 md:gap-3">
+              <span className="text-white/40 text-xs w-10 md:w-16 text-right">
+                {speed.toFixed(1)}×{!isMobile && " velocidade"}
               </span>
               <input
                 type="range"
@@ -570,20 +791,119 @@ export default function SolarSystemPage() {
                 step="0.5"
                 value={speed}
                 onChange={(e) => setSpeed(parseFloat(e.target.value))}
-                className="w-24 md:w-32 accent-yellow-400 cursor-pointer"
+                className="w-20 md:w-32 accent-yellow-400 cursor-pointer"
                 aria-label="Velocidade das órbitas"
               />
-              <div className="flex gap-1 items-center">
-                <span className="text-white/20 text-xs">lento</span>
-                <span className="text-white/20 text-xs mx-1">·</span>
-                <span className="text-white/20 text-xs">rápido</span>
-              </div>
+              {!isMobile && (
+                <div className="flex gap-1 items-center">
+                  <span className="text-white/20 text-xs">lento</span>
+                  <span className="text-white/20 text-xs mx-1">·</span>
+                  <span className="text-white/20 text-xs">rápido</span>
+                </div>
+              )}
             </div>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-white/10" />
+
+            {/* Tour button */}
+            <button
+              type="button"
+              onClick={() => setTourActive((t) => !t)}
+              className="flex items-center justify-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all hover:scale-105 active:scale-95"
+              style={{
+                borderColor: tourActive ? "rgba(250, 204, 21, 0.7)" : "rgba(255,255,255,0.2)",
+                color: tourActive ? "rgba(250, 204, 21, 1)" : "rgba(255,255,255,0.7)",
+                animation: tourActive ? "tour-pulse 2s ease-in-out infinite" : "none",
+              }}
+              aria-label={tourActive ? "Parar tour" : "Iniciar tour"}
+            >
+              {tourActive ? "⏹" : "🚀"} Tour
+            </button>
+
+            {/* Keyboard hint (hidden on mobile) */}
+            {!isMobile && (
+              <span
+                className="text-white/20 text-xs ml-1 cursor-default"
+                title="← → navegar | Espaço pausar | Esc fechar | +/- zoom"
+              >
+                ⌨
+              </span>
+            )}
           </div>
         </div>
 
+        {/* Zoom Controls */}
+        <div className="absolute bottom-20 right-4 z-30 flex flex-col gap-1.5">
+          <button
+            type="button"
+            onClick={() => setZoomOffset((z) => Math.min(1.2, z + 0.1))}
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 backdrop-blur-xl text-white/60 hover:text-white hover:border-white/30 transition-all text-sm"
+            style={{ background: "rgba(3, 0, 20, 0.70)" }}
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+          <button
+            type="button"
+            onClick={() => setZoomOffset((z) => Math.max(-0.7, z - 0.1))}
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 backdrop-blur-xl text-white/60 hover:text-white hover:border-white/30 transition-all text-sm"
+            style={{ background: "rgba(3, 0, 20, 0.70)" }}
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+          <button
+            type="button"
+            onClick={() => setZoomOffset(0)}
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 backdrop-blur-xl text-white/60 hover:text-white hover:border-white/30 transition-all text-[10px]"
+            style={{ background: "rgba(3, 0, 20, 0.70)" }}
+            aria-label="Reset zoom"
+          >
+            ↺
+          </button>
+        </div>
+
         {/* Info panel */}
-        <InfoPanel planet={selectedPlanet} onClose={() => setSelectedPlanet(null)} />
+        {/* Distance Scale Ruler */}
+        {!isMobile && (
+          <div
+            className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 pointer-events-none hidden sm:flex items-end gap-0"
+            style={{ opacity: 0.2 }}
+          >
+            {(() => {
+              // Real scale: Neptune is at 4.5B km, orbit radius 660px at scale 1
+              // So 1px at scale=1 ≈ 6.82M km
+              const kmPerPx = 4500 / 660; // millions km per px at scale 1
+              const marks = [
+                { label: "100M km", distMkm: 100 },
+                { label: "500M km", distMkm: 500 },
+                { label: "1B km", distMkm: 1000 },
+                { label: "2B km", distMkm: 2000 },
+                { label: "4B km", distMkm: 4000 },
+              ];
+              return marks
+                .filter((m) => m.distMkm / kmPerPx * scale < 600) // only show marks that fit
+                .map((mark, i) => {
+                  const px = (mark.distMkm / kmPerPx) * scale;
+                  return (
+                    <div
+                      key={i}
+                      className="flex flex-col items-end"
+                      style={{ width: i === 0 ? px : px - ((marks[i - 1]?.distMkm || 0) / kmPerPx) * scale }}
+                    >
+                      <div className="h-2 border-r border-white/30" />
+                      <span className="text-white/40 text-[9px] mt-0.5 -mr-3">{mark.label}</span>
+                    </div>
+                  );
+                });
+            })()}
+            <div className="absolute bottom-[7px] left-0 h-px bg-white/20" style={{ width: "100%" }} />
+          </div>
+        )}
+
+        {/* Info panel */}
+        <InfoPanel planet={selectedPlanet} onClose={() => setSelectedPlanet(null)} isMobile={isMobile} />
       </div>
     </>
   );
