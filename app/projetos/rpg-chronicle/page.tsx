@@ -67,7 +67,7 @@ const RESTAURANT_DATA = [
   },
   {
     emoji: "\u{1F99E}",
-    name: "Marisqueira Rosa Amelia",
+    name: "Marisqueira Rosa Amélia",
     desc: "Marisco fresco há gerações",
     slug: "marisqueira-rosa-amelia",
     color: "#0E7490",
@@ -806,7 +806,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   dev: "\u{1F6E0}\u{FE0F} Dev Tools",
   produtividade: "\u{1F4CA} Produtividade",
   ciencia: "\u{1F52C} Ciência",
-  experiencias: "\u{1F30D} Experiências",
+  experiências: "\u{1F30D} Experiências",
 };
 
 /* =============================================================================
@@ -3604,7 +3604,7 @@ const MiniGameMemory = memo(function MiniGameMemory() {
 });
 
 /* =============================================================================
-   MINI-GAME: DIAGNOSIS PUZZLE (Ch4 - Distrito da Saude)
+   MINI-GAME: DIAGNOSIS PUZZLE (Ch4 - Distrito da Saúde)
    ============================================================================= */
 
 const DIAGNOSIS_PAIRS = [
@@ -6219,7 +6219,7 @@ const ChapterSaude = memo(function ChapterSaude({
               fontFamily: "var(--font-sora), sans-serif",
             }}
           >
-            {"\u{1F3E5}"} Distrito da Saude
+            {"\u{1F3E5}"} Distrito da Saúde
           </h2>
           <p className="text-sm text-gray-500 mb-6">
             8 clínicas digitalizadas
@@ -6399,7 +6399,7 @@ const ChapterLab = memo(function ChapterLab({
             {"\u{1F52C}"} Laboratorio
           </h2>
           <p className="text-sm text-gray-400 mb-4 text-center">
-            30+ ferramentas e experiências interativas
+            50+ ferramentas e experiências interativas
           </p>
 
           {/* Category filter tabs */}
@@ -6508,7 +6508,7 @@ const ChapterLab = memo(function ChapterLab({
               >
                 <GlassCard className="px-4 py-2 flex items-center gap-4">
                   <span className="text-xs text-white/50">
-                    {filteredTools.length} experiencias
+                    {filteredTools.length} experiências
                   </span>
                   <div className="h-3 w-px bg-white/10" />
                   <span className="text-xs text-cyan-400">
@@ -6850,8 +6850,8 @@ const ChapterTopo = memo(function ChapterTopo({
   const constellationStats = [
     "109 Páginas",
     "55+ Projetos",
-    "52K Linhas",
-    "30+ Tools",
+    "52K+ Linhas",
+    "50+ Tools",
     "25 Sites",
     "1 Noite",
   ];
@@ -7118,13 +7118,13 @@ const ChapterTopo = memo(function ChapterTopo({
                     />
                     <StatBadge
                       icon={"\u{1F37D}\u{FE0F}"}
-                      value="17+"
+                      value="25"
                       label="Restaurantes"
                       color="#F59E0B"
                     />
                     <StatBadge
                       icon={"\u{1F6E0}\u{FE0F}"}
-                      value="30+"
+                      value="50+"
                       label="Tools"
                       color="#3B82F6"
                     />
