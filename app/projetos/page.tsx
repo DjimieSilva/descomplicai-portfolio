@@ -100,6 +100,15 @@ const PROJECTS: Project[] = [
   { id: "morse-code", title: "Código Morse", category: "interactive", type: "Ferramenta Educativa", description: "Tradutor bidirecional com transmissão visual, estética CRT retro", gradient: "from-amber-500 to-yellow-300", emoji: "📡", status: "live" },
   { id: "todo-kanban", title: "Kanban Board", category: "interactive", type: "App de Produtividade", description: "Quadro kanban com drag & drop HTML5, inline edit, prioridades, localStorage", gradient: "from-blue-400 to-green-400", emoji: "📋", status: "live" },
 
+  // ═══ RPG GAMES ═══
+  { id: "rpg-quest", title: "Descomplicai RPG — The Quest", category: "creative", type: "2D RPG Game", description: "RPG completo com mapa 60×50, 12 NPCs, 8 quests, 15 cofres e sistema de diálogo em português", gradient: "from-green-600 to-emerald-400", emoji: "🎮", status: "live" },
+  { id: "rpg-chronicle", title: "Descomplicai Chronicle", category: "creative", type: "Parallax Experience", description: "8 capítulos parallax com 10,000px de scroll, personagem-guia e 50+ projetos showcased", gradient: "from-indigo-600 to-purple-500", emoji: "📜", status: "live" },
+
+  // ═══ HOMEPAGE REDESIGNS ═══
+  { id: "descomplicai-cosmos", title: "Descomplicai Cosmos", category: "creative", type: "Homepage Redesign", description: "Redesign espacial do site — nebulas, constelações, planetas orbitais e aurora borealis", gradient: "from-blue-900 to-purple-700", emoji: "🌌", status: "live" },
+  { id: "descomplicai-jardim", title: "Descomplicai Jardim", category: "creative", type: "Homepage Redesign", description: "Redesign natureza — plantas CSS, borboletas, estufas, portão animado e estações do ano", gradient: "from-green-600 to-amber-400", emoji: "🌿", status: "live" },
+  { id: "descomplicai-terminal", title: "Descomplicai Terminal", category: "creative", type: "Homepage Redesign", description: "Redesign hacker — Matrix rain, boot sequence, neofetch, git log e terminal interativo", gradient: "from-gray-900 to-green-800", emoji: "💻", status: "live" },
+
   // ═══ MEGA OP 2.0 — SUPER COMPLEXOS (4) ═══
   { id: "fractal-explorer", title: "Fractal Explorer", category: "interactive", type: "Explorador Matemático", description: "Mandelbrot, Julia Set & Burning Ship — zoom infinito, 6 paletas, mini-map, progressive rendering", gradient: "from-purple-600 to-blue-600", emoji: "🌀", status: "live" },
   { id: "particle-sim", title: "Simulador de Partículas", category: "interactive", type: "Simulação Física", description: "N-body Verlet gravity, 5 tipos de partículas, galáxia espiral, slingshot, colisões", gradient: "from-indigo-900 to-cyan-500", emoji: "⚛️", status: "live" },
