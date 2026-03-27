@@ -16,6 +16,7 @@ import {
   useSpring,
   useMotionValueEvent,
   AnimatePresence,
+  type MotionValue,
 } from "framer-motion";
 
 /* =============================================================================
@@ -824,9 +825,9 @@ function useReducedMotion(): boolean {
 }
 
 function useChapterProgress(
-  scrollY: ReturnType<typeof useScroll>["scrollYProgress"],
+  scrollY: MotionValue<number>,
   chapterIndex: number
-) {
+): MotionValue<number> {
   const range = CHAPTER_RANGES[chapterIndex];
   const start = range.start / TOTAL_HEIGHT;
   const end = range.end / TOTAL_HEIGHT;
@@ -2272,7 +2273,7 @@ const NavigationDots = memo(function NavigationDots({
   }, []);
 
   return (
-    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-0 hidden md:flex">
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center gap-0">
       {/* Connecting line */}
       <div className="absolute top-0 bottom-0 w-px bg-white/10" />
       {CHAPTER_RANGES.map((ch, i) => (
@@ -2433,7 +2434,7 @@ const ChapterPortal = memo(function ChapterPortal({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const titleOpacity = useTransform(
@@ -2666,7 +2667,7 @@ const ChapterInicio = memo(function ChapterInicio({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const bgGradient = useTransform(
@@ -2954,7 +2955,7 @@ const ChapterOficina = memo(function ChapterOficina({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const [ref, inView] = useInView(0.1);
@@ -3301,7 +3302,7 @@ const ChapterVila = memo(function ChapterVila({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const bgOpacity = useTransform(chapterProgress, [0, 0.05], [0, 1]);
@@ -3651,7 +3652,7 @@ const ChapterSaude = memo(function ChapterSaude({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const bgOpacity = useTransform(chapterProgress, [0, 0.05], [0, 1]);
@@ -3785,7 +3786,7 @@ const ChapterLab = memo(function ChapterLab({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const bgOpacity = useTransform(chapterProgress, [0, 0.05], [0, 1]);
@@ -4029,7 +4030,7 @@ const ChapterJornada = memo(function ChapterJornada({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const bgOpacity = useTransform(chapterProgress, [0, 0.05], [0, 1]);
@@ -4231,7 +4232,7 @@ const ChapterTopo = memo(function ChapterTopo({
   chapterProgress,
   reducedMotion,
 }: {
-  chapterProgress: ReturnType<typeof useTransform>;
+  chapterProgress: MotionValue<number>;
   reducedMotion: boolean;
 }) {
   const bgOpacity = useTransform(chapterProgress, [0, 0.05], [0, 1]);

@@ -10,17 +10,17 @@ const sora = Sora({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Descomplicai Cosmos \u2014 Redesign",
+  title: "Descomplicai Cosmos — Homepage Concept",
   description:
-    "Uma viagem pelo cosmos digital. Estrutura Digital, Mentoria e IA \u2014 redesign conceptual da homepage descomplicai.pt",
+    "Uma viagem pelo cosmos digital. Estrutura Digital, Mentoria e Inteligencia Artificial — homepage conceptual descomplicai.pt com parallax, animacoes e experiencia imersiva.",
   openGraph: {
-    title: "Descomplicai Cosmos \u2014 Redesign",
+    title: "Descomplicai Cosmos — Homepage Concept",
     description:
-      "Explore o universo da Descomplicai. Estrutura digital, mentoria e intelig\u00eancia artificial.",
+      "Explore o universo da Descomplicai. Estrutura digital, mentoria e inteligencia artificial acessivel a todos.",
     type: "website",
   },
 };

@@ -4,22 +4,25 @@ import { Sora, Inter } from "next/font/google";
 const sora = Sora({
   variable: "--font-sora",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Jaime Silva — Builder, AI Architect, Systems Creator",
   description:
-    "Portfolio pessoal de Jaime Silva. Builder, AI Architect e Systems Creator. Keep building. Share Love.",
+    "Portfolio pessoal de Jaime Silva. 24 anos, MSc IST, fundador da Descomplicai. 109 paginas numa noite. Keep building. Share Love.",
   openGraph: {
     title: "Jaime Silva — Builder & AI Architect",
-    description: "Keep building. Share Love.",
+    description:
+      "109 paginas. 55+ projetos. Uma noite. Keep building. Share Love.",
     type: "website",
   },
 };
