@@ -284,8 +284,10 @@ export default function HorizontePage() {
           style={{
             position: "fixed",
             top: 16,
-            left: "50%",
-            transform: "translateX(-50%)",
+            left: 0,
+            right: 0,
+            marginLeft: "auto",
+            marginRight: "auto",
             zIndex: 1000,
             width: "min(90%, 900px)",
             padding: "12px 24px",

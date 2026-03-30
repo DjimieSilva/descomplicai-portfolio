@@ -75,29 +75,33 @@ const STATS = [
 
 const TIERS = [
   {
-    name: "Gota",
-    emoji: "💧",
-    price: "Gratuito",
-    description: "Partilha nas redes, usa os projetos, dá feedback.",
-    cta: "Partilhar",
+    name: "Estrela",
+    emoji: "\u2B50",
+    price: "5\u20AC/m\u00EAs",
+    tagline: "O teu nome na constela\u00E7\u00E3o",
+    perks: ["Mural de apoiantes", "Updates behind-the-scenes", "Badge Apoiante Estrela"],
+    cta: "Juntar-me como Estrela",
     style: "outline" as const,
     popular: false,
   },
   {
-    name: "Onda",
-    emoji: "🌊",
-    price: "€5 uma vez",
-    description: "Contribuição para servidores e domínios.",
-    cta: "Contribuir €5",
+    name: "Sol",
+    emoji: "\u2600\uFE0F",
+    price: "15\u20AC/m\u00EAs",
+    tagline: "Ilumina o caminho",
+    perks: ["Tudo da Estrela", "Newsletter exclusiva mensal", "Acesso antecipado a ferramentas", "Templates e recursos premium"],
+    cta: "Juntar-me como Sol",
     style: "solid" as const,
     popular: true,
+    badge: "Mais Popular",
   },
   {
-    name: "Maré",
-    emoji: "🌊",
-    price: "€15+/mês",
-    description: "Apoio mensal, input em novos projetos, agradecimento público.",
-    cta: "Apoiar mensalmente",
+    name: "Horizonte",
+    emoji: "\uD83C\uDF05",
+    price: "30\u20AC/m\u00EAs",
+    tagline: "Transforma a paisagem",
+    perks: ["Tudo do Sol", "Sess\u00E3o de mentoria 1:1 mensal (30min)", "Input direto em novos projetos", "Cr\u00E9dito permanente no site", "Convite para eventos"],
+    cta: "Juntar-me como Horizonte",
     style: "gradient" as const,
     popular: false,
   },
@@ -659,7 +663,7 @@ export default function MarePage() {
                   marginTop: 8,
                 }}
               >
-                Apoiar a missão
+                Fazer parte
               </button>
             </motion.div>
           )}
@@ -819,7 +823,7 @@ export default function MarePage() {
                 marginBottom: 8,
               }}
             >
-              Construo para todos.
+              Olha o que estou a construir.
             </h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -833,7 +837,7 @@ export default function MarePage() {
                 marginBottom: 24,
               }}
             >
-              Não para lucrar.
+              Vem.
             </motion.p>
             <motion.p
               initial={{ opacity: 0 }}
@@ -847,8 +851,7 @@ export default function MarePage() {
                 margin: "0 auto 40px",
               }}
             >
-              110+ projetos gratuitos. Websites, ferramentas, jogos e
-              experiências. Tudo open, tudo para a comunidade.
+              110+ projetos gratuitos. Construídos em público. Isto é só o começo.
             </motion.p>
 
             {/* CTAs */}
@@ -885,7 +888,7 @@ export default function MarePage() {
                     "0 4px 20px rgba(13,148,136,0.3)";
                 }}
               >
-                Ver o que construí
+                Explorar
               </button>
               <button
                 onClick={() => scrollTo("apoiar")}
@@ -911,7 +914,7 @@ export default function MarePage() {
                   e.currentTarget.style.background = "rgba(255,255,255,0.7)";
                 }}
               >
-                Apoiar a missão
+                Fazer parte
               </button>
             </motion.div>
           </motion.div>
@@ -1006,7 +1009,7 @@ export default function MarePage() {
                   marginBottom: 20,
                 }}
               >
-                Porquê fazer tudo de graça?
+                Porquê gratuito?
               </h2>
               <p
                 style={{
@@ -1016,9 +1019,7 @@ export default function MarePage() {
                   marginBottom: 16,
                 }}
               >
-                Não quero estar preocupado com profits. Quero construir para o
-                bem de todos e para a minha felicidade. Porque gosto de resolver
-                problemas.
+                Grátis para ti. Mas não grátis de fazer. Cada projeto nasce de horas de trabalho, servidores e ferramentas. Faço-o porque resolver problemas é o que me faz feliz.
               </p>
               <p
                 style={{
@@ -1028,8 +1029,7 @@ export default function MarePage() {
                   fontStyle: "italic",
                 }}
               >
-                Cada pessoa que usa uma das minhas ferramentas sem pagar é uma
-                vitória.
+                A melhor coisa que construí hoje vai ajudar alguém que nunca vou conhecer.
               </p>
             </motion.div>
 
@@ -1309,8 +1309,18 @@ export default function MarePage() {
                 marginBottom: 12,
               }}
             >
-              Como podes ajudar?
+              <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" as const, color: "#0D9488", display: "block", marginBottom: 8 }}>FAZER PARTE</span>
+              <span style={{
+                background: "linear-gradient(135deg, #0D9488, #0EA5E9, #FB923C)",
+                backgroundSize: "200% 200%",
+                animation: "gradientShift 4s ease infinite",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>Vem para a viagem</span>
             </h2>
+            <p style={{ fontSize: 16, color: "#4B5563", maxWidth: 600, margin: "0 auto" }}>
+              Os projetos são sempre gratuitos. Isto é para quem quer estar mais perto do processo.
+            </p>
           </motion.div>
 
           <div
@@ -1357,7 +1367,7 @@ export default function MarePage() {
                   }}
                 >
                   {/* Popular badge */}
-                  {tier.popular && (
+                  {tier.popular && tier.badge && (
                     <div
                       style={{
                         position: "absolute",
@@ -1372,7 +1382,7 @@ export default function MarePage() {
                         letterSpacing: 0.5,
                       }}
                     >
-                      Popular
+                      {tier.badge}
                     </div>
                   )}
 
@@ -1403,15 +1413,31 @@ export default function MarePage() {
                   </p>
                   <p
                     style={{
-                      fontSize: 14,
-                      color: "#4B5563",
-                      lineHeight: 1.6,
-                      marginBottom: 24,
-                      minHeight: 44,
+                      fontSize: 13,
+                      color: "#6B7280",
+                      fontStyle: "italic",
+                      marginBottom: 16,
                     }}
                   >
-                    {tier.description}
+                    {tier.tagline}
                   </p>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: 0,
+                      margin: "0 0 24px 0",
+                      fontSize: 14,
+                      color: "#4B5563",
+                      lineHeight: 2,
+                    }}
+                  >
+                    {tier.perks.map((perk: string) => (
+                      <li key={perk} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ color: "#0D9488", fontSize: 16 }}>&#10003;</span>
+                        {perk}
+                      </li>
+                    ))}
+                  </ul>
                   <button
                     style={{
                       width: "100%",
@@ -1471,8 +1497,7 @@ export default function MarePage() {
               margin: "0 auto",
             }}
           >
-            Cada contribuição faz diferença. Mas se não puderes apoiar
-            financeiramente, usar e partilhar já é enorme.
+            Partilhar o projeto com alguém é tão valioso como qualquer contribuição.
           </motion.p>
         </section>
 
@@ -1521,32 +1546,7 @@ export default function MarePage() {
                 marginBottom: 32,
               }}
             >
-              Imagina um mundo onde qualquer pessoa pode ter um website
-              profissional. Onde ferramentas úteis são gratuitas. Onde a
-              tecnologia não é um luxo.
-            </p>
-            <p
-              style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontWeight: 700,
-                fontSize: "clamp(1.5rem, 4vw, 2.25rem)",
-                color: "#134E4A",
-              }}
-            >
-              Esse é o{" "}
-              <span
-                style={{
-                  background:
-                    "linear-gradient(135deg, #0D9488, #0EA5E9, #FB923C)",
-                  backgroundSize: "200% 200%",
-                  animation: "gradientShift 4s ease infinite",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                mar
-              </span>{" "}
-              para onde navego.
+              Isto é só o começo. Se gostas do que vês, há mais a caminho.
             </p>
           </motion.div>
         </section>

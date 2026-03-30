@@ -100,8 +100,8 @@ const SUPPORT_TIERS = [
   {
     name: "Estrela",
     icon: "\u2b50",
-    price: "Gratis",
-    period: "",
+    price: "\u20ac5",
+    period: "/mes",
     features: [
       "Acesso a todos os projetos",
       "Updates por email",
@@ -110,11 +110,12 @@ const SUPPORT_TIERS = [
     gradient: "linear-gradient(135deg, #3B82F6, #60a5fa)",
     glow: "rgba(59,130,246,0.15)",
     tier: 0,
+    popular: false,
   },
   {
-    name: "Lua",
-    icon: "\ud83c\udf19",
-    price: "\u20ac5",
+    name: "Sol",
+    icon: "\u2600\ufe0f",
+    price: "\u20ac15",
     period: "/mes",
     features: [
       "Tudo do Estrela",
@@ -125,14 +126,15 @@ const SUPPORT_TIERS = [
     gradient: "linear-gradient(135deg, #8B5CF6, #a78bfa)",
     glow: "rgba(139,92,246,0.2)",
     tier: 1,
+    popular: true,
   },
   {
-    name: "Ceu",
+    name: "Horizonte",
     icon: "\ud83c\udf05",
-    price: "\u20ac15+",
+    price: "\u20ac30",
     period: "/mes",
     features: [
-      "Tudo do Lua",
+      "Tudo do Sol",
       "Projetos personalizados",
       "Reuniao mensal",
       "Co-criacao",
@@ -141,6 +143,7 @@ const SUPPORT_TIERS = [
     gradient: "linear-gradient(135deg, #3B82F6, #8B5CF6, #FDE68A)",
     glow: "rgba(253,230,138,0.3)",
     tier: 2,
+    popular: false,
   },
 ];
 
@@ -804,8 +807,10 @@ export default function CeuPage() {
           style={{
             position: "fixed",
             top: 16,
-            left: "50%",
-            transform: "translateX(-50%)",
+            left: 0,
+            right: 0,
+            marginLeft: "auto",
+            marginRight: "auto",
             zIndex: 1000,
             width: "min(92%, 900px)",
             padding: "12px 24px",
@@ -1173,22 +1178,22 @@ export default function CeuPage() {
               >
                 para todos.
               </span>
+              <br />
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.3 }}
+                style={{
+                  display: "block",
+                  fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+                  fontWeight: 700,
+                  color: "#3B82F6",
+                  marginTop: 8,
+                }}
+              >
+                Vem.
+              </motion.span>
             </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
-                fontWeight: 700,
-                color: "#3B82F6",
-                marginBottom: 16,
-              }}
-            >
-              110+ projetos. Zero custos. Todo o impacto.
-            </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 25 }}
@@ -1202,7 +1207,7 @@ export default function CeuPage() {
                 lineHeight: 1.7,
               }}
             >
-              Como estrelas no ceu, cada projeto ilumina o caminho de alguem.
+              110+ projetos gratuitos. Construidos em publico. Isto e so o comeco.
             </motion.p>
 
             <motion.div
@@ -1243,7 +1248,7 @@ export default function CeuPage() {
                     "0 4px 20px rgba(59,130,246,0.35)";
                 }}
               >
-                Explorar projetos
+                Explorar
               </button>
               <button
                 onClick={() => scrollTo("apoiar")}
@@ -1269,7 +1274,7 @@ export default function CeuPage() {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                Apoiar a visao
+                Fazer parte
               </button>
             </motion.div>
           </motion.div>
@@ -1306,7 +1311,7 @@ export default function CeuPage() {
                 lineHeight: 1.2,
               }}
             >
-              Construo porque resolver problemas e o que me faz feliz.
+              A melhor coisa que construi hoje vai ajudar alguem que nunca vou conhecer.
             </h2>
             <p
               style={{
@@ -1317,10 +1322,7 @@ export default function CeuPage() {
                 marginBottom: 32,
               }}
             >
-              Cada projeto nasce de uma necessidade real. Restaurantes que precisam
-              de presenca digital. Clinicas que querem chegar a mais pacientes.
-              Ferramentas que tornam o dia a dia mais simples. Tudo gratuito,
-              porque a tecnologia deve servir todos.
+              Gratis para ti. Mas nao gratis de fazer.
             </p>
 
             {/* Big counter */}
@@ -1593,18 +1595,33 @@ export default function CeuPage() {
                 marginBottom: 12,
               }}
             >
-              Como apoiar
+              Vem para a viagem
             </h2>
+            <div
+              style={{
+                display: "inline-block",
+                padding: "4px 16px",
+                borderRadius: 9999,
+                background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
+                color: "white",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 2,
+                textTransform: "uppercase",
+                marginBottom: 16,
+              }}
+            >
+              FAZER PARTE
+            </div>
             <p
               style={{
                 fontSize: "clamp(1rem, 2vw, 1.15rem)",
                 color: "#6B7280",
-                maxWidth: 500,
+                maxWidth: 560,
                 margin: "0 auto",
               }}
             >
-              Escolhe o teu lugar no ceu. Cada contribuicao mantem a missao
-              viva.
+              Os projetos sao sempre gratuitos. Isto e para quem quer estar mais perto do processo.
             </p>
           </motion.div>
 
@@ -1618,7 +1635,7 @@ export default function CeuPage() {
             }}
           >
             {SUPPORT_TIERS.map((tier, i) => {
-              const isTop = tier.tier === 2;
+              const isTop = tier.popular;
               return (
                 <motion.div
                   key={tier.name}
@@ -1639,6 +1656,27 @@ export default function CeuPage() {
                       : "none",
                   }}
                 >
+                  {isTop && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: -12,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        padding: "4px 16px",
+                        borderRadius: 9999,
+                        background: "linear-gradient(135deg, #8B5CF6, #a78bfa)",
+                        color: "white",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: 1,
+                        whiteSpace: "nowrap" as const,
+                        zIndex: 5,
+                      }}
+                    >
+                      Mais Popular
+                    </div>
+                  )}
                   <div
                     style={{
                       background: "rgba(255,255,255,0.9)",
@@ -1779,17 +1817,32 @@ export default function CeuPage() {
                             "0 4px 20px rgba(59,130,246,0.3)";
                       }}
                     >
-                      {tier.tier === 0
-                        ? "Comecar"
-                        : tier.tier === 1
-                          ? "Apoiar"
-                          : "Juntar-me"}
+                      {`Juntar-me como ${tier.name}`}
                     </button>
                   </div>
                 </motion.div>
               );
             })}
           </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            style={{
+              textAlign: "center",
+              marginTop: 48,
+              fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
+              color: "#6B7280",
+              fontStyle: "italic",
+              maxWidth: 500,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            Partilhar o projeto com alguem e tao valioso como qualquer contribuicao.
+          </motion.p>
         </section>
 
         {/* ═══════════════════════ 7. VISAO ═══════════════════════ */}
@@ -1840,20 +1893,8 @@ export default function CeuPage() {
                 lineHeight: 1.3,
               }}
             >
-              Imagina um mundo onde a tecnologia nao e um luxo.
+              Isto e so o comeco.
             </h2>
-            <p
-              style={{
-                fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
-                color: "#4B5563",
-                lineHeight: 1.8,
-                marginBottom: 16,
-              }}
-            >
-              Onde qualquer negocio, por mais pequeno que seja, pode ter uma
-              presenca digital de qualidade. Onde ferramentas uteis estao
-              disponiveis para todos, sem barreiras.
-            </p>
             <p
               style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -1863,7 +1904,7 @@ export default function CeuPage() {
                 lineHeight: 1.4,
               }}
             >
-              Esse e o{" "}
+              Se gostas do que ves, ha mais a{" "}
               <span
                 style={{
                   background:
@@ -1872,9 +1913,8 @@ export default function CeuPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                ceu
-              </span>{" "}
-              que imagino.
+                caminho.
+              </span>
             </p>
           </motion.div>
         </section>

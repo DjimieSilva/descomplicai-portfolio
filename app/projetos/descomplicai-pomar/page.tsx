@@ -54,30 +54,35 @@ const IMPACT_STATS = [
 
 const SUPPORT_TIERS = [
   {
-    name: "Semente",
-    emoji: "🌱",
-    price: "Grátis",
-    description: "Usa, partilha, faz crescer.",
-    features: ["Acesso a todos os projetos", "Atualizações regulares", "Comunidade aberta"],
+    name: "Estrela",
+    emoji: "\u2B50",
+    price: "\u20AC5",
+    period: "/m\u00EAs",
+    description: "O teu nome na constela\u00E7\u00E3o",
+    features: ["Acesso a todos os projetos", "Badge de apoiante", "Canal exclusivo", "Nome na p\u00E1gina de apoiantes"],
     highlighted: false,
+    cta: "Juntar-me como Estrela",
   },
   {
-    name: "Broto",
-    emoji: "🌿",
-    price: "€5",
-    period: "/mês",
-    description: "Ajuda a manter o pomar vivo.",
-    features: ["Tudo do Semente", "Badge de apoiante", "Acesso antecipado a novos projetos", "Canal exclusivo"],
-    highlighted: false,
-  },
-  {
-    name: "Pomar",
-    emoji: "🌳",
-    price: "€15+",
-    period: "/mês",
-    description: "Juntos, cultivamos o futuro.",
-    features: ["Tudo do Broto", "Voto em próximos projetos", "Sessões mensais de Q&A", "Nome nos créditos", "Sugestões prioritárias"],
+    name: "Sol",
+    emoji: "\u2600\uFE0F",
+    price: "\u20AC15",
+    period: "/m\u00EAs",
+    description: "Ilumina o caminho",
+    features: ["Tudo do Estrela", "Acesso antecipado a novos projetos", "Voto em pr\u00F3ximos projetos", "Sess\u00F5es mensais de Q&A"],
     highlighted: true,
+    badge: "Mais Popular",
+    cta: "Juntar-me como Sol",
+  },
+  {
+    name: "Horizonte",
+    emoji: "\uD83C\uDF05",
+    price: "\u20AC30",
+    period: "/m\u00EAs",
+    description: "Transforma a paisagem",
+    features: ["Tudo do Sol", "Sugest\u00F5es priorit\u00E1rias", "Cr\u00E9ditos em todos os projetos", "Linha direta comigo"],
+    highlighted: false,
+    cta: "Juntar-me como Horizonte",
   },
 ];
 
@@ -523,7 +528,7 @@ export default function PomarPage() {
               onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(5,150,105,0.35)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(5,150,105,0.25)"; }}
             >
-              Plantar uma Semente
+              Fazer parte
             </button>
           </div>
 
@@ -584,7 +589,7 @@ export default function PomarPage() {
                   fontFamily: "'Inter', sans-serif", marginTop: 8,
                 }}
               >
-                Plantar uma Semente
+                Fazer parte
               </button>
             </motion.div>
           )}
@@ -657,17 +662,36 @@ export default function PomarPage() {
                 color: "#78350F",
               }}
             >
-              Cada projeto{" "}
+              Olha o que estou a{" "}
               <span style={{
                 background: "linear-gradient(135deg, #92400E, #FDBA74, #86EFAC)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}>
-                é um fruto.
+                cultivar.
               </span>
             </motion.h1>
 
             {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              style={{
+                fontSize: "clamp(28px, 4vw, 42px)",
+                color: "#78350F",
+                maxWidth: 600,
+                margin: "0 auto 16px",
+                lineHeight: 1.2,
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 700,
+                fontStyle: "italic",
+              }}
+            >
+              Vem.
+            </motion.p>
+
+            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -683,7 +707,7 @@ export default function PomarPage() {
                 opacity: 0.8,
               }}
             >
-              Plantado com cuidado. Cultivado com paixão. Oferecido a todos.
+              110+ projetos gratuitos. Cada um plantado com cuidado. Isto é só o começo.
             </motion.p>
 
             {/* CTAs */}
@@ -731,7 +755,7 @@ export default function PomarPage() {
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "rgba(255,255,255,0.9)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "rgba(255,255,255,0.7)"; }}
               >
-                Regar o jardim
+                Fazer parte
               </button>
             </motion.div>
           </motion.div>
@@ -849,7 +873,7 @@ export default function PomarPage() {
                   marginBottom: 16,
                 }}
               >
-                &ldquo;Não quero construir para lucrar. Quero construir para o bem de todos e para a minha felicidade.&rdquo;
+                &ldquo;A melhor coisa que construí hoje vai ajudar alguém que nunca vou conhecer.&rdquo;
               </motion.blockquote>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
@@ -876,18 +900,8 @@ export default function PomarPage() {
                   color: "#4B5563",
                   marginBottom: 20,
                 }}>
-                  O Descomplicai nasceu de uma ideia simples: e se a tecnologia fosse verdadeiramente acessível?
-                  Sem barreiras, sem custos escondidos, sem complicações.
-                </p>
-                <p style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 16,
-                  lineHeight: 1.8,
-                  color: "#4B5563",
-                }}>
-                  Cada projeto é plantado com a mesma intenção — ajudar. Restaurantes que precisam de presença digital,
-                  clínicas que querem chegar a mais pessoas, ferramentas que simplificam o dia a dia. Tudo gratuito,
-                  tudo feito com cuidado, tudo oferecido de coração.
+                  Grátis para ti. Mas não grátis de fazer. Cada projeto nasce de horas de trabalho, servidores e ferramentas.
+                  Faço-o porque resolver problemas é o que me faz feliz.
                 </p>
               </div>
 
@@ -1214,27 +1228,32 @@ export default function PomarPage() {
                 letterSpacing: "0.1em",
                 color: "#059669",
               }}>
-                Como apoiar
+                FAZER PARTE
               </span>
             </div>
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: "clamp(28px, 5vw, 44px)",
               fontWeight: 800,
-              color: "#78350F",
               marginBottom: 12,
             }}>
-              Planta a tua semente
+              <span style={{
+                background: "linear-gradient(135deg, #92400E, #FDBA74, #86EFAC)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>
+                Vem para a viagem
+              </span>
             </h2>
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: 16,
               color: "#4B5563",
-              maxWidth: 500,
+              maxWidth: 560,
               margin: "0 auto",
               lineHeight: 1.6,
             }}>
-              Cada contribuição ajuda o pomar a crescer e a dar mais frutos.
+              Os projetos são sempre gratuitos. Isto é para quem quer estar mais perto do processo.
             </p>
           </motion.div>
 
@@ -1278,6 +1297,27 @@ export default function PomarPage() {
                 }}
                 whileHover={{ y: -4 }}
               >
+                {/* Popular badge */}
+                {"badge" in tier && tier.badge && (
+                  <div style={{
+                    position: "absolute",
+                    top: 16,
+                    right: 16,
+                    padding: "4px 12px",
+                    borderRadius: 9999,
+                    background: "linear-gradient(135deg, #059669, #10B981)",
+                    color: "white",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    fontFamily: "'Inter', sans-serif",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    zIndex: 2,
+                  }}>
+                    {tier.badge}
+                  </div>
+                )}
+
                 {/* Highlighted tier — animated gradient border */}
                 {tier.highlighted && (
                   <div style={{
@@ -1417,12 +1457,31 @@ export default function PomarPage() {
                     onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.02)"; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; }}
                   >
-                    {tier.price === "Grátis" ? "Começar agora" : "Apoiar"}
+                    {tier.cta}
                   </button>
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Bottom note */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            style={{
+              textAlign: "center",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              color: "#6B7280",
+              marginTop: 40,
+              fontStyle: "italic",
+              lineHeight: 1.6,
+            }}
+          >
+            Partilhar o projeto com alguém é tão valioso como qualquer contribuição.
+          </motion.p>
         </section>
 
         {/* ═══════════════════════════ SECTION 7: VISÃO ═══════════════════════════ */}
@@ -1449,15 +1508,14 @@ export default function PomarPage() {
                 marginBottom: 24,
               }}
             >
-              Esse é o{" "}
+              Isto é só o{" "}
               <span style={{
                 background: "linear-gradient(135deg, #92400E, #FDBA74, #86EFAC)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}>
-                pomar
+                começo.
               </span>
-              {" "}que cultivo.
             </motion.h2>
             <p style={{
               fontFamily: "'Inter', sans-serif",
@@ -1467,8 +1525,7 @@ export default function PomarPage() {
               margin: "0 auto",
               lineHeight: 1.7,
             }}>
-              Um lugar onde cada ideia tem espaço para crescer. Onde a tecnologia serve as pessoas,
-              não o contrário. Onde o valor está no impacto, não no preço.
+              Se gostas do que vês, há mais a caminho.
             </p>
 
             {/* Decorative divider */}
