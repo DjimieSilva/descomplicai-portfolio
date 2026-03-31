@@ -123,11 +123,11 @@ function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16 lg:h-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-14 lg:h-20">
         {/* Logo */}
         <a
           href="#"
-          className="font-[var(--awat-font-heading)] text-2xl lg:text-3xl tracking-[0.2em] text-[#F5F5F0] hover:text-[#C17F59] transition-colors"
+          className="font-[var(--awat-font-heading)] text-base sm:text-xl lg:text-3xl tracking-[0.1em] lg:tracking-[0.2em] text-[#F5F5F0] hover:text-[#C17F59] transition-colors"
         >
           {"AWAT & CHALAK".split("").map((letter, i) => (
             <span
@@ -301,7 +301,7 @@ function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-screen w-full overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-[80svh] sm:min-h-svh h-screen w-full overflow-hidden">
       <div ref={videoContainerRef} className="absolute inset-0 w-full h-full">
         <img
           src="/awat-chalak/hero1.jpg"
@@ -338,7 +338,7 @@ function Hero() {
             <span
               key={i}
               ref={(el) => { lettersRef.current[i] = el; }}
-              className={`font-[var(--awat-font-heading)] text-[3rem] sm:text-[5rem] md:text-[8rem] lg:text-[10rem] leading-none tracking-[0.1em] text-[#F5F5F0] select-none inline-block ${letter === " " ? "w-[0.3em]" : ""}`}
+              className={`font-[var(--awat-font-heading)] text-[1.8rem] sm:text-[3rem] md:text-[5rem] lg:text-[8rem] leading-none tracking-[0.05em] sm:tracking-[0.1em] text-[#F5F5F0] select-none inline-block ${letter === " " ? "w-[0.3em]" : ""}`}
               style={{ textShadow: "0 0 80px rgba(193,127,89,0.3)" }}
             >
               {letter === " " ? "\u00A0" : letter}
@@ -348,16 +348,16 @@ function Hero() {
 
         <p
           ref={subtitleRef}
-          className="mt-4 md:mt-6 font-[var(--awat-font-body)] text-sm md:text-base tracking-[0.3em] uppercase text-[#F5F5F0]/70"
+          className="mt-3 md:mt-6 font-[var(--awat-font-body)] text-xs sm:text-sm md:text-base tracking-[0.15em] sm:tracking-[0.3em] uppercase text-[#F5F5F0]/70"
         >
           {t("Ihr Friseur in Heilbronn seit 2007", "Your barber in Heilbronn since 2007")}
         </p>
 
-        <div ref={scrollHintRef} className="absolute bottom-10 flex flex-col items-center gap-2">
-          <span className="font-[var(--awat-font-body)] text-xs tracking-widest uppercase text-[#F5F5F0]/40">
+        <div ref={scrollHintRef} className="absolute bottom-6 sm:bottom-10 flex flex-col items-center gap-1.5 sm:gap-2">
+          <span className="font-[var(--awat-font-body)] text-[10px] sm:text-xs tracking-widest uppercase text-[#F5F5F0]/40">
             {t("Entdecken", "Discover")}
           </span>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-[#C17F59]/60">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="sm:w-5 sm:h-5 text-[#C17F59]/60">
             <path d="M10 4v12M4 12l6 6 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
@@ -414,7 +414,7 @@ function ServiceIcon({ type }: { type: string }) {
     ),
   };
 
-  return <div className="mb-6">{iconMap[type] || iconMap.scissors}</div>;
+  return <div className="mb-6 [&>svg]:w-12 [&>svg]:h-12 md:[&>svg]:w-16 md:[&>svg]:h-16">{iconMap[type] || iconMap.scissors}</div>;
 }
 
 function Services() {
@@ -480,10 +480,10 @@ function Services() {
 
   return (
     <section ref={sectionRef} id="servicos" className="relative overflow-hidden">
-      <div className="pt-20 pb-12 px-6 lg:px-16">
+      <div className="pt-12 sm:pt-20 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-16">
         <h2
           ref={titleRef}
-          className="font-[var(--awat-font-heading)] text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] text-[#F5F5F0] text-center"
+          className="awat-section-title font-[var(--awat-font-heading)] text-3xl md:text-5xl lg:text-7xl tracking-[0.05em] sm:tracking-[0.1em] text-[#F5F5F0] text-center"
         >
           {t("LEISTUNGEN", "SERVICES")}
         </h2>
@@ -492,13 +492,13 @@ function Services() {
 
       <div
         ref={trackRef}
-        className="flex items-stretch gap-8 pl-8 lg:pl-16 pr-[40vw] pb-20 pt-8"
+        className="flex items-stretch gap-4 sm:gap-8 pl-4 sm:pl-8 lg:pl-16 pr-[40vw] pb-12 sm:pb-20 pt-4 sm:pt-8"
       >
         {services.map((service, i) => (
           <div
             key={service.name.de}
             ref={(el) => { cardsRef.current[i] = el; }}
-            className="group relative flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[30vw] min-h-[400px] bg-[#2D2D2D] border border-[#C17F59]/20 rounded-sm p-8 lg:p-10 flex flex-col justify-between transition-all duration-500 hover:border-[#C17F59]/60 hover:shadow-[0_0_40px_rgba(193,127,89,0.15)]"
+            className="group relative flex-shrink-0 w-[70vw] sm:w-[60vw] md:w-[45vw] lg:w-[30vw] min-h-[400px] bg-[#2D2D2D] border border-[#C17F59]/20 rounded-sm p-4 md:p-6 lg:p-10 flex flex-col justify-between transition-all duration-500 hover:border-[#C17F59]/60 hover:shadow-[0_0_40px_rgba(193,127,89,0.15)]"
           >
             <span className="absolute top-6 right-6 font-[var(--awat-font-heading)] text-6xl text-[#C17F59]/10 select-none">
               0{i + 1}
@@ -509,13 +509,13 @@ function Services() {
               <h3 className="font-[var(--awat-font-heading)] text-3xl md:text-4xl tracking-[0.1em] text-[#F5F5F0] mb-4">
                 {t(service.name.de, service.name.en)}
               </h3>
-              <p className="font-[var(--awat-font-body)] text-[#F5F5F0]/60 text-base leading-relaxed max-w-xs">
+              <p className="font-[var(--awat-font-body)] text-[#F5F5F0]/60 text-sm md:text-base leading-relaxed max-w-xs">
                 {t(service.desc.de, service.desc.en)}
               </p>
             </div>
 
             <div className="mt-8 flex items-end justify-between">
-              <span className="font-[var(--awat-font-heading)] text-5xl md:text-6xl text-[#C17F59]">
+              <span className="font-[var(--awat-font-heading)] text-2xl md:text-3xl text-[#C17F59]">
                 {service.price}
               </span>
               <div className="w-12 h-px bg-[#C17F59]/40 group-hover:w-20 transition-all duration-500" />
@@ -630,30 +630,30 @@ function Barbers() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="equipa" className="relative py-24 md:py-32 lg:py-40 bg-[#1C1C1C]">
-      <div className="text-center mb-16 md:mb-24 px-6">
+    <section ref={sectionRef} id="equipa" className="relative py-12 sm:py-24 md:py-32 lg:py-40 bg-[#1C1C1C]">
+      <div className="text-center mb-10 sm:mb-16 md:mb-24 px-4 sm:px-6">
         <h2
           ref={titleRef}
-          className="font-[var(--awat-font-heading)] text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] text-[#F5F5F0]"
+          className="awat-section-title font-[var(--awat-font-heading)] text-3xl md:text-5xl lg:text-7xl tracking-[0.05em] sm:tracking-[0.1em] text-[#F5F5F0]"
         >
           {t({ de: "UNSER TEAM", en: "OUR TEAM" })}
         </h2>
         <div className="w-24 h-px bg-[#C17F59] mx-auto mt-6" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-24 md:space-y-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-16 md:space-y-24 lg:space-y-32">
         {barbers.map((barber, i) => (
           <div
             key={barber.name}
             ref={(el) => { profilesRef.current[i] = el; }}
-            className={`flex flex-col gap-8 lg:gap-12 ${
-              i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+            className={`flex flex-col gap-6 md:gap-8 lg:gap-12 ${
+              i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
             } items-center`}
           >
-            <div className="relative w-full lg:w-1/2 overflow-hidden">
+            <div className="relative w-full md:w-1/2 overflow-hidden">
               <div
                 ref={(el) => { imagesRef.current[i] = el; }}
-                className="w-full aspect-[3/4] rounded-sm relative overflow-hidden"
+                className="w-full h-[300px] md:h-auto md:aspect-[3/4] rounded-sm relative overflow-hidden"
               >
                 <img
                   src={barber.image}
@@ -665,18 +665,18 @@ function Barbers() {
               </div>
             </div>
 
-            <div className={`w-full lg:w-1/2 ${i % 2 === 0 ? "lg:pl-8" : "lg:pr-8"}`}>
+            <div className={`w-full md:w-1/2 ${i % 2 === 0 ? "md:pl-8" : "md:pr-8"}`}>
               <p className="barber-text font-[var(--awat-font-body)] text-[#C17F59] text-sm tracking-[0.3em] uppercase mb-3">
                 {t(barber.role)}
               </p>
-              <h3 className="barber-text font-[var(--awat-font-heading)] text-4xl md:text-5xl lg:text-6xl tracking-[0.1em] text-[#F5F5F0] mb-6">
+              <h3 className="barber-text font-[var(--awat-font-heading)] text-3xl md:text-4xl lg:text-6xl tracking-[0.1em] text-[#F5F5F0] mb-6">
                 {barber.name}
               </h3>
               <div
                 ref={(el) => { linesRef.current[i] = el; }}
                 className="w-16 h-px bg-[#C17F59] mb-6"
               />
-              <p className="barber-text font-[var(--awat-font-body)] text-[#F5F5F0]/60 text-lg leading-relaxed max-w-md">
+              <p className="barber-text font-[var(--awat-font-body)] text-[#F5F5F0]/60 text-base md:text-lg leading-relaxed max-w-md">
                 {t(barber.description)}
               </p>
             </div>
@@ -703,8 +703,8 @@ const galleryItems = [
 
 function getSpanClass(span: string) {
   switch (span) {
-    case "row": return "col-span-1 sm:col-span-2 row-span-1";
-    case "col": return "col-span-1 row-span-2";
+    case "row": return "col-span-1 row-span-1 sm:col-span-2 sm:row-span-1";
+    case "col": return "col-span-1 row-span-1 sm:col-span-1 sm:row-span-2";
     default: return "col-span-1 row-span-1";
   }
 }
@@ -750,24 +750,24 @@ function Gallery() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="galeria" className="relative py-24 md:py-32 lg:py-40 bg-[#2D2D2D]">
-      <div className="text-center mb-16 md:mb-24 px-6">
+    <section ref={sectionRef} id="galeria" className="relative py-12 sm:py-24 md:py-32 lg:py-40 bg-[#2D2D2D]">
+      <div className="text-center mb-10 sm:mb-16 md:mb-24 px-4 sm:px-6">
         <h2
           ref={titleRef}
-          className="font-[var(--awat-font-heading)] text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] text-[#F5F5F0]"
+          className="awat-section-title font-[var(--awat-font-heading)] text-3xl md:text-5xl lg:text-7xl tracking-[0.05em] sm:tracking-[0.1em] text-[#F5F5F0]"
         >
           {t({ de: "GALERIE", en: "GALLERY" })}
         </h2>
         <div className="w-24 h-px bg-[#C17F59] mx-auto mt-6" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[250px]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {galleryItems.map((item, i) => (
             <div
               key={t(item.label)}
               ref={(el) => { itemsRef.current[i] = el; }}
-              className={`${getSpanClass(item.span)} group relative overflow-hidden rounded-sm cursor-pointer`}
+              className={`${getSpanClass(item.span)} group relative overflow-hidden rounded-sm cursor-pointer h-[200px] sm:h-[250px] lg:h-[300px]`}
             >
               <img
                 src={item.image}
@@ -775,8 +775,8 @@ function Gallery() {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#C17F59]/50 transition-colors duration-500 rounded-sm z-10" />
-              <div className="absolute inset-0 flex items-end p-6 z-20">
-                <span className="font-[var(--awat-font-body)] text-sm tracking-widest uppercase text-[#F5F5F0]/0 group-hover:text-[#F5F5F0]/80 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+              <div className="absolute inset-0 flex items-end p-4 sm:p-6 z-20">
+                <span className="font-[var(--awat-font-body)] text-sm tracking-widest uppercase text-[#F5F5F0]/80 sm:text-[#F5F5F0]/0 sm:group-hover:text-[#F5F5F0]/80 transition-all duration-500 translate-y-0 sm:translate-y-4 sm:group-hover:translate-y-0">
                   {t(item.label)}
                 </span>
               </div>
@@ -814,9 +814,8 @@ function BookNow() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="marcar" style={{
+    <section ref={sectionRef} id="marcar" className="awat-book-section" style={{
       background: "#1C1C1C",
-      padding: "120px 24px",
       position: "relative",
       overflow: "hidden",
     }}>
@@ -867,11 +866,11 @@ function BookNow() {
           </div>
         </div>
 
-        <div style={{
+        <div className="awat-book-buttons" style={{
           display: "flex", flexDirection: "column", alignItems: "center", gap: 16, marginBottom: 48,
         }}>
-          <a href="tel:+4971312066991" style={{
-            display: "inline-flex", alignItems: "center", gap: 12,
+          <a href="tel:+4971312066991" className="awat-book-btn" style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 12,
             background: "#C17F59", color: "#1C1C1C", padding: "16px 40px",
             borderRadius: 8, fontFamily: "var(--awat-font-heading)", fontSize: "1.2rem",
             letterSpacing: "0.05em", textDecoration: "none",
@@ -884,8 +883,8 @@ function BookNow() {
             {t("JETZT ANRUFEN", "CALL NOW")}
           </a>
 
-          <a href="https://wa.me/4917662095949" target="_blank" rel="noopener noreferrer" style={{
-            display: "inline-flex", alignItems: "center", gap: 12,
+          <a href="https://wa.me/4917662095949" target="_blank" rel="noopener noreferrer" className="awat-book-btn" style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 12,
             border: "1px solid rgba(193,127,89,0.4)", color: "#C17F59",
             padding: "14px 36px", borderRadius: 8,
             fontFamily: "var(--awat-font-heading)", fontSize: "1.1rem",
@@ -943,11 +942,11 @@ function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative bg-[#1C1C1C] border-t border-[#C17F59]/10 py-12 md:py-16"
+      className="relative bg-[#1C1C1C] border-t border-[#C17F59]/10 py-8 md:py-12"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-6">
-          <span className="font-[var(--awat-font-heading)] text-xl tracking-[0.2em] text-[#F5F5F0]/60">
+          <span className="font-[var(--awat-font-heading)] text-xl md:text-2xl tracking-[0.2em] text-[#F5F5F0]/60">
             AWAT & CHALAK
           </span>
 
@@ -955,7 +954,7 @@ function Footer() {
             {t("Ihr Stil. Unser Handwerk.", "Your style. Our craft.")}
           </p>
 
-          <div className="flex items-center gap-6 flex-wrap justify-center">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 flex-wrap justify-center">
             <a
               href="https://www.instagram.com/awat_und_chalak_friseursalon"
               target="_blank"
@@ -1114,9 +1113,35 @@ export default function FriseursalonAwatChalakPage() {
             grid-template-columns: 1fr;
           }
         }
+
+        /* BookNow section responsive padding */
+        .awat-book-section {
+          padding: 60px 16px;
+        }
+        @media (min-width: 640px) {
+          .awat-book-section {
+            padding: 120px 24px;
+          }
+        }
+
+        /* Mobile section title clamp + buttons */
+        @media (max-width: 640px) {
+          .awat-section-title {
+            font-size: clamp(2rem, 8vw, 3.5rem) !important;
+          }
+          .awat-book-btn {
+            width: 100% !important;
+            max-width: 100%;
+            box-sizing: border-box;
+          }
+          .awat-book-buttons {
+            width: 100%;
+            align-items: stretch !important;
+          }
+        }
       `}</style>
 
-      <div className="awat-page">
+      <div className="awat-page" style={{ overflowX: "hidden", maxWidth: "100vw" }}>
         <LanguageProvider>
           <LenisProvider>
             <GrainOverlay />
