@@ -59,6 +59,7 @@ const PROJECTS: Project[] = [
   { id: "quinta-da-salmanha", title: "Quinta da Salmanha", category: "restaurant", type: "Rural Estate", description: "Quinta rural com restaurante de cozinha regional, vinhos da casa e eventos ao ar livre", gradient: "from-green-800 to-amber-400", emoji: "🏡", status: "live" },
   { id: "sand-murtinheira", title: "Sand Murtinheira", category: "restaurant", type: "Beach Lounge", description: "Beach lounge na Praia da Murtinheira — cocktails, sushi, DJ sets e pôr-do-sol", gradient: "from-amber-400 to-rose-300", emoji: "🌅", status: "live" },
   { id: "tasca-da-praia", title: "Tasca da Praia", category: "restaurant", type: "Seaside Tavern", description: "Tasca à beira-mar com petiscos, vinho verde e marisco fresco em ambiente informal", gradient: "from-blue-600 to-amber-400", emoji: "⚓", status: "live" },
+  { id: "friseursalon-awat-chalak", title: "Friseursalon Awat & Chalak", category: "restaurant", type: "Website", description: "Professioneller Friseursalon in Heilbronn seit 2007. Zweisprachig DE/EN, echte Fotos, GSAP Animationen.", gradient: "from-amber-800 to-yellow-700", emoji: "💈", status: "live" },
 
   // ═══ NOVOS — CLÍNICAS (8) ═══
   { id: "alba-saude-dentaria", title: "Alba Saúde Dentária", category: "health", type: "Dental Clinic", description: "Clínica dentária moderna com estética dental, ortodontia invisível e branqueamento premium", gradient: "from-sky-400 to-teal-300", emoji: "🦷", status: "live" },
