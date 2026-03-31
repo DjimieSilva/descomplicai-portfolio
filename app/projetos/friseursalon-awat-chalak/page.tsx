@@ -303,13 +303,25 @@ function Hero() {
   return (
     <section ref={sectionRef} className="relative h-screen w-full overflow-hidden">
       <div ref={videoContainerRef} className="absolute inset-0 w-full h-full">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2D2D2D] via-[#1C1C1C] to-[#8B5E3C]/30" />
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_50%,rgba(193,127,89,0.15)_0%,transparent_70%)]" />
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          <source src="https://assets.mixkit.co/videos/34487/34487-720.mp4" type="video/mp4" />
-          <source src="https://assets.mixkit.co/videos/4815/4815-720.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-[#1C1C1C]/40" />
+        <img
+          src="/awat-chalak/hero1.jpg"
+          alt="Friseursalon Awat & Chalak"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        />
+        {/* Dark overlay for text readability */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, rgba(28,28,28,0.6) 0%, rgba(28,28,28,0.8) 100%)",
+          zIndex: 1,
+        }} />
       </div>
 
       <div ref={leftPanelRef} className="absolute inset-y-0 left-0 w-1/2 z-20 bg-[#1C1C1C]">
@@ -521,21 +533,21 @@ function Services() {
 
 const barbers = [
   {
-    name: "Chalak",
-    image: "/awat-chalak/barber-chalak.jpg",
-    role: { de: "Meisterfriseur", en: "Master Barber" },
-    description: {
-      de: "Mit \u00FCber 15 Jahren Erfahrung ist Chalak Spezialist f\u00FCr kreative Frisuren, Flechtarbeiten und moderne Schnitte. Seine Pr\u00E4zision und Kreativit\u00E4t machen jeden Besuch einzigartig.",
-      en: "With over 15 years of experience, Chalak specializes in creative hairstyles, braiding and modern cuts. His precision and creativity make every visit unique.",
-    },
-  },
-  {
     name: "Awat",
     image: "/awat-chalak/barber-awat.jpg",
     role: { de: "Inhaber & Friseur", en: "Owner & Barber" },
     description: {
       de: "Awat gr\u00FCndete den Salon 2007 in Heilbronn. Seine Leidenschaft f\u00FCr klassische Herrenhaarschnitte und Bartpflege hat den Salon zu einer festen Gr\u00F6\u00DFe in der Stadt gemacht.",
       en: "Awat founded the salon in 2007 in Heilbronn. His passion for classic men's haircuts and beard care has made the salon a fixture in the city.",
+    },
+  },
+  {
+    name: "Chalak",
+    image: "/awat-chalak/barber-chalak.jpg",
+    role: { de: "Meisterfriseur", en: "Master Barber" },
+    description: {
+      de: "Mit \u00FCber 15 Jahren Erfahrung ist Chalak Spezialist f\u00FCr kreative Frisuren, Flechtarbeiten und moderne Schnitte. Seine Pr\u00E4zision und Kreativit\u00E4t machen jeden Besuch einzigartig.",
+      en: "With over 15 years of experience, Chalak specializes in creative hairstyles, braiding and modern cuts. His precision and creativity make every visit unique.",
     },
   },
 ];
@@ -802,7 +814,7 @@ function BookNow() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="book" style={{
+    <section ref={sectionRef} id="marcar" style={{
       background: "#1C1C1C",
       padding: "120px 24px",
       position: "relative",
@@ -830,10 +842,7 @@ function BookNow() {
           {t("Kein Termin n\u00F6tig \u2014 einfach vorbeikommen. Oder rufen Sie uns an.", "No appointment needed \u2014 just walk in. Or give us a call.")}
         </p>
 
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16,
-          maxWidth: 400, margin: "0 auto 48px",
-        }}>
+        <div className="awat-hours-grid">
           <div style={{
             background: "rgba(193,127,89,0.08)", borderRadius: 12, padding: "20px 16px",
             border: "1px solid rgba(193,127,89,0.15)",
@@ -948,7 +957,7 @@ function Footer() {
 
           <div className="flex items-center gap-6 flex-wrap justify-center">
             <a
-              href="https://instagram.com/awat_und_chalak_friseursalon"
+              href="https://www.instagram.com/awat_und_chalak_friseursalon"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-[#F5F5F0]/40 hover:text-[#C17F59] transition-colors duration-300"
@@ -964,7 +973,7 @@ function Footer() {
             </a>
 
             <a
-              href="https://facebook.com/Friseursalon-Awat-Chalak-100052215741641"
+              href="https://www.facebook.com/profile.php?id=100052215741641"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-[#F5F5F0]/40 hover:text-[#C17F59] transition-colors duration-300"
@@ -976,7 +985,7 @@ function Footer() {
             </a>
 
             <a
-              href="https://tiktok.com/@friseur_awat_chalak"
+              href="https://www.tiktok.com/@friseur_awat_chalak"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-[#F5F5F0]/40 hover:text-[#C17F59] transition-colors duration-300"
@@ -991,7 +1000,7 @@ function Footer() {
           <div className="w-12 h-px bg-[#C17F59]/20 mt-2" />
 
           <p className="font-[var(--awat-font-body)] text-[#F5F5F0]/20 text-xs tracking-wide">
-            {t("\u00A9 2025 Awat & Chalak. Alle Rechte vorbehalten.", "\u00A9 2025 Awat & Chalak. All rights reserved.")}
+            {t("\u00A9 2026 Awat & Chalak. Alle Rechte vorbehalten.", "\u00A9 2026 Awat & Chalak. All rights reserved.")}
           </p>
         </div>
       </div>
@@ -1090,6 +1099,20 @@ export default function FriseursalonAwatChalakPage() {
         }
         .awat-page .hide-scrollbar::-webkit-scrollbar {
           display: none;
+        }
+
+        /* BookNow hours grid responsive */
+        .awat-hours-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          max-width: 400px;
+          margin: 0 auto 48px;
+        }
+        @media (max-width: 400px) {
+          .awat-hours-grid {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 
