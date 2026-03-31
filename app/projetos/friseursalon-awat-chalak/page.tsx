@@ -419,109 +419,100 @@ function ServiceIcon({ type }: { type: string }) {
 
 function Services() {
   const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const { t } = useLanguage();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const track = trackRef.current;
-      if (!track) return;
-
-      gsap.from(titleRef.current, {
+      gsap.from(".service-row", {
         opacity: 0,
-        y: 40,
+        y: 20,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 80%",
-          end: "top 50%",
-          scrub: 1,
+          start: "top 75%",
         },
-      });
-
-      const getScrollAmount = () => {
-        return -(track.scrollWidth - window.innerWidth);
-      };
-
-      gsap.to(track, {
-        x: getScrollAmount,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: () => `+=${track.scrollWidth - window.innerWidth}`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-        gsap.from(card, {
-          scale: 0.9,
-          opacity: 0.5,
-          y: 30,
-          duration: 0.6,
-          delay: i * 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 60%",
-            toggleActions: "play none none reverse",
-          },
-        });
       });
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} id="servicos" className="relative overflow-hidden">
-      <div className="pt-12 sm:pt-20 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-16">
+    <section ref={sectionRef} id="servicos" style={{ background: "#1C1C1C", padding: "60px 16px" }}>
+      <div style={{ maxWidth: 700, margin: "0 auto" }}>
         <h2
-          ref={titleRef}
-          className="awat-section-title font-[var(--awat-font-heading)] text-3xl md:text-5xl lg:text-7xl tracking-[0.05em] sm:tracking-[0.1em] text-[#F5F5F0] text-center"
+          className="font-[var(--awat-font-heading)]"
+          style={{
+            fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+            color: "#F5F5F0",
+            textAlign: "center",
+            letterSpacing: "0.1em",
+            marginBottom: 8,
+          }}
         >
           {t("LEISTUNGEN", "SERVICES")}
         </h2>
-        <div className="w-24 h-px bg-[#C17F59] mx-auto mt-6" />
-      </div>
+        <div style={{ width: 60, height: 1, background: "#C17F59", margin: "0 auto 40px" }} />
 
-      <div
-        ref={trackRef}
-        className="flex items-stretch gap-4 sm:gap-8 pl-4 sm:pl-8 lg:pl-16 pr-[40vw] pb-12 sm:pb-20 pt-4 sm:pt-8"
-      >
-        {services.map((service, i) => (
-          <div
-            key={service.name.de}
-            ref={(el) => { cardsRef.current[i] = el; }}
-            className="group relative flex-shrink-0 w-[70vw] sm:w-[60vw] md:w-[45vw] lg:w-[30vw] min-h-[400px] bg-[#2D2D2D] border border-[#C17F59]/20 rounded-sm p-4 md:p-6 lg:p-10 flex flex-col justify-between transition-all duration-500 hover:border-[#C17F59]/60 hover:shadow-[0_0_40px_rgba(193,127,89,0.15)]"
-          >
-            <span className="absolute top-6 right-6 font-[var(--awat-font-heading)] text-6xl text-[#C17F59]/10 select-none">
-              0{i + 1}
-            </span>
+        {/* Price list */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          {services.map((service, i) => (
+            <div
+              key={service.name.de}
+              className="service-row"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "18px 0",
+                borderBottom: i < services.length - 1 ? "1px solid rgba(193,127,89,0.12)" : "none",
+                gap: 12,
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3
+                  className="font-[var(--awat-font-heading)]"
+                  style={{
+                    fontSize: "clamp(1rem, 3vw, 1.4rem)",
+                    color: "#F5F5F0",
+                    letterSpacing: "0.05em",
+                    marginBottom: 4,
+                  }}
+                >
+                  {t(service.name.de, service.name.en)}
+                </h3>
+                <p
+                  className="font-[var(--awat-font-body)]"
+                  style={{ fontSize: 13, color: "rgba(245,245,240,0.45)", lineHeight: 1.4 }}
+                >
+                  {t(service.desc.de, service.desc.en)}
+                </p>
+              </div>
 
-            <div>
-              <ServiceIcon type={service.icon} />
-              <h3 className="font-[var(--awat-font-heading)] text-3xl md:text-4xl tracking-[0.1em] text-[#F5F5F0] mb-4">
-                {t(service.name.de, service.name.en)}
-              </h3>
-              <p className="font-[var(--awat-font-body)] text-[#F5F5F0]/60 text-sm md:text-base leading-relaxed max-w-xs">
-                {t(service.desc.de, service.desc.en)}
-              </p>
-            </div>
+              {/* Dotted line */}
+              <div style={{
+                flex: "0 0 auto",
+                width: 40,
+                borderBottom: "1px dotted rgba(193,127,89,0.3)",
+                alignSelf: "center",
+              }} />
 
-            <div className="mt-8 flex items-end justify-between">
-              <span className="font-[var(--awat-font-heading)] text-2xl md:text-3xl text-[#C17F59]">
+              {/* Price */}
+              <span
+                className="font-[var(--awat-font-heading)]"
+                style={{
+                  fontSize: "clamp(1.1rem, 3vw, 1.5rem)",
+                  color: "#C17F59",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                }}
+              >
                 {service.price}
               </span>
-              <div className="w-12 h-px bg-[#C17F59]/40 group-hover:w-20 transition-all duration-500" />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -838,7 +829,7 @@ function BookNow() {
           color: "#C17F59", fontSize: "1.1rem", marginBottom: 48,
           maxWidth: 500, margin: "0 auto 48px",
         }}>
-          {t("Kein Termin n\u00F6tig \u2014 einfach vorbeikommen. Oder rufen Sie uns an.", "No appointment needed \u2014 just walk in. Or give us a call.")}
+          {t("Kein Termin n\u00F6tig — einfach vorbeikommen. Oder rufen Sie uns an.", "No appointment needed — just walk in. Or give us a call.")}
         </p>
 
         <div className="awat-hours-grid">
@@ -847,10 +838,10 @@ function BookNow() {
             border: "1px solid rgba(193,127,89,0.15)",
           }}>
             <p style={{ color: "#C17F59", fontSize: 13, letterSpacing: "0.1em", marginBottom: 8 }}>
-              {t("MO \u2014 FR", "MON \u2014 FRI")}
+              {t("MO — FR", "MON — FRI")}
             </p>
             <p style={{ color: "#F5F5F0", fontFamily: "var(--awat-font-heading)", fontSize: "1.5rem" }}>
-              10:00 \u2014 19:00
+              10:00 — 19:00
             </p>
           </div>
           <div style={{
@@ -861,7 +852,7 @@ function BookNow() {
               {t("SAMSTAG", "SATURDAY")}
             </p>
             <p style={{ color: "#F5F5F0", fontFamily: "var(--awat-font-heading)", fontSize: "1.5rem" }}>
-              10:00 \u2014 18:00
+              10:00 — 18:00
             </p>
           </div>
         </div>
