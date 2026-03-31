@@ -112,32 +112,6 @@ const CATEGORIES = [
   { name: "Interativo", emoji: "✨", count: 18 },
 ];
 
-const FAQS = [
-  {
-    q: "Porque é tudo gratuito?",
-    a: "Porque acredito que resolver problemas não deveria ter preço. A tecnologia deve servir todos, não apenas quem pode pagar.",
-  },
-  {
-    q: "O que acontece com o dinheiro?",
-    a: "100% vai para infraestrutura (servidores, domínios) e tempo dedicado a novos projetos. Zero lucro pessoal.",
-  },
-  {
-    q: "Posso pedir um projeto personalizado?",
-    a: "Sim! Jardineiros (apoiantes mensais) podem sugerir projetos que entram na fila de desenvolvimento.",
-  },
-  {
-    q: "Isto vai ter anúncios?",
-    a: "Nunca. Zero anúncios, zero tracking, zero strings attached. A pureza é parte da missão.",
-  },
-  {
-    q: "Posso contribuir com código?",
-    a: "Claro! Todos os projetos são open-source. Pull requests são sempre bem-vindos.",
-  },
-  {
-    q: "Como sei que o meu apoio faz diferença?",
-    a: "Cada mês partilho um relatório transparente com os custos e os novos projetos criados. Sem segredos.",
-  },
-];
 
 /* ─────────────────────────────────────────────
    ANIMATED SECTION WRAPPER
@@ -205,7 +179,6 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 export default function SementePage() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Todos");
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileMenu, setMobileMenu] = useState(false);
 
   useEffect(() => {
@@ -343,7 +316,7 @@ export default function SementePage() {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                Plantar uma Semente
+                Fazer parte
               </button>
             </div>
 
@@ -455,36 +428,43 @@ export default function SementePage() {
             </span>
 
             <h1 className="font-serif" style={{ fontSize: "clamp(42px, 8vw, 96px)", fontWeight: 700, lineHeight: 1.05, color: "#1E293B", letterSpacing: -2, marginBottom: 32 }}>
-              Cada projeto
+              Olha o que estou
               <br />
-              é uma{" "}
-              <span style={{ color: "#059669", fontStyle: "italic" }}>semente.</span>
+              a{" "}
+              <span style={{ color: "#059669", fontStyle: "italic" }}>plantar. Vem.</span>
             </h1>
 
             <p style={{ fontSize: "clamp(18px, 2.5vw, 24px)", lineHeight: 1.6, color: "#64748B", maxWidth: 600, margin: "0 auto 48px", fontWeight: 300 }}>
-              Plantada com cuidado. Cultivada com paixão.
+              110+ projetos gratuitos. Cada um uma semente.
               <br />
-              Oferecida a todos.
+              Isto é só o começo.
             </p>
 
             <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap" }}>
               <button
-                onClick={() => scrollTo("historia")}
+                onClick={() => scrollTo("jardim")}
                 style={{
                   background: "none",
-                  border: "none",
+                  border: "2px solid #059669",
+                  borderRadius: 999,
+                  padding: "14px 32px",
                   cursor: "pointer",
                   fontSize: 16,
                   color: "#059669",
-                  fontWeight: 500,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
+                  fontWeight: 600,
                   fontFamily: "'Inter', sans-serif",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#059669";
+                  e.currentTarget.style.color = "white";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "none";
+                  e.currentTarget.style.color = "#059669";
                 }}
               >
-                Conhecer a história
-                <span style={{ fontSize: 20, transition: "transform 0.3s" }}>→</span>
+                Explorar
               </button>
               <button
                 onClick={() => scrollTo("apoiar")}
@@ -512,7 +492,7 @@ export default function SementePage() {
                   e.currentTarget.style.boxShadow = "0 4px 20px rgba(5,150,105,0.25)";
                 }}
               >
-                Apoiar o crescimento 🌱
+                Fazer parte
               </button>
             </div>
           </motion.div>
@@ -940,18 +920,15 @@ export default function SementePage() {
         <section id="apoiar" style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: 64 }}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: "#059669", letterSpacing: 3, textTransform: "uppercase" }}>Apoiar</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "#D97706", letterSpacing: 3, textTransform: "uppercase" }}>FAZER PARTE</span>
               <h2 className="font-serif" style={{ fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 700, lineHeight: 1.1, color: "#1E293B", marginTop: 16, letterSpacing: -2 }}>
-                Rega o jardim
+                Vem para a viagem
               </h2>
-              <p style={{ fontSize: 18, color: "#64748B", marginTop: 20, maxWidth: 500, margin: "20px auto 0", lineHeight: 1.6 }}>
-                O teu apoio é a água que faz crescer novos projetos para todos.
-              </p>
             </div>
           </Reveal>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
-            {/* Tier 1 */}
+            {/* Tier 1 — Estrela */}
             <Reveal delay={0}>
               <div style={{
                 background: "white",
@@ -963,20 +940,19 @@ export default function SementePage() {
                 display: "flex",
                 flexDirection: "column",
               }}>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>💧</div>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>⭐</div>
                 <h3 className="font-serif" style={{ fontSize: 24, fontWeight: 700, color: "#1E293B", marginBottom: 4 }}>
-                  Gota de Orvalho
+                  Estrela
                 </h3>
-                <p style={{ fontSize: 14, color: "#059669", fontWeight: 600, marginBottom: 20 }}>Gratuito</p>
+                <p style={{ fontSize: 14, color: "#D97706", fontWeight: 600, marginBottom: 20 }}>5€/mês</p>
                 <ul style={{ listStyle: "none", padding: 0, flex: 1 }}>
                   {[
-                    "Partilha um projeto com amigos",
-                    "Dá uma estrela no GitHub",
-                    "Espalha a palavra nas redes",
-                    "Envia feedback construtivo",
+                    "Nome no muro de apoiantes",
+                    "Acesso ao diário de desenvolvimento",
+                    "Badge exclusivo de apoiante",
                   ].map((item) => (
                     <li key={item} style={{ fontSize: 15, color: "#64748B", lineHeight: 1.6, marginBottom: 12, paddingLeft: 24, position: "relative" }}>
-                      <span style={{ position: "absolute", left: 0, color: "#4ADE80" }}>✓</span>
+                      <span style={{ position: "absolute", left: 0, color: "#D97706" }}>✓</span>
                       {item}
                     </li>
                   ))}
@@ -984,8 +960,8 @@ export default function SementePage() {
                 <button style={{
                   width: "100%",
                   marginTop: 24,
-                  background: "rgba(5,150,105,0.08)",
-                  color: "#059669",
+                  background: "rgba(217,119,6,0.08)",
+                  color: "#D97706",
                   border: "none",
                   borderRadius: 12,
                   padding: "14px",
@@ -995,22 +971,22 @@ export default function SementePage() {
                   transition: "background 0.2s",
                   fontFamily: "'Inter', sans-serif",
                 }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(5,150,105,0.15)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(5,150,105,0.08)")}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(217,119,6,0.15)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(217,119,6,0.08)")}
                 >
-                  Partilhar agora
+                  Juntar-me como Estrela
                 </button>
               </div>
             </Reveal>
 
-            {/* Tier 2 */}
+            {/* Tier 2 — Sol */}
             <Reveal delay={0.1}>
               <div style={{
                 background: "white",
                 borderRadius: 20,
                 padding: "36px 28px",
-                border: "2px solid #059669",
-                boxShadow: "0 4px 24px rgba(5,150,105,0.15)",
+                border: "2px solid #D97706",
+                boxShadow: "0 4px 24px rgba(217,119,6,0.15)",
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
@@ -1020,7 +996,7 @@ export default function SementePage() {
                   position: "absolute",
                   top: -12,
                   right: 20,
-                  background: "#059669",
+                  background: "#D97706",
                   color: "white",
                   fontSize: 12,
                   fontWeight: 600,
@@ -1029,77 +1005,17 @@ export default function SementePage() {
                 }}>
                   Popular
                 </div>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>🚿</div>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>☀️</div>
                 <h3 className="font-serif" style={{ fontSize: 24, fontWeight: 700, color: "#1E293B", marginBottom: 4 }}>
-                  Regador
+                  Sol
                 </h3>
-                <p style={{ fontSize: 14, color: "#059669", fontWeight: 600, marginBottom: 20 }}>€5 — contribuição única</p>
+                <p style={{ fontSize: 14, color: "#D97706", fontWeight: 600, marginBottom: 20 }}>15€/mês</p>
                 <ul style={{ listStyle: "none", padding: 0, flex: 1 }}>
                   {[
-                    "Ajuda com custos de servidor",
-                    "Nome no muro de agradecimentos",
-                    "Acesso ao diário de desenvolvimento",
-                    "A satisfação de regar o jardim",
-                  ].map((item) => (
-                    <li key={item} style={{ fontSize: 15, color: "#64748B", lineHeight: 1.6, marginBottom: 12, paddingLeft: 24, position: "relative" }}>
-                      <span style={{ position: "absolute", left: 0, color: "#4ADE80" }}>✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <button style={{
-                  width: "100%",
-                  marginTop: 24,
-                  background: "#059669",
-                  color: "white",
-                  border: "none",
-                  borderRadius: 12,
-                  padding: "14px",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                  fontFamily: "'Inter', sans-serif",
-                  boxShadow: "0 4px 16px rgba(5,150,105,0.25)",
-                }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#047857";
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "#059669";
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}
-                >
-                  Apoiar com €5
-                </button>
-              </div>
-            </Reveal>
-
-            {/* Tier 3 */}
-            <Reveal delay={0.2}>
-              <div style={{
-                background: "linear-gradient(135deg, white, #FEFCE8)",
-                borderRadius: 20,
-                padding: "36px 28px",
-                border: "1px solid rgba(217,119,6,0.2)",
-                boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>🌻</div>
-                <h3 className="font-serif" style={{ fontSize: 24, fontWeight: 700, color: "#1E293B", marginBottom: 4 }}>
-                  Jardineiro
-                </h3>
-                <p style={{ fontSize: 14, color: "#D97706", fontWeight: 600, marginBottom: 20 }}>€15+/mês</p>
-                <ul style={{ listStyle: "none", padding: 0, flex: 1 }}>
-                  {[
-                    "Tudo do Regador, mais:",
-                    "Apoio mensal contínuo",
-                    "Acesso antecipado a projetos",
-                    "Pedidos de projetos prioritários",
-                    "Canal exclusivo de comunicação",
+                    "Tudo do Estrela, mais:",
+                    "Acesso antecipado a novos projetos",
+                    "Sugestao de projetos prioritarios",
+                    "Canal exclusivo de comunicacao",
                   ].map((item) => (
                     <li key={item} style={{ fontSize: 15, color: "#64748B", lineHeight: 1.6, marginBottom: 12, paddingLeft: 24, position: "relative" }}>
                       <span style={{ position: "absolute", left: 0, color: "#D97706" }}>✓</span>
@@ -1120,6 +1036,7 @@ export default function SementePage() {
                   cursor: "pointer",
                   transition: "all 0.2s",
                   fontFamily: "'Inter', sans-serif",
+                  boxShadow: "0 4px 16px rgba(217,119,6,0.25)",
                 }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "#B45309";
@@ -1130,7 +1047,65 @@ export default function SementePage() {
                     e.currentTarget.style.transform = "translateY(0)";
                   }}
                 >
-                  Tornar-me Jardineiro
+                  Juntar-me como Sol
+                </button>
+              </div>
+            </Reveal>
+
+            {/* Tier 3 — Horizonte */}
+            <Reveal delay={0.2}>
+              <div style={{
+                background: "linear-gradient(135deg, white, #FEFCE8)",
+                borderRadius: 20,
+                padding: "36px 28px",
+                border: "1px solid rgba(5,150,105,0.2)",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>🌅</div>
+                <h3 className="font-serif" style={{ fontSize: 24, fontWeight: 700, color: "#1E293B", marginBottom: 4 }}>
+                  Horizonte
+                </h3>
+                <p style={{ fontSize: 14, color: "#059669", fontWeight: 600, marginBottom: 20 }}>30€/mês</p>
+                <ul style={{ listStyle: "none", padding: 0, flex: 1 }}>
+                  {[
+                    "Tudo do Sol, mais:",
+                    "Sessao mensal 1:1 comigo",
+                    "Credito especial nos projetos",
+                    "Influencia direta no roadmap",
+                  ].map((item) => (
+                    <li key={item} style={{ fontSize: 15, color: "#64748B", lineHeight: 1.6, marginBottom: 12, paddingLeft: 24, position: "relative" }}>
+                      <span style={{ position: "absolute", left: 0, color: "#059669" }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <button style={{
+                  width: "100%",
+                  marginTop: 24,
+                  background: "#059669",
+                  color: "white",
+                  border: "none",
+                  borderRadius: 12,
+                  padding: "14px",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  fontFamily: "'Inter', sans-serif",
+                }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#047857";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#059669";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  Juntar-me como Horizonte
                 </button>
               </div>
             </Reveal>
@@ -1138,86 +1113,12 @@ export default function SementePage() {
         </section>
 
         {/* ═══════════════════════════════════════
-            9. FAQ — RAÍZES
-           ═══════════════════════════════════════ */}
-        <section style={{ padding: "120px 24px", maxWidth: 720, margin: "0 auto" }}>
-          <Reveal>
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#059669", letterSpacing: 3, textTransform: "uppercase" }}>FAQ</span>
-            <h2 className="font-serif" style={{ fontSize: "clamp(32px, 5vw, 52px)", fontWeight: 700, lineHeight: 1.1, color: "#1E293B", marginTop: 16, letterSpacing: -1.5, marginBottom: 48 }}>
-              Raízes — Perguntas frequentes
-            </h2>
-          </Reveal>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {FAQS.map((faq, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <div style={{
-                  background: "white",
-                  borderRadius: 14,
-                  border: "1px solid rgba(5,150,105,0.1)",
-                  overflow: "hidden",
-                }}>
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    style={{
-                      width: "100%",
-                      background: "none",
-                      border: "none",
-                      padding: "20px 24px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      textAlign: "left",
-                    }}
-                  >
-                    <span style={{ fontSize: 16, fontWeight: 500, color: "#1E293B", fontFamily: "'Inter', sans-serif", paddingRight: 16 }}>
-                      {faq.q}
-                    </span>
-                    <motion.span
-                      animate={{ rotate: openFaq === i ? 45 : 0 }}
-                      style={{ fontSize: 22, color: "#059669", flexShrink: 0, fontWeight: 300 }}
-                    >
-                      +
-                    </motion.span>
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        style={{ overflow: "hidden" }}
-                      >
-                        <p style={{ padding: "0 24px 20px", fontSize: 15, lineHeight: 1.7, color: "#64748B" }}>
-                          {faq.a}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════
-            10. MANIFESTO
+            9. PULL QUOTE
            ═══════════════════════════════════════ */}
         <section style={{ padding: "120px 24px", background: "rgba(240,253,244,0.6)" }}>
           <Reveal>
-            <div style={{ maxWidth: 800, margin: "0 auto", position: "relative" }}>
-              <div style={{
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: 4,
-                background: "linear-gradient(180deg, #059669, #0D9488)",
-                borderRadius: 2,
-              }} />
-              <div style={{ paddingLeft: 48 }}>
+            <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
+              <blockquote>
                 <p className="font-serif" style={{
                   fontSize: "clamp(24px, 4vw, 40px)",
                   fontStyle: "italic",
@@ -1226,32 +1127,31 @@ export default function SementePage() {
                   fontWeight: 400,
                   marginBottom: 32,
                 }}>
-                  &ldquo;Não quero construir para lucrar. Quero construir para o bem de todos
-                  e para a minha felicidade. Porque gosto de resolver problemas. Porque acredito
-                  que a tecnologia, quando partilhada, tem o poder de mudar vidas.&rdquo;
+                  &ldquo;A melhor coisa que construí hoje vai ajudar alguém que nunca vou conhecer.&rdquo;
                 </p>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                  <div style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg, #059669, #0D9488)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: 700,
-                    fontFamily: "'Playfair Display', serif",
-                  }}>
-                    J
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 16, fontWeight: 600, color: "#1E293B" }}>Jaime Silva</p>
-                    <p style={{ fontSize: 14, color: "#64748B" }}>Fundador, descomplicai</p>
-                  </div>
-                </div>
-              </div>
+                <footer style={{ fontSize: 14, color: "#64748B", fontWeight: 500 }}>
+                  — Jaime Silva
+                </footer>
+              </blockquote>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* ═══════════════════════════════════════
+            10. VISION
+           ═══════════════════════════════════════ */}
+        <section style={{ padding: "80px 24px" }}>
+          <Reveal>
+            <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
+              <h2 className="font-serif" style={{
+                fontSize: "clamp(32px, 5vw, 52px)",
+                fontWeight: 700,
+                lineHeight: 1.1,
+                color: "#059669",
+                letterSpacing: -1.5,
+              }}>
+                Isto é só o começo.
+              </h2>
             </div>
           </Reveal>
         </section>

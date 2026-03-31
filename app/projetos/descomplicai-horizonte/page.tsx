@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionValue, useSpring, type MotionValue } from "framer-motion";
 
 /* ─────────────────────────── DATA ─────────────────────────── */
@@ -30,113 +30,7 @@ const FEATURED_PROJECTS = [
   { name: "Design System", emoji: "🧩", category: "Plataformas", type: "Ferramenta", description: "Sistema de design completo com 15 componentes reutilizáveis, tokens e documentação interativa.", gradient: "linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)" },
 ];
 
-const ALL_PROJECTS = [
-  { name: "Bijou Restaurante", emoji: "🍷", category: "Restaurantes", gradient: "linear-gradient(135deg, #c084fc, #818cf8)" },
-  { name: "Caçarola", emoji: "🍲", category: "Restaurantes", gradient: "linear-gradient(135deg, #f97316, #ef4444)" },
-  { name: "Caçarola Dois", emoji: "🍳", category: "Restaurantes", gradient: "linear-gradient(135deg, #f97316, #f59e0b)" },
-  { name: "Café Praça 18", emoji: "☕", category: "Restaurantes", gradient: "linear-gradient(135deg, #92400e, #f59e0b)" },
-  { name: "Casa dos Papagaios", emoji: "🦜", category: "Restaurantes", gradient: "linear-gradient(135deg, #16a34a, #4ade80)" },
-  { name: "Cataventos", emoji: "🌬️", category: "Restaurantes", gradient: "linear-gradient(135deg, #0ea5e9, #38bdf8)" },
-  { name: "Marisqueira Rosa Amélia", emoji: "🦐", category: "Restaurantes", gradient: "linear-gradient(135deg, #f43f5e, #fb923c)" },
-  { name: "Maregrafo", emoji: "🌊", category: "Restaurantes", gradient: "linear-gradient(135deg, #0284c7, #22d3ee)" },
-  { name: "Meio Cheio", emoji: "🍷", category: "Vinho & Gastronomia", gradient: "linear-gradient(135deg, #7c3aed, #a78bfa)" },
-  { name: "Mesa dos Amigos", emoji: "🤝", category: "Restaurantes", gradient: "linear-gradient(135deg, #ea580c, #f97316)" },
-  { name: "Nalu Cabedelo", emoji: "🏄", category: "Restaurantes", gradient: "linear-gradient(135deg, #0891b2, #67e8f9)" },
-  { name: "O Picadeiro", emoji: "🎪", category: "Restaurantes", gradient: "linear-gradient(135deg, #dc2626, #f97316)" },
-  { name: "Pé na Areia", emoji: "🏖️", category: "Restaurantes", gradient: "linear-gradient(135deg, #f59e0b, #fbbf24)" },
-  { name: "Pé no Bairro", emoji: "🏘️", category: "Restaurantes", gradient: "linear-gradient(135deg, #b45309, #f59e0b)" },
-  { name: "Ribeirosanto", emoji: "🏛️", category: "Restaurantes", gradient: "linear-gradient(135deg, #1e3a5f, #3b82f6)" },
-  { name: "Sabor Abençoado", emoji: "🙏", category: "Restaurantes", gradient: "linear-gradient(135deg, #a16207, #fbbf24)" },
-  { name: "Tasca da Praia", emoji: "🐚", category: "Restaurantes", gradient: "linear-gradient(135deg, #0d9488, #5eead4)" },
-  { name: "Tasca Dentro", emoji: "🍴", category: "Restaurantes", gradient: "linear-gradient(135deg, #b91c1c, #ef4444)" },
-  { name: "Zeff Pizza", emoji: "🍕", category: "Restaurantes", gradient: "linear-gradient(135deg, #dc2626, #f97316)" },
-  { name: "Ninika Tours", emoji: "✈️", category: "Restaurantes", gradient: "linear-gradient(135deg, #2563eb, #60a5fa)" },
-  { name: "Sand Murtinheira", emoji: "🏝️", category: "Restaurantes", gradient: "linear-gradient(135deg, #d97706, #fcd34d)" },
-  { name: "Quintas Estrelas", emoji: "⭐", category: "Restaurantes", gradient: "linear-gradient(135deg, #854d0e, #fbbf24)" },
-  { name: "Quinta da Salmanha", emoji: "🌿", category: "Restaurantes", gradient: "linear-gradient(135deg, #15803d, #86efac)" },
-  { name: "Alba Saúde Dentária", emoji: "🦷", category: "Saúde", gradient: "linear-gradient(135deg, #0ea5e9, #7dd3fc)" },
-  { name: "Clínica Dentária Quiaios", emoji: "🏥", category: "Saúde", gradient: "linear-gradient(135deg, #2563eb, #93c5fd)" },
-  { name: "Clínica Tamargueira", emoji: "💊", category: "Saúde", gradient: "linear-gradient(135deg, #0d9488, #5eead4)" },
-  { name: "Clínica Vasco da Gama", emoji: "⚕️", category: "Saúde", gradient: "linear-gradient(135deg, #1d4ed8, #60a5fa)" },
-  { name: "DentalKid", emoji: "🧒", category: "Saúde", gradient: "linear-gradient(135deg, #8b5cf6, #c084fc)" },
-  { name: "DentalKid v2", emoji: "😁", category: "Saúde", gradient: "linear-gradient(135deg, #a855f7, #d8b4fe)" },
-  { name: "FozClínica", emoji: "🏨", category: "Saúde", gradient: "linear-gradient(135deg, #0891b2, #67e8f9)" },
-  { name: "Premium Clínica Dentária", emoji: "👑", category: "Saúde", gradient: "linear-gradient(135deg, #b45309, #fcd34d)" },
-  { name: "UpConcept Clínica", emoji: "💎", category: "Saúde", gradient: "linear-gradient(135deg, #4f46e5, #818cf8)" },
-  { name: "Rota dos Vinhos", emoji: "🍇", category: "Vinho & Gastronomia", gradient: "linear-gradient(135deg, #7c2d12, #dc2626)" },
-  { name: "Vindima Selvagem", emoji: "🌾", category: "Vinho & Gastronomia", gradient: "linear-gradient(135deg, #854d0e, #f59e0b)" },
-  { name: "Vinho na Rua", emoji: "🥂", category: "Vinho & Gastronomia", gradient: "linear-gradient(135deg, #9f1239, #f43f5e)" },
-  { name: "Ondas Academy", emoji: "🌊", category: "Vinho & Gastronomia", gradient: "linear-gradient(135deg, #0369a1, #38bdf8)" },
-  { name: "Chess", emoji: "♟️", category: "Jogos", gradient: "linear-gradient(135deg, #1e1b4b, #6366f1)" },
-  { name: "Snake Game", emoji: "🐍", category: "Jogos", gradient: "linear-gradient(135deg, #15803d, #4ade80)" },
-  { name: "Memory Game", emoji: "🧠", category: "Jogos", gradient: "linear-gradient(135deg, #7c3aed, #c084fc)" },
-  { name: "RPG Chronicle", emoji: "⚔️", category: "Jogos", gradient: "linear-gradient(135deg, #ef4444, #f97316)" },
-  { name: "RPG Quest", emoji: "🗡️", category: "Jogos", gradient: "linear-gradient(135deg, #b91c1c, #f59e0b)" },
-  { name: "Fractal Explorer", emoji: "🌀", category: "Interativo", gradient: "linear-gradient(135deg, #06b6d4, #8b5cf6)" },
-  { name: "Solar System", emoji: "🪐", category: "Interativo", gradient: "linear-gradient(135deg, #1e1b4b, #6366f1)" },
-  { name: "Aurora Borealis", emoji: "🌌", category: "Interativo", gradient: "linear-gradient(135deg, #065f46, #34d399)" },
-  { name: "Particle Sim", emoji: "✨", category: "Interativo", gradient: "linear-gradient(135deg, #4f46e5, #c084fc)" },
-  { name: "Globe Explorer", emoji: "🌍", category: "Interativo", gradient: "linear-gradient(135deg, #1d4ed8, #22d3ee)" },
-  { name: "Color Theory", emoji: "🎨", category: "Interativo", gradient: "linear-gradient(135deg, #ec4899, #f59e0b)" },
-  { name: "Color Blindness Sim", emoji: "👁️", category: "Interativo", gradient: "linear-gradient(135deg, #6366f1, #a78bfa)" },
-  { name: "Music Visualizer", emoji: "🎵", category: "Interativo", gradient: "linear-gradient(135deg, #8b5cf6, #ec4899)" },
-  { name: "Music Theory", emoji: "🎼", category: "Interativo", gradient: "linear-gradient(135deg, #7c3aed, #f472b6)" },
-  { name: "Music Box", emoji: "🎶", category: "Interativo", gradient: "linear-gradient(135deg, #a855f7, #f9a8d4)" },
-  { name: "Breathing Exercise", emoji: "🧘", category: "Interativo", gradient: "linear-gradient(135deg, #0d9488, #a7f3d0)" },
-  { name: "Countdown", emoji: "⏱️", category: "Interativo", gradient: "linear-gradient(135deg, #dc2626, #f97316)" },
-  { name: "Morse Code", emoji: "📡", category: "Interativo", gradient: "linear-gradient(135deg, #1e3a5f, #60a5fa)" },
-  { name: "Sorting Visualizer", emoji: "📊", category: "Interativo", gradient: "linear-gradient(135deg, #059669, #34d399)" },
-  { name: "Maze Solver", emoji: "🏁", category: "Interativo", gradient: "linear-gradient(135deg, #7c2d12, #f97316)" },
-  { name: "Typing Speed Test", emoji: "⌨️", category: "Interativo", gradient: "linear-gradient(135deg, #4338ca, #818cf8)" },
-  { name: "Weather Mood", emoji: "🌤️", category: "Interativo", gradient: "linear-gradient(135deg, #0284c7, #fbbf24)" },
-  { name: "World Clock", emoji: "🕐", category: "Interativo", gradient: "linear-gradient(135deg, #1e1b4b, #818cf8)" },
-  { name: "Decision Wheel", emoji: "🎯", category: "Interativo", gradient: "linear-gradient(135deg, #dc2626, #f59e0b)" },
-  { name: "Drum Machine", emoji: "🥁", category: "Interativo", gradient: "linear-gradient(135deg, #9f1239, #f43f5e)" },
-  { name: "Emoji Mixer", emoji: "😎", category: "Interativo", gradient: "linear-gradient(135deg, #f59e0b, #ec4899)" },
-  { name: "Mood Journal", emoji: "📔", category: "Interativo", gradient: "linear-gradient(135deg, #8b5cf6, #fbbf24)" },
-  { name: "Habit Tracker", emoji: "📋", category: "Interativo", gradient: "linear-gradient(135deg, #059669, #a7f3d0)" },
-  { name: "Pomodoro", emoji: "🍅", category: "Interativo", gradient: "linear-gradient(135deg, #dc2626, #ef4444)" },
-  { name: "Flashcards", emoji: "📚", category: "Interativo", gradient: "linear-gradient(135deg, #2563eb, #7dd3fc)" },
-  { name: "Quiz Portugal", emoji: "🇵🇹", category: "Interativo", gradient: "linear-gradient(135deg, #dc2626, #16a34a)" },
-  { name: "Mapa Portugal", emoji: "🗺️", category: "Interativo", gradient: "linear-gradient(135deg, #1e40af, #60a5fa)" },
-  { name: "Photo Filters", emoji: "📸", category: "Interativo", gradient: "linear-gradient(135deg, #ec4899, #8b5cf6)" },
-  { name: "Rabbit Hole", emoji: "🐇", category: "Interativo", gradient: "linear-gradient(135deg, #4f46e5, #a78bfa)" },
-  { name: "Seeds", emoji: "🌱", category: "Interativo", gradient: "linear-gradient(135deg, #15803d, #86efac)" },
-  { name: "Futuro", emoji: "🔮", category: "Interativo", gradient: "linear-gradient(135deg, #6d28d9, #c084fc)" },
-  { name: "Generative Art", emoji: "🎨", category: "Criativo", gradient: "linear-gradient(135deg, #f472b6, #c084fc)" },
-  { name: "CSS Art Gallery", emoji: "🖼️", category: "Criativo", gradient: "linear-gradient(135deg, #8b5cf6, #06b6d4)" },
-  { name: "Pixel Art", emoji: "👾", category: "Criativo", gradient: "linear-gradient(135deg, #6366f1, #ec4899)" },
-  { name: "Drawing Canvas", emoji: "✏️", category: "Criativo", gradient: "linear-gradient(135deg, #f59e0b, #ef4444)" },
-  { name: "CSS Playground", emoji: "🎭", category: "Criativo", gradient: "linear-gradient(135deg, #0ea5e9, #8b5cf6)" },
-  { name: "Guitar Tuner", emoji: "🎸", category: "Criativo", gradient: "linear-gradient(135deg, #92400e, #f59e0b)" },
-  { name: "BFitFam", emoji: "💪", category: "Fitness", gradient: "linear-gradient(135deg, #f97316, #ef4444)" },
-  { name: "JSON Formatter", emoji: "📝", category: "Ferramentas", gradient: "linear-gradient(135deg, #059669, #34d399)" },
-  { name: "Regex Tester", emoji: "🔍", category: "Ferramentas", gradient: "linear-gradient(135deg, #7c3aed, #a78bfa)" },
-  { name: "Password Generator", emoji: "🔐", category: "Ferramentas", gradient: "linear-gradient(135deg, #dc2626, #f97316)" },
-  { name: "Calculator", emoji: "🧮", category: "Ferramentas", gradient: "linear-gradient(135deg, #1d4ed8, #60a5fa)" },
-  { name: "Unit Converter", emoji: "📐", category: "Ferramentas", gradient: "linear-gradient(135deg, #0891b2, #67e8f9)" },
-  { name: "BMI Calculator", emoji: "⚖️", category: "Ferramentas", gradient: "linear-gradient(135deg, #16a34a, #86efac)" },
-  { name: "Color Palette Generator", emoji: "🌈", category: "Ferramentas", gradient: "linear-gradient(135deg, #ec4899, #f59e0b)" },
-  { name: "Gradient Maker", emoji: "🎨", category: "Ferramentas", gradient: "linear-gradient(135deg, #6366f1, #ec4899)" },
-  { name: "Markdown Editor", emoji: "📄", category: "Ferramentas", gradient: "linear-gradient(135deg, #1e40af, #93c5fd)" },
-  { name: "Text Analyzer", emoji: "📊", category: "Ferramentas", gradient: "linear-gradient(135deg, #4f46e5, #818cf8)" },
-  { name: "Todo Kanban", emoji: "📌", category: "Ferramentas", gradient: "linear-gradient(135deg, #0ea5e9, #38bdf8)" },
-  { name: "Recipe Finder", emoji: "👨‍🍳", category: "Ferramentas", gradient: "linear-gradient(135deg, #ea580c, #fb923c)" },
-  { name: "Periodic Table", emoji: "⚛️", category: "Interativo", gradient: "linear-gradient(135deg, #10b981, #06b6d4)" },
-  { name: "AI Chat Sim", emoji: "🤖", category: "Ferramentas", gradient: "linear-gradient(135deg, #6366f1, #a78bfa)" },
-  { name: "Design System", emoji: "🧩", category: "Plataformas", gradient: "linear-gradient(135deg, #6366f1, #06b6d4)" },
-  { name: "Portfolio Builder", emoji: "🏗️", category: "Plataformas", gradient: "linear-gradient(135deg, #4f46e5, #818cf8)" },
-  { name: "Synth", emoji: "🎹", category: "Plataformas", gradient: "linear-gradient(135deg, #8b5cf6, #ec4899)" },
-  { name: "Jaime Silva", emoji: "👨‍💻", category: "Plataformas", gradient: "linear-gradient(135deg, #6366f1, #8b5cf6)" },
-];
 
-const FAQ_DATA = [
-  { q: "Porque não cobrar pelos projetos?", a: "Acredito que a tecnologia deve ser acessível a todos. Muitos negócios locais — restaurantes, clínicas, pequenas empresas — não têm orçamento para presença digital. Se posso ajudar, porque não o fazer? O valor que recebo é ver o impacto real na vida das pessoas." },
-  { q: "Como é financiado atualmente?", a: "Honestamente, com poupanças pessoais e muito tempo. Cada domínio, cada servidor, cada hora de desenvolvimento sai do meu bolso. É sustentável? Não para sempre. É por isso que o Horizonte existe — para que a comunidade possa ajudar a manter isto vivo." },
-  { q: "Posso sugerir um projeto?", a: "Claro que sim! Adoro receber ideias. Os apoiantes do plano Horizonte têm prioridade, mas todas as sugestões são bem-vindas. Às vezes, a melhor ideia vem de quem menos esperas." },
-  { q: "Os projetos vão ter anúncios?", a: "Nunca. Ponto final. Os projetos são livres de anúncios, tracking invasivo e paywalls. Essa é uma promessa que faço e que nunca vou quebrar. A confiança dos utilizadores vale mais do que qualquer receita publicitária." },
-  { q: "Como posso ajudar sem dinheiro?", a: "Partilha os projetos! Fala sobre eles, dá feedback, usa-os no dia a dia. Cada pessoa que descobre uma das ferramentas e a acha útil é uma vitória. O boca-a-boca é o marketing mais poderoso que existe." },
-];
 
 /* ─────────────────────────── HOOKS ─────────────────────────── */
 
@@ -198,9 +92,6 @@ function FloatingShape({ style, mouseX, mouseY, depth }: {
 
 export default function HorizontePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("Todos");
-  const [visibleCount, setVisibleCount] = useState(24);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
@@ -230,20 +121,10 @@ export default function HorizontePage() {
   const missionInView = useInView(missionRef, { once: true, margin: "-100px" });
   const missionCount = useCountUp(110, 2500, missionInView);
 
-  /* Filtered projects */
-  const filteredProjects = useMemo(() => {
-    if (activeCategory === "Todos") return ALL_PROJECTS;
-    return ALL_PROJECTS.filter(p => p.category === activeCategory);
-  }, [activeCategory]);
-
-  const loadMore = () => setVisibleCount(prev => Math.min(prev + 24, filteredProjects.length));
-
-  useEffect(() => { setVisibleCount(24); }, [activeCategory]);
-
-  const navLinks = ["Missão", "Projectos", "Impacto", "Apoiar"];
+  const navLinks = ["Missão", "Projectos", "Impacto", "Fazer Parte"];
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id.replace(/\s+/g, "-"))?.scrollIntoView({ behavior: "smooth" });
     setMobileMenuOpen(false);
   };
 
@@ -253,8 +134,17 @@ export default function HorizontePage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
         body { font-family: 'Inter', sans-serif; color: #1E1B4B; overflow-x: hidden; }
+        @media (max-width: 768px) {
+          .floating-shapes-container { display: none !important; }
+          .tier-grid { grid-template-columns: 1fr !important; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+          .nav-mobile-btn { min-width: 44px !important; min-height: 44px !important; }
+        }
+        @media (max-width: 480px) {
+          .stats-grid { grid-template-columns: 1fr !important; }
+        }
         ::selection { background: #c7d2fe; color: #1E1B4B; }
         @keyframes shimmer {
           0% { background-position: -200% center; }
@@ -334,7 +224,7 @@ export default function HorizontePage() {
               </button>
             ))}
             <button
-              onClick={() => scrollTo("apoiar")}
+              onClick={() => scrollTo("fazer-parte")}
               style={{
                 background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
                 color: "white",
@@ -351,16 +241,18 @@ export default function HorizontePage() {
               onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(99, 102, 241, 0.4)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(99, 102, 241, 0.3)"; }}
             >
-              Apoiar
+              Fazer Parte
             </button>
           </div>
 
           {/* Mobile Hamburger */}
           <button className="nav-mobile-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            title={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
             style={{
               background: "none", border: "none", cursor: "pointer",
-              width: 32, height: 32, display: "flex", flexDirection: "column",
+              width: 44, height: 44, display: "flex", flexDirection: "column",
               justifyContent: "center", alignItems: "center", gap: 5,
             }}
           >
@@ -394,22 +286,24 @@ export default function HorizontePage() {
                     background: "none", border: "none", cursor: "pointer",
                     fontSize: 18, fontWeight: 600, color: "#1E1B4B",
                     fontFamily: "'Plus Jakarta Sans', sans-serif", textAlign: "left",
-                    padding: "8px 0", borderBottom: "1px solid #e5e7eb",
+                    padding: "12px 0", borderBottom: "1px solid #e5e7eb",
+                    minHeight: 44,
                   }}
                 >
                   {link}
                 </button>
               ))}
-              <button onClick={() => scrollTo("apoiar")}
+              <button onClick={() => scrollTo("fazer-parte")}
                 style={{
                   background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
                   color: "white", border: "none", borderRadius: 9999,
                   padding: "12px 24px", fontSize: 16, fontWeight: 600,
                   cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif",
                   marginTop: 8,
+                  minHeight: 44,
                 }}
               >
-                Apoiar
+                Fazer Parte
               </button>
             </motion.div>
           )}
@@ -436,7 +330,7 @@ export default function HorizontePage() {
           }} />
 
           {/* Floating shapes — middle layer */}
-          <motion.div style={{ position: "absolute", inset: 0, zIndex: 1, y: midParallax }}>
+          <motion.div className="floating-shapes-container" style={{ position: "absolute", inset: 0, zIndex: 1, y: midParallax, overflow: "hidden", pointerEvents: "none" }}>
             <FloatingShape mouseX={mouseX} mouseY={mouseY} depth={1.2}
               style={{ top: "15%", left: "8%", width: 80, height: 80, background: "rgba(147, 197, 253, 0.35)", filter: "blur(1px)" }} />
             <FloatingShape mouseX={mouseX} mouseY={mouseY} depth={0.8}
@@ -481,6 +375,7 @@ export default function HorizontePage() {
               }}>
                 para todos.
               </span>
+              {" "}Vem.
             </motion.h1>
 
             <motion.p
@@ -495,7 +390,7 @@ export default function HorizontePage() {
                 marginBottom: 16,
               }}
             >
-              110+ projetos. Zero custos. Todo o impacto.
+              110+ projetos gratuitos. Construídos em público. Isto é só o começo.
             </motion.p>
 
             <motion.p
@@ -510,7 +405,7 @@ export default function HorizontePage() {
                 lineHeight: 1.7,
               }}
             >
-              Construo ferramentas, websites e experiências porque acredito que a tecnologia deve ser livre.
+              Ferramentas, websites e experiências — construídos porque acredito que a tecnologia deve ser livre.
             </motion.p>
 
             <motion.div
@@ -533,14 +428,15 @@ export default function HorizontePage() {
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   boxShadow: "0 4px 20px rgba(99, 102, 241, 0.35)",
                   transition: "transform 0.2s, box-shadow 0.2s",
+                  minHeight: 44,
                 }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px) scale(1.03)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(99, 102, 241, 0.45)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(99, 102, 241, 0.35)"; }}
               >
-                Explorar projetos
+                Explorar
               </button>
               <button
-                onClick={() => scrollTo("apoiar")}
+                onClick={() => scrollTo("fazer-parte")}
                 style={{
                   background: "transparent",
                   color: "#6366F1",
@@ -552,11 +448,12 @@ export default function HorizontePage() {
                   cursor: "pointer",
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   transition: "all 0.2s",
+                  minHeight: 44,
                 }}
                 onMouseEnter={e => { e.currentTarget.style.background = "#6366F1"; e.currentTarget.style.color = "white"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#6366F1"; }}
               >
-                Apoiar a visão
+                Fazer parte
               </button>
             </motion.div>
           </motion.div>
@@ -622,7 +519,7 @@ export default function HorizontePage() {
                 color: "#4b5563",
                 marginBottom: 32,
               }}>
-                Não quero construir para lucrar. Quero construir porque resolver problemas é o que me faz feliz. Cada pessoa que usa uma das minhas ferramentas sem pagar é uma vitória.
+                Grátis para ti. Mas não grátis de fazer. Cada domínio, cada servidor, cada hora de desenvolvimento — sai do meu bolso. Quero construir porque resolver problemas é o que me faz feliz.
               </p>
 
               <div style={{
@@ -883,7 +780,7 @@ export default function HorizontePage() {
                     position: "relative",
                     overflow: "hidden",
                   }}
-                  onClick={() => { setActiveCategory(cat.name); scrollTo("todos-projetos"); }}
+                  onClick={() => scrollTo("projectos")}
                 >
                   {/* Gradient bottom border */}
                   <div style={{
@@ -930,161 +827,6 @@ export default function HorizontePage() {
           </div>
         </section>
 
-        {/* ═══════════════ TODOS OS PROJETOS ═══════════════ */}
-        <section id="todos-projetos" style={{ padding: "100px 24px", maxWidth: 1200, margin: "0 auto" }}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            style={{ textAlign: "center", marginBottom: 40 }}
-          >
-            <h2 style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-              fontWeight: 800,
-              color: "#1E1B4B",
-              marginBottom: 12,
-            }}>
-              110+ projetos, cada um com uma{" "}
-              <span style={{
-                background: "linear-gradient(135deg, #6366F1, #F97316)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}>história</span>
-            </h2>
-          </motion.div>
-
-          {/* Category filter bar */}
-          <div style={{
-            display: "flex",
-            gap: 8,
-            flexWrap: "wrap",
-            justifyContent: "center",
-            marginBottom: 48,
-            position: "sticky",
-            top: 80,
-            zIndex: 50,
-            padding: "12px 0",
-            background: "linear-gradient(180deg, rgba(245,243,255,0.95) 0%, rgba(245,243,255,0.8) 100%)",
-            backdropFilter: "blur(10px)",
-            borderRadius: 16,
-          }}>
-            {["Todos", ...CATEGORIES.map(c => c.name)].map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                style={{
-                  padding: "8px 18px",
-                  borderRadius: 9999,
-                  border: "none",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontFamily: "'Inter', sans-serif",
-                  transition: "all 0.2s",
-                  background: activeCategory === cat
-                    ? "linear-gradient(135deg, #6366F1, #8B5CF6)"
-                    : "rgba(99, 102, 241, 0.06)",
-                  color: activeCategory === cat ? "white" : "#6B7280",
-                  boxShadow: activeCategory === cat
-                    ? "0 2px 12px rgba(99, 102, 241, 0.3)"
-                    : "none",
-                }}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Project grid */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: 20,
-          }}>
-            <AnimatePresence mode="popLayout">
-              {filteredProjects.slice(0, visibleCount).map((project, i) => (
-                <motion.div
-                  key={project.name}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.35, delay: i * 0.02 }}
-                  whileHover={{ scale: 1.03, boxShadow: "0 12px 40px rgba(99, 102, 241, 0.12)" }}
-                  style={{
-                    background: "white",
-                    borderRadius: 20,
-                    overflow: "hidden",
-                    boxShadow: "0 2px 16px rgba(99, 102, 241, 0.06)",
-                    border: "1px solid rgba(99, 102, 241, 0.06)",
-                    cursor: "pointer",
-                    transition: "box-shadow 0.3s",
-                    position: "relative",
-                  }}
-                >
-                  {/* Top gradient strip */}
-                  <div style={{
-                    height: 4,
-                    background: project.gradient,
-                    transition: "height 0.3s",
-                  }} />
-                  <div style={{ padding: "20px 20px 24px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-                      <span style={{ fontSize: 32 }}>{project.emoji}</span>
-                      <div>
-                        <h3 style={{
-                          fontFamily: "'Plus Jakarta Sans', sans-serif",
-                          fontWeight: 700,
-                          fontSize: 15,
-                          color: "#1E1B4B",
-                        }}>
-                          {project.name}
-                        </h3>
-                        <span style={{
-                          fontSize: 11,
-                          fontWeight: 600,
-                          color: "#8B5CF6",
-                          background: "rgba(139, 92, 246, 0.08)",
-                          padding: "2px 8px",
-                          borderRadius: 9999,
-                        }}>
-                          {project.category}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* Load more */}
-          {visibleCount < filteredProjects.length && (
-            <div style={{ textAlign: "center", marginTop: 48 }}>
-              <button
-                onClick={loadMore}
-                style={{
-                  background: "rgba(99, 102, 241, 0.06)",
-                  color: "#6366F1",
-                  border: "2px solid rgba(99, 102, 241, 0.15)",
-                  borderRadius: 9999,
-                  padding: "12px 32px",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = "#6366F1"; e.currentTarget.style.color = "white"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(99, 102, 241, 0.06)"; e.currentTarget.style.color = "#6366F1"; }}
-              >
-                Carregar mais ({filteredProjects.length - visibleCount} restantes)
-              </button>
-            </div>
-          )}
-        </section>
 
         {/* ═══════════════ IMPACTO ═══════════════ */}
         <section id="impacto" ref={impactRef} style={{
@@ -1113,7 +855,7 @@ export default function HorizontePage() {
               }}>importam</span>
             </motion.h2>
 
-            <div style={{
+            <div className="stats-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
               gap: 40,
@@ -1152,8 +894,8 @@ export default function HorizontePage() {
           </div>
         </section>
 
-        {/* ═══════════════ COMO APOIAR ═══════════════ */}
-        <section id="apoiar" style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}>
+        {/* ═══════════════ FAZER PARTE ═══════════════ */}
+        <section id="fazer-parte" style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1161,6 +903,15 @@ export default function HorizontePage() {
             transition={{ duration: 0.7 }}
             style={{ textAlign: "center", marginBottom: 64 }}
           >
+            <span style={{
+              fontSize: 12,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: 3,
+              color: "#8B5CF6",
+              display: "block",
+              marginBottom: 16,
+            }}>FAZER PARTE</span>
             <h2 style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
@@ -1168,19 +919,19 @@ export default function HorizontePage() {
               color: "#1E1B4B",
               marginBottom: 12,
             }}>
-              Junta-te ao{" "}
+              Vem para a{" "}
               <span style={{
                 background: "linear-gradient(135deg, #F97316, #8B5CF6)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-              }}>horizonte</span>
+              }}>viagem</span>
             </h2>
             <p style={{ fontSize: 18, color: "#6B7280", maxWidth: 600, margin: "0 auto" }}>
               Cada contribuição mantém os projetos vivos e gratuitos para todos
             </p>
           </motion.div>
 
-          <div style={{
+          <div className="tier-grid" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 24,
@@ -1216,7 +967,7 @@ export default function HorizontePage() {
                 fontWeight: 700,
                 color: "#8B5CF6",
                 marginBottom: 20,
-              }}>Gratuito</p>
+              }}>5€/mês</p>
               <ul style={{ listStyle: "none", padding: 0, marginBottom: 24, flex: 1 }}>
                 {["Partilha nas redes sociais", "Dá feedback nos projetos", "Usa as ferramentas no dia a dia", "Sugere melhorias"].map(item => (
                   <li key={item} style={{
@@ -1248,7 +999,7 @@ export default function HorizontePage() {
                 onMouseEnter={e => { e.currentTarget.style.background = "#6366F1"; e.currentTarget.style.color = "white"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "rgba(99, 102, 241, 0.06)"; e.currentTarget.style.color = "#6366F1"; }}
               >
-                Começar a apoiar
+                Juntar-me como Estrela
               </button>
             </motion.div>
 
@@ -1283,7 +1034,7 @@ export default function HorizontePage() {
                   background: "linear-gradient(135deg, #F97316, #8B5CF6)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                }}>5€ uma vez</span>
+                }}>15€/mês</span>
               </p>
               <ul style={{ listStyle: "none", padding: 0, marginBottom: 24, flex: 1 }}>
                 {["Contribuição para servidores", "Ajuda com domínios e hosting", "Nome no mural de apoiantes", "Tudo do plano Estrela"].map(item => (
@@ -1317,7 +1068,7 @@ export default function HorizontePage() {
                 onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(249, 115, 22, 0.4)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(249, 115, 22, 0.3)"; }}
               >
-                Contribuir 5€
+                Juntar-me como Sol
               </button>
             </motion.div>
 
@@ -1367,7 +1118,7 @@ export default function HorizontePage() {
                   background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                }}>15€+/mês</span>
+                }}>30€/mês</span>
               </p>
               <ul style={{ listStyle: "none", padding: 0, marginBottom: 24, flex: 1 }}>
                 {[
@@ -1412,7 +1163,7 @@ export default function HorizontePage() {
                 onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(99, 102, 241, 0.45)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(99, 102, 241, 0.35)"; }}
               >
-                Apoiar mensalmente
+                Juntar-me como Horizonte
               </button>
             </motion.div>
           </div>
@@ -1437,101 +1188,6 @@ export default function HorizontePage() {
           </motion.p>
         </section>
 
-        {/* ═══════════════ PERGUNTAS ═══════════════ */}
-        <section style={{
-          padding: "120px 24px",
-          background: "linear-gradient(180deg, rgba(139,92,246,0.03), rgba(99,102,241,0.05))",
-        }}>
-          <div style={{ maxWidth: 780, margin: "0 auto" }}>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-                fontWeight: 800,
-                color: "#1E1B4B",
-                textAlign: "center",
-                marginBottom: 48,
-              }}
-            >
-              Perguntas frequentes
-            </motion.h2>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {FAQ_DATA.map((faq, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
-                  style={{
-                    background: "white",
-                    borderRadius: 16,
-                    overflow: "hidden",
-                    boxShadow: "0 2px 12px rgba(99, 102, 241, 0.05)",
-                    border: `1px solid ${openFaq === i ? "rgba(99, 102, 241, 0.15)" : "rgba(99, 102, 241, 0.06)"}`,
-                    transition: "border-color 0.3s",
-                  }}
-                >
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    style={{
-                      width: "100%",
-                      padding: "20px 24px",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      textAlign: "left",
-                    }}
-                  >
-                    <span style={{
-                      fontFamily: "'Plus Jakarta Sans', sans-serif",
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: "#1E1B4B",
-                    }}>
-                      {faq.q}
-                    </span>
-                    <motion.span
-                      animate={{ rotate: openFaq === i ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      style={{ fontSize: 18, color: "#8B5CF6", flexShrink: 0, marginLeft: 16 }}
-                    >
-                      ▼
-                    </motion.span>
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        style={{ overflow: "hidden" }}
-                      >
-                        <p style={{
-                          padding: "0 24px 20px",
-                          fontSize: 15,
-                          color: "#6B7280",
-                          lineHeight: 1.7,
-                        }}>
-                          {faq.a}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ═══════════════ VISÃO ═══════════════ */}
         <section style={{
@@ -1568,27 +1224,13 @@ export default function HorizontePage() {
               lineHeight: 1.6,
               marginBottom: 32,
             }}>
-              Imagina um mundo onde qualquer pessoa pode ter um{" "}
+              Isto é só o começo. Se gostas do que vês, há{" "}
               <span style={{
                 background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 fontWeight: 800,
-              }}>website profissional</span>
-              . Onde ferramentas úteis são{" "}
-              <span style={{
-                background: "linear-gradient(135deg, #F97316, #f59e0b)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: 800,
-              }}>gratuitas</span>
-              . Onde a tecnologia não é um{" "}
-              <span style={{
-                background: "linear-gradient(135deg, #ec4899, #8B5CF6)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: 800,
-              }}>luxo</span>.
+              }}>mais a caminho</span>.
             </p>
 
             <motion.p
@@ -1823,7 +1465,7 @@ export default function HorizontePage() {
                   Links
                 </h4>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {["Missão", "Projectos", "Impacto", "Apoiar", "Contacto"].map(link => (
+                  {["Missão", "Projectos", "Impacto", "Fazer Parte", "Contacto"].map(link => (
                     <button
                       key={link}
                       onClick={() => scrollTo(link.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))}

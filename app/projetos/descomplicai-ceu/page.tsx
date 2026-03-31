@@ -521,13 +521,25 @@ function ConstellationCard({
   index: number;
   isDesktop: boolean;
 }) {
-  const [hovered, setHovered] = useState(false);
-  const ref = useRef(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
   const posStyle: React.CSSProperties = isDesktop
     ? { position: "absolute", ...project.pos, width: 180 }
     : { position: "relative", width: "100%" };
+
+  // Close tooltip when clicking outside (mobile)
+  useEffect(() => {
+    if (!showTooltip || isDesktop) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setShowTooltip(false);
+      }
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [showTooltip, isDesktop]);
 
   return (
     <motion.div
@@ -537,21 +549,33 @@ function ConstellationCard({
       transition={{ duration: 0.7, delay: index * 0.12, type: "spring", stiffness: 120 }}
       style={{
         ...posStyle,
-        zIndex: hovered ? 20 : 5,
+        zIndex: showTooltip ? 20 : 5,
         cursor: "pointer",
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => isDesktop && setShowTooltip(true)}
+      onMouseLeave={() => isDesktop && setShowTooltip(false)}
+      onClick={() => !isDesktop && setShowTooltip((prev) => !prev)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setShowTooltip((prev) => !prev);
+        }
+        if (e.key === "Escape") setShowTooltip(false);
+      }}
+      tabIndex={0}
+      role="button"
+      aria-expanded={showTooltip}
+      aria-label={`${project.name} - ${project.category}. ${showTooltip ? "Fechar detalhes" : "Ver detalhes"}`}
     >
       <motion.div
-        animate={hovered ? { scale: 1.05, y: -4 } : { scale: 1, y: 0 }}
+        animate={showTooltip ? { scale: 1.05, y: -4 } : { scale: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         style={{
           background: "rgba(255,255,255,0.9)",
           borderRadius: 20,
           padding: isDesktop ? "20px 16px" : "20px 24px",
           textAlign: "center",
-          boxShadow: hovered
+          boxShadow: showTooltip
             ? `0 8px 32px rgba(59,130,246,0.18), 0 0 0 1px rgba(59,130,246,0.1)`
             : `0 4px 16px rgba(59,130,246,0.08), 0 0 0 1px rgba(59,130,246,0.05)`,
           transition: "box-shadow 0.3s",
@@ -559,10 +583,11 @@ function ConstellationCard({
           flexDirection: isDesktop ? "column" : "row",
           alignItems: "center",
           gap: isDesktop ? 8 : 16,
+          minHeight: 44,
         }}
       >
         <ProjectIllustration id={project.id} size={isDesktop ? 80 : 64} />
-        <div style={{ textAlign: isDesktop ? "center" : "left" }}>
+        <div style={{ textAlign: isDesktop ? "center" : "left", flex: isDesktop ? undefined : 1 }}>
           <div
             style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -576,7 +601,7 @@ function ConstellationCard({
           </div>
           <div
             style={{
-              fontSize: 12,
+              fontSize: 14,
               color: "#8B5CF6",
               fontWeight: 500,
             }}
@@ -584,25 +609,32 @@ function ConstellationCard({
             {project.category}
           </div>
         </div>
+        {/* Mobile tap hint */}
+        {!isDesktop && (
+          <div style={{ fontSize: 14, color: "#9CA3AF", flexShrink: 0 }} aria-hidden="true">
+            {showTooltip ? "\u2715" : "\u2139\ufe0f"}
+          </div>
+        )}
       </motion.div>
 
       {/* Glowing balloon tooltip */}
       <AnimatePresence>
-        {hovered && (
+        {showTooltip && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            role="tooltip"
+            aria-label={`Detalhes de ${project.name}`}
             style={{
-              position: "absolute",
+              position: isDesktop ? "absolute" : "relative",
               top: isDesktop ? "100%" : "auto",
-              bottom: isDesktop ? "auto" : "100%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              marginTop: isDesktop ? 8 : 0,
-              marginBottom: isDesktop ? 0 : 8,
-              width: 220,
+              bottom: isDesktop ? "auto" : "auto",
+              left: isDesktop ? "50%" : 0,
+              transform: isDesktop ? "translateX(-50%)" : "none",
+              marginTop: 8,
+              width: isDesktop ? 220 : "100%",
               padding: "16px 18px",
               background: "rgba(255,255,255,0.95)",
               borderRadius: 16,
@@ -613,12 +645,12 @@ function ConstellationCard({
               backdropFilter: "blur(12px)",
             }}
           >
-            <div style={{ textAlign: "center", marginBottom: 8, fontSize: 16 }}>
-              \u2b50
+            <div style={{ textAlign: "center", marginBottom: 8, fontSize: 16 }} aria-hidden="true">
+              {"\u2b50"}
             </div>
             <div
               style={{
-                fontSize: 13,
+                fontSize: 14,
                 color: "#4B5563",
                 lineHeight: 1.6,
                 textAlign: "center",
@@ -629,7 +661,7 @@ function ConstellationCard({
             <div
               style={{
                 marginTop: 8,
-                fontSize: 11,
+                fontSize: 14,
                 color: "#8B5CF6",
                 fontWeight: 600,
                 textAlign: "center",
@@ -787,20 +819,30 @@ export default function CeuPage() {
           0%, 100% { box-shadow: 0 0 40px rgba(253,230,138,0.5), 0 0 80px rgba(253,230,138,0.2); }
           50% { box-shadow: 0 0 60px rgba(253,230,138,0.7), 0 0 120px rgba(253,230,138,0.3); }
         }
-        @media (max-width: 768px) { .nav-desktop { display: none !important; } }
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .star-hide-mobile { display: none !important; }
+          .form-grid-responsive { grid-template-columns: 1fr !important; }
+        }
         @media (min-width: 769px) { .nav-mobile-btn { display: none !important; } }
         input:focus, textarea:focus { outline: none; border-color: #3B82F6 !important; box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important; }
+        button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
+          outline: 2px solid #3B82F6;
+          outline-offset: 2px;
+        }
       `}</style>
 
       <div
         style={{
           minHeight: "100vh",
+          overflowX: "hidden",
           background:
             "linear-gradient(180deg, #EFF6FF 0%, #F5F3FF 30%, #FEFCE8 60%, #FDF2F8 100%)",
         }}
       >
         {/* ═══════════════════════ 1. NAVBAR ═══════════════════════ */}
         <motion.nav
+          aria-label="Navegacao principal"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -828,6 +870,9 @@ export default function CeuPage() {
         >
           {/* Logo */}
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Voltar ao topo"
             style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 800,
@@ -836,6 +881,12 @@ export default function CeuPage() {
               color: "#1E3A5F",
             }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
           >
             descomplic
             <span
@@ -858,6 +909,7 @@ export default function CeuPage() {
               <button
                 key={link}
                 onClick={() => scrollTo(link.toLowerCase())}
+                aria-label={`Navegar para ${link}`}
                 style={{
                   background: "none",
                   border: "none",
@@ -866,6 +918,8 @@ export default function CeuPage() {
                   fontSize: 14,
                   fontWeight: 500,
                   color: "#4B5563",
+                  padding: "10px 4px",
+                  minHeight: 44,
                   transition: "color 0.2s",
                 }}
                 onMouseEnter={(e) =>
@@ -912,12 +966,14 @@ export default function CeuPage() {
           <button
             className="nav-mobile-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileMenuOpen}
             style={{
               background: "none",
               border: "none",
               cursor: "pointer",
-              width: 32,
-              height: 32,
+              width: 44,
+              height: 44,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -991,6 +1047,7 @@ export default function CeuPage() {
                 <button
                   key={link}
                   onClick={() => scrollTo(link.toLowerCase())}
+                  aria-label={`Navegar para ${link}`}
                   style={{
                     background: "none",
                     border: "none",
@@ -1000,7 +1057,8 @@ export default function CeuPage() {
                     color: "#1E3A5F",
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                     textAlign: "left",
-                    padding: "8px 0",
+                    padding: "12px 0",
+                    minHeight: 44,
                     borderBottom: "1px solid #e5e7eb",
                   }}
                 >
@@ -1117,10 +1175,12 @@ export default function CeuPage() {
             />
           </motion.div>
 
-          {/* Twinkling stars */}
+          {/* Twinkling stars — hide every other star on mobile for performance */}
           <div style={{ position: "absolute", inset: 0, zIndex: 2 }}>
             {starsData.map((star, i) => (
-              <TwinklingStar key={i} {...star} />
+              <div key={i} className={i % 2 === 1 ? "star-hide-mobile" : undefined}>
+                <TwinklingStar {...star} />
+              </div>
             ))}
           </div>
 
@@ -1223,6 +1283,7 @@ export default function CeuPage() {
             >
               <button
                 onClick={() => scrollTo("projetos")}
+                aria-label="Explorar projetos"
                 style={{
                   background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
                   color: "white",
@@ -1230,6 +1291,7 @@ export default function CeuPage() {
                   borderRadius: 9999,
                   padding: "14px 32px",
                   fontSize: 16,
+                  minHeight: 44,
                   fontWeight: 600,
                   cursor: "pointer",
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -1252,6 +1314,7 @@ export default function CeuPage() {
               </button>
               <button
                 onClick={() => scrollTo("apoiar")}
+                aria-label="Fazer parte do projeto"
                 style={{
                   background: "transparent",
                   color: "#3B82F6",
@@ -1259,6 +1322,7 @@ export default function CeuPage() {
                   borderRadius: 9999,
                   padding: "12px 30px",
                   fontSize: 16,
+                  minHeight: 44,
                   fontWeight: 600,
                   cursor: "pointer",
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -1283,6 +1347,7 @@ export default function CeuPage() {
         {/* ═══════════════════════ 3. MISSAO ═══════════════════════ */}
         <section
           id="missao"
+          aria-label="A nossa missao"
           style={{
             padding: "100px 24px",
             maxWidth: 900,
@@ -1356,6 +1421,7 @@ export default function CeuPage() {
         {/* ═══════════════════════ 4. PROJETOS — CONSTELACOES NO CEU ═══════════════════════ */}
         <section
           id="projetos"
+          aria-label="Projetos em destaque"
           style={{
             padding: "80px 24px 100px",
             maxWidth: 1100,
@@ -1398,8 +1464,10 @@ export default function CeuPage() {
                 margin: "0 auto",
               }}
             >
-              Projetos que brilham com proposito. Passa o rato para descobrir
-              cada um.
+              Projetos que brilham com proposito.{" "}
+              {isDesktop
+                ? "Passa o rato para descobrir cada um."
+                : "Toca num projeto para saber mais."}
             </p>
           </motion.div>
 
@@ -1477,6 +1545,7 @@ export default function CeuPage() {
         <section
           id="impacto"
           ref={impactRef}
+          aria-label="Impacto em numeros"
           style={{
             padding: "100px 24px",
             background:
@@ -1515,10 +1584,11 @@ export default function CeuPage() {
 
           <div
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: 32,
+              display: "grid",
+              gridTemplateColumns: isDesktop
+                ? "repeat(auto-fit, minmax(160px, 1fr))"
+                : "repeat(2, 1fr)",
+              gap: isDesktop ? 32 : 12,
               maxWidth: 1000,
               margin: "0 auto",
             }}
@@ -1534,11 +1604,13 @@ export default function CeuPage() {
                   background: "rgba(255,255,255,0.85)",
                   backdropFilter: "blur(12px)",
                   borderRadius: 20,
-                  padding: "32px 40px",
+                  padding: isDesktop ? "32px 40px" : "20px 16px",
                   textAlign: "center",
-                  minWidth: 160,
                   boxShadow: "0 4px 20px rgba(59,130,246,0.06)",
                   border: "1px solid rgba(59,130,246,0.08)",
+                  ...((!isDesktop && i === IMPACT_STATS.length - 1 && IMPACT_STATS.length % 2 !== 0)
+                    ? { gridColumn: "1 / -1" }
+                    : {}),
                 }}
               >
                 <div
@@ -1558,9 +1630,10 @@ export default function CeuPage() {
                 </div>
                 <div
                   style={{
-                    fontSize: 14,
+                    fontSize: isDesktop ? 14 : 13,
                     color: "#6B7280",
                     fontWeight: 500,
+                    lineHeight: 1.4,
                   }}
                 >
                   {stat.label}
@@ -1573,6 +1646,7 @@ export default function CeuPage() {
         {/* ═══════════════════════ 6. COMO APOIAR ═══════════════════════ */}
         <section
           id="apoiar"
+          aria-label="Como apoiar o projeto"
           style={{
             padding: "100px 24px",
             maxWidth: 1100,
@@ -1786,14 +1860,17 @@ export default function CeuPage() {
                       ))}
                     </ul>
                     <button
+                      type="button"
+                      aria-label={`Juntar-me como ${tier.name} por ${tier.price}${tier.period}`}
                       style={{
                         width: "100%",
-                        padding: "12px 24px",
+                        padding: "14px 24px",
                         borderRadius: 9999,
                         border: isTop ? "none" : "2px solid #3B82F6",
                         background: isTop ? tier.gradient : "transparent",
                         color: isTop ? "white" : "#3B82F6",
                         fontSize: 15,
+                        minHeight: 44,
                         fontWeight: 700,
                         cursor: "pointer",
                         fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -1922,6 +1999,7 @@ export default function CeuPage() {
         {/* ═══════════════════════ 8. CONTACTO + FOOTER ═══════════════════════ */}
         <section
           id="contacto"
+          aria-label="Formulario de contacto"
           style={{
             padding: "80px 24px 40px",
             maxWidth: 700,
@@ -1976,11 +2054,13 @@ export default function CeuPage() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Contactar via ${link.label}`}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  padding: "10px 20px",
+                  padding: "12px 20px",
+                  minHeight: 44,
                   borderRadius: 9999,
                   background: "rgba(255,255,255,0.85)",
                   backdropFilter: "blur(8px)",
@@ -2012,6 +2092,7 @@ export default function CeuPage() {
           {/* Contact form */}
           <motion.form
             onSubmit={handleFormSubmit}
+            aria-label="Formulario de contacto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -2029,6 +2110,7 @@ export default function CeuPage() {
             }}
           >
             <div
+              className="form-grid-responsive"
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
@@ -2038,6 +2120,7 @@ export default function CeuPage() {
               <input
                 type="text"
                 placeholder="Nome"
+                aria-label="O teu nome"
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 required
@@ -2045,16 +2128,18 @@ export default function CeuPage() {
                   padding: "12px 16px",
                   borderRadius: 12,
                   border: "1px solid #e5e7eb",
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: "'Inter', sans-serif",
                   background: "rgba(255,255,255,0.8)",
                   color: "#1E3A5F",
                   transition: "border-color 0.2s, box-shadow 0.2s",
+                  width: "100%",
                 }}
               />
               <input
                 type="email"
                 placeholder="Email"
+                aria-label="O teu email"
                 value={formEmail}
                 onChange={(e) => setFormEmail(e.target.value)}
                 required
@@ -2062,16 +2147,18 @@ export default function CeuPage() {
                   padding: "12px 16px",
                   borderRadius: 12,
                   border: "1px solid #e5e7eb",
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: "'Inter', sans-serif",
                   background: "rgba(255,255,255,0.8)",
                   color: "#1E3A5F",
                   transition: "border-color 0.2s, box-shadow 0.2s",
+                  width: "100%",
                 }}
               />
             </div>
             <textarea
               placeholder="A tua mensagem..."
+              aria-label="A tua mensagem"
               value={formMsg}
               onChange={(e) => setFormMsg(e.target.value)}
               required
@@ -2080,24 +2167,26 @@ export default function CeuPage() {
                 padding: "12px 16px",
                 borderRadius: 12,
                 border: "1px solid #e5e7eb",
-                fontSize: 14,
+                fontSize: 16,
                 fontFamily: "'Inter', sans-serif",
                 background: "rgba(255,255,255,0.8)",
                 color: "#1E3A5F",
                 resize: "vertical",
                 transition: "border-color 0.2s, box-shadow 0.2s",
+                width: "100%",
               }}
             />
             <button
               type="submit"
+              aria-label={formSent ? "Mensagem enviada" : "Enviar mensagem"}
               style={{
-                alignSelf: "flex-end",
+                alignSelf: isDesktop ? "flex-end" : "stretch",
                 background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
                 color: "white",
                 border: "none",
                 borderRadius: 9999,
-                padding: "12px 32px",
-                fontSize: 15,
+                padding: "14px 32px",
+                fontSize: 16,
                 fontWeight: 600,
                 cursor: "pointer",
                 fontFamily: "'Plus Jakarta Sans', sans-serif",

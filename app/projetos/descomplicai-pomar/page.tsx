@@ -116,7 +116,7 @@ function ProjectSVG({ id }: { id: string }) {
   switch (id) {
     case "chess":
       return (
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           {/* 4x4 grid */}
           {[0, 1, 2, 3].map(row =>
             [0, 1, 2, 3].map(col => (
@@ -141,7 +141,7 @@ function ProjectSVG({ id }: { id: string }) {
       );
     case "bijou":
       return (
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           {/* Plate */}
           <circle cx="40" cy="42" r="24" stroke={brown} strokeWidth="2" fill="none" />
           <circle cx="40" cy="42" r="18" stroke={brown} strokeWidth="1" opacity="0.3" fill="none" />
@@ -155,7 +155,7 @@ function ProjectSVG({ id }: { id: string }) {
       );
     case "fractal":
       return (
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           {/* Nested squares */}
           <rect x="10" y="10" width="60" height="60" stroke={brown} strokeWidth="2" fill="none" rx="2" />
           <rect x="20" y="20" width="40" height="40" stroke={green} strokeWidth="2" fill="none" rx="2" opacity="0.7" />
@@ -165,7 +165,7 @@ function ProjectSVG({ id }: { id: string }) {
       );
     case "dentalkid":
       return (
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           {/* Tooth shape */}
           <path d="M30 28 C30 18 38 14 40 14 C42 14 50 18 50 28 C50 38 48 44 46 52 C45 56 43 58 42 58 C41 58 40 56 40 52 C40 56 39 58 38 58 C37 58 35 56 34 52 C32 44 30 38 30 28Z"
             stroke={brown} strokeWidth="2" fill={green} fillOpacity="0.2"
@@ -177,7 +177,7 @@ function ProjectSVG({ id }: { id: string }) {
       );
     case "synth":
       return (
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           {/* Equalizer bars */}
           {[0, 1, 2, 3, 4, 5, 6].map((i) => {
             const heights = [24, 36, 18, 42, 30, 22, 34];
@@ -199,7 +199,7 @@ function ProjectSVG({ id }: { id: string }) {
       );
     case "solar":
       return (
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
           {/* Sun */}
           <circle cx="40" cy="40" r="8" fill={brown} opacity="0.3" />
           <circle cx="40" cy="40" r="4" fill={brown} opacity="0.6" />
@@ -241,10 +241,13 @@ function FloatingBlob({ config, mouseX, mouseY }: {
   const springX = useSpring(x as MotionValue<number>, { stiffness: 40, damping: 25 });
   const springY = useSpring(y as MotionValue<number>, { stiffness: 40, damping: 25 });
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const scaledSize = isMobile ? config.size * 0.5 : config.size;
+
   const posStyle: React.CSSProperties = {
     position: "absolute",
-    width: config.size,
-    height: config.size,
+    width: scaledSize,
+    height: scaledSize,
     borderRadius: config.radius,
     background: config.color,
     ...(config.top !== undefined && { top: config.top }),
@@ -282,10 +285,11 @@ function LeafParticles() {
     })), []);
 
   return (
-    <>
+    <div className="pomar-leaf-particles">
       {particles.map(p => (
         <motion.div
           key={p.id}
+          aria-hidden="true"
           style={{
             position: "absolute",
             left: `${p.left}%`,
@@ -309,7 +313,7 @@ function LeafParticles() {
           }}
         />
       ))}
-    </>
+    </div>
   );
 }
 
@@ -320,6 +324,7 @@ function LeafTooltip({ text, visible }: { text: string; visible: boolean }) {
     <AnimatePresence>
       {visible && (
         <motion.div
+          role="tooltip"
           initial={{ opacity: 0, y: 10, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 5, scale: 0.95 }}
@@ -415,8 +420,11 @@ export default function PomarPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; color: #4B5563; overflow-x: hidden; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; color: #4B5563; overflow-x: hidden; font-size: clamp(14px, 1vw, 16px); }
+        @media (max-width: 768px) {
+          .pomar-leaf-particles { display: none !important; }
+        }
         ::selection { background: #FDE68A; color: #78350F; }
         @keyframes sway {
           0%, 100% { transform: rotate(-2deg); }
@@ -444,6 +452,7 @@ export default function PomarPage() {
 
         {/* ═══════════════════════════ SECTION 1: NAVBAR ═══════════════════════════ */}
         <motion.nav
+          aria-label="Navegacao principal"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -468,6 +477,9 @@ export default function PomarPage() {
         >
           {/* Logo */}
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Voltar ao topo"
             style={{
               fontFamily: "'Playfair Display', serif",
               fontWeight: 700,
@@ -477,8 +489,11 @@ export default function PomarPage() {
               display: "flex",
               alignItems: "center",
               gap: 6,
+              minHeight: 44,
+              WebkitTapHighlightColor: "transparent",
             }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
           >
             descomplic
             <span style={{
@@ -497,12 +512,15 @@ export default function PomarPage() {
             `}</style>
             {navLinks.map(link => (
               <button
+                type="button"
                 key={link}
                 onClick={() => scrollTo(link.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))}
+                aria-label={`Navegar para ${link}`}
                 style={{
                   background: "none", border: "none", cursor: "pointer",
                   fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500,
                   color: "#78350F", transition: "color 0.2s", opacity: 0.7,
+                  minHeight: 44, minWidth: 44, display: "inline-flex", alignItems: "center",
                 }}
                 onMouseEnter={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.color = "#059669"; }}
                 onMouseLeave={e => { e.currentTarget.style.opacity = "0.7"; e.currentTarget.style.color = "#78350F"; }}
@@ -511,7 +529,9 @@ export default function PomarPage() {
               </button>
             ))}
             <button
+              type="button"
               onClick={() => scrollTo("apoiar")}
+              aria-label="Navegar para Fazer parte"
               style={{
                 background: "linear-gradient(135deg, #059669, #10B981)",
                 color: "white",
@@ -524,6 +544,7 @@ export default function PomarPage() {
                 fontFamily: "'Inter', sans-serif",
                 transition: "transform 0.2s, box-shadow 0.2s",
                 boxShadow: "0 2px 10px rgba(5,150,105,0.25)",
+                minHeight: 44,
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(5,150,105,0.35)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(5,150,105,0.25)"; }}
@@ -536,10 +557,14 @@ export default function PomarPage() {
           <button
             className="pomar-mobile-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileMenuOpen}
+            role="button"
             style={{
               background: "none", border: "none", cursor: "pointer",
-              width: 32, height: 32, display: "flex", flexDirection: "column",
+              width: 44, height: 44, display: "flex", flexDirection: "column",
               justifyContent: "center", alignItems: "center", gap: 5,
+              WebkitTapHighlightColor: "transparent",
             }}
           >
             <motion.span animate={{ rotate: mobileMenuOpen ? 45 : 0, y: mobileMenuOpen ? 7 : 0 }}
@@ -568,25 +593,31 @@ export default function PomarPage() {
             >
               {navLinks.map(link => (
                 <button
+                  type="button"
                   key={link}
                   onClick={() => scrollTo(link.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))}
+                  aria-label={`Navegar para ${link}`}
                   style={{
                     background: "none", border: "none", cursor: "pointer",
                     fontSize: 18, fontWeight: 600, color: "#78350F",
                     fontFamily: "'Playfair Display', serif", textAlign: "left",
-                    padding: "8px 0", borderBottom: "1px solid rgba(253,186,116,0.2)",
+                    padding: "12px 0", minHeight: 44, borderBottom: "1px solid rgba(253,186,116,0.2)",
+                    WebkitTapHighlightColor: "transparent",
                   }}
                 >
                   {link}
                 </button>
               ))}
               <button
+                type="button"
                 onClick={() => scrollTo("apoiar")}
+                aria-label="Navegar para Fazer parte"
                 style={{
                   background: "linear-gradient(135deg, #059669, #10B981)",
                   color: "white", border: "none", borderRadius: 12,
-                  padding: "12px", fontSize: 16, fontWeight: 600, cursor: "pointer",
-                  fontFamily: "'Inter', sans-serif", marginTop: 8,
+                  padding: "14px", fontSize: 16, fontWeight: 600, cursor: "pointer",
+                  fontFamily: "'Inter', sans-serif", marginTop: 8, minHeight: 44,
+                  WebkitTapHighlightColor: "transparent",
                 }}
               >
                 Fazer parte
@@ -718,7 +749,9 @@ export default function PomarPage() {
               style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}
             >
               <button
+                type="button"
                 onClick={() => scrollTo("projetos")}
+                aria-label="Explorar o pomar de projetos"
                 style={{
                   background: "linear-gradient(135deg, #92400E, #B45309)",
                   color: "white",
@@ -731,6 +764,8 @@ export default function PomarPage() {
                   fontFamily: "'Inter', sans-serif",
                   boxShadow: "0 4px 20px rgba(146,64,14,0.25)",
                   transition: "transform 0.2s, box-shadow 0.2s",
+                  minHeight: 44,
+                  WebkitTapHighlightColor: "transparent",
                 }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(146,64,14,0.3)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(146,64,14,0.25)"; }}
@@ -738,7 +773,9 @@ export default function PomarPage() {
                 Explorar o pomar
               </button>
               <button
+                type="button"
                 onClick={() => scrollTo("apoiar")}
+                aria-label="Fazer parte do projeto"
                 style={{
                   background: "rgba(255,255,255,0.7)",
                   color: "#059669",
@@ -751,6 +788,8 @@ export default function PomarPage() {
                   fontFamily: "'Inter', sans-serif",
                   backdropFilter: "blur(10px)",
                   transition: "transform 0.2s, background 0.2s",
+                  minHeight: 44,
+                  WebkitTapHighlightColor: "transparent",
                 }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "rgba(255,255,255,0.9)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "rgba(255,255,255,0.7)"; }}
@@ -1021,7 +1060,10 @@ export default function PomarPage() {
             }}
           >
             <style>{`
-              @media (min-width: 768px) {
+              @media (max-width: 599px) {
+                .pomar-projects-grid { grid-template-columns: 1fr !important; }
+              }
+              @media (min-width: 600px) and (max-width: 1023px) {
                 .pomar-projects-grid { grid-template-columns: repeat(2, 1fr) !important; }
               }
               @media (min-width: 1024px) {
@@ -1038,6 +1080,10 @@ export default function PomarPage() {
                 onMouseEnter={() => setHoveredProject(project.name)}
                 onMouseLeave={() => setHoveredProject(null)}
                 onClick={() => setHoveredProject(hoveredProject === project.name ? null : project.name)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${project.name} - ${project.category}. Toca para ver detalhes.`}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setHoveredProject(hoveredProject === project.name ? null : project.name); } }}
                 style={{
                   position: "relative",
                   background: "rgba(255,255,255,0.8)",
@@ -1048,6 +1094,7 @@ export default function PomarPage() {
                   boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
                   cursor: "pointer",
                   transition: "transform 0.3s, box-shadow 0.3s",
+                  WebkitTapHighlightColor: "transparent",
                 }}
                 whileHover={{ y: -4, boxShadow: "0 8px 30px rgba(5,150,105,0.1)" }}
               >
@@ -1156,9 +1203,10 @@ export default function PomarPage() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.6 }}
                   style={{
-                    flex: "0 0 auto",
-                    minWidth: 160,
-                    padding: "32px 28px",
+                    flex: "1 1 140px",
+                    minWidth: 140,
+                    maxWidth: 200,
+                    padding: "24px 16px",
                     background: "rgba(255,255,255,0.7)",
                     backdropFilter: "blur(10px)",
                     borderRadius: 20,
@@ -1180,7 +1228,7 @@ export default function PomarPage() {
                   </div>
                   <div style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: 13,
+                    fontSize: 14,
                     color: "#6B7280",
                     lineHeight: 1.4,
                   }}>
@@ -1269,6 +1317,9 @@ export default function PomarPage() {
             }}
           >
             <style>{`
+              @media (max-width: 599px) {
+                .pomar-tiers-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+              }
               @media (min-width: 900px) {
                 .pomar-tiers-grid { grid-template-columns: repeat(3, 1fr) !important; }
               }
@@ -1438,9 +1489,11 @@ export default function PomarPage() {
 
                   {/* CTA */}
                   <button
+                    type="button"
+                    aria-label={tier.cta}
                     style={{
                       width: "100%",
-                      padding: "12px",
+                      padding: "14px",
                       borderRadius: 12,
                       border: tier.highlighted ? "none" : "1px solid rgba(5,150,105,0.2)",
                       background: tier.highlighted
@@ -1453,6 +1506,8 @@ export default function PomarPage() {
                       fontFamily: "'Inter', sans-serif",
                       transition: "transform 0.2s, box-shadow 0.2s",
                       boxShadow: tier.highlighted ? "0 4px 16px rgba(5,150,105,0.2)" : "none",
+                      minHeight: 44,
+                      WebkitTapHighlightColor: "transparent",
                     }}
                     onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.02)"; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -1602,11 +1657,12 @@ export default function PomarPage() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Contactar via ${link.label}`}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  padding: "10px 20px",
+                  padding: "12px 20px",
                   borderRadius: 12,
                   background: "rgba(255,255,255,0.7)",
                   backdropFilter: "blur(10px)",
@@ -1617,6 +1673,8 @@ export default function PomarPage() {
                   fontSize: 14,
                   fontWeight: 500,
                   transition: "transform 0.2s, box-shadow 0.2s",
+                  minHeight: 44,
+                  WebkitTapHighlightColor: "transparent",
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.06)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
@@ -1645,23 +1703,33 @@ export default function PomarPage() {
               gap: 16,
             }}
           >
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <div className="pomar-form-row" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              <style>{`
+                @media (max-width: 599px) {
+                  .pomar-form-row { flex-direction: column !important; }
+                  .pomar-form-row input { flex: 1 1 100% !important; width: 100% !important; }
+                  .pomar-form-submit { align-self: stretch !important; width: 100% !important; }
+                }
+              `}</style>
               <input
                 type="text"
                 placeholder="O teu nome"
                 value={contactForm.name}
                 onChange={e => handleFormChange("name", e.target.value)}
+                aria-label="O teu nome"
+                autoComplete="name"
                 style={{
                   flex: "1 1 200px",
-                  padding: "12px 16px",
+                  padding: "14px 16px",
                   borderRadius: 12,
                   border: "1px solid rgba(253,186,116,0.2)",
                   background: "rgba(255,251,235,0.5)",
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: 14,
+                  fontSize: 16,
                   color: "#78350F",
                   outline: "none",
                   transition: "border-color 0.2s",
+                  minHeight: 44,
                 }}
                 onFocus={e => e.currentTarget.style.borderColor = "rgba(5,150,105,0.4)"}
                 onBlur={e => e.currentTarget.style.borderColor = "rgba(253,186,116,0.2)"}
@@ -1671,17 +1739,20 @@ export default function PomarPage() {
                 placeholder="O teu email"
                 value={contactForm.email}
                 onChange={e => handleFormChange("email", e.target.value)}
+                aria-label="O teu email"
+                autoComplete="email"
                 style={{
                   flex: "1 1 200px",
-                  padding: "12px 16px",
+                  padding: "14px 16px",
                   borderRadius: 12,
                   border: "1px solid rgba(253,186,116,0.2)",
                   background: "rgba(255,251,235,0.5)",
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: 14,
+                  fontSize: 16,
                   color: "#78350F",
                   outline: "none",
                   transition: "border-color 0.2s",
+                  minHeight: 44,
                 }}
                 onFocus={e => e.currentTarget.style.borderColor = "rgba(5,150,105,0.4)"}
                 onBlur={e => e.currentTarget.style.borderColor = "rgba(253,186,116,0.2)"}
@@ -1691,37 +1762,43 @@ export default function PomarPage() {
               placeholder="A tua mensagem..."
               value={contactForm.message}
               onChange={e => handleFormChange("message", e.target.value)}
+              aria-label="A tua mensagem"
               rows={4}
               style={{
-                padding: "12px 16px",
+                padding: "14px 16px",
                 borderRadius: 12,
                 border: "1px solid rgba(253,186,116,0.2)",
                 background: "rgba(255,251,235,0.5)",
                 fontFamily: "'Inter', sans-serif",
-                fontSize: 14,
+                fontSize: 16,
                 color: "#78350F",
                 outline: "none",
                 resize: "vertical",
                 transition: "border-color 0.2s",
+                minHeight: 120,
               }}
               onFocus={e => e.currentTarget.style.borderColor = "rgba(5,150,105,0.4)"}
               onBlur={e => e.currentTarget.style.borderColor = "rgba(253,186,116,0.2)"}
             />
             <button
               type="submit"
+              aria-label="Enviar mensagem de contacto"
+              className="pomar-form-submit"
               style={{
                 alignSelf: "flex-end",
-                padding: "12px 32px",
+                padding: "14px 32px",
                 borderRadius: 12,
                 border: "none",
                 background: "linear-gradient(135deg, #92400E, #B45309)",
                 color: "white",
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: 600,
                 cursor: "pointer",
                 fontFamily: "'Inter', sans-serif",
                 transition: "transform 0.2s, box-shadow 0.2s",
                 boxShadow: "0 4px 16px rgba(146,64,14,0.2)",
+                minHeight: 44,
+                WebkitTapHighlightColor: "transparent",
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(146,64,14,0.3)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(146,64,14,0.2)"; }}
@@ -1756,15 +1833,17 @@ export default function PomarPage() {
             fontStyle: "italic",
             color: "#92400E",
             opacity: 0.6,
-            marginBottom: 12,
+            marginBottom: 16,
+            lineHeight: 1.6,
           }}>
             Feito com cuidado, como tudo o que construo.
           </p>
 
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: 13,
+            fontSize: 14,
             color: "#9CA3AF",
+            lineHeight: 1.6,
           }}>
             Descomplicai &copy; {new Date().getFullYear()}. Todos os projetos, sempre gratuitos.
           </p>

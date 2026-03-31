@@ -148,6 +148,7 @@ function FloatingShape({
 
   return (
     <motion.div
+      aria-hidden="true"
       style={{
         position: "absolute",
         borderRadius: "50%",
@@ -173,10 +174,19 @@ function FloatingShape({
 
 function ProjectSVG({ type }: { type: string }) {
   const size = 80;
+  const labels: Record<string, string> = {
+    chess: "Ilustracao de tabuleiro de xadrez",
+    bijou: "Ilustracao de prato e talheres",
+    fractal: "Ilustracao de formas fractais",
+    dental: "Ilustracao de dente",
+    synth: "Ilustracao de barras de audio",
+    solar: "Ilustracao do sistema solar",
+  };
+  const ariaLabel = labels[type] || "Ilustracao do projeto";
   switch (type) {
     case "chess":
       return (
-        <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+        <svg width={size} height={size} viewBox="0 0 80 80" fill="none" role="img" aria-label={ariaLabel}>
           {/* 4x4 board */}
           {[0, 1, 2, 3].map(row =>
             [0, 1, 2, 3].map(col => (
@@ -200,7 +210,7 @@ function ProjectSVG({ type }: { type: string }) {
       );
     case "bijou":
       return (
-        <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+        <svg width={size} height={size} viewBox="0 0 80 80" fill="none" role="img" aria-label={ariaLabel}>
           {/* Plate */}
           <circle cx={40} cy={42} r={24} stroke="#0D9488" strokeWidth={2} fill="white" />
           <circle cx={40} cy={42} r={18} stroke="rgba(13,148,136,0.3)" strokeWidth={1} fill="none" />
@@ -215,7 +225,7 @@ function ProjectSVG({ type }: { type: string }) {
       );
     case "fractal":
       return (
-        <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+        <svg width={size} height={size} viewBox="0 0 80 80" fill="none" role="img" aria-label={ariaLabel}>
           <rect x={22} y={22} width={36} height={36} rx={2} stroke="#0D9488" strokeWidth={2} fill="none" transform="rotate(0 40 40)" />
           <rect x={22} y={22} width={36} height={36} rx={2} stroke="#0EA5E9" strokeWidth={1.5} fill="none" transform="rotate(15 40 40)" opacity={0.7} />
           <rect x={22} y={22} width={36} height={36} rx={2} stroke="#FB923C" strokeWidth={1} fill="none" transform="rotate(30 40 40)" opacity={0.5} />
@@ -223,7 +233,7 @@ function ProjectSVG({ type }: { type: string }) {
       );
     case "dental":
       return (
-        <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+        <svg width={size} height={size} viewBox="0 0 80 80" fill="none" role="img" aria-label={ariaLabel}>
           {/* Tooth shape */}
           <path
             d="M30 30 Q30 18 38 18 Q40 22 42 18 Q50 18 50 30 Q50 42 46 55 Q44 60 40 55 Q36 60 34 55 Q30 42 30 30Z"
@@ -242,7 +252,7 @@ function ProjectSVG({ type }: { type: string }) {
       );
     case "synth":
       return (
-        <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+        <svg width={size} height={size} viewBox="0 0 80 80" fill="none" role="img" aria-label={ariaLabel}>
           {[0, 1, 2, 3, 4].map(i => {
             const heights = [28, 40, 20, 35, 24];
             const colors = ["#0D9488", "#0EA5E9", "#FB923C", "#0D9488", "#0EA5E9"];
@@ -263,7 +273,7 @@ function ProjectSVG({ type }: { type: string }) {
       );
     case "solar":
       return (
-        <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+        <svg width={size} height={size} viewBox="0 0 80 80" fill="none" role="img" aria-label={ariaLabel}>
           {/* Orbits */}
           <circle cx={40} cy={40} r={12} stroke="rgba(13,148,136,0.2)" strokeWidth={1} fill="none" />
           <circle cx={40} cy={40} r={20} stroke="rgba(14,165,233,0.2)" strokeWidth={1} fill="none" />
@@ -292,13 +302,44 @@ function BalloonTooltip({
   message: string;
 }) {
   const [show, setShow] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  /* Close on tap outside */
+  useEffect(() => {
+    if (!show) return;
+    const handler = (e: MouseEvent | TouchEvent) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(e.target as Node)) {
+        setShow(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, [show]);
 
   return (
     <div
+      ref={tooltipRef}
       style={{ position: "relative" }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
-      onClick={() => setShow(prev => !prev)}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShow(prev => !prev);
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Ver detalhe: ${message}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setShow(prev => !prev);
+        }
+      }}
     >
       <AnimatePresence>
         {show && (
@@ -307,6 +348,7 @@ function BalloonTooltip({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            role="tooltip"
             style={{
               position: "absolute",
               bottom: "calc(100% + 16px)",
@@ -423,16 +465,27 @@ export default function MarePage() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(8px); }
         }
+        /* Prevent horizontal scroll globally */
+        html, body { overflow-x: hidden; max-width: 100vw; }
+
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
-          .hero-ctas { flex-direction: column !important; align-items: center !important; }
-          .mission-grid { grid-template-columns: 1fr !important; }
+          .hero-ctas { flex-direction: column !important; align-items: center !important; width: 100% !important; }
+          .hero-ctas button { width: 100% !important; max-width: 320px !important; min-height: 48px !important; }
+          .mission-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
           .projects-grid { grid-template-columns: 1fr !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .stats-grid > *:last-child { grid-column: 1 / -1 !important; max-width: 200px !important; margin: 0 auto !important; }
           .tiers-grid { grid-template-columns: 1fr !important; }
-          .contact-row { flex-direction: column !important; gap: 12px !important; }
+          .contact-row { flex-direction: column !important; gap: 12px !important; align-items: center !important; }
+          .contact-row a { width: 100% !important; max-width: 320px !important; justify-content: center !important; min-height: 48px !important; }
           .footer-inner { flex-direction: column !important; text-align: center !important; gap: 16px !important; }
+          .footer-inner > div:last-child { flex-wrap: wrap !important; justify-content: center !important; gap: 12px !important; }
+          .footer-inner button { min-height: 44px !important; min-width: 44px !important; font-size: 14px !important; }
           .vision-text { font-size: clamp(1.25rem, 4vw, 2rem) !important; }
+        }
+        @media (max-width: 374px) {
+          .stats-grid { grid-template-columns: 1fr !important; }
         }
         @media (min-width: 769px) {
           .nav-mobile-btn { display: none !important; }
@@ -474,6 +527,9 @@ export default function MarePage() {
         >
           {/* Logo */}
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Voltar ao topo"
             style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 800,
@@ -481,6 +537,12 @@ export default function MarePage() {
               cursor: "pointer",
             }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
           >
             descomplic
             <span
@@ -495,14 +557,16 @@ export default function MarePage() {
           </div>
 
           {/* Desktop Links */}
-          <div
+          <nav
             className="nav-desktop"
+            aria-label="Navegacao principal"
             style={{ display: "flex", gap: 28, alignItems: "center" }}
           >
             {navLinks.map((link) => (
               <button
                 key={link}
                 onClick={() => scrollTo(sectionIdFromLink(link))}
+                aria-label={`Navegar para ${link}`}
                 style={{
                   background: "none",
                   border: "none",
@@ -512,6 +576,11 @@ export default function MarePage() {
                   fontWeight: 500,
                   color: "#4B5563",
                   transition: "color 0.2s",
+                  minHeight: 44,
+                  minWidth: 44,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#0D9488")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#4B5563")}
@@ -521,6 +590,7 @@ export default function MarePage() {
             ))}
             <button
               onClick={() => scrollTo("apoiar")}
+              aria-label="Navegar para secao Apoiar"
               style={{
                 background: "linear-gradient(135deg, #0D9488, #0EA5E9)",
                 color: "white",
@@ -533,6 +603,7 @@ export default function MarePage() {
                 fontFamily: "'Inter', sans-serif",
                 transition: "transform 0.2s, box-shadow 0.2s",
                 boxShadow: "0 2px 10px rgba(13, 148, 136, 0.3)",
+                minHeight: 44,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.05)";
@@ -547,18 +618,20 @@ export default function MarePage() {
             >
               Apoiar
             </button>
-          </div>
+          </nav>
 
           {/* Mobile Hamburger */}
           <button
             className="nav-mobile-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileMenuOpen ? "true" : "false"}
             style={{
               background: "none",
               border: "none",
               cursor: "pointer",
-              width: 32,
-              height: 32,
+              width: 44,
+              height: 44,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -632,6 +705,7 @@ export default function MarePage() {
                 <button
                   key={link}
                   onClick={() => scrollTo(sectionIdFromLink(link))}
+                  aria-label={`Navegar para ${link}`}
                   style={{
                     background: "none",
                     border: "none",
@@ -641,7 +715,8 @@ export default function MarePage() {
                     color: "#134E4A",
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                     textAlign: "left",
-                    padding: "8px 0",
+                    padding: "12px 0",
+                    minHeight: 48,
                     borderBottom: "1px solid rgba(13,148,136,0.1)",
                   }}
                 >
@@ -650,17 +725,19 @@ export default function MarePage() {
               ))}
               <button
                 onClick={() => scrollTo("apoiar")}
+                aria-label="Navegar para secao Apoiar"
                 style={{
                   background: "linear-gradient(135deg, #0D9488, #0EA5E9)",
                   color: "white",
                   border: "none",
                   borderRadius: 9999,
-                  padding: "12px 24px",
+                  padding: "14px 24px",
                   fontSize: 16,
                   fontWeight: 600,
                   cursor: "pointer",
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   marginTop: 8,
+                  minHeight: 48,
                 }}
               >
                 Fazer parte
@@ -863,7 +940,9 @@ export default function MarePage() {
               style={{ display: "flex", gap: 16, justifyContent: "center" }}
             >
               <button
+                type="button"
                 onClick={() => scrollTo("projetos")}
+                aria-label="Explorar projetos"
                 style={{
                   background: "linear-gradient(135deg, #0D9488, #0EA5E9)",
                   color: "white",
@@ -876,6 +955,7 @@ export default function MarePage() {
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   boxShadow: "0 4px 20px rgba(13,148,136,0.3)",
                   transition: "transform 0.2s, box-shadow 0.2s",
+                  minHeight: 48,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-2px)";
@@ -891,7 +971,9 @@ export default function MarePage() {
                 Explorar
               </button>
               <button
+                type="button"
                 onClick={() => scrollTo("apoiar")}
+                aria-label="Fazer parte do projeto"
                 style={{
                   background: "rgba(255,255,255,0.7)",
                   color: "#0D9488",
@@ -904,6 +986,7 @@ export default function MarePage() {
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                   backdropFilter: "blur(10px)",
                   transition: "transform 0.2s, background 0.2s",
+                  minHeight: 48,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-2px)";
@@ -937,6 +1020,8 @@ export default function MarePage() {
               height={24}
               viewBox="0 0 24 24"
               fill="none"
+              role="img"
+              aria-label="Scroll para baixo"
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -954,6 +1039,8 @@ export default function MarePage() {
           <svg
             viewBox="0 0 1440 120"
             preserveAspectRatio="none"
+            role="presentation"
+            aria-hidden="true"
             style={{
               position: "absolute",
               bottom: 0,
@@ -1132,6 +1219,7 @@ export default function MarePage() {
                 <BalloonTooltip message={project.balloon}>
                   <a
                     href={project.link}
+                    aria-label={`Ver projeto ${project.name}`}
                     style={{ textDecoration: "none", color: "inherit", display: "block" }}
                   >
                     <motion.div
@@ -1160,7 +1248,7 @@ export default function MarePage() {
                           color: "#0D9488",
                           borderRadius: 9999,
                           padding: "4px 12px",
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: 600,
                           marginBottom: 10,
                           fontFamily: "'Inter', sans-serif",
@@ -1269,7 +1357,7 @@ export default function MarePage() {
                 </div>
                 <p
                   style={{
-                    fontSize: 13,
+                    fontSize: 14,
                     color: "#6B7280",
                     lineHeight: 1.4,
                     fontWeight: 500,
@@ -1377,7 +1465,7 @@ export default function MarePage() {
                         color: "white",
                         borderRadius: 9999,
                         padding: "4px 12px",
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: 700,
                         letterSpacing: 0.5,
                       }}
@@ -1413,7 +1501,7 @@ export default function MarePage() {
                   </p>
                   <p
                     style={{
-                      fontSize: 13,
+                      fontSize: 14,
                       color: "#6B7280",
                       fontStyle: "italic",
                       marginBottom: 16,
@@ -1439,15 +1527,18 @@ export default function MarePage() {
                     ))}
                   </ul>
                   <button
+                    type="button"
+                    aria-label={tier.cta}
                     style={{
                       width: "100%",
-                      padding: "12px 24px",
+                      padding: "14px 24px",
                       borderRadius: 9999,
                       fontSize: 15,
                       fontWeight: 600,
                       cursor: "pointer",
                       fontFamily: "'Plus Jakarta Sans', sans-serif",
                       transition: "transform 0.2s, box-shadow 0.2s",
+                      minHeight: 48,
                       ...(tier.style === "outline"
                         ? {
                             background: "transparent",
@@ -1514,13 +1605,14 @@ export default function MarePage() {
         >
           {/* Radial glow */}
           <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: 600,
-              height: 600,
+              width: "min(600px, 100vw)",
+              height: "min(600px, 100vw)",
               background:
                 "radial-gradient(circle, rgba(13,148,136,0.06), transparent 70%)",
               borderRadius: "50%",
@@ -1604,6 +1696,8 @@ export default function MarePage() {
                       strokeWidth={2}
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      role="img"
+                      aria-hidden="true"
                     >
                       <rect x={2} y={4} width={20} height={16} rx={2} />
                       <path d="M22 7l-10 7L2 7" />
@@ -1619,6 +1713,8 @@ export default function MarePage() {
                       height={18}
                       viewBox="0 0 24 24"
                       fill="currentColor"
+                      role="img"
+                      aria-hidden="true"
                     >
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
@@ -1633,6 +1729,8 @@ export default function MarePage() {
                       height={18}
                       viewBox="0 0 24 24"
                       fill="currentColor"
+                      role="img"
+                      aria-hidden="true"
                     >
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
@@ -1644,6 +1742,7 @@ export default function MarePage() {
                   href={contact.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Contactar via ${contact.label}`}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -1659,6 +1758,7 @@ export default function MarePage() {
                     fontFamily: "'Inter', sans-serif",
                     transition: "background 0.2s, transform 0.2s",
                     backdropFilter: "blur(8px)",
+                    minHeight: 48,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background =
@@ -1715,20 +1815,27 @@ export default function MarePage() {
               </div>
 
               {/* Nav links */}
-              <div style={{ display: "flex", gap: 24 }}>
+              <div style={{ display: "flex", gap: 24, flexWrap: "wrap" as const, justifyContent: "center" }}>
                 {navLinks.map((link) => (
                   <button
+                    type="button"
                     key={link}
                     onClick={() => scrollTo(sectionIdFromLink(link))}
+                    aria-label={`Navegar para ${link}`}
                     style={{
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: 500,
                       color: "#6B7280",
                       fontFamily: "'Inter', sans-serif",
                       transition: "color 0.2s",
+                      minHeight: 44,
+                      minWidth: 44,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.color = "#0D9488")
@@ -1760,7 +1867,7 @@ export default function MarePage() {
               </p>
               <p
                 style={{
-                  fontSize: 13,
+                  fontSize: 14,
                   color: "#9CA3AF",
                 }}
               >

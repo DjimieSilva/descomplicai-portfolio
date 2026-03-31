@@ -171,24 +171,6 @@ const testimonials = [
   },
 ];
 
-const faqItems = [
-  {
-    q: "Porque não cobrar pelos projetos?",
-    a: "Porque acredito que a tecnologia deve ser acessível a todos. Restaurantes locais, clínicas de bairro e pequenos negócios merecem ter uma presença digital de qualidade, mesmo sem orçamento para isso.",
-  },
-  {
-    q: "Para onde vai o dinheiro?",
-    a: "Servidores, domínios, ferramentas de desenvolvimento e tempo dedicado a criar. Cada euro ajuda-me a manter os projetos no ar e a dedicar mais horas a construir novos.",
-  },
-  {
-    q: "Posso pedir um projeto?",
-    a: "Claro! Contacta-me e vamos conversar. Se é algo que pode ajudar mais pessoas, será sempre uma prioridade.",
-  },
-  {
-    q: "E se não puder apoiar financeiramente?",
-    a: "Partilhar é tão valioso quanto doar. Conta a alguém sobre estes projetos, partilha nas redes sociais, deixa uma estrela no GitHub. Tudo conta.",
-  },
-];
 
 /* ─────────────────── HELPERS & HOOKS ─────────────────── */
 
@@ -287,7 +269,6 @@ function CountStat({
 export default function BrisaPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [visibleProjects, setVisibleProjects] = useState(24);
 
   /* refs for intersection observer count-up */
@@ -466,10 +447,10 @@ export default function BrisaPage() {
                 className="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-tight mb-6"
                 style={{ fontFamily: "'Sora', system-ui" }}
               >
-                Construo para todos.
+                Olha o que estou
                 <br />
                 <span className="bg-gradient-to-r from-[#0EA5E9] to-[#10B981] bg-clip-text text-transparent">
-                  Não para lucrar.
+                  a construir. Vem.
                 </span>
               </h1>
             </motion.div>
@@ -480,8 +461,7 @@ export default function BrisaPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-lg sm:text-xl text-[#64748B] max-w-2xl mx-auto mb-10 leading-relaxed"
             >
-              110+ projetos gratuitos. Websites, ferramentas, jogos e experiências
-              interativas. Tudo open, tudo para a comunidade.
+              110+ projetos gratuitos. Construídos em público. Isto é só o começo.
             </motion.p>
 
             <motion.div
@@ -495,13 +475,13 @@ export default function BrisaPage() {
                 className="px-8 py-4 rounded-full text-base font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
                 style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}
               >
-                Ver o que já construí
+                Explorar
               </button>
               <button
                 onClick={() => scrollTo("apoiar")}
                 className="px-8 py-4 rounded-full text-base font-semibold border-2 border-[#F59E0B] text-[#D97706] hover:bg-[#F59E0B] hover:text-white shadow-sm hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
               >
-                Apoiar a missão
+                Fazer parte
               </button>
             </motion.div>
 
@@ -886,20 +866,16 @@ export default function BrisaPage() {
             variants={sectionVariants}
           >
             <div className="text-center mb-14">
+              <span className="text-xs font-semibold tracking-[3px] uppercase text-[#F59E0B]">FAZER PARTE</span>
               <h2
-                className="text-3xl sm:text-4xl font-bold mb-3"
+                className="text-3xl sm:text-4xl font-bold mb-3 mt-4"
                 style={{ fontFamily: "'Sora', system-ui" }}
               >
-                Como podes{" "}
+                Vem para a{" "}
                 <span className="bg-gradient-to-r from-[#F59E0B] to-[#D97706] bg-clip-text text-transparent">
-                  ajudar
+                  viagem
                 </span>
-                ?
               </h2>
-              <p className="text-[#64748B] max-w-xl mx-auto">
-                Qualquer valor ajuda. Qualquer partilha conta. O importante é manter
-                estes projetos vivos e acessíveis.
-              </p>
             </div>
 
             <motion.div
@@ -909,66 +885,69 @@ export default function BrisaPage() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              {/* Tier 1 */}
+              {/* Tier 1 — Estrela */}
               <motion.div variants={cardVariants}>
                 <Glass className="p-8 text-center h-full flex flex-col hover:shadow-xl transition-shadow">
-                  <span className="text-5xl mb-4">📣</span>
-                  <h3 className="text-xl font-bold mb-2">Partilhar</h3>
-                  <p className="text-2xl font-bold text-[#10B981] mb-3 font-mono">Grátis</p>
-                  <p className="text-sm text-[#64748B] flex-1">
-                    Partilha os projetos nas redes sociais, conta a um amigo, envia a
-                    um negócio local que precise de um website. A visibilidade é
-                    poderosa.
-                  </p>
+                  <span className="text-5xl mb-4">⭐</span>
+                  <h3 className="text-xl font-bold mb-2">Estrela</h3>
+                  <p className="text-2xl font-bold text-[#F59E0B] mb-3 font-mono">5€/mês</p>
+                  <ul className="text-sm text-[#64748B] flex-1 text-left space-y-2">
+                    <li>Nome no muro de apoiantes</li>
+                    <li>Acesso ao diário de desenvolvimento</li>
+                    <li>Badge exclusivo de apoiante</li>
+                  </ul>
                   <button
-                    className="mt-6 px-6 py-3 rounded-full text-sm font-semibold border-2 border-[#10B981] text-[#10B981] hover:bg-[#10B981] hover:text-white transition-all cursor-pointer"
+                    className="mt-6 w-full px-6 py-3 rounded-full text-sm font-semibold border-2 border-[#F59E0B] text-[#F59E0B] hover:bg-[#F59E0B] hover:text-white transition-all cursor-pointer"
                   >
-                    Partilhar agora
+                    Juntar-me como Estrela
                   </button>
                 </Glass>
               </motion.div>
 
-              {/* Tier 2 */}
+              {/* Tier 2 — Sol */}
               <motion.div variants={cardVariants}>
                 <Glass className="p-8 text-center h-full flex flex-col relative overflow-hidden hover:shadow-xl transition-shadow ring-2 ring-[#F59E0B]/30">
                   <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#F59E0B] text-white text-[10px] font-bold">
                     POPULAR
                   </div>
-                  <span className="text-5xl mb-4">☕</span>
-                  <h3 className="text-xl font-bold mb-2">Café Virtual</h3>
+                  <span className="text-5xl mb-4">☀️</span>
+                  <h3 className="text-xl font-bold mb-2">Sol</h3>
                   <p className="text-2xl font-bold text-[#F59E0B] mb-3 font-mono">
-                    3€ — 5€
+                    15€/mês
                   </p>
-                  <p className="text-sm text-[#64748B] flex-1">
-                    Um café virtual que se transforma em horas de desenvolvimento. Cada
-                    contribuição pontual ajuda a manter servidores e domínios ativos.
-                  </p>
+                  <ul className="text-sm text-[#64748B] flex-1 text-left space-y-2">
+                    <li>Tudo do Estrela, mais:</li>
+                    <li>Acesso antecipado a novos projetos</li>
+                    <li>Sugestao de projetos prioritarios</li>
+                    <li>Canal exclusivo de comunicacao</li>
+                  </ul>
                   <button
-                    className="mt-6 px-6 py-3 rounded-full text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
+                    className="mt-6 w-full px-6 py-3 rounded-full text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
                     style={{ background: "linear-gradient(135deg, #F59E0B, #D97706)" }}
                   >
-                    Oferecer um café
+                    Juntar-me como Sol
                   </button>
                 </Glass>
               </motion.div>
 
-              {/* Tier 3 */}
+              {/* Tier 3 — Horizonte */}
               <motion.div variants={cardVariants}>
                 <Glass className="p-8 text-center h-full flex flex-col hover:shadow-xl transition-shadow">
-                  <span className="text-5xl mb-4">🌟</span>
-                  <h3 className="text-xl font-bold mb-2">Patrono</h3>
+                  <span className="text-5xl mb-4">🌅</span>
+                  <h3 className="text-xl font-bold mb-2">Horizonte</h3>
                   <p className="text-2xl font-bold text-[#0EA5E9] mb-3 font-mono">
-                    10€+/mês
+                    30€/mês
                   </p>
-                  <p className="text-sm text-[#64748B] flex-1">
-                    Apoio mensal que me permite planear a longo prazo. Patronos têm
-                    acesso antecipado a novos projetos e podem sugerir ideias
-                    prioritárias.
-                  </p>
+                  <ul className="text-sm text-[#64748B] flex-1 text-left space-y-2">
+                    <li>Tudo do Sol, mais:</li>
+                    <li>Sessao mensal 1:1 comigo</li>
+                    <li>Credito especial nos projetos</li>
+                    <li>Influencia direta no roadmap</li>
+                  </ul>
                   <button
-                    className="mt-6 px-6 py-3 rounded-full text-sm font-semibold border-2 border-[#0EA5E9] text-[#0EA5E9] hover:bg-[#0EA5E9] hover:text-white transition-all cursor-pointer"
+                    className="mt-6 w-full px-6 py-3 rounded-full text-sm font-semibold border-2 border-[#0EA5E9] text-[#0EA5E9] hover:bg-[#0EA5E9] hover:text-white transition-all cursor-pointer"
                   >
-                    Tornar-me patrono
+                    Juntar-me como Horizonte
                   </button>
                 </Glass>
               </motion.div>
@@ -976,63 +955,44 @@ export default function BrisaPage() {
           </motion.div>
         </section>
 
-        {/* ═════════ PORQUÊ CROWDFUNDING ═════════ */}
+        {/* ═════════ PULL QUOTE ═════════ */}
         <section className="py-20 sm:py-28 px-4">
           <motion.div
-            className="max-w-3xl mx-auto"
+            className="max-w-3xl mx-auto text-center"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={sectionVariants}
           >
-            <div className="text-center mb-14">
-              <h2
-                className="text-3xl sm:text-4xl font-bold mb-3"
+            <blockquote>
+              <p
+                className="text-2xl sm:text-3xl md:text-4xl font-bold leading-relaxed italic text-[#0F172A]"
                 style={{ fontFamily: "'Sora', system-ui" }}
               >
-                Porquê este{" "}
-                <span className="bg-gradient-to-r from-[#0EA5E9] to-[#10B981] bg-clip-text text-transparent">
-                  modelo
-                </span>
-                ?
-              </h2>
-            </div>
+                &ldquo;A melhor coisa que construí hoje vai ajudar alguém que nunca vou conhecer.&rdquo;
+              </p>
+              <footer className="mt-8 text-[#64748B] text-sm font-medium">
+                — Jaime Silva
+              </footer>
+            </blockquote>
+          </motion.div>
+        </section>
 
-            <div className="space-y-3">
-              {faqItems.map((faq, i) => (
-                <motion.div key={i} variants={cardVariants}>
-                  <Glass className="overflow-hidden">
-                    <button
-                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full p-5 flex items-center justify-between text-left cursor-pointer"
-                    >
-                      <span className="font-semibold text-[#0F172A] pr-4">{faq.q}</span>
-                      <motion.span
-                        animate={{ rotate: openFaq === i ? 45 : 0 }}
-                        className="text-[#0EA5E9] text-xl flex-shrink-0 font-light"
-                      >
-                        +
-                      </motion.span>
-                    </button>
-                    <AnimatePresence>
-                      {openFaq === i && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
-                        >
-                          <p className="px-5 pb-5 text-[#64748B] leading-relaxed">
-                            {faq.a}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </Glass>
-                </motion.div>
-              ))}
-            </div>
+        {/* ═════════ VISION ═════════ */}
+        <section className="py-16 px-4">
+          <motion.div
+            className="max-w-2xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <p
+              className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#0EA5E9] to-[#10B981] bg-clip-text text-transparent"
+              style={{ fontFamily: "'Sora', system-ui" }}
+            >
+              Isto é só o começo.
+            </p>
           </motion.div>
         </section>
 
