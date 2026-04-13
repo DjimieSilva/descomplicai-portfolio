@@ -122,6 +122,7 @@ const projectDefinitions = [
   { id: "descomplicai-brisa", title: "Descomplicai Brisa", category: "creative", type: "Crowdfunding Site", description: "Conceito Brisa — glassmorphism, bento grid, cores claras. Crowdfunding pessoal para construir para todos.", gradient: "from-sky-400 to-emerald-400", emoji: "🌊", status: "live" },
   { id: "descomplicai-semente", title: "Descomplicai Semente", category: "creative", type: "Crowdfunding Site", description: "Conceito Semente — editorial, storytelling, natureza. Cada projeto é uma semente plantada para a comunidade.", gradient: "from-emerald-500 to-teal-400", emoji: "🌱", status: "live" },
   { id: "descomplicai-horizonte", title: "Descomplicai Horizonte", category: "creative", type: "Crowdfunding Site", description: "Conceito Horizonte — parallax imersivo, gradientes suaves, profundidade. O futuro é para todos.", gradient: "from-indigo-500 to-violet-400", emoji: "🌅", status: "live" },
+  { id: "descomplicai-horizonte-v2", title: "Descomplicai Horizonte v2", category: "creative", type: "Redesign Concept", description: "Versão Horizonte evoluída — sunrise gradients, crowdfunding, building in public, comunidade e transparência", gradient: "from-indigo-500 to-orange-400", emoji: "🌅", status: "live" },
   { id: "descomplicai-mare", title: "Descomplicai Maré", category: "creative", type: "Crowdfunding Site", description: "Conceito Maré — oceano, ondas SVG, ilhas de projetos com balloons explicativos. Construo para todos.", gradient: "from-teal-500 to-sky-400", emoji: "🌊", status: "live" },
   { id: "descomplicai-pomar", title: "Descomplicai Pomar", category: "creative", type: "Crowdfunding Site", description: "Conceito Pomar — jardim editorial, tipografia serif, frutos na árvore. Cada projeto é um fruto.", gradient: "from-amber-500 to-emerald-400", emoji: "🍊", status: "live" },
   { id: "descomplicai-ceu", title: "Descomplicai Céu", category: "creative", type: "Crowdfunding Site", description: "Conceito Céu — nuvens CSS, constelações de projetos, parallax em profundidade. O futuro é para todos.", gradient: "from-blue-400 to-violet-400", emoji: "☁️", status: "live" },
@@ -358,6 +359,9 @@ const projectTaxonomySeedDefinitions: Partial<Record<ProjectId, ProjectTaxonomyS
     seriesId: "descomplicai-crowdfunding",
   },
   "descomplicai-horizonte": {
+    seriesId: "descomplicai-crowdfunding",
+  },
+  "descomplicai-horizonte-v2": {
     seriesId: "descomplicai-crowdfunding",
   },
   "descomplicai-mare": {
