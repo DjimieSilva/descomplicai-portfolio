@@ -184,18 +184,8 @@ function useInView(threshold: number = 0.2) {
   return { ref, isInView };
 }
 
-function useScrollProgress() {
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    const handleScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(total > 0 ? window.scrollY / total : 0);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  return progress;
-}
+/* useScrollProgress removed — replaced with rAF-throttled CSS variable approach
+   to avoid full-page re-renders on every scroll pixel. See DescomplicaiHorizonteV2. */
 
 /* ─────────────────────────── KEYFRAMES & STYLES ─────────────────────────── */
 
@@ -466,6 +456,21 @@ const globalStyles = `
   ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, #4F46E5, #EA580C);
   }
+
+  /* Respect reduced-motion preference — disable floating orbs and decorative animations */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* CSS-only scroll progress bar (scroll-driven animation) */
+  @keyframes scroll-progress {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
 `;
 
 /* ─────────────────────────── FLOATING ORBS ─────────────────────────── */
@@ -501,6 +506,7 @@ function FloatingOrbs() {
             animation: orb.animation,
             animationDelay: orb.delay,
             filter: "blur(40px)",
+            willChange: "transform",
           }}
         />
       ))}
@@ -529,7 +535,8 @@ function Navbar() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+            const id = entry.target.id;
+            setActiveSection((prev) => (prev === id ? prev : id));
           }
         });
       },
@@ -2632,7 +2639,25 @@ function Footer() {
 /* ─────────────────────────── MAIN PAGE ─────────────────────────── */
 
 export default function DescomplicaiHorizonteV2() {
-  const scrollProgress = useScrollProgress();
+  /* Scroll progress: rAF-throttled, updates only a CSS property — no React state, no re-renders */
+  useEffect(() => {
+    let ticking = false;
+    const bar = document.getElementById("scroll-bar");
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const total =
+            document.documentElement.scrollHeight - window.innerHeight;
+          if (bar && total > 0)
+            bar.style.width = `${(window.scrollY / total) * 100}%`;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div
@@ -2648,17 +2673,17 @@ export default function DescomplicaiHorizonteV2() {
       {/* Inject global styles */}
       <style>{globalStyles}</style>
 
-      {/* Scroll progress bar */}
+      {/* Scroll progress bar — driven by rAF, not React state */}
       <div
+        id="scroll-bar"
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           height: 3,
           background: "linear-gradient(90deg, #6366F1, #8B5CF6, #F97316)",
-          width: `${scrollProgress * 100}%`,
+          width: "0%",
           zIndex: 1001,
-          transition: "width 0.1s linear",
         }}
       />
 

@@ -223,7 +223,7 @@ function useAnimatedCounter(
     hasAnimated.current = true;
 
     const startTime = performance.now();
-    const startValue = 0;
+    let rafId: number;
 
     function animate(currentTime: number) {
       const elapsed = currentTime - startTime;
@@ -231,16 +231,15 @@ function useAnimatedCounter(
 
       // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
-      const currentValue = Math.round(startValue + (target - startValue) * eased);
-
-      setCount(currentValue);
+      setCount(Math.floor(eased * target));
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       }
     }
 
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
   }, [isVisible, target, duration]);
 
   return count;
@@ -551,6 +550,7 @@ export default function DescomplicaiGlassmorphism() {
   const [scrolled, setScrolled] = useState(false);
   const [email, setEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const emailTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // ─── Refs & observers ──────────────────────────────────────
   const [statsRef, statsVisible] = useIntersectionObserver(0.2);
@@ -573,13 +573,21 @@ export default function DescomplicaiGlassmorphism() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ─── Cleanup email timeout on unmount ─────────────────────
+  useEffect(() => {
+    return () => {
+      if (emailTimeoutRef.current) clearTimeout(emailTimeoutRef.current);
+    };
+  }, []);
+
   // ─── Email submit handler ────────────────────────────────
   const handleEmailSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (email.trim()) {
         setEmailSubmitted(true);
-        setTimeout(() => setEmailSubmitted(false), 4000);
+        if (emailTimeoutRef.current) clearTimeout(emailTimeoutRef.current);
+        emailTimeoutRef.current = setTimeout(() => setEmailSubmitted(false), 4000);
         setEmail("");
       }
     },
@@ -1893,7 +1901,7 @@ export default function DescomplicaiGlassmorphism() {
             {/* Bottom bar */}
             <div className="mt-10 pt-6 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4">
               <p className="text-xs text-slate-500">
-                &copy; {new Date().getFullYear()} Descomplicai. Todos os direitos
+                &copy; 2026 Descomplicai. Todos os direitos
                 reservados.
               </p>
               <div className="flex items-center gap-1 text-xs text-slate-400">

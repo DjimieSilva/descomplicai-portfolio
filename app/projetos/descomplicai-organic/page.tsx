@@ -2,6 +2,21 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
+import { Newsreader, Lora } from "next/font/google";
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-lora",
+  display: "swap",
+});
 
 /* ═══════════════════════════════════════════════════════════════
    DESCOMPLICAI ORGANIC — Nature-Inspired Design Variation
@@ -900,7 +915,7 @@ export default function DescomplicaiOrganic() {
         ::selection { background: ${colors.sage}40; color: ${colors.forest}; }
       `}</style>
 
-      <div style={{ background: colors.sand, minHeight: "100vh", overflowX: "hidden" }}>
+      <div className={`${newsreader.variable} ${lora.variable}`} style={{ background: colors.sand, minHeight: "100vh", overflowX: "hidden" }}>
 
         {/* ══════════════════════════════════════════════
             1. NAVBAR
@@ -1824,7 +1839,7 @@ export default function DescomplicaiOrganic() {
                   fontFamily: "var(--font-lora), Georgia, serif",
                 }}
               >
-                &copy; {new Date().getFullYear()} Descomplicai. Todos os direitos reservados.
+                &copy; 2026 Descomplicai. Todos os direitos reservados.
               </p>
               <div className="flex items-center gap-2 text-xs opacity-40" style={{ color: colors.forest }}>
                 <span style={{ fontFamily: "var(--font-lora), Georgia, serif" }}>

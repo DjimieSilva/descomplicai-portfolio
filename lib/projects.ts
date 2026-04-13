@@ -164,6 +164,11 @@ const projectDefinitions = [
 
   // ═══ ORGANIC FLOW (1) ═══
   { id: "descomplicai-organic", title: "Descomplicai Organic", category: "creative", type: "Redesign Concept", description: "Versão organic flow — tons terrosos, formas curvas SVG, texturas naturais, botânico e humano", gradient: "from-green-300 to-amber-200", emoji: "🌿", status: "live" },
+
+  // ═══ COMING SOON — REDESIGN CONCEPTS (3) ═══
+  { id: "descomplicai-aurora", title: "Descomplicai Aurora", category: "creative", type: "Redesign Concept", description: "Versão aurora — luzes do norte, gradientes etéreos, transições suaves", gradient: "from-blue-800 to-teal-400", emoji: "🌌", status: "dev" },
+  { id: "descomplicai-cristal", title: "Descomplicai Cristal", category: "creative", type: "Redesign Concept", description: "Versão cristal — formas geométricas, reflexos de luz, paleta gelada", gradient: "from-cyan-200 to-blue-300", emoji: "💎", status: "dev" },
+  { id: "descomplicai-florescer", title: "Descomplicai Florescer", category: "creative", type: "Redesign Concept", description: "Versão florescer — botânico, pétalas, crescimento orgânico", gradient: "from-pink-300 to-green-300", emoji: "🌸", status: "dev" },
 ] as const satisfies ReadonlyArray<Project>;
 
 export type ProjectId = (typeof projectDefinitions)[number]["id"];
@@ -241,11 +246,7 @@ const projectCategoryTaxonomyDefaults = {
   services: { track: "client", sectors: ["local_services"], formats: ["website"] },
 } as const satisfies Readonly<Record<ProjectCategory, ProjectTaxonomyDefaults>>;
 
-export const draftProjectRouteIds = [
-  "descomplicai-aurora",
-  "descomplicai-cristal",
-  "descomplicai-florescer",
-] as const;
+export const draftProjectRouteIds = [] as const;
 
 export type DraftProjectRouteId = (typeof draftProjectRouteIds)[number];
 
