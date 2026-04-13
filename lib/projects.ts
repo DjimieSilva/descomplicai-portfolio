@@ -33,6 +33,7 @@ const projectDefinitions = [
   { id: "descomplicai-neobrutalism", title: "Descomplicai Neobrutalism", category: "creative", type: "Redesign Concept", description: "Versão neobrutalist do Descomplicai — cores bold, sombras duras, tipografia oversized, energia playful", gradient: "from-yellow-400 to-pink-500", emoji: "🟡", status: "live" },
   { id: "descomplicai-swiss", title: "Descomplicai Swiss", category: "creative", type: "Redesign Concept", description: "Versão Swiss/International Style — grid rigoroso, whitespace extremo, Inter puro, zero decoração", gradient: "from-white to-gray-100", emoji: "🇨🇭", status: "live" },
   { id: "descomplicai-zen", title: "Descomplicai Zen", category: "creative", type: "Redesign Concept", description: "Versão wabi-sabi — assimetria intencional, serif elegante, kanji decorativos, calma absoluta", gradient: "from-stone-100 to-amber-50", emoji: "🍵", status: "live" },
+  { id: "descomplicai-glassmorphism", title: "Descomplicai Glass", category: "creative", type: "Redesign Concept", description: "Versão glassmorphism — vidro fosco, transparência, blur effects, floating cards sobre gradients suaves", gradient: "from-indigo-400 to-purple-300", emoji: "🪟", status: "live" },
   { id: "vindima-selvagem", title: "Vindima Selvagem", category: "food", type: "Wine Experience", description: "Experiência de vindima participativa no Douro — colha as suas uvas, pise a pé, prove vinhos DOC", gradient: "from-amber-700 to-orange-500", emoji: "🍇", status: "live" },
   { id: "quintas-estrelas", title: "Quintas & Estrelas", category: "food", type: "Wine Experience", description: "Estadias em quintas vinícolas com jantares sob as estrelas — glamping, gastronomia, vindima", gradient: "from-indigo-900 to-amber-700", emoji: "✨", status: "live" },
   { id: "rota-dos-vinhos", title: "Rota dos Vinhos", category: "food", type: "Wine Experience", description: "Rotas turísticas guiadas pelas 6 regiões vinícolas de Portugal — acessível e solar", gradient: "from-blue-500 to-green-400", emoji: "🌞", status: "live" },
@@ -159,6 +160,9 @@ const projectDefinitions = [
   { id: "maze-solver", title: "Labirinto", category: "interactive", type: "Jogo & Algoritmos", description: "Gerador de labirintos + 3 solvers (BFS, DFS, A*), player mode com WASD", gradient: "from-emerald-600 to-lime-500", emoji: "🏰", status: "live" },
   { id: "json-formatter", title: "JSON Formatter", category: "interactive", type: "Dev Tool", description: "Tree view colapsável, JSONPath hover, syntax highlighting, dark/light, search", gradient: "from-amber-500 to-orange-500", emoji: "{ }", status: "live" },
   { id: "guitar-tuner", title: "Afinador de Guitarra", category: "interactive", type: "Ferramenta Musical", description: "Afinador com referência Web Audio, 5 afinações, biblioteca de 30+ acordes", gradient: "from-amber-700 to-red-600", emoji: "🎸", status: "live" },
+
+  // ═══ ORGANIC FLOW (1) ═══
+  { id: "descomplicai-organic", title: "Descomplicai Organic", category: "creative", type: "Redesign Concept", description: "Versão organic flow — tons terrosos, formas curvas SVG, texturas naturais, botânico e humano", gradient: "from-green-300 to-amber-200", emoji: "🌿", status: "live" },
 ] as const satisfies ReadonlyArray<Project>;
 
 export type ProjectId = (typeof projectDefinitions)[number]["id"];
@@ -264,6 +268,9 @@ const projectTaxonomySeedDefinitions: Partial<Record<ProjectId, ProjectTaxonomyS
     seriesId: "descomplicai-redesigns",
   },
   "descomplicai-editorial": {
+    seriesId: "descomplicai-redesigns",
+  },
+  "descomplicai-glassmorphism": {
     seriesId: "descomplicai-redesigns",
   },
   "vindima-selvagem": {
@@ -380,6 +387,9 @@ const projectTaxonomySeedDefinitions: Partial<Record<ProjectId, ProjectTaxonomyS
     seriesId: "jardim-algarvio",
     variantKind: "variant",
     variantLabel: "Organic",
+  },
+  "descomplicai-organic": {
+    seriesId: "descomplicai-redesigns",
   },
 };
 
