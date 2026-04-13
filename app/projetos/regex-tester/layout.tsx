@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Regex Tester — Descomplicai",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/regex-tester");
+
 export default function RegexTesterLayout({
   children,
 }: {
@@ -19,3 +22,5 @@ export default function RegexTesterLayout({
 }) {
   return children;
 }
+
+

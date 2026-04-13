@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Libre_Caslon_Text, Inter } from "next/font/google";
 
 const libreCaslon = Libre_Caslon_Text({
@@ -21,6 +22,8 @@ export const metadata: Metadata = {
     "Uma experiência gastronómica única numa quinta histórica com vista para o rio. Cozinha tradicional portuguesa, buffet diário e espaço de eventos para casamentos e celebrações junto ao Mondego.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/quinta-da-salmanha");
+
 export default function QuintaDaSalmanhaLayout({
   children,
 }: {
@@ -35,3 +38,5 @@ export default function QuintaDaSalmanhaLayout({
     </div>
   );
 }
+
+

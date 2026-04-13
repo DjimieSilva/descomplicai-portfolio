@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Source_Serif_4, Inter } from "next/font/google";
 
 const sourceSerif4 = Source_Serif_4({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "Sabores autênticos da cozinha portuguesa em Figueira da Foz. Cozido à portuguesa, bacalhau à brás, feijoada — receitas de tradição preparadas com o carinho da comida da avó. Dois espaços: Caçarola e Caçarola Dois.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/cacarola");
+
 export default function CacarolaLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function CacarolaLayout({
     </div>
   );
 }
+
+

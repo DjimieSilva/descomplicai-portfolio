@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Playfair_Display, Inter, Cormorant_Garamond } from "next/font/google";
 
 const playfair = Playfair_Display({
@@ -28,6 +29,8 @@ export const metadata: Metadata = {
     "Estudio de paisagismo e design de jardins no Algarve. Projetos exclusivos de arquitetura paisagista com plantas mediterranicas nativas, sistemas de rega eficientes e espacos exteriores de luxo.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/jardim-algarvio-premium");
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div
@@ -38,3 +41,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+

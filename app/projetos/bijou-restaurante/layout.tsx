@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { EB_Garamond, Source_Sans_3 } from "next/font/google";
 
 const ebGaramond = EB_Garamond({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "Mais de 110 anos de tradição gastronómica no coração da Figueira da Foz. Cozinha portuguesa autêntica, transmitida de geração em geração desde 1912.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/bijou-restaurante");
+
 export default function BijouLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function BijouLayout({
     </div>
   );
 }
+
+

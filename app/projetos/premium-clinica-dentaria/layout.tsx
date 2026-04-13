@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Premium - Clínica Médica e Dentária | Prevenção e Saúde Oral — Figueira da Foz",
@@ -45,6 +46,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/premium-clinica-dentaria");
+
 export default function PremiumClinicaLayout({
   children,
 }: {
@@ -52,3 +55,5 @@ export default function PremiumClinicaLayout({
 }) {
   return <>{children}</>;
 }
+
+

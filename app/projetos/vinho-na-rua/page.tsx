@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 /* ═══════════════════════════════════════════════
    Data
@@ -382,7 +383,7 @@ function Nav() {
   return (
     <>
       <nav className={`rua-nav ${scrolled ? "rua-nav--scrolled" : ""}`}>
-        <a href="#" className="rua-nav-logo" onClick={close}>
+        <a href="#top" className="rua-nav-logo" onClick={close}>
           Vinho na <span>Rua</span>
         </a>
         <ul className="rua-nav-links">
@@ -394,8 +395,11 @@ function Nav() {
         </ul>
         <button
           className={`rua-hamburger ${open ? "rua-hamburger--open" : ""}`}
+          type="button"
           onClick={() => setOpen(!open)}
           aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={open}
+          aria-controls="rua-mobile-menu"
         >
           <span />
           <span />
@@ -406,6 +410,7 @@ function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="rua-mobile-menu"
             className="rua-mobile-menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -443,7 +448,7 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="rua-hero">
+    <section className="rua-hero" id="top">
       <motion.div
         className="rua-hero-badge"
         initial={{ opacity: 0, y: -10 }}
@@ -920,9 +925,9 @@ function Footer() {
       </p>
       <p>
         Uma experiência{" "}
-        <a href="/" target="_blank" rel="noopener noreferrer">
+        <Link href="/">
           Descomplicai
-        </a>
+        </Link>
       </p>
       <p style={{ marginTop: "0.75rem" }}>
         &copy; {new Date().getFullYear()} Vinho na Rua. Todos os direitos

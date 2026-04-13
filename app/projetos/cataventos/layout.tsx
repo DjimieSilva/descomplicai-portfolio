@@ -1,4 +1,4 @@
-export default function CataventosLayout({ children }: { children: React.ReactNode }) {
+﻿export default function CataventosLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
       className="min-h-screen"
@@ -8,3 +8,6 @@ export default function CataventosLayout({ children }: { children: React.ReactNo
     </div>
   );
 }
+
+
+

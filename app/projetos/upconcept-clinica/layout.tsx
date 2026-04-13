@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Space_Grotesk, Inter } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({
@@ -63,6 +64,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/upconcept-clinica");
+
 export default function UpcOnceptLayout({
   children,
 }: {
@@ -76,3 +79,5 @@ export default function UpcOnceptLayout({
     </div>
   );
 }
+
+

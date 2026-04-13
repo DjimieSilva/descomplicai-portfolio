@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Descomplicai Jardim — Redesign",
   description:
     "Cultivamos presenca digital para pessoas e empresas — uma homepage organica inspirada num jardim portugues",
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/descomplicai-jardim");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,3 +17,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+

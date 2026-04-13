@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
   ],
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/jardim-algarvio-local");
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div
@@ -33,3 +36,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+

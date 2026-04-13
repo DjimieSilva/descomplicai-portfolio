@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Libre_Caslon_Text, Source_Sans_3, Newsreader } from "next/font/google";
 
 const libreCaslon = Libre_Caslon_Text({
@@ -28,6 +29,8 @@ export const metadata: Metadata = {
     "Onde a natureza encontra o design. Criamos jardins que contam histórias, com plantas mediterrânicas nativas e design orgânico. Jardinagem artística no Algarve.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/jardim-algarvio-organic");
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div
@@ -42,3 +45,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Clínica Vasco da Gama | Medicina Dentária de Excelência — Figueira da Foz",
@@ -45,6 +46,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/clinica-vasco-da-gama");
+
 export default function ClinicaVascoGamaLayout({
   children,
 }: {
@@ -52,3 +55,5 @@ export default function ClinicaVascoGamaLayout({
 }) {
   return <>{children}</>;
 }
+
+

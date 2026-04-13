@@ -27,7 +27,7 @@ export default function Gallery() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="bg-[#F1F5F9] py-24 sm:py-32 px-6">
+    <section id="galeria" ref={ref} className="bg-[#F1F5F9] py-24 sm:py-32 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.p
@@ -66,7 +66,7 @@ export default function Gallery() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.5, delay: i * 0.07 }}
-              className={`relative overflow-hidden rounded-2xl group cursor-pointer ${
+              className={`relative overflow-hidden rounded-2xl group ${
                 item.size === "large"
                   ? "col-span-2 row-span-2 aspect-square sm:aspect-auto sm:h-80"
                   : item.size === "medium"
@@ -119,13 +119,13 @@ export default function Gallery() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center mt-12"
         >
-          <a
-            href="#"
-            className="inline-flex items-center gap-2 font-[family-name:var(--font-hanken)] text-[#0369A1] font-semibold text-sm tracking-wide hover:text-[#FB923C] transition-colors duration-200 group"
+          <span
+            aria-disabled="true"
+            title="Instagram em atualização"
+            className="inline-flex items-center gap-2 font-[family-name:var(--font-hanken)] text-[#0369A1]/70 font-semibold text-sm tracking-wide cursor-default"
           >
-            <span>Ver mais no Instagram</span>
-            <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-          </a>
+            <span>Instagram em atualização</span>
+          </span>
         </motion.div>
       </div>
     </section>

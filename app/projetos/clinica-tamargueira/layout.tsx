@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Clínica Dentária Tamargueira — Especialistas em Implantologia | Figueira da Foz",
@@ -22,6 +23,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/clinica-tamargueira");
+
 export default function ClinicaTamargueiralayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function ClinicaTamargueiralayout({
     </div>
   );
 }
+
+

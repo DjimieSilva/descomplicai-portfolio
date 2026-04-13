@@ -25,7 +25,7 @@ const contactInfo = [
     icon: MessageCircle,
     label: "WhatsApp",
     value: "+351 233 109 109",
-    href: "https://wa.me/351233109109?text=Olá,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept.",
+    href: "https://wa.me/351233109109?text=OlÃ¡,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept.",
     color: "#22c55e",
   },
   {
@@ -45,35 +45,43 @@ const contactInfo = [
   {
     icon: Facebook,
     label: "Facebook",
-    value: "Upconcept — Clínica Médica e Dentária",
+    value: "Upconcept â€” ClÃ­nica MÃ©dica e DentÃ¡ria",
     href: "https://facebook.com/upconcept",
     color: "#1877F2",
   },
   {
     icon: Clock,
-    label: "Horário",
-    value: "Abertos 7 dias / semana — incluindo feriados",
+    label: "HorÃ¡rio",
+    value: "Abertos 7 dias / semana â€” incluindo feriados",
     href: "#horarios",
     color: "#06B6D4",
   },
 ];
 
 const services_list = [
-  "Medicina Dentária Geral",
-  "Implantes Dentários",
+  "Medicina DentÃ¡ria Geral",
+  "Implantes DentÃ¡rios",
   "Ortodontia",
-  "Estética Dentária",
+  "EstÃ©tica DentÃ¡ria",
   "Cirurgia Oral",
   "Endodontia",
   "Periodontia",
-  "Prótese Dentária",
+  "PrÃ³tese DentÃ¡ria",
 ];
+
+type PreparedAppointmentRequest = {
+  emailHref: string;
+  summary: string;
+  whatsAppHref: string;
+};
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [selectedService, setSelectedService] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [preparedRequest, setPreparedRequest] = useState<PreparedAppointmentRequest | null>(
+    null
+  );
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -83,8 +91,31 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Static site — simulate submission
-    setSubmitted(true);
+
+    const summaryLines = [`Nome: ${formData.name}`, `Telefone: ${formData.phone}`];
+
+    if (formData.email) {
+      summaryLines.push(`Email: ${formData.email}`);
+    }
+
+    if (selectedService) {
+      summaryLines.push(`Servico: ${selectedService}`);
+    }
+
+    if (formData.message) {
+      summaryLines.push(`Mensagem: ${formData.message}`);
+    }
+
+    const summary = summaryLines.join("\n");
+    const message = `Ola, gostaria de marcar uma consulta na Upconcept.\n\n${summary}`;
+
+    setPreparedRequest({
+      emailHref: `mailto:geral@upconcept.pt?subject=${encodeURIComponent(
+        `Pedido de marcacao - ${formData.name}`
+      )}&body=${encodeURIComponent(message)}`,
+      summary,
+      whatsAppHref: `https://wa.me/351233109109?text=${encodeURIComponent(message)}`,
+    });
   };
 
   return (
@@ -105,7 +136,6 @@ export default function Contact() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -138,13 +168,12 @@ export default function Contact() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-gray-400 text-lg max-w-2xl mx-auto font-[family-name:var(--font-inter-uc)]"
           >
-            Estamos disponíveis 7 dias por semana para responder às suas questões e
+            Estamos disponÃ­veis 7 dias por semana para responder Ã s suas questÃµes e
             agendar a sua consulta. Contacte-nos pela forma que preferir.
           </motion.p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -188,9 +217,8 @@ export default function Contact() {
               ))}
             </div>
 
-            {/* WhatsApp CTA */}
             <motion.a
-              href="https://wa.me/351233109109?text=Olá,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept."
+              href="https://wa.me/351233109109?text=OlÃ¡,%20gostaria%20de%20marcar%20uma%20consulta%20na%20Upconcept."
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
@@ -200,38 +228,79 @@ export default function Contact() {
               style={{ background: "linear-gradient(135deg, #16a34a, #15803d)" }}
             >
               <MessageCircle className="w-5 h-5" />
-              Marcar via WhatsApp — Resposta Imediata
+              Marcar via WhatsApp â€” Resposta Imediata
             </motion.a>
           </motion.div>
 
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <h3 className="text-white font-bold font-[family-name:var(--font-space-grotesk)] text-2xl mb-8">
-              Pedido de marcação
+              Pedido de marcaÃ§Ã£o
             </h3>
 
-            {submitted ? (
+            {preparedRequest ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center text-center h-80 p-8 rounded-2xl border border-[#22c55e]/30 bg-[#22c55e]/10"
+                className="flex flex-col justify-center h-auto min-h-[20rem] p-8 rounded-2xl border border-[#06B6D4]/30 bg-[#06B6D4]/10"
+                aria-live="polite"
               >
-                <CheckCircle className="w-16 h-16 text-[#22c55e] mb-4" />
-                <h4 className="text-white font-bold font-[family-name:var(--font-space-grotesk)] text-xl mb-2">
-                  Pedido Enviado!
-                </h4>
-                <p className="text-gray-400 font-[family-name:var(--font-inter-uc)]">
-                  Entraremos em contacto em breve para confirmar a sua consulta.
-                  Lembre-se: estamos disponíveis todos os dias, incluindo fins de semana e feriados.
+                <div className="flex flex-col items-center text-center">
+                  <CheckCircle className="w-16 h-16 text-[#06B6D4] mb-4" />
+                  <h4 className="text-white font-bold font-[family-name:var(--font-space-grotesk)] text-xl mb-2">
+                    Mensagem pronta para enviar
+                  </h4>
+                  <p className="text-gray-300 font-[family-name:var(--font-inter-uc)] max-w-md">
+                    Este site nao envia pedidos automaticamente. Escolha abaixo como quer
+                    concluir o envio com os seus dados ja preenchidos.
+                  </p>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-white/10 bg-[#0D1421]/50 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#06B6D4] mb-3 font-[family-name:var(--font-inter-uc)]">
+                    Resumo do pedido
+                  </p>
+                  <pre className="whitespace-pre-wrap text-sm text-gray-200 font-[family-name:var(--font-inter-uc)]">
+                    {preparedRequest.summary}
+                  </pre>
+                </div>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <a
+                    href={preparedRequest.whatsAppHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 rounded-2xl px-5 py-4 font-bold font-[family-name:var(--font-space-grotesk)] text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-green-900/30"
+                    style={{ background: "linear-gradient(135deg, #16a34a, #15803d)" }}
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    Continuar no WhatsApp
+                  </a>
+                  <a
+                    href={preparedRequest.emailHref}
+                    className="flex items-center justify-center gap-3 rounded-2xl border border-[#2563EB]/40 bg-[#2563EB]/10 px-5 py-4 font-bold font-[family-name:var(--font-space-grotesk)] text-[#8FD9FF] transition-all duration-300 hover:scale-[1.02] hover:border-[#06B6D4]/50 hover:bg-[#2563EB]/15"
+                  >
+                    <Mail className="w-5 h-5" />
+                    Abrir email
+                  </a>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setPreparedRequest(null)}
+                  className="mt-5 text-sm text-gray-400 font-[family-name:var(--font-inter-uc)] underline underline-offset-4 hover:text-white transition-colors"
+                >
+                  Editar pedido
+                </button>
+                <p className="mt-3 text-xs text-gray-500 text-center font-[family-name:var(--font-inter-uc)]">
+                  O pedido so fica enviado depois de confirmar no WhatsApp ou no seu email.
                 </p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Name + Phone */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-gray-400 text-sm font-[family-name:var(--font-inter-uc)] mb-2">
@@ -261,7 +330,6 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Email */}
                 <div>
                   <label className="block text-gray-400 text-sm font-[family-name:var(--font-inter-uc)] mb-2">
                     E-mail
@@ -275,17 +343,16 @@ export default function Contact() {
                   />
                 </div>
 
-                {/* Service */}
                 <div>
                   <label className="block text-gray-400 text-sm font-[family-name:var(--font-inter-uc)] mb-2">
-                    Serviço pretendido
+                    ServiÃ§o pretendido
                   </label>
                   <select
                     value={selectedService}
                     onChange={(e) => setSelectedService(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-white/15 bg-[#111827] text-white font-[family-name:var(--font-inter-uc)] text-sm focus:outline-none focus:border-[#2563EB]/60 transition-all duration-200"
                   >
-                    <option value="">Selecione um serviço</option>
+                    <option value="">Selecione um serviÃ§o</option>
                     {services_list.map((s) => (
                       <option key={s} value={s} className="bg-[#111827]">
                         {s}
@@ -294,7 +361,6 @@ export default function Contact() {
                   </select>
                 </div>
 
-                {/* Message */}
                 <div>
                   <label className="block text-gray-400 text-sm font-[family-name:var(--font-inter-uc)] mb-2">
                     Mensagem adicional
@@ -303,12 +369,11 @@ export default function Contact() {
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Descreva o motivo da consulta ou coloque as suas dúvidas..."
+                    placeholder="Descreva o motivo da consulta ou coloque as suas dÃºvidas..."
                     className="w-full px-4 py-3 rounded-xl border border-white/15 bg-white/5 text-white placeholder-gray-600 font-[family-name:var(--font-inter-uc)] text-sm focus:outline-none focus:border-[#2563EB]/60 focus:bg-[#2563EB]/5 transition-all duration-200 resize-none"
                   />
                 </div>
 
-                {/* Reminder */}
                 <div className="flex items-center gap-2 text-sm text-gray-500 font-[family-name:var(--font-inter-uc)]">
                   <Clock className="w-4 h-4 text-[#06B6D4] shrink-0" />
                   <span>
@@ -317,18 +382,22 @@ export default function Contact() {
                   </span>
                 </div>
 
-                {/* Submit */}
+                <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-300 font-[family-name:var(--font-inter-uc)]">
+                  Ao continuar, vamos preparar uma mensagem real para enviar por WhatsApp ou
+                  email. O pedido so segue depois de o confirmar.
+                </div>
+
                 <button
                   type="submit"
                   className="w-full py-4 px-6 rounded-xl font-bold font-[family-name:var(--font-space-grotesk)] text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#2563EB]/30 flex items-center justify-center gap-2"
                   style={{ background: "linear-gradient(135deg, #2563EB, #06B6D4)" }}
                 >
                   <Send className="w-4 h-4" />
-                  Enviar Pedido de Marcação
+                  Preparar pedido de marcacao
                 </button>
 
                 <p className="text-xs text-gray-600 font-[family-name:var(--font-inter-uc)] text-center">
-                  Os seus dados são tratados com confidencialidade, em conformidade com o RGPD.
+                  Os seus dados sÃ£o tratados com confidencialidade, em conformidade com o RGPD.
                 </p>
               </form>
             )}

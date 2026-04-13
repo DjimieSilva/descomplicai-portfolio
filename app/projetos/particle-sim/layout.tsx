@@ -1,10 +1,12 @@
-import type { Metadata } from 'next'
+﻿import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Simulador de Partículas — Descomplicai',
   description:
     'Simulador de física de partículas N-body com gravidade, colisões elásticas, trilhas e presets estelares. Totalmente client-side.',
 }
+
+applyProjectRouteMetadata(metadata, "/projetos/particle-sim");
 
 export default function ParticleSimLayout({
   children,
@@ -13,3 +15,5 @@ export default function ParticleSimLayout({
 }) {
   return <>{children}</>
 }
+
+

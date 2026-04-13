@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import "./vindima.css";
 
 export const metadata: Metadata = {
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/vindima-selvagem");
+
 export default function VindimaSelvagem({
   children,
 }: {
@@ -30,3 +33,5 @@ export default function VindimaSelvagem({
 }) {
   return <div className="vindima-root">{children}</div>;
 }
+
+

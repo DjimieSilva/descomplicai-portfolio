@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Descomplicai Terminal — Redesign",
   description:
     "Homepage redesign com estetica hacker/terminal para Descomplicai",
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/descomplicai-terminal");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,3 +23,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+

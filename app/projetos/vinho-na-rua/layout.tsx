@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import "./rua.css";
 
 export const metadata: Metadata = {
@@ -28,6 +29,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/vinho-na-rua");
+
 export default function VinhoNaRuaLayout({
   children,
 }: {
@@ -35,3 +38,5 @@ export default function VinhoNaRuaLayout({
 }) {
   return <div className="rua-root">{children}</div>;
 }
+
+

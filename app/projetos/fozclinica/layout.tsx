@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Fozclinica | Centro de Saúde e Bem-Estar — Figueira da Foz",
@@ -44,6 +45,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/fozclinica");
+
 export default function FozclinicaLayout({
   children,
 }: {
@@ -53,3 +56,5 @@ export default function FozclinicaLayout({
     <div className="font-[family-name:var(--font-inter)]">{children}</div>
   );
 }
+
+

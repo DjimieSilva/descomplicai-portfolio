@@ -62,7 +62,7 @@ export default function Footer() {
             <h4 className="nk-footer-heading">Contacto</h4>
             <ul className="nk-footer-links">
               <li><a href="mailto:info@ninikatours.com">info@ninikatours.com</a></li>
-              <li><a href="https://wa.me/351XXXXXXXXX" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+              <li><span aria-label="WhatsApp em atualização">WhatsApp em atualização</span></li>
               <li><a href="https://instagram.com/ninikatours" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             </ul>
           </motion.div>
@@ -72,7 +72,7 @@ export default function Footer() {
           <p>&copy; {new Date().getFullYear()} NinikaTours. Todos os direitos reservados.</p>
           <p className="nk-footer-credit">
             Criado por{" "}
-            <a href="https://descomplicai.com" target="_blank" rel="noopener noreferrer">Descomplicai</a>
+            <a href="https://descomplicai.pt" target="_blank" rel="noopener noreferrer">Descomplicai</a>
           </p>
         </div>
       </div>

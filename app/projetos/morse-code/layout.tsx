@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Código Morse — Descomplicai",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/morse-code");
+
 export default function MorseCodeLayout({
   children,
 }: {
@@ -19,3 +22,5 @@ export default function MorseCodeLayout({
 }) {
   return children;
 }
+
+

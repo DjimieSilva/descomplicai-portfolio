@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Marégrafo — Restaurante de Marisco em Buarcos | Figueira da Foz",
@@ -24,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/maregrafo");
+
 export default function MaregrafoLayout({
   children,
 }: {
@@ -38,3 +41,5 @@ export default function MaregrafoLayout({
     </div>
   );
 }
+
+

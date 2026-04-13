@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { MapPin, Phone, Mail, Instagram, Facebook } from "lucide-react";
 
 export default function Footer() {
@@ -77,18 +78,19 @@ export default function Footer() {
                 { Icon: Instagram, label: "Instagram" },
                 { Icon: Facebook, label: "Facebook" },
               ].map(({ Icon, label }) => (
-                <a
+                <span
                   key={label}
-                  href="#"
-                  aria-label={label}
-                  className="w-9 h-9 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                  aria-label={`${label} indisponível`}
+                  aria-disabled="true"
+                  title={`${label} indisponível`}
+                  className="w-9 h-9 flex items-center justify-center opacity-60 cursor-default"
                   style={{
                     background: "rgba(255,251,235,0.1)",
                     border: "1px solid rgba(255,251,235,0.15)",
                   }}
                 >
                   <Icon size={15} style={{ color: "#FDE68A" }} />
-                </a>
+                </span>
               ))}
             </div>
           </motion.div>
@@ -214,13 +216,13 @@ export default function Footer() {
             >
               Website por
             </p>
-            <a
+            <Link
               href="/"
               className="text-xs hover:text-[#FDE68A] transition-colors"
               style={{ color: "rgba(255,251,235,0.5)", fontFamily: "var(--font-inter)" }}
             >
               Descomplicai
-            </a>
+            </Link>
           </div>
         </div>
       </div>

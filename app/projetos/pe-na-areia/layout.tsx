@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Pé na Areia | Restaurante de Praia · Figueira da Foz",
   description:
     "Pé na Areia é o restaurante de praia icónico da Figueira da Foz. Distinguido pela Seleção Gastronomia e Vinhos, oferece o melhor do mar com os pés na areia e vista para o oceano.",
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/pe-na-areia");
 
 export default function PeNaAreiaLayout({
   children,
@@ -20,3 +23,5 @@ export default function PeNaAreiaLayout({
     </div>
   );
 }
+
+

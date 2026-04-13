@@ -1,5 +1,7 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Cormorant_Garamond, DM_Sans } from 'next/font/google';
+import { absoluteUrl } from '@/lib/site-config';
 import './ninika.css';
 
 const cormorant = Cormorant_Garamond({
@@ -64,13 +66,15 @@ export const metadata: Metadata = {
     images: ['/ninika-tours/og-image.jpg'],
   },
   alternates: {
-    canonical: 'https://descomplicai.com/projetos/ninika-tours',
+    canonical: absoluteUrl('/projetos/ninika-tours'),
   },
   robots: {
     index: true,
     follow: true,
   },
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/ninika-tours");
 
 export default function NinikaTours({
   children,
@@ -83,3 +87,5 @@ export default function NinikaTours({
     </div>
   );
 }
+
+

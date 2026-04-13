@@ -1,15 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { CheckCircle, Clock, Mail, Phone } from "lucide-react";
 import { useRef, useState } from "react";
-import { Phone, Mail, Clock, CheckCircle } from "lucide-react";
 
 const horarios = [
   { dia: "Segunda-feira", hora: "Encerrado" },
-  { dia: "Terça a Sexta", hora: "12h00 – 15h30 | 19h00 – 22h30" },
-  { dia: "Sábado", hora: "12h00 – 16h00 | 19h00 – 23h00" },
-  { dia: "Domingo", hora: "12h00 – 16h00" },
+  { dia: "Terca a Sexta", hora: "12h00 - 15h30 | 19h00 - 22h30" },
+  { dia: "Sabado", hora: "12h00 - 16h00 | 19h00 - 23h00" },
+  { dia: "Domingo", hora: "12h00 - 16h00" },
 ];
 
 export default function Reservations() {
@@ -26,66 +25,78 @@ export default function Reservations() {
     observacoes: "",
   });
 
+  const reservationSummary = [
+    `Nome: ${form.nome}`,
+    `Telefone: ${form.telefone}`,
+    `Email: ${form.email || "-"}`,
+    `Data: ${form.data}`,
+    `Hora: ${form.hora}`,
+    `Pessoas: ${form.pessoas}`,
+    `Observacoes: ${form.observacoes || "-"}`,
+    "",
+    "A reserva so fica enviada depois de confirmar o email ou ligar para o restaurante.",
+  ].join("\n");
+
+  const mailtoUrl = `mailto:verdadeira.ra@gmail.com?subject=${encodeURIComponent("Pedido de reserva - Marisqueira Rosa Amelia")}&body=${encodeURIComponent(reservationSummary)}`;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    window.location.href = mailtoUrl;
     setSubmitted(true);
   };
 
   const inputClass =
-    "w-full bg-white/5 border border-[#D4A574]/20 rounded-sm px-4 py-3 text-[#FFF1E6] placeholder-[#FFF1E6]/25 text-sm focus:outline-none focus:border-[#D4A574]/60 transition-colors";
+    "w-full rounded-sm border border-[#D4A574]/20 bg-white/5 px-4 py-3 text-sm text-[#FFF1E6] placeholder-[#FFF1E6]/25 transition-colors focus:border-[#D4A574]/60 focus:outline-none";
 
   return (
-    <section ref={ref} id="reservas" className="bg-[#FFF1E6] py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
+    <section ref={ref} id="reservas" className="bg-[#FFF1E6] px-6 py-24">
+      <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="mb-16 text-center"
         >
-          <p className="text-[#E63946]/70 text-xs tracking-[0.4em] uppercase mb-4"
-            style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <p
+            className="mb-4 text-xs uppercase tracking-[0.4em] text-[#E63946]/70"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
             Reservas
           </p>
           <h2
-            className="text-[#1D3557] text-[clamp(2.5rem,6vw,5rem)] leading-tight font-light"
+            className="text-[clamp(2.5rem,6vw,5rem)] font-light leading-tight text-[#1D3557]"
             style={{ fontFamily: "var(--font-newsreader), serif" }}
           >
-            Reserve a sua{" "}
-            <span className="italic text-[#E63946]">Mesa</span>
+            Reserve a sua <span className="italic text-[#E63946]">Mesa</span>
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={isInView ? { scaleX: 1 } : {}}
             transition={{ duration: 1, delay: 0.4 }}
-            className="w-20 h-px bg-[#D4A574] mx-auto mt-8"
+            className="mx-auto mt-8 h-px w-20 bg-[#D4A574]"
           />
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left: Info */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* Contact info */}
-            <div className="space-y-6 mb-10">
-              <a
-                href="tel:+351233412288"
-                className="flex items-center gap-4 group"
-              >
-                <div className="w-12 h-12 rounded-full bg-[#E63946]/10 flex items-center justify-center group-hover:bg-[#E63946]/20 transition-colors">
-                  <Phone className="w-5 h-5 text-[#E63946]" />
+            <div className="mb-10 space-y-6">
+              <a href="tel:+351233412288" className="group flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E63946]/10 transition-colors group-hover:bg-[#E63946]/20">
+                  <Phone className="h-5 w-5 text-[#E63946]" />
                 </div>
                 <div>
-                  <p className="text-[#1D3557]/45 text-xs tracking-[0.2em] uppercase mb-0.5"
-                    style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                  <p
+                    className="mb-0.5 text-xs uppercase tracking-[0.2em] text-[#1D3557]/45"
+                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                  >
                     Telefone / Reservas
                   </p>
                   <p
-                    className="text-[#1D3557] text-lg font-light group-hover:text-[#E63946] transition-colors"
+                    className="text-lg font-light text-[#1D3557] transition-colors group-hover:text-[#E63946]"
                     style={{ fontFamily: "var(--font-newsreader), serif" }}
                   >
                     +351 233 412 288
@@ -93,20 +104,19 @@ export default function Reservations() {
                 </div>
               </a>
 
-              <a
-                href="mailto:verdadeira.ra@gmail.com"
-                className="flex items-center gap-4 group"
-              >
-                <div className="w-12 h-12 rounded-full bg-[#D4A574]/10 flex items-center justify-center group-hover:bg-[#D4A574]/20 transition-colors">
-                  <Mail className="w-5 h-5 text-[#D4A574]" />
+              <a href="mailto:verdadeira.ra@gmail.com" className="group flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#D4A574]/10 transition-colors group-hover:bg-[#D4A574]/20">
+                  <Mail className="h-5 w-5 text-[#D4A574]" />
                 </div>
                 <div>
-                  <p className="text-[#1D3557]/45 text-xs tracking-[0.2em] uppercase mb-0.5"
-                    style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                  <p
+                    className="mb-0.5 text-xs uppercase tracking-[0.2em] text-[#1D3557]/45"
+                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                  >
                     Email
                   </p>
                   <p
-                    className="text-[#1D3557] text-base font-light group-hover:text-[#D4A574] transition-colors"
+                    className="text-base font-light text-[#1D3557] transition-colors group-hover:text-[#D4A574]"
                     style={{ fontFamily: "var(--font-newsreader), serif" }}
                   >
                     verdadeira.ra@gmail.com
@@ -115,75 +125,105 @@ export default function Reservations() {
               </a>
             </div>
 
-            {/* Horários */}
             <div>
-              <div className="flex items-center gap-3 mb-5">
-                <Clock className="w-4 h-4 text-[#D4A574]" />
+              <div className="mb-5 flex items-center gap-3">
+                <Clock className="h-4 w-4 text-[#D4A574]" />
                 <h3
-                  className="text-[#1D3557] text-lg font-light"
+                  className="text-lg font-light text-[#1D3557]"
                   style={{ fontFamily: "var(--font-newsreader), serif" }}
                 >
-                  Horário de Funcionamento
+                  Horario de Funcionamento
                 </h3>
               </div>
               <div className="divide-y divide-[#D4A574]/15">
-                {horarios.map((h) => (
-                  <div key={h.dia} className="flex justify-between items-center py-3">
-                    <span className="text-[#1D3557]/65 text-sm">{h.dia}</span>
+                {horarios.map((horario) => (
+                  <div key={horario.dia} className="flex items-center justify-between py-3">
+                    <span className="text-sm text-[#1D3557]/65">{horario.dia}</span>
                     <span
                       className={`text-sm font-light ${
-                        h.hora === "Encerrado" ? "text-[#E63946]/60" : "text-[#1D3557]"
+                        horario.hora === "Encerrado" ? "text-[#E63946]/60" : "text-[#1D3557]"
                       }`}
                       style={{ fontFamily: "var(--font-newsreader), serif" }}
                     >
-                      {h.hora}
+                      {horario.hora}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Note */}
-            <div className="mt-8 p-5 bg-[#1D3557]/5 border border-[#1D3557]/10 rounded-sm">
-              <p className="text-[#1D3557]/70 text-sm leading-relaxed">
+            <div className="mt-8 rounded-sm border border-[#1D3557]/10 bg-[#1D3557]/5 p-5">
+              <p className="text-sm leading-relaxed text-[#1D3557]/70">
                 <span className="font-medium text-[#1D3557]">Nota importante:</span> Para grupos
-                de mais de 6 pessoas, lagosta ou marisco em grande quantidade, pedimos reserva
-                com pelo menos 24h de antecedência.
+                de mais de 6 pessoas, lagosta ou marisco em grande quantidade, pedimos reserva com
+                pelo menos 24h de antecedencia.
               </p>
             </div>
           </motion.div>
 
-          {/* Right: Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <div className="bg-[#1D3557] p-8 rounded-sm">
+            <div className="rounded-sm bg-[#1D3557] p-8">
               {submitted ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12"
+                  className="py-12 text-center"
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
                 >
-                  <CheckCircle className="w-14 h-14 text-[#D4A574] mx-auto mb-5" />
+                  <CheckCircle className="mx-auto mb-5 h-14 w-14 text-[#D4A574]" />
                   <h3
-                    className="text-[#FFF1E6] text-2xl font-light mb-3"
+                    className="mb-3 text-2xl font-light text-[#FFF1E6]"
                     style={{ fontFamily: "var(--font-newsreader), serif" }}
                   >
-                    Pedido Enviado!
+                    Rascunho Aberto no Email
                   </h3>
-                  <p className="text-[#FFF1E6]/60 text-sm leading-relaxed">
-                    Entraremos em contacto em breve para confirmar a sua reserva.
-                    Obrigado por escolher a Marisqueira Rosa Amélia.
+                  <p className="mx-auto max-w-md text-sm leading-relaxed text-[#FFF1E6]/60">
+                    Abrimos um email com os dados da reserva. O pedido so segue depois de o rever,
+                    enviar no email ou ligar para confirmar diretamente com o restaurante.
                   </p>
+                  <div className="mx-auto mt-6 grid max-w-md gap-3 sm:grid-cols-2">
+                    <a
+                      href={mailtoUrl}
+                      className="inline-flex items-center justify-center gap-2 rounded-sm border border-[#D4A574]/35 px-4 py-3 text-xs uppercase tracking-[0.2em] text-[#FFF1E6] transition-colors hover:border-[#D4A574]/60 hover:text-white"
+                      style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      aria-label="Abrir o email com o pedido de reserva preparado"
+                    >
+                      <Mail className="h-4 w-4" />
+                      Abrir Email
+                    </a>
+                    <a
+                      href="tel:+351233412288"
+                      className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#E63946] px-4 py-3 text-xs uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#E63946]/90"
+                      style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      aria-label="Ligar para o restaurante e confirmar a reserva"
+                    >
+                      <Phone className="h-4 w-4" />
+                      Ligar Agora
+                    </a>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="mt-5 text-xs uppercase tracking-[0.2em] text-[#D4A574] transition-colors hover:text-[#FFF1E6]"
+                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                  >
+                    Editar pedido
+                  </button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
                         Nome Completo *
                       </label>
                       <input
@@ -197,8 +237,10 @@ export default function Reservations() {
                       />
                     </div>
                     <div>
-                      <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
                         Telefone *
                       </label>
                       <input
@@ -214,8 +256,10 @@ export default function Reservations() {
                   </div>
 
                   <div>
-                    <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                      style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                    <label
+                      className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                      style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                    >
                       Email
                     </label>
                     <input
@@ -228,10 +272,12 @@ export default function Reservations() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <div>
-                      <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
                         Data *
                       </label>
                       <input
@@ -244,8 +290,10 @@ export default function Reservations() {
                       />
                     </div>
                     <div>
-                      <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
                         Hora *
                       </label>
                       <select
@@ -271,8 +319,10 @@ export default function Reservations() {
                       </select>
                     </div>
                     <div>
-                      <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
                         Pessoas *
                       </label>
                       <select
@@ -291,9 +341,11 @@ export default function Reservations() {
                   </div>
 
                   <div>
-                    <label className="text-[#D4A574]/70 text-xs tracking-[0.2em] uppercase block mb-2"
-                      style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-                      Observações / Pedidos Especiais
+                    <label
+                      className="mb-2 block text-xs uppercase tracking-[0.2em] text-[#D4A574]/70"
+                      style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                    >
+                      Observacoes / Pedidos Especiais
                     </label>
                     <textarea
                       rows={3}
@@ -307,11 +359,18 @@ export default function Reservations() {
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-[#E63946] text-white text-sm tracking-[0.2em] uppercase hover:bg-[#E63946]/90 transition-colors rounded-sm mt-2"
+                    className="mt-2 w-full rounded-sm bg-[#E63946] py-4 text-sm uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#E63946]/90"
                     style={{ fontFamily: "var(--font-inter), sans-serif" }}
                   >
-                    Confirmar Reserva
+                    Abrir Pedido no Email
                   </button>
+                  <p
+                    className="text-center text-xs leading-relaxed text-[#FFF1E6]/55"
+                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                  >
+                    Este botao abre um email com os dados da reserva. O envio final depende da sua
+                    confirmacao no email ou por telefone.
+                  </p>
                 </form>
               )}
             </div>

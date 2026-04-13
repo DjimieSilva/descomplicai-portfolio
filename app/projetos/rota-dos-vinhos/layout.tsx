@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import "./rota.css";
 
 export const metadata: Metadata = {
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/rota-dos-vinhos");
+
 export default function RotaDosVinhosLayout({
   children,
 }: {
@@ -30,3 +33,5 @@ export default function RotaDosVinhosLayout({
 }) {
   return <div className="rota-root">{children}</div>;
 }
+
+

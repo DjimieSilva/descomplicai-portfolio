@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Public_Sans, Inter } from "next/font/google";
 
 const publicSans = Public_Sans({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "Restaurante premiado no coração do Mercado Municipal da Figueira da Foz. Do mercado para o prato — a frescura máxima todos os dias.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/casa-dos-papagaios");
+
 export default function CasaDosPapagaiosLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function CasaDosPapagaiosLayout({
     </div>
   );
 }
+
+

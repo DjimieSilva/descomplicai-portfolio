@@ -1,15 +1,15 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import { Mail, Phone, Clock, Users, CalendarDays } from "lucide-react";
 import { useRef, useState } from "react";
-import { Phone, Clock, Users, CalendarDays } from "lucide-react";
 
 const hours = [
   { day: "Segunda-feira", lunch: "Encerrado", dinner: "Encerrado", closed: true },
-  { day: "Terça a Quinta", lunch: "12:00 – 15:00", dinner: "19:00 – 22:30", closed: false },
-  { day: "Sexta-feira", lunch: "12:00 – 15:00", dinner: "19:00 – 23:00", closed: false },
-  { day: "Sábado", lunch: "12:00 – 15:30", dinner: "19:00 – 23:00", closed: false },
-  { day: "Domingo", lunch: "12:00 – 15:30", dinner: "Encerrado", closed: false },
+  { day: "Terca a Quinta", lunch: "12:00 - 15:00", dinner: "19:00 - 22:30", closed: false },
+  { day: "Sexta-feira", lunch: "12:00 - 15:00", dinner: "19:00 - 23:00", closed: false },
+  { day: "Sabado", lunch: "12:00 - 15:30", dinner: "19:00 - 23:00", closed: false },
+  { day: "Domingo", lunch: "12:00 - 15:30", dinner: "Encerrado", closed: false },
 ];
 
 export default function Reservations() {
@@ -26,11 +26,24 @@ export default function Reservations() {
   });
   const [submitted, setSubmitted] = useState(false);
 
+  const reservationSummary = [
+    "Pedido de reserva - Bijou Restaurante",
+    `Nome: ${formData.name}`,
+    `Telefone: ${formData.phone}`,
+    `Data: ${formData.date}`,
+    `Hora: ${formData.time}`,
+    `Pessoas: ${formData.guests}`,
+    `Notas: ${formData.notes || "-"}`,
+    "",
+    "A reserva so fica enviada depois de confirmar a mensagem no canal escolhido.",
+  ].join("\n");
+
+  const whatsappUrl = `https://wa.me/351233434447?text=${encodeURIComponent(reservationSummary)}`;
+  const mailtoUrl = `mailto:geral@bijourestaurante.pt?subject=${encodeURIComponent("Pedido de reserva - Bijou Restaurante")}&body=${encodeURIComponent(reservationSummary)}`;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Static site: open WhatsApp or mailto
-    const msg = `Pedido de reserva — Bijou Restaurante%0ANome: ${formData.name}%0ATelefone: ${formData.phone}%0AData: ${formData.date}%0AHora: ${formData.time}%0APessoas: ${formData.guests}%0ANotas: ${formData.notes}`;
-    window.open(`https://wa.me/351233434447?text=${msg}`, "_blank");
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
 
@@ -53,71 +66,67 @@ export default function Reservations() {
   return (
     <section
       id="reservas"
-      className="py-24 px-6 relative overflow-hidden"
+      className="relative overflow-hidden px-6 py-24"
       style={{ background: "#2C1810" }}
     >
-      {/* Background ornament */}
-      <div className="absolute right-0 top-0 w-1/3 h-full opacity-5 pointer-events-none">
-        <svg viewBox="0 0 300 800" className="w-full h-full" fill="none">
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-1/3 opacity-5">
+        <svg viewBox="0 0 300 800" className="h-full w-full" fill="none">
           <path d="M150 0 Q250 200 150 400 Q50 600 150 800" stroke="#CFB53B" strokeWidth="1" />
           <path d="M200 0 Q300 200 200 400 Q100 600 200 800" stroke="#CFB53B" strokeWidth="0.5" />
         </svg>
       </div>
 
-      <div ref={ref} className="relative max-w-5xl mx-auto">
-        {/* Header */}
+      <div ref={ref} className="relative mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="mb-16 text-center"
         >
           <p
-            className="text-xs tracking-[0.4em] uppercase mb-4"
+            className="mb-4 text-xs uppercase tracking-[0.4em]"
             style={{ color: "#CFB53B", fontFamily: "var(--font-source-sans-3)" }}
           >
             Reserve a sua Mesa
           </p>
           <h2
-            className="text-5xl md:text-6xl font-bold mb-4"
+            className="mb-4 text-5xl font-bold md:text-6xl"
             style={{ fontFamily: "var(--font-eb-garamond)", color: "#FFFFF0" }}
           >
             Venha Sentar-se
             <br />
-            <em>à Nossa Mesa</em>
+            <em>a Nossa Mesa</em>
           </h2>
-          <div className="flex items-center justify-center gap-4 mt-4">
+          <div className="mt-4 flex items-center justify-center gap-4">
             <div className="h-px w-20" style={{ background: "rgba(207,181,59,0.4)" }} />
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#CFB53B" }} />
+            <div className="h-1.5 w-1.5 rounded-full" style={{ background: "#CFB53B" }} />
             <div className="h-px w-20" style={{ background: "rgba(207,181,59,0.4)" }} />
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left: Info */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* Phone CTA */}
             <a
               href="tel:+351233434447"
-              className="flex items-center gap-4 p-5 mb-8 transition-all duration-300 hover:scale-[1.02]"
+              className="mb-8 flex items-center gap-4 p-5 transition-all duration-300 hover:scale-[1.02]"
               style={{
                 background: "#800020",
                 border: "1px solid rgba(207,181,59,0.3)",
               }}
             >
               <div
-                className="w-12 h-12 flex items-center justify-center flex-shrink-0"
+                className="flex h-12 w-12 flex-shrink-0 items-center justify-center"
                 style={{ background: "rgba(255,255,240,0.1)" }}
               >
                 <Phone size={22} style={{ color: "#CFB53B" }} />
               </div>
               <div>
                 <p
-                  className="text-xs tracking-widest uppercase mb-1"
+                  className="mb-1 text-xs uppercase tracking-widest"
                   style={{ color: "rgba(255,255,240,0.6)", fontFamily: "var(--font-source-sans-3)" }}
                 >
                   Reservas por Telefone
@@ -131,13 +140,12 @@ export default function Reservations() {
               </div>
             </a>
 
-            {/* Info cards */}
-            <div className="space-y-4 mb-8">
+            <div className="mb-8 space-y-4">
               <div className="flex items-start gap-3">
                 <Users size={18} style={{ color: "#CFB53B", flexShrink: 0, marginTop: 2 }} />
                 <div>
                   <p
-                    className="text-sm font-semibold mb-1"
+                    className="mb-1 text-sm font-semibold"
                     style={{ color: "#FFFFF0", fontFamily: "var(--font-source-sans-3)" }}
                   >
                     Grupos & Eventos Privados
@@ -146,75 +154,80 @@ export default function Reservations() {
                     className="text-sm"
                     style={{ color: "rgba(255,255,240,0.6)", fontFamily: "var(--font-source-sans-3)" }}
                   >
-                    Disponíveis para jantares privados, celebrações de aniversário e eventos empresariais.
-                    Contacte-nos para orçamento.
+                    Disponiveis para jantares privados, celebracoes de aniversario e eventos
+                    empresariais. Contacte-nos para orcamento.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CalendarDays size={18} style={{ color: "#CFB53B", flexShrink: 0, marginTop: 2 }} />
+                <CalendarDays
+                  size={18}
+                  style={{ color: "#CFB53B", flexShrink: 0, marginTop: 2 }}
+                />
                 <div>
                   <p
-                    className="text-sm font-semibold mb-1"
+                    className="mb-1 text-sm font-semibold"
                     style={{ color: "#FFFFF0", fontFamily: "var(--font-source-sans-3)" }}
                   >
-                    Cabrito com Antecedência
+                    Cabrito com Antecedencia
                   </p>
                   <p
                     className="text-sm"
                     style={{ color: "rgba(255,255,240,0.6)", fontFamily: "var(--font-source-sans-3)" }}
                   >
-                    O cabrito assado no forno requer encomenda com 24 horas de antecedência.
+                    O cabrito assado no forno requer encomenda com 24 horas de antecedencia.
                     Mencione na reserva.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Hours */}
             <div
-              className="p-6 border"
+              className="border p-6"
               style={{ borderColor: "rgba(207,181,59,0.2)", background: "rgba(255,255,240,0.03)" }}
             >
-              <div className="flex items-center gap-2 mb-4">
+              <div className="mb-4 flex items-center gap-2">
                 <Clock size={16} style={{ color: "#CFB53B" }} />
                 <p
-                  className="text-xs tracking-[0.3em] uppercase"
+                  className="text-xs uppercase tracking-[0.3em]"
                   style={{ color: "#CFB53B", fontFamily: "var(--font-source-sans-3)" }}
                 >
-                  Horário de Funcionamento
+                  Horario de Funcionamento
                 </p>
               </div>
               <div className="space-y-2">
-                {hours.map((h) => (
+                {hours.map((hour) => (
                   <div
-                    key={h.day}
-                    className="flex justify-between items-center text-sm py-1 border-b"
+                    key={hour.day}
+                    className="flex items-center justify-between border-b py-1 text-sm"
                     style={{ borderColor: "rgba(207,181,59,0.08)" }}
                   >
                     <span
                       style={{
-                        color: h.closed ? "rgba(255,255,240,0.3)" : "rgba(255,255,240,0.75)",
+                        color: hour.closed ? "rgba(255,255,240,0.3)" : "rgba(255,255,240,0.75)",
                         fontFamily: "var(--font-source-sans-3)",
                       }}
                     >
-                      {h.day}
+                      {hour.day}
                     </span>
-                    {h.closed ? (
+                    {hour.closed ? (
                       <span
                         className="text-xs"
-                        style={{ color: "rgba(255,255,240,0.3)", fontFamily: "var(--font-source-sans-3)" }}
+                        style={{
+                          color: "rgba(255,255,240,0.3)",
+                          fontFamily: "var(--font-source-sans-3)",
+                        }}
                       >
                         Encerrado
                       </span>
                     ) : (
                       <div className="text-right">
                         <p style={{ color: "#CFB53B", fontFamily: "var(--font-source-sans-3)" }}>
-                          {h.lunch}
+                          {hour.lunch}
                         </p>
-                        {h.dinner !== "Encerrado" && (
+                        {hour.dinner !== "Encerrado" && (
                           <p style={{ color: "#CFB53B", fontFamily: "var(--font-source-sans-3)" }}>
-                            {h.dinner}
+                            {hour.dinner}
                           </p>
                         )}
                       </div>
@@ -225,7 +238,6 @@ export default function Reservations() {
             </div>
           </motion.div>
 
-          {/* Right: Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -235,35 +247,95 @@ export default function Reservations() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="h-full flex flex-col items-center justify-center text-center p-8 border"
+                className="flex h-full flex-col items-center justify-center border p-8 text-center"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
                 style={{ borderColor: "rgba(207,181,59,0.3)", background: "rgba(255,255,240,0.03)" }}
               >
                 <div
-                  className="w-16 h-16 flex items-center justify-center mb-6"
+                  className="mb-6 flex h-16 w-16 items-center justify-center"
                   style={{ background: "#800020" }}
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="#CFB53B">
-                    <path d="M5 15L12 22L25 8" stroke="#CFB53B" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M5 15L12 22L25 8"
+                      stroke="#CFB53B"
+                      strokeWidth="2.5"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
                 <h3
-                  className="text-3xl font-bold mb-3"
+                  className="mb-3 text-3xl font-bold"
                   style={{ fontFamily: "var(--font-eb-garamond)", color: "#FFFFF0" }}
                 >
-                  Pedido Enviado!
+                  Pedido Aberto no WhatsApp
                 </h3>
                 <p
-                  className="text-sm leading-relaxed"
+                  className="max-w-md text-sm leading-relaxed"
                   style={{ color: "rgba(255,255,240,0.7)", fontFamily: "var(--font-source-sans-3)" }}
                 >
-                  Recebemos o seu pedido de reserva via WhatsApp.
-                  Entraremos em contacto para confirmação em breve.
+                  Abrimos uma mensagem com os dados da reserva, mas o pedido so segue quando o
+                  confirmar e enviar no canal escolhido.
                 </p>
+                <div className="mt-6 grid w-full max-w-md gap-3 sm:grid-cols-2">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-4 py-3 text-xs font-medium uppercase tracking-widest transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      background: "#800020",
+                      color: "#FFFFF0",
+                      fontFamily: "var(--font-source-sans-3)",
+                    }}
+                    aria-label="Abrir o WhatsApp com o pedido de reserva preparado"
+                  >
+                    Abrir WhatsApp
+                  </a>
+                  <a
+                    href={mailtoUrl}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium uppercase tracking-widest transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      border: "1px solid rgba(207,181,59,0.35)",
+                      color: "#FFFFF0",
+                      fontFamily: "var(--font-source-sans-3)",
+                    }}
+                    aria-label="Abrir um email com o pedido de reserva preparado"
+                  >
+                    <Mail size={14} />
+                    Enviar Email
+                  </a>
+                  <a
+                    href="tel:+351233434447"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium uppercase tracking-widest transition-all duration-300 hover:scale-[1.02] sm:col-span-2"
+                    style={{
+                      border: "1px solid rgba(255,255,240,0.16)",
+                      color: "rgba(255,255,240,0.85)",
+                      fontFamily: "var(--font-source-sans-3)",
+                    }}
+                    aria-label="Ligar para o restaurante para confirmar a reserva"
+                  >
+                    <Phone size={14} />
+                    Ligar para Confirmar
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-5 text-xs uppercase tracking-[0.25em]"
+                  style={{ color: "#CFB53B", fontFamily: "var(--font-source-sans-3)" }}
+                >
+                  Editar pedido
+                </button>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label style={labelStyle} className="block mb-2">
+                  <label style={labelStyle} className="mb-2 block">
                     Nome Completo
                   </label>
                   <input
@@ -271,13 +343,13 @@ export default function Reservations() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 text-sm focus:border-[#CFB53B] transition-colors"
+                    className="w-full px-4 py-3 text-sm transition-colors focus:border-[#CFB53B]"
                     style={inputStyle}
                     placeholder="O seu nome"
                   />
                 </div>
                 <div>
-                  <label style={labelStyle} className="block mb-2">
+                  <label style={labelStyle} className="mb-2 block">
                     Telefone
                   </label>
                   <input
@@ -285,14 +357,14 @@ export default function Reservations() {
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 text-sm focus:border-[#CFB53B] transition-colors"
+                    className="w-full px-4 py-3 text-sm transition-colors focus:border-[#CFB53B]"
                     style={inputStyle}
                     placeholder="9XX XXX XXX"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label style={labelStyle} className="block mb-2">
+                    <label style={labelStyle} className="mb-2 block">
                       Data
                     </label>
                     <input
@@ -300,19 +372,19 @@ export default function Reservations() {
                       required
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full px-4 py-3 text-sm focus:border-[#CFB53B] transition-colors"
+                      className="w-full px-4 py-3 text-sm transition-colors focus:border-[#CFB53B]"
                       style={{ ...inputStyle, colorScheme: "dark" }}
                     />
                   </div>
                   <div>
-                    <label style={labelStyle} className="block mb-2">
+                    <label style={labelStyle} className="mb-2 block">
                       Hora
                     </label>
                     <select
                       required
                       value={formData.time}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      className="w-full px-4 py-3 text-sm focus:border-[#CFB53B] transition-colors"
+                      className="w-full px-4 py-3 text-sm transition-colors focus:border-[#CFB53B]"
                       style={inputStyle}
                     >
                       <option value="">Escolher</option>
@@ -330,13 +402,13 @@ export default function Reservations() {
                   </div>
                 </div>
                 <div>
-                  <label style={labelStyle} className="block mb-2">
-                    Número de Pessoas
+                  <label style={labelStyle} className="mb-2 block">
+                    Numero de Pessoas
                   </label>
                   <select
                     value={formData.guests}
                     onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-                    className="w-full px-4 py-3 text-sm focus:border-[#CFB53B] transition-colors"
+                    className="w-full px-4 py-3 text-sm transition-colors focus:border-[#CFB53B]"
                     style={inputStyle}
                   >
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
@@ -348,21 +420,21 @@ export default function Reservations() {
                   </select>
                 </div>
                 <div>
-                  <label style={labelStyle} className="block mb-2">
-                    Observações (opcional)
+                  <label style={labelStyle} className="mb-2 block">
+                    Observacoes (opcional)
                   </label>
                   <textarea
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-4 py-3 text-sm focus:border-[#CFB53B] transition-colors resize-none"
+                    className="w-full resize-none px-4 py-3 text-sm transition-colors focus:border-[#CFB53B]"
                     style={inputStyle}
-                    placeholder="Alergias, preferências, datas especiais..."
+                    placeholder="Alergias, preferencias, datas especiais..."
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-4 text-sm tracking-widest uppercase font-medium transition-all duration-300 hover:scale-[1.02]"
+                  className="w-full py-4 text-sm font-medium uppercase tracking-widest transition-all duration-300 hover:scale-[1.02]"
                   style={{
                     background: "#800020",
                     color: "#FFFFF0",
@@ -375,7 +447,8 @@ export default function Reservations() {
                   className="text-center text-xs"
                   style={{ color: "rgba(255,255,240,0.4)", fontFamily: "var(--font-source-sans-3)" }}
                 >
-                  Confirmaremos a sua reserva por telefone
+                  Este botao abre um rascunho de mensagem. A reserva so e enviada depois de a rever
+                  e confirmar no WhatsApp ou por email.
                 </p>
               </form>
             )}

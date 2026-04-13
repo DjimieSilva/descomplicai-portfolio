@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Space_Grotesk, Inter } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
     "Restaurante de bairro contemporâneo em Figueira da Foz. Comida portuguesa com alma: bifanas gourmet, francesinhas, petiscos e muito mais. Reservas disponíveis.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/pe-no-bairro");
+
 export default function PeNoBairroLayout({
   children,
 }: {
@@ -30,3 +33,5 @@ export default function PeNoBairroLayout({
     </div>
   );
 }
+
+

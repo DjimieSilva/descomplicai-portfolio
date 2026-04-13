@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Literata, Inter } from "next/font/google";
 
 const literata = Literata({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "Cozinha portuguesa refinada no coração da Figueira da Foz. Ingredientes da época, técnicas tradicionais, apresentação contemporânea. Reserve a sua mesa.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/o-picadeiro");
+
 export default function OPicadeiroLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function OPicadeiroLayout({
     </div>
   );
 }
+
+

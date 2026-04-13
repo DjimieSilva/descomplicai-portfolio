@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Newsreader, Inter } from "next/font/google";
 
 const newsreader = Newsreader({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "A Marisqueira Rosa Amélia é a casa do marisco na Figueira da Foz. Tradição, frescura e sabor do mar: camarão, lagosta, sapateira, percebes e muito mais.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/marisqueira-rosa-amelia");
+
 export default function MarisqueiraRosaAmeliaLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function MarisqueiraRosaAmeliaLayout({
     </div>
   );
 }
+
+

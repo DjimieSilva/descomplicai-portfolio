@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Alba Saúde Dentária | Centro de Excelência com Bloco Operatório — Figueira da Foz",
@@ -47,6 +48,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/alba-saude-dentaria");
+
 export default function AlbaSaudeDentariaLayout({
   children,
 }: {
@@ -54,3 +57,5 @@ export default function AlbaSaudeDentariaLayout({
 }) {
   return <>{children}</>;
 }
+
+

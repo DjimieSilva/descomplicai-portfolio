@@ -223,86 +223,10 @@ const TITLE = "AWAT & CHALAK";
 
 function Hero() {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const leftPanelRef = useRef<HTMLDivElement>(null);
-  const rightPanelRef = useRef<HTMLDivElement>(null);
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-  const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const scrollHintRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(lettersRef.current.filter(Boolean), {
-        opacity: 0,
-        y: 60,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: 0.3,
-      });
-
-      gsap.from(subtitleRef.current, {
-        opacity: 0,
-        y: 30,
-        duration: 1,
-        delay: 1.2,
-        ease: "power2.out",
-      });
-
-      gsap.from(scrollHintRef.current, {
-        opacity: 0,
-        duration: 1,
-        delay: 2,
-      });
-
-      gsap.to(scrollHintRef.current, {
-        y: 10,
-        repeat: -1,
-        yoyo: true,
-        duration: 1.5,
-        ease: "power1.inOut",
-        delay: 2,
-      });
-
-      const splitTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "+=60%",
-          scrub: 1,
-          pin: true,
-          pinSpacing: true,
-        },
-      });
-
-      splitTl.to(leftPanelRef.current, { xPercent: -100, ease: "none" }, 0);
-      splitTl.to(rightPanelRef.current, { xPercent: 100, ease: "none" }, 0);
-
-      splitTl.to(
-        [...lettersRef.current.filter(Boolean), subtitleRef.current, scrollHintRef.current],
-        { opacity: 0, duration: 0.3 },
-        0
-      );
-
-      gsap.to(videoContainerRef.current, {
-        yPercent: 20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[80svh] sm:min-h-svh h-screen w-full overflow-hidden">
-      <div ref={videoContainerRef} className="absolute inset-0 w-full h-full">
+    <section className="relative min-h-[80svh] sm:min-h-svh h-screen w-full overflow-hidden">
+      <div className="absolute inset-0 w-full h-full">
         <img
           src="/awat-chalak/hero1.jpg"
           alt="Friseursalon Awat & Chalak"
@@ -324,20 +248,11 @@ function Hero() {
         }} />
       </div>
 
-      <div ref={leftPanelRef} className="absolute inset-y-0 left-0 w-1/2 z-20 bg-[#1C1C1C]">
-        <div className="absolute top-0 right-0 w-px h-full bg-[#C17F59]/30" />
-      </div>
-
-      <div ref={rightPanelRef} className="absolute inset-y-0 right-0 w-1/2 z-20 bg-[#1C1C1C]">
-        <div className="absolute top-0 left-0 w-px h-full bg-[#C17F59]/30" />
-      </div>
-
-      <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-6 text-center pointer-events-none">
         <h1 className="flex items-center justify-center flex-wrap">
           {TITLE.split("").map((letter, i) => (
             <span
               key={i}
-              ref={(el) => { lettersRef.current[i] = el; }}
               className={`font-[var(--awat-font-heading)] text-[1.8rem] sm:text-[3rem] md:text-[5rem] lg:text-[8rem] leading-none tracking-[0.05em] sm:tracking-[0.1em] text-[#F5F5F0] select-none inline-block ${letter === " " ? "w-[0.3em]" : ""}`}
               style={{ textShadow: "0 0 80px rgba(193,127,89,0.3)" }}
             >
@@ -347,13 +262,12 @@ function Hero() {
         </h1>
 
         <p
-          ref={subtitleRef}
           className="mt-3 md:mt-6 font-[var(--awat-font-body)] text-xs sm:text-sm md:text-base tracking-[0.15em] sm:tracking-[0.3em] uppercase text-[#F5F5F0]/70"
         >
           {t("Ihr Friseur in Heilbronn seit 2007", "Your barber in Heilbronn since 2007")}
         </p>
 
-        <div ref={scrollHintRef} className="absolute bottom-6 sm:bottom-10 flex flex-col items-center gap-1.5 sm:gap-2">
+        <div className="absolute bottom-6 sm:bottom-10 flex flex-col items-center gap-1.5 sm:gap-2">
           <span className="font-[var(--awat-font-body)] text-[10px] sm:text-xs tracking-widest uppercase text-[#F5F5F0]/40">
             {t("Entdecken", "Discover")}
           </span>
@@ -370,52 +284,70 @@ function Hero() {
    SERVICES
    ═══════════════════════════════════════════════════════════ */
 
-const services = [
-  { name: { de: "Herrenhaarschnitt", en: "Men's Haircut" }, price: "ab \u20AC13", desc: { de: "Pr\u00E4ziser Schnitt mit Maschine oder Schere", en: "Precise cut with machine or scissors" }, icon: "scissors" },
-  { name: { de: "Bartrasur", en: "Beard Shave" }, price: "\u20AC10", desc: { de: "Traditionelle Rasur mit hei\u00DFem Handtuch", en: "Traditional shave with hot towel" }, icon: "razor" },
-  { name: { de: "Waschen & Schneiden", en: "Wash & Cut" }, price: "\u20AC16", desc: { de: "Haarw\u00E4sche und professioneller Schnitt", en: "Hair wash and professional cut" }, icon: "wash" },
-  { name: { de: "Augenbrauen", en: "Eyebrows" }, price: "\u20AC7", desc: { de: "Perfekt geformte Augenbrauen", en: "Perfectly shaped eyebrows" }, icon: "eyebrow" },
-  { name: { de: "Premium Styling", en: "Premium Styling" }, price: "ab \u20AC25", desc: { de: "F\u00E4rben, Str\u00E4hnchen und individuelles Styling", en: "Coloring, highlights and custom styling" }, icon: "style" },
+const serviceGroups = [
+  {
+    title: { de: "Herren", en: "Men" },
+    services: [
+      {
+        name: { de: "Haarschneiden", en: "Haircut" },
+        price: "16 €",
+      },
+      {
+        name: { de: "Maschinenschnitt", en: "Machine Cut" },
+        price: "14 €",
+      },
+      {
+        name: { de: "Zero", en: "Zero Cut" },
+        price: "18 €",
+      },
+      {
+        name: { de: "Doppelt Zero", en: "Double Zero Cut" },
+        price: "20 €",
+      },
+      {
+        name: { de: "Augenbrauen - Kontur - Bart Stylen", en: "Eyebrows - Contour - Beard Styling" },
+        price: "10 €",
+      },
+      {
+        name: { de: "Bart Rasur", en: "Beard Shave" },
+        price: "12 €",
+      },
+      {
+        name: { de: "Waschen", en: "Wash" },
+        price: "4 €",
+      },
+      {
+        name: { de: "Heißwachs ( Pro Stelle 2 €)", en: "Hot Wax (2 € Per Area)" },
+        price: "10 €",
+      },
+      {
+        name: { de: "Kinder", en: "Kids Cut" },
+        price: "12 €",
+      },
+      {
+        name: { de: "Kinder Zero", en: "Kids Zero Cut" },
+        price: "14 €",
+      },
+      {
+        name: { de: "Awat & Chalak Paket", en: "Awat & Chalak Package" },
+        price: "40 €",
+      },
+    ],
+  },
+  {
+    title: { de: "Frauen:", en: "Women" },
+    services: [
+      {
+        name: { de: "Haarschnitt", en: "Haircut" },
+        price: "20 €",
+      },
+      {
+        name: { de: "Haarentfernung im Gesicht", en: "Facial Hair Removal" },
+        price: "12 €",
+      },
+    ],
+  },
 ];
-
-function ServiceIcon({ type }: { type: string }) {
-  const iconMap: Record<string, React.ReactNode> = {
-    scissors: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M10 10l20 20M30 10L10 30M8 8a4 4 0 110-8 4 4 0 010 8zM8 40a4 4 0 110-8 4 4 0 010 8z" stroke="#C17F59" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    razor: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <rect x="8" y="12" width="24" height="16" rx="2" stroke="#C17F59" strokeWidth="1.5" />
-        <line x1="20" y1="12" x2="20" y2="28" stroke="#C17F59" strokeWidth="1.5" />
-      </svg>
-    ),
-    wash: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M10 28c2-4 4-8 10-8s8 4 10 8" stroke="#C17F59" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M14 14c0-3 3-6 6-6s6 3 6 6" stroke="#C17F59" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M20 20v-6" stroke="#C17F59" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="16" cy="32" r="1.5" fill="#C17F59" />
-        <circle cx="24" cy="32" r="1.5" fill="#C17F59" />
-      </svg>
-    ),
-    eyebrow: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M8 18c4-6 12-8 24-4" stroke="#C17F59" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="20" cy="24" r="3" stroke="#C17F59" strokeWidth="1.5" />
-        <circle cx="20" cy="24" r="1" fill="#C17F59" />
-      </svg>
-    ),
-    style: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M20 6l4 8 9 1.5-6.5 6.5L28 31l-8-4-8 4 1.5-9L7 15.5 16 14l4-8z" stroke="#C17F59" strokeWidth="1.5" strokeLinejoin="round" />
-      </svg>
-    ),
-  };
-
-  return <div className="mb-6 [&>svg]:w-12 [&>svg]:h-12 md:[&>svg]:w-16 md:[&>svg]:h-16">{iconMap[type] || iconMap.scissors}</div>;
-}
 
 function Services() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -456,60 +388,70 @@ function Services() {
         <div style={{ width: 60, height: 1, background: "#C17F59", margin: "0 auto 40px" }} />
 
         {/* Price list */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {services.map((service, i) => (
-            <div
-              key={service.name.de}
-              className="service-row"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "18px 0",
-                borderBottom: i < services.length - 1 ? "1px solid rgba(193,127,89,0.12)" : "none",
-                gap: 12,
-              }}
-            >
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <h3
-                  className="font-[var(--awat-font-heading)]"
-                  style={{
-                    fontSize: "clamp(1rem, 3vw, 1.4rem)",
-                    color: "#F5F5F0",
-                    letterSpacing: "0.05em",
-                    marginBottom: 4,
-                  }}
-                >
-                  {t(service.name.de, service.name.en)}
-                </h3>
-                <p
-                  className="font-[var(--awat-font-body)]"
-                  style={{ fontSize: 13, color: "rgba(245,245,240,0.45)", lineHeight: 1.4 }}
-                >
-                  {t(service.desc.de, service.desc.en)}
-                </p>
-              </div>
-
-              {/* Dotted line */}
-              <div style={{
-                flex: "0 0 auto",
-                width: 40,
-                borderBottom: "1px dotted rgba(193,127,89,0.3)",
-                alignSelf: "center",
-              }} />
-
-              {/* Price */}
-              <span
+        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          {serviceGroups.map((group) => (
+            <div key={group.title.de}>
+              <h3
                 className="font-[var(--awat-font-heading)]"
                 style={{
-                  fontSize: "clamp(1.1rem, 3vw, 1.5rem)",
+                  fontSize: "clamp(1rem, 3vw, 1.25rem)",
                   color: "#C17F59",
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  marginBottom: 10,
                 }}
               >
-                {service.price}
-              </span>
+                {t(group.title.de, group.title.en)}
+              </h3>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                {group.services.map((service, i) => (
+                  <div
+                    key={`${group.title.de}-${service.name.de}`}
+                    className="service-row"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "18px 0",
+                      borderBottom: i < group.services.length - 1 ? "1px solid rgba(193,127,89,0.12)" : "none",
+                      gap: 12,
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h4
+                        className="font-[var(--awat-font-heading)]"
+                        style={{
+                          fontSize: "clamp(1rem, 3vw, 1.4rem)",
+                          color: "#F5F5F0",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {t(service.name.de, service.name.en)}
+                      </h4>
+                    </div>
+
+                    <div style={{
+                      flex: "0 0 auto",
+                      width: 40,
+                      borderBottom: "1px dotted rgba(193,127,89,0.3)",
+                      alignSelf: "center",
+                    }} />
+
+                    <span
+                      className="font-[var(--awat-font-heading)]"
+                      style={{
+                        fontSize: "clamp(1.1rem, 3vw, 1.5rem)",
+                        color: "#C17F59",
+                        whiteSpace: "nowrap",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {service.price}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -526,20 +468,26 @@ const barbers = [
   {
     name: "Awat",
     image: "/awat-chalak/barber-awat.jpg",
-    role: { de: "Inhaber & Friseur", en: "Owner & Barber" },
-    description: {
-      de: "Awat gr\u00FCndete den Salon 2007 in Heilbronn. Seine Leidenschaft f\u00FCr klassische Herrenhaarschnitte und Bartpflege hat den Salon zu einer festen Gr\u00F6\u00DFe in der Stadt gemacht.",
-      en: "Awat founded the salon in 2007 in Heilbronn. His passion for classic men's haircuts and beard care has made the salon a fixture in the city.",
-    },
   },
   {
-    name: "Chalak",
-    image: "/awat-chalak/barber-chalak.jpg",
-    role: { de: "Meisterfriseur", en: "Master Barber" },
-    description: {
-      de: "Mit \u00FCber 15 Jahren Erfahrung ist Chalak Spezialist f\u00FCr kreative Frisuren, Flechtarbeiten und moderne Schnitte. Seine Pr\u00E4zision und Kreativit\u00E4t machen jeden Besuch einzigartig.",
-      en: "With over 15 years of experience, Chalak specializes in creative hairstyles, braiding and modern cuts. His precision and creativity make every visit unique.",
-    },
+    name: "Ranj",
+    image: "/awat-chalak/barber-ranj.jpeg",
+  },
+  {
+    name: "Rani",
+    image: "/awat-chalak/barber-rani.jpeg",
+  },
+  {
+    name: "San",
+    image: "/awat-chalak/barber-san.jpeg",
+  },
+  {
+    name: "Karam",
+    image: "/awat-chalak/barber-karam.jpeg",
+  },
+  {
+    name: "Goran",
+    image: "/awat-chalak/barber-goran.jpeg",
   },
 ];
 
@@ -547,9 +495,7 @@ function Barbers() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const profilesRef = useRef<(HTMLDivElement | null)[]>([]);
-  const linesRef = useRef<(HTMLDivElement | null)[]>([]);
-  const imagesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -564,56 +510,21 @@ function Barbers() {
         },
       });
 
-      profilesRef.current.forEach((profile, i) => {
-        if (!profile) return;
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return;
 
-        const image = imagesRef.current[i];
-        const line = linesRef.current[i];
-
-        if (image) {
-          gsap.fromTo(
-            image,
-            { y: -80 },
-            {
-              y: 0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: profile,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true,
-              },
-            }
-          );
-        }
-
-        const textElements = profile.querySelectorAll(".barber-text");
-        gsap.from(textElements, {
-          x: 100,
+        gsap.from(card, {
+          y: 40,
           opacity: 0,
-          stagger: 0.15,
-          duration: 1,
+          duration: 0.8,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: profile,
+            trigger: card,
             start: "top 75%",
             toggleActions: "play none none reverse",
           },
+          delay: i * 0.08,
         });
-
-        if (line) {
-          gsap.from(line, {
-            scaleX: 0,
-            transformOrigin: "left center",
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: profile,
-              start: "top 70%",
-              toggleActions: "play none none reverse",
-            },
-          });
-        }
       });
     }, sectionRef);
 
@@ -632,47 +543,34 @@ function Barbers() {
         <div className="w-24 h-px bg-[#C17F59] mx-auto mt-6" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-16 md:space-y-24 lg:space-y-32">
-        {barbers.map((barber, i) => (
-          <div
-            key={barber.name}
-            ref={(el) => { profilesRef.current[i] = el; }}
-            className={`flex flex-col gap-6 md:gap-8 lg:gap-12 ${
-              i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-            } items-center`}
-          >
-            <div className="relative w-full md:w-1/2 overflow-hidden">
-              <div
-                ref={(el) => { imagesRef.current[i] = el; }}
-                className="w-full h-[300px] md:h-auto md:aspect-[3/4] rounded-sm relative overflow-hidden"
-              >
-                <img
-                  src={barber.image}
-                  alt={barber.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-                <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-[#C17F59]/40" />
-                <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-[#C17F59]/40" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
+          {barbers.map((barber, i) => (
+            <div
+              key={barber.name}
+              ref={(el) => { cardsRef.current[i] = el; }}
+              className="group overflow-hidden rounded-sm border border-[#C17F59]/10 bg-[#2D2D2D]"
+            >
+              <div className="relative overflow-hidden">
+                <div className="relative aspect-[4/5] w-full overflow-hidden">
+                  <img
+                    src={barber.image}
+                    alt={barber.name}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/65 via-transparent to-transparent" />
+                  <div className="absolute left-3 top-3 h-6 w-6 border-l border-t border-[#C17F59]/40" />
+                  <div className="absolute bottom-3 right-3 h-6 w-6 border-b border-r border-[#C17F59]/40" />
+                </div>
+              </div>
+              <div className="px-3 py-4 text-center sm:px-4 sm:py-5">
+                <h3 className="font-[var(--awat-font-heading)] text-2xl tracking-[0.12em] text-[#F5F5F0] sm:text-3xl">
+                  {barber.name}
+                </h3>
               </div>
             </div>
-
-            <div className={`w-full md:w-1/2 ${i % 2 === 0 ? "md:pl-8" : "md:pr-8"}`}>
-              <p className="barber-text font-[var(--awat-font-body)] text-[#C17F59] text-sm tracking-[0.3em] uppercase mb-3">
-                {t(barber.role)}
-              </p>
-              <h3 className="barber-text font-[var(--awat-font-heading)] text-3xl md:text-4xl lg:text-6xl tracking-[0.1em] text-[#F5F5F0] mb-6">
-                {barber.name}
-              </h3>
-              <div
-                ref={(el) => { linesRef.current[i] = el; }}
-                className="w-16 h-px bg-[#C17F59] mb-6"
-              />
-              <p className="barber-text font-[var(--awat-font-body)] text-[#F5F5F0]/60 text-base md:text-lg leading-relaxed max-w-md">
-                {t(barber.description)}
-              </p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -683,22 +581,15 @@ function Barbers() {
    ═══════════════════════════════════════════════════════════ */
 
 const galleryItems = [
-  { image: "/awat-chalak/gallery-1.jpg", label: { de: "Lockenschnitt", en: "Curly Cut" }, span: "row" },
-  { image: "/awat-chalak/gallery-2.jpg", label: { de: "Fade Schnitt", en: "Fade Cut" }, span: "col" },
-  { image: "/awat-chalak/gallery-3.jpg", label: { de: "Clean Fade", en: "Clean Fade" }, span: "normal" },
-  { image: "/awat-chalak/gallery-4.jpg", label: { de: "Flechtfrisur", en: "Braided Style" }, span: "col" },
-  { image: "/awat-chalak/gallery-5.jpg", label: { de: "Bartpflege", en: "Beard Grooming" }, span: "normal" },
-  { image: "/awat-chalak/gallery-6.jpg", label: { de: "Pr\u00E4zisionsschnitt", en: "Precision Cut" }, span: "row" },
-  { image: "/awat-chalak/gallery-7.jpg", label: { de: "Moderner Stil", en: "Modern Style" }, span: "normal" },
+  { image: "/awat-chalak/gallery-1.jpg", label: { de: "Salonmoment", en: "Salon Moment" }, className: "sm:col-span-2 lg:col-span-2 aspect-[16/10]" },
+  { image: "/awat-chalak/gallery-2.jpg", label: { de: "Fade Schnitt", en: "Fade Cut" }, className: "aspect-[4/5]" },
+  { image: "/awat-chalak/gallery-3.jpg", label: { de: "Clean Fade", en: "Clean Fade" }, className: "aspect-[4/5]" },
+  { image: "/awat-chalak/gallery-4.jpg", label: { de: "Braids & Styling", en: "Braids & Styling" }, className: "aspect-[4/5]" },
+  { image: "/awat-chalak/gallery-5.jpg", label: { de: "Bartpflege", en: "Beard Grooming" }, className: "sm:col-span-2 lg:col-span-1 aspect-[16/10] lg:aspect-[4/5]" },
+  { image: "/awat-chalak/gallery-6.jpg", label: { de: "Präzisionsschnitt", en: "Precision Cut" }, className: "aspect-[4/5]" },
+  { image: "/awat-chalak/gallery-7.jpg", label: { de: "Moderner Stil", en: "Modern Style" }, className: "aspect-[4/5]" },
+  { image: "/awat-chalak/barber-goran.jpeg", label: { de: "Goran", en: "Goran" }, className: "sm:col-span-2 lg:col-span-2 aspect-[16/10]" },
 ];
-
-function getSpanClass(span: string) {
-  switch (span) {
-    case "row": return "col-span-1 row-span-1 sm:col-span-2 sm:row-span-1";
-    case "col": return "col-span-1 row-span-1 sm:col-span-1 sm:row-span-2";
-    default: return "col-span-1 row-span-1";
-  }
-}
 
 function Gallery() {
   const { t } = useLanguage();
@@ -758,7 +649,7 @@ function Gallery() {
             <div
               key={t(item.label)}
               ref={(el) => { itemsRef.current[i] = el; }}
-              className={`${getSpanClass(item.span)} group relative overflow-hidden rounded-sm cursor-pointer h-[200px] sm:h-[250px] lg:h-[300px]`}
+              className={`${item.className} group relative overflow-hidden rounded-sm`}
             >
               <img
                 src={item.image}
@@ -841,7 +732,7 @@ function BookNow() {
               {t("MO — FR", "MON — FRI")}
             </p>
             <p style={{ color: "#F5F5F0", fontFamily: "var(--awat-font-heading)", fontSize: "1.5rem" }}>
-              10:00 — 19:00
+              09:00 — 19:00
             </p>
           </div>
           <div style={{
@@ -852,7 +743,7 @@ function BookNow() {
               {t("SAMSTAG", "SATURDAY")}
             </p>
             <p style={{ color: "#F5F5F0", fontFamily: "var(--awat-font-heading)", fontSize: "1.5rem" }}>
-              10:00 — 18:00
+              09:00 — 18:00
             </p>
           </div>
         </div>
@@ -960,30 +851,6 @@ function Footer() {
               <span className="font-[var(--awat-font-body)] text-sm tracking-wide">
                 @awat_und_chalak_friseursalon
               </span>
-            </a>
-
-            <a
-              href="https://www.facebook.com/profile.php?id=100052215741641"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[#F5F5F0]/40 hover:text-[#C17F59] transition-colors duration-300"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-              </svg>
-              <span className="font-[var(--awat-font-body)] text-sm tracking-wide">Facebook</span>
-            </a>
-
-            <a
-              href="https://www.tiktok.com/@friseur_awat_chalak"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[#F5F5F0]/40 hover:text-[#C17F59] transition-colors duration-300"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.83 4.83 0 0 1-1-.15z" />
-              </svg>
-              <span className="font-[var(--awat-font-body)] text-sm tracking-wide">TikTok</span>
             </a>
           </div>
 

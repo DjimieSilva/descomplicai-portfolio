@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Sora, Inter } from "next/font/google";
 
 const sora = Sora({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "A Tailândia chegou à Figueira da Foz. O único restaurante Thai da costa portuguesa com avaliação 9.2/10. Sabores autênticos, fusão perfeita.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/mesa-dos-amigos");
+
 export default function MesaDosAmigosLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function MesaDosAmigosLayout({
     </div>
   );
 }
+
+

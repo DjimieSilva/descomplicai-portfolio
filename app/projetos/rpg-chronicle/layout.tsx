@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Sora, Inter } from "next/font/google";
 
 const sora = Sora({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "Uma jornada cinematica pelo mundo da inteligencia artificial. Portfolio interativo de Jaime com parallax, RPG narrativo e scroll experience.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/rpg-chronicle");
+
 export default function ChronicleLayout({
   children,
 }: {
@@ -33,3 +36,5 @@ export default function ChronicleLayout({
     </div>
   );
 }
+
+

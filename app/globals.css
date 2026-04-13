@@ -11,6 +11,8 @@
 :root {
   --background: #fafaf9;
   --foreground: #111827;
+  --header-offset: 4.5rem;
+  --anchor-offset: calc(var(--header-offset) + 1.25rem);
 }
 
 body {
@@ -21,12 +23,47 @@ body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--anchor-offset);
   overflow-x: hidden;
 }
 
 ::selection {
   background: rgba(37, 99, 235, 0.15);
   color: #111827;
+}
+
+main:focus {
+  outline: none;
+}
+
+[data-anchor-section] {
+  scroll-margin-top: var(--anchor-offset);
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 80;
+  transform: translateY(calc(-100% - 1rem));
+  border-radius: 9999px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  background: rgba(255, 255, 255, 0.96);
+  padding: 0.75rem 1rem;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.32);
+  outline-offset: 3px;
 }
 
 /* Animated gradient text */
@@ -56,7 +93,9 @@ html {
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in-up {
+  opacity: 0;
   animation: fade-in-up 0.8s ease-out forwards;
+  animation-fill-mode: both;
 }
 
 /* Scrollbar */

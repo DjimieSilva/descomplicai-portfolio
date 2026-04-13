@@ -17,11 +17,14 @@ const mobileNav = document.getElementById('mobileNav');
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('active');
   mobileNav.classList.toggle('open');
-  document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+  const isOpen = mobileNav.classList.contains('open');
+  hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
 });
 function closeMobile() {
   hamburger.classList.remove('active');
   mobileNav.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
   document.body.style.overflow = '';
 }
 
@@ -1033,7 +1036,8 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
   display: flex;
   gap: 12px;
 }
-.footer-social a {
+.footer-social a,
+.footer-social span {
   width: 40px;
   height: 40px;
   border-radius: 12px;
@@ -1047,6 +1051,10 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
   background: var(--primary);
   color: #fff;
   transform: translateY(-3px);
+}
+.footer-social span {
+  opacity: 0.6;
+  cursor: default;
 }
 .footer-bottom {
   text-align: center;
@@ -1135,7 +1143,7 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <div class="navbar-inner">
-    <a href="#" class="navbar-logo">
+    <a href="#home" class="navbar-logo">
       <svg class="sun-icon" viewBox="0 0 64 64" fill="none">
         <circle cx="32" cy="32" r="14" fill="#E8A946"/>
         <g stroke="#E8A946" stroke-width="3" stroke-linecap="round">
@@ -1158,7 +1166,7 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
       <a href="#contacto">Contacto</a>
       <a href="tel:233096420" class="btn-cta">Encomendar</a>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
+    <button class="hamburger" id="hamburger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -1559,11 +1567,11 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
           </div>
         </div>
         <div class="contact-buttons">
-          <a href="https://glovoapp.com" target="_blank" rel="noopener" class="btn-glovo">
+          <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" class="btn-glovo">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
             Pedir no Glovo
           </a>
-          <a href="https://www.google.com/maps/dir//R.+Poeta+Ac%C3%A1cio+Antunes+1%2FA,+3080-158+Figueira+da+Foz" target="_blank" rel="noopener" class="btn-directions">
+          <a href="https://www.google.com/maps/dir//R.+Poeta+Ac%C3%A1cio+Antunes+1%2FA,+3080-158+Figueira+da+Foz" target="_blank" rel="noopener noreferrer" class="btn-directions">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             Como Chegar
           </a>
@@ -1581,7 +1589,7 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <a href="#" class="navbar-logo" style="margin-bottom:12px;">
+        <a href="#home" class="navbar-logo" style="margin-bottom:12px;">
           <svg class="sun-icon" viewBox="0 0 64 64" fill="none" style="width:28px;height:28px;">
             <circle cx="32" cy="32" r="14" fill="#E8A946"/>
             <g stroke="#E8A946" stroke-width="3" stroke-linecap="round">
@@ -1611,15 +1619,15 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
       <div>
         <h5 style="font-family:'Lato',sans-serif;font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:16px;">Siga-nos</h5>
         <div class="footer-social">
-          <a href="#" aria-label="Facebook">
+          <span aria-label="Facebook indisponível" aria-disabled="true" title="Facebook indisponível">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-          </a>
-          <a href="#" aria-label="Instagram">
+          </span>
+          <span aria-label="Instagram indisponível" aria-disabled="true" title="Instagram indisponível">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="#" aria-label="TripAdvisor">
+          </span>
+          <span aria-label="TripAdvisor indisponível" aria-disabled="true" title="TripAdvisor indisponível">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          </a>
+          </span>
         </div>
       </div>
     </div>

@@ -17,7 +17,6 @@ import {
   Send,
   ArrowRight,
 } from "lucide-react";
-import Link from "next/link";
 
 /* ═══════════════════════════════════════════════
    ANIMATION VARIANTS
@@ -155,9 +154,10 @@ export default function ContactoPage() {
     assunto: "",
     mensagem: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [preparedContactHref, setPreparedContactHref] = useState("");
+  const [preparedContactSummary, setPreparedContactSummary] = useState("");
   const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const [newsletterHref, setNewsletterHref] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -167,16 +167,40 @@ export default function ContactoPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
-    setFormData({ nome: "", email: "", telefone: "", assunto: "", mensagem: "" });
+
+    const summaryLines = [
+      `Nome: ${formData.nome}`,
+      `Email: ${formData.email}`,
+      `Assunto: ${formData.assunto}`,
+      `Mensagem: ${formData.mensagem}`,
+    ];
+
+    if (formData.telefone) {
+      summaryLines.push(`Telefone: ${formData.telefone}`);
+    }
+
+    const summary = summaryLines.join("\n");
+    const body =
+      "Ola Ribeiro Santo,\n\nGostaria de entrar em contacto convosco.\n\n" +
+      `${summary}\n\nObrigado.`;
+
+    setPreparedContactSummary(summary);
+    setPreparedContactHref(
+      `mailto:info@ribeirosanto.pt?subject=${encodeURIComponent(
+        `${formData.assunto} - ${formData.nome}`
+      )}&body=${encodeURIComponent(body)}`
+    );
   };
 
   const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
-    setNewsletterSubmitted(true);
-    setNewsletterEmail("");
-    setTimeout(() => setNewsletterSubmitted(false), 5000);
+    setNewsletterHref(
+      `mailto:info@ribeirosanto.pt?subject=${encodeURIComponent(
+        "Pedido de subscricao newsletter"
+      )}&body=${encodeURIComponent(
+        `Ola,\n\nGostaria de subscrever a newsletter Ribeiro Santo com o email ${newsletterEmail}.\n\nObrigado.`
+      )}`
+    );
   };
 
   return (
@@ -666,23 +690,67 @@ export default function ContactoPage() {
                 }}
               >
                 <Send size={16} />
-                Enviar Mensagem
+                Preparar Email
               </button>
             </div>
 
-            {/* Success message */}
-            {submitted && (
+            <div
+              className="rounded-lg p-4 text-center text-sm"
+              style={{
+                backgroundColor: "rgba(114, 47, 55, 0.04)",
+                color: "var(--rs-stone)",
+                border: "1px solid rgba(114, 47, 55, 0.12)",
+              }}
+            >
+              O contacto so segue depois de confirmar o envio no seu email.
+            </div>
+
+            {preparedContactHref && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-6 rounded-lg p-4 text-center text-sm font-medium"
+                className="mt-6 rounded-lg p-5 text-sm"
                 style={{
                   backgroundColor: "rgba(114, 47, 55, 0.08)",
                   color: "var(--rs-burgundy)",
                   border: "1px solid rgba(114, 47, 55, 0.2)",
                 }}
+                aria-live="polite"
               >
-                Obrigado! Responderemos em menos de 24 horas.
+                <p className="text-center font-medium">
+                  Mensagem pronta para enviar. Este site nao envia formularios
+                  automaticamente.
+                </p>
+                <pre
+                  className="mt-4 whitespace-pre-wrap rounded-lg p-4 text-left text-sm"
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.55)",
+                    color: "var(--rs-dark)",
+                  }}
+                >
+                  {preparedContactSummary}
+                </pre>
+                <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <a
+                    href={preparedContactHref}
+                    className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    style={{
+                      backgroundColor: "var(--rs-burgundy)",
+                      color: "var(--rs-cream)",
+                    }}
+                  >
+                    <Mail size={16} />
+                    Abrir email
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setPreparedContactHref("")}
+                    className="text-sm font-medium underline underline-offset-4"
+                    style={{ color: "var(--rs-burgundy)" }}
+                  >
+                    Editar mensagem
+                  </button>
+                </div>
               </motion.div>
             )}
           </motion.form>
@@ -893,16 +961,33 @@ export default function ContactoPage() {
                   color: "var(--rs-cream)",
                 }}
               >
-                Subscrever
+                Preparar subscricao
                 <ArrowRight size={14} />
               </button>
             </form>
 
-            {newsletterSubmitted && (
+            <p className="mt-4 text-sm" style={{ color: "var(--rs-stone-light)" }}>
+              Ainda nao ha subscricao automatica nesta pagina. Vamos preparar um email para a
+              equipa concluir manualmente.
+            </p>
+
+            {newsletterHref && (
+              <div className="mt-4 text-sm" style={{ color: "var(--rs-gold)" }}>
+                <a
+                  href={newsletterHref}
+                  className="inline-flex items-center gap-2 underline underline-offset-4"
+                >
+                  <Mail size={14} />
+                  Abrir email de subscricao
+                </a>
+              </div>
+            )}
+
+            {newsletterHref && (
               <motion.p
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 text-sm"
+                className="hidden"
                 style={{ color: "var(--rs-gold)" }}
               >
                 Subscrição confirmada! Obrigado.

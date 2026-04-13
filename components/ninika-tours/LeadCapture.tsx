@@ -13,7 +13,7 @@ const fadeInUp = {
   },
 };
 
-type FormState = "idle" | "submitting" | "success" | "error";
+type FormState = "idle" | "submitting" | "success";
 
 export default function LeadCapture() {
   const [state, setState] = useState<FormState>("idle");
@@ -24,17 +24,23 @@ export default function LeadCapture() {
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
+    const subject = encodeURIComponent("Pedido de experiência - NinikaTours");
+    const body = encodeURIComponent(
+      [
+        `Nome: ${data.nome ?? "-"}`,
+        `Email: ${data.email ?? "-"}`,
+        `Data de chegada: ${data.dataChegada ?? "-"}`,
+        `Data de partida: ${data.dataPartida ?? "-"}`,
+        `Experiência: ${data.experiencia ?? "-"}`,
+        `Tamanho do grupo: ${data.tamanhoGrupo ?? "-"}`,
+        `Mensagem: ${data.mensagem ?? "-"}`,
+        "",
+        "Pedido sujeito a confirmação por email.",
+      ].join("\n")
+    );
 
-    try {
-      const res = await fetch("https://formspree.io/f/PLACEHOLDER", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      setState(res.ok ? "success" : "error");
-    } catch {
-      setState("error");
-    }
+    window.location.href = `mailto:info@ninikatours.com?subject=${subject}&body=${body}`;
+    setState("success");
   };
 
   return (
@@ -68,10 +74,13 @@ export default function LeadCapture() {
               fontFamily: "var(--nk-font-display)",
               fontWeight: 700,
             }}>
-              Obrigado! Respondemos em menos de 24 horas.
+              Rascunho de email preparado.
+            </p>
+            <p style={{ fontSize: "0.95rem", color: "var(--nk-gray-300)", marginBottom: "1rem" }}>
+              O teu pedido ficou pronto para revisão e envio por email. A reserva só fica confirmada depois de receberes resposta.
             </p>
             <button onClick={() => setState("idle")} className="nk-btn nk-btn-secondary">
-              Enviar outro pedido
+              Editar pedido
             </button>
           </motion.div>
         ) : (
@@ -129,22 +138,16 @@ export default function LeadCapture() {
               <textarea id="nk-mensagem" name="mensagem" className="nk-textarea" maxLength={500} placeholder="Diz-nos o que procuras, datas flexíveis, alergias, ocasião especial..." />
             </div>
 
-            {state === "error" && (
-              <p className="nk-error" role="alert">
-                Algo correu mal. Tenta novamente ou contacta-nos pelo WhatsApp.
-              </p>
-            )}
-
             <button type="submit" className="nk-btn nk-btn-primary" disabled={state === "submitting"} style={{ width: "100%" }}>
-              {state === "submitting" ? "A enviar..." : "Enviar Pedido"}
+              {state === "submitting" ? "A preparar..." : "Abrir Pedido no Email"}
             </button>
 
             <div style={{ textAlign: "center", marginTop: "1rem" }}>
               <p style={{ fontSize: "0.875rem", color: "var(--nk-gray-400)", marginBottom: "0.75rem" }}>
                 Preferes falar directamente?
               </p>
-              <a href="https://wa.me/351XXXXXXXXX" target="_blank" rel="noopener noreferrer" className="nk-btn nk-btn-whatsapp">
-                Enviar WhatsApp
+              <a href="mailto:info@ninikatours.com" className="nk-btn nk-btn-whatsapp">
+                Enviar Email
               </a>
             </div>
           </motion.form>

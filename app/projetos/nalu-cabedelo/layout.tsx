@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "NALU Cabedelo | Bar de Praia · Figueira da Foz",
   description:
     "NALU é o bar de praia mais vibrante de Cabedelo. Petiscos, cocktails, música ao vivo e o pôr do sol mais bonito da Figueira da Foz. Onde o Mar Encontra o Sabor.",
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/nalu-cabedelo");
 
 export default function NaluLayout({
   children,
@@ -20,3 +23,5 @@ export default function NaluLayout({
     </div>
   );
 }
+
+

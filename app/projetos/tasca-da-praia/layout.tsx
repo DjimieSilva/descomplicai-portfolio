@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Merriweather, Inter } from "next/font/google";
 
 const merriweather = Merriweather({
@@ -20,6 +21,8 @@ export const metadata: Metadata = {
     "Restaurante de pesca tradicional em Buarcos, Figueira da Foz. Peixe fresco do dia, caldeirada, arroz de marisco e a autêntica tradição da tasca piscatória da costa.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/tasca-da-praia");
+
 export default function TascaDaPraiaLayout({
   children,
 }: {
@@ -34,3 +37,5 @@ export default function TascaDaPraiaLayout({
     </div>
   );
 }
+
+

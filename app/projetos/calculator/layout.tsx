@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Calculadora Científica — Descomplicai",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/calculator");
+
 export default function CalculatorLayout({
   children,
 }: {
@@ -19,3 +22,5 @@ export default function CalculatorLayout({
 }) {
   return <>{children}</>;
 }
+
+

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Clínica Médico Dentária de Quiaios | A Sua Clínica Dentária em Quiaios",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/clinica-dentaria-quiaios");
 
 export default function ClinicaQuiaiosLayout({
   children,
@@ -29,3 +32,5 @@ export default function ClinicaQuiaiosLayout({
     </div>
   );
 }
+
+

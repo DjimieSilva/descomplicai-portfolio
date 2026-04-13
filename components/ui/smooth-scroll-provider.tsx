@@ -1,11 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
-import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type Lenis from "lenis";
 
 const LenisContext = createContext<Lenis | null>(null);
 
@@ -13,42 +9,56 @@ export function useLenis() {
   return useContext(LenisContext);
 }
 
-export function SmoothScrollProvider({ children }: { children: ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null);
+export function SmoothScrollProvider({
+  children,
+  enabled = true,
+}: {
+  children: ReactNode;
+  enabled?: boolean;
+}) {
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
   useEffect(() => {
-    // Respect reduced motion preference
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    if (!enabled) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 1.5,
-    });
+    let animationFrameId = 0;
+    let isDisposed = false;
 
-    lenisRef.current = lenis;
+    async function setupLenis() {
+      const { default: LenisConstructor } = await import("lenis");
+      if (isDisposed) return;
 
-    // Connect Lenis scroll events to GSAP ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
+      const lenis = new LenisConstructor({
+        duration: 1.05,
+        smoothWheel: true,
+        touchMultiplier: 1.2,
+      });
 
-    // Use GSAP ticker for Lenis raf (syncs both animation systems)
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
+      setLenisInstance(lenis);
+
+      const raf = (time: number) => {
+        lenis.raf(time);
+        animationFrameId = window.requestAnimationFrame(raf);
+      };
+
+      animationFrameId = window.requestAnimationFrame(raf);
+    }
+
+    void setupLenis();
 
     return () => {
-      gsap.ticker.remove(tickerCallback);
-      lenis.destroy();
-      lenisRef.current = null;
+      isDisposed = true;
+      window.cancelAnimationFrame(animationFrameId);
+      setLenisInstance((current) => {
+        current?.destroy();
+        return null;
+      });
     };
-  }, []);
+  }, [enabled]);
 
   return (
-    <LenisContext.Provider value={lenisRef.current}>
+    <LenisContext.Provider value={lenisInstance}>
       {children}
     </LenisContext.Provider>
   );

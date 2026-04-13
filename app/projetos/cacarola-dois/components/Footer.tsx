@@ -1,12 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { MapPin, Phone, Mail, Instagram, ArrowUp } from "lucide-react";
 
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const quickLinks = [
+    { label: "O Conceito", href: "/projetos/cacarola-dois" },
+    { label: "Ementa", href: "#ementa" },
+    { label: "Carta de Vinhos", disabled: true },
+    { label: "Galeria", href: "#galeria" },
+    { label: "Reservas", href: "#reservas" },
+  ] as const;
 
   return (
     <footer className="bg-[#060F1A] text-white px-6 pt-20 pb-10">
@@ -30,13 +38,14 @@ export default function Footer() {
               do oceano atlântico que abraça Figueira da Foz.
             </p>
             <div className="flex gap-3 mt-6">
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-[#0369A1]/30 flex items-center justify-center transition-colors duration-200"
+              <span
+                aria-label="Instagram indisponível"
+                aria-disabled="true"
+                title="Instagram indisponível"
+                className="w-9 h-9 rounded-lg bg-white/5 text-white/40 flex items-center justify-center opacity-60 cursor-default"
               >
-                <Instagram size={15} className="text-white/40 hover:text-white/80" />
-              </a>
+                <Instagram size={15} className="text-white/40" />
+              </span>
             </div>
           </div>
 
@@ -46,20 +55,24 @@ export default function Footer() {
               Navegação
             </h3>
             <ul className="space-y-3">
-              {[
-                { label: "O Conceito", href: "#" },
-                { label: "Ementa", href: "#ementa" },
-                { label: "Carta de Vinhos", href: "#" },
-                { label: "Galeria", href: "#" },
-                { label: "Reservas", href: "#reservas" },
-              ].map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="font-[family-name:var(--font-inter)] text-white/35 text-sm hover:text-[#FB923C] transition-colors duration-150"
-                  >
-                    {link.label}
-                  </a>
+                  {"href" in link ? (
+                    <a
+                      href={link.href}
+                      className="font-[family-name:var(--font-inter)] text-white/35 text-sm hover:text-[#FB923C] transition-colors duration-150"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <span
+                      aria-disabled="true"
+                      title="Secção ainda sem destino direto"
+                      className="font-[family-name:var(--font-inter)] text-white/20 text-sm cursor-default"
+                    >
+                      {link.label}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -118,12 +131,12 @@ export default function Footer() {
             © 2025 Caçarola Dois. Todos os direitos reservados.
             <span className="mx-2">·</span>
             Website criado pela{" "}
-            <a
+            <Link
               href="/"
               className="text-[#0369A1]/60 hover:text-[#0369A1] transition-colors"
             >
               Descomplicai
-            </a>
+            </Link>
           </p>
           <motion.button
             onClick={scrollToTop}

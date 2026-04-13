@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Hanken_Grotesk, Inter } from "next/font/google";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
     "Restaurante de frutos do mar contemporâneo em Figueira da Foz. O segundo capítulo da Caçarola, dedicado ao mar. Ceviches, tartares, arrozes e polvo à lagareiro. Reservas disponíveis.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/cacarola-dois");
+
 export default function CacarolaDoisLayout({
   children,
 }: {
@@ -30,3 +33,5 @@ export default function CacarolaDoisLayout({
     </div>
   );
 }
+
+

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { MetaPixel } from "./components/meta-pixel";
 import { Providers } from "./components/providers";
 import "./bfitfam.css";
@@ -26,6 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/bfitfam");
+
 export default function BfitfamLayout({
   children,
 }: {
@@ -38,3 +41,5 @@ export default function BfitfamLayout({
     </div>
   );
 }
+
+

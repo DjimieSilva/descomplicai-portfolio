@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import "./quintas.css";
 
 export const metadata: Metadata = {
@@ -27,6 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/quintas-estrelas");
+
 export default function QuintasEstrelasLayout({
   children,
 }: {
@@ -34,3 +37,5 @@ export default function QuintasEstrelasLayout({
 }) {
   return <div className="quintas-root">{children}</div>;
 }
+
+

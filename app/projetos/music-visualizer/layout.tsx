@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Visualizador Musical — Descomplicai",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/music-visualizer");
+
 export default function MusicVisualizerLayout({
   children,
 }: {
@@ -19,3 +22,5 @@ export default function MusicVisualizerLayout({
 }) {
   return children;
 }
+
+

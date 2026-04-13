@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Sora, Inter } from "next/font/google";
 
 const sora = Sora({
@@ -25,8 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/descomplicai-cosmos");
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${sora.variable} ${inter.variable}`}>{children}</div>
   );
 }
+
+

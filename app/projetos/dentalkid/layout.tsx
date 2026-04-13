@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Dentalkid — O Dentista das Crianças | Figueira da Foz",
@@ -25,6 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/dentalkid");
+
 export default function DentalkidLayout({
   children,
 }: {
@@ -39,3 +42,5 @@ export default function DentalkidLayout({
     </div>
   );
 }
+
+

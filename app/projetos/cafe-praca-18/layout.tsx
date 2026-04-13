@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Domine, Inter } from "next/font/google";
 
 const domine = Domine({
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
     "O café mais bem avaliado da Figueira da Foz. Avaliação 9.6/10. Pequenos-almoços, almoços, pastéis de nata e café de qualidade no coração da Praça.",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/cafe-praca-18");
+
 export default function CafePraca18Layout({
   children,
 }: {
@@ -37,3 +40,5 @@ export default function CafePraca18Layout({
     </div>
   );
 }
+
+

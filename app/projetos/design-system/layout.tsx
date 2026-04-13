@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Design System Masterclass — Descomplicai",
@@ -11,6 +12,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/design-system");
+
 export default function DesignSystemLayout({
   children,
 }: {
@@ -18,3 +21,5 @@ export default function DesignSystemLayout({
 }) {
   return children;
 }
+
+

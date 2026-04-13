@@ -24,22 +24,35 @@ export default function ZeffPizzaPiratePage() {
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileOverlay = document.getElementById('mobileOverlay');
 
-        function toggleMobileMenu() {
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        function syncMobileMenuState(isOpen) {
+            hamburger.classList.toggle('active', isOpen);
+            mobileMenu.classList.toggle('active', isOpen);
+            mobileOverlay.classList.toggle('active', isOpen);
+            hamburger.setAttribute('aria-expanded', String(isOpen));
+            document.body.style.overflow = isOpen ? 'hidden' : '';
         }
 
-        hamburger.addEventListener('click', toggleMobileMenu);
-        mobileOverlay.addEventListener('click', toggleMobileMenu);
+        function toggleMobileMenu() {
+            syncMobileMenuState(!mobileMenu.classList.contains('active'));
+        }
 
-        // Close mobile menu on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (mobileMenu.classList.contains('active')) toggleMobileMenu();
+        if (hamburger && mobileMenu && mobileOverlay) {
+            hamburger.addEventListener('click', toggleMobileMenu);
+            mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+            // Close mobile menu on link click
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileMenu.classList.contains('active')) toggleMobileMenu();
+                });
             });
-        });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                    toggleMobileMenu();
+                }
+            });
+        }
 
         // Parallax hero
         const heroBg = document.getElementById('heroBg');
@@ -91,9 +104,10 @@ export default function ZeffPizzaPiratePage() {
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const href = this.getAttribute('href');
+                const target = href ? document.querySelector(href) : null;
                 if (target) {
+                    e.preventDefault();
                     const offset = 80;
                     const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
                     window.scrollTo({ top, behavior: 'smooth' });
@@ -217,6 +231,9 @@ export default function ZeffPizzaPiratePage() {
             cursor: pointer;
             gap: 5px;
             z-index: 1001;
+            background: none;
+            border: 0;
+            padding: 0;
         }
         .hamburger span {
             width: 28px;
@@ -1136,7 +1153,7 @@ export default function ZeffPizzaPiratePage() {
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
         <div class="navbar-inner">
-            <a href="#" class="logo">
+            <a href="#hero" class="logo">
                 <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="32" cy="20" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
                     <path d="M22 42 C22 30 42 30 42 42" fill="none" stroke="currentColor" stroke-width="2.5"/>
@@ -1152,24 +1169,24 @@ export default function ZeffPizzaPiratePage() {
                 <a href="#mapa">O Mapa</a>
                 <a href="#marinheiros">Tripulação</a>
                 <a href="#porto">Localização</a>
-                <a href="https://glovoapp.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">Encomendar</a>
+                <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">Encomendar</a>
             </div>
-            <div class="hamburger" id="hamburger">
+            <button type="button" class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
         </div>
     </nav>
 
     <!-- MOBILE MENU -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
-    <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menu móvel">
         <a href="#taverna">A Taverna</a>
         <a href="#mapa">O Mapa do Tesouro</a>
         <a href="#marinheiros">Os Marinheiros</a>
         <a href="#porto">Porto de Ancoragem</a>
-        <a href="https://glovoapp.com" target="_blank" style="color: var(--primary);">Encomendar no Glovo</a>
+        <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">Encomendar no Glovo</a>
     </div>
 
     <!-- HERO -->
@@ -1185,7 +1202,7 @@ export default function ZeffPizzaPiratePage() {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
                     Ver o Mapa do Tesouro
                 </a>
-                <a href="https://glovoapp.com" target="_blank" class="btn btn-outline">
+                <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     Encomendar
                 </a>
@@ -1521,7 +1538,7 @@ export default function ZeffPizzaPiratePage() {
                     <div class="delivery-banner">
                         <h3>Entregas pelo Glovo</h3>
                         <p>99% de satisfação — o tesouro chega à tua porta!</p>
-                        <a href="https://glovoapp.com" target="_blank" class="btn btn-outline" style="border-color: #fff; color: #fff; font-size: 0.9rem;">
+                        <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="border-color: #fff; color: #fff; font-size: 0.9rem;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             Encomendar Agora
                         </a>
@@ -1554,7 +1571,7 @@ export default function ZeffPizzaPiratePage() {
                 ZEFF PIZZA
             </div>
             <div class="footer-center">
-                <a href="https://glovoapp.com" target="_blank" class="btn btn-accent" style="font-size: 0.85rem; padding: 0.6rem 1.5rem;">
+                <a href="https://glovoapp.com" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="font-size: 0.85rem; padding: 0.6rem 1.5rem;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     Encomendar no Glovo
                 </a>

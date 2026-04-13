@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "CSS Art Gallery — Descomplicai",
   description:
     "Galeria de arte feita 100% em CSS puro. Seis ilustrações criadas apenas com divs, gradientes, borders e clip-path — sem imagens, sem SVG, sem canvas.",
 };
+
+applyProjectRouteMetadata(metadata, "/projetos/css-art-gallery");
 
 export default function CSSArtGalleryLayout({
   children,
@@ -13,3 +16,5 @@ export default function CSSArtGalleryLayout({
 }) {
   return <>{children}</>;
 }
+
+

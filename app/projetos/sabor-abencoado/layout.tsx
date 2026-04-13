@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+﻿import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";import type { Metadata, Viewport } from "next";
 import "./sabor-abencoado.css";
 
 export const metadata: Metadata = {
@@ -15,6 +15,10 @@ export const viewport: Viewport = {
   themeColor: "#FFF8F0",
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/sabor-abencoado");
+
 export default function SaborAbencoLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
+
+

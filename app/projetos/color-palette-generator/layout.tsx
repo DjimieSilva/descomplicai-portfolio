@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 
 export const metadata: Metadata = {
   title: "Color Palette Generator — Descomplicai",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/color-palette-generator");
+
 export default function ColorPaletteGeneratorLayout({
   children,
 }: {
@@ -19,3 +22,5 @@ export default function ColorPaletteGeneratorLayout({
 }) {
   return children;
 }
+
+

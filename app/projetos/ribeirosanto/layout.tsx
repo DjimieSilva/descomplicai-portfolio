@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -22,6 +22,34 @@ const NAV_LINKS = [
   { label: "Contacto", href: "/projetos/ribeirosanto/contacto" },
 ];
 
+const FOOTER_ACTIONS = [
+  {
+    label: "Contacto",
+    shortLabel: "C",
+    href: "/projetos/ribeirosanto/contacto",
+    title: "Abrir página de contacto",
+  },
+  {
+    label: "Email",
+    shortLabel: "@",
+    href: "mailto:info@ribeirosanto.pt",
+    title: "Enviar email para info@ribeirosanto.pt",
+  },
+  {
+    label: "Enoturismo",
+    shortLabel: "E",
+    href: "/projetos/ribeirosanto/enoturismo",
+    title: "Explorar visitas e provas",
+  },
+  {
+    label: "Livro",
+    shortLabel: "LR",
+    href: "https://www.livroreclamacoes.pt/Inicio/",
+    title: "Abrir Livro de Reclamações eletrónico",
+    external: true,
+  },
+] as const;
+
 const FOOTER_LINKS = [
   {
     title: "Explorar",
@@ -42,12 +70,26 @@ const FOOTER_LINKS = [
   {
     title: "Legal",
     links: [
-      { label: "Política de Privacidade", href: "#" },
-      { label: "Termos e Condições", href: "#" },
-      { label: "Livro de Reclamações", href: "#" },
+      {
+        label: "Pedir política de privacidade",
+        href: "mailto:info@ribeirosanto.pt?subject=Pedido%20de%20politica%20de%20privacidade",
+      },
+      {
+        label: "Pedir termos e condições",
+        href: "mailto:info@ribeirosanto.pt?subject=Pedido%20de%20termos%20e%20condicoes",
+      },
+      {
+        label: "Livro de Reclamações",
+        href: "https://www.livroreclamacoes.pt/Inicio/",
+        external: true,
+      },
     ],
+    note: "Nesta versão pública, a documentação legal detalhada é pedida por email.",
   },
 ];
+
+const MOBILE_MENU_ID = "ribeirosanto-mobile-menu";
+
 
 export default function RibeiroSantoLayout({
   children,
@@ -55,8 +97,9 @@ export default function RibeiroSantoLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(() => (typeof window !== "undefined" ? window.scrollY > 48 : false));
+  const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
+  const mobileOpen = mobileMenuPath === pathname;
 
   /* Pages with light/cream backgrounds need dark nav text */
   const LIGHT_PAGES = ["/projetos/ribeirosanto/contacto"];
@@ -69,14 +112,8 @@ export default function RibeiroSantoLayout({
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-
-  /* ── Close mobile menu on route change ────── */
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
 
   /* ── Lock body scroll when mobile menu open ─ */
   useEffect(() => {
@@ -135,12 +172,14 @@ export default function RibeiroSantoLayout({
 
           {/* Hamburger */}
           <button
+            type="button"
             className={`rs-nav__hamburger ${
               mobileOpen ? "rs-nav__hamburger--open" : ""
             }`}
-            onClick={() => setMobileOpen((o) => !o)}
+            onClick={() => setMobileMenuPath((currentPath) => (currentPath === pathname ? null : pathname))}
             aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={mobileOpen}
+            aria-controls={MOBILE_MENU_ID}
           >
             <span />
             <span />
@@ -160,11 +199,12 @@ export default function RibeiroSantoLayout({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              onClick={() => setMobileOpen(false)}
+              onClick={() => setMobileMenuPath(null)}
             />
 
             {/* Panel */}
             <motion.nav
+              id={MOBILE_MENU_ID}
               className="rs-mobile-panel"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -189,6 +229,7 @@ export default function RibeiroSantoLayout({
                   >
                     <Link
                       href={link.href}
+                      onClick={() => setMobileMenuPath(null)}
                       className={`rs-mobile-panel__link ${
                         isActive(link.href)
                           ? "rs-mobile-panel__link--active"
@@ -237,20 +278,44 @@ export default function RibeiroSantoLayout({
               Vinhos de terroir, feitos com respeito pela tradição e pela terra.
             </p>
 
-            {/* Social icons placeholder */}
+            <p className="rs-footer__subtitle">
+              Os canais públicos ativos estão concentrados aqui para evitar links sociais fictícios.
+            </p>
+
             <div className="rs-footer__social">
-              {["Facebook", "Instagram", "YouTube", "LinkedIn"].map((name) => (
-                <a
-                  key={name}
-                  href="#"
-                  className="rs-footer__social-icon"
-                  aria-label={name}
-                  title={name}
-                >
-                  <span>{name.charAt(0)}</span>
-                </a>
-              ))}
+              {FOOTER_ACTIONS.map((action) =>
+                (("external" in action && action.external) || action.href.startsWith("mailto:")) ? (
+                  <a
+                    key={action.label}
+                    href={action.href}
+                    className="rs-footer__social-icon"
+                    aria-label={action.title}
+                    title={action.title}
+                    {...(("external" in action && action.external)
+                      ? {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        }
+                      : {})}
+                  >
+                    <span>{action.shortLabel}</span>
+                  </a>
+                ) : (
+                  <Link
+                    key={action.label}
+                    href={action.href}
+                    className="rs-footer__social-icon"
+                    aria-label={action.title}
+                    title={action.title}
+                  >
+                    <span>{action.shortLabel}</span>
+                  </Link>
+                )
+              )}
             </div>
+            <p className="rs-footer__location">
+              Contacto, email, visitas e reclamações eletrónicas disponíveis a partir deste footer.
+            </p>
           </div>
 
           {/* Link columns */}
@@ -260,12 +325,30 @@ export default function RibeiroSantoLayout({
               <ul className="rs-footer__col-list">
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className="rs-footer__col-link">
-                      {link.label}
-                    </Link>
+                    {"external" in link && link.external ? (
+                      <a
+                        href={link.href}
+                        className="rs-footer__col-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    ) : link.href.startsWith("mailto:") ? (
+                      <a href={link.href} className="rs-footer__col-link">
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link href={link.href} className="rs-footer__col-link">
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
+              {"note" in col ? (
+                <p className="rs-footer__location">{col.note}</p>
+              ) : null}
             </div>
           ))}
         </div>
@@ -284,3 +367,6 @@ export default function RibeiroSantoLayout({
     </div>
   );
 }
+
+
+

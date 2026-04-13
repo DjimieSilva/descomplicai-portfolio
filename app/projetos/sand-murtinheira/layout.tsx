@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { applyProjectRouteMetadata } from "@/lib/project-route-metadata";
 import { Playfair_Display, Libre_Franklin } from "next/font/google";
 
 const playfair = Playfair_Display({
@@ -29,6 +30,8 @@ export const metadata: Metadata = {
   },
 };
 
+applyProjectRouteMetadata(metadata, "/projetos/sand-murtinheira");
+
 export default function SandLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
@@ -39,3 +42,5 @@ export default function SandLayout({ children }: { children: React.ReactNode }) 
     </div>
   );
 }
+
+
